@@ -1,56 +1,54 @@
 "use client"
 
 import React, { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Sphere, MeshDistortMaterial, Float } from '@react-three/drei'
+import { Canvas, useFrame, useLoader } from '@react-three/fiber'
+import { OrbitControls, PerspectiveCamera, Html } from '@react-three/drei'
 import * as THREE from 'three'
+import { motion } from 'framer-motion'
 
-function Earth({ risks }) {
+function Earth({ risks, opportunities, autoRotate }) {
   const meshRef = useRef()
-  
-  // Rotate the globe
+  const texture = useLoader(THREE.TextureLoader, '/earth.jpg')
+
   useFrame((state, delta) => {
-    meshRef.current.rotation.y += delta * 0.1
+    if (autoRotate && meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.08
+    }
   })
 
   return (
-    <group ref={meshRef}>
-      {/* Main Wireframe Globe */}
-      <mesh>
+    <group>
+      <mesh ref={meshRef}>
         <sphereGeometry args={[2, 64, 64]} />
-        <meshBasicMaterial 
-          color="#38bdf8" 
-          wireframe 
-          transparent 
-          opacity={0.15} 
-        />
-      </mesh>
+        <meshPhongMaterial map={texture} shininess={5} emissive="#ffffff" emissiveIntensity={0.1} />
+        
+        <mesh>
+          <sphereGeometry args={[2.005, 32, 32]} />
+          <meshBasicMaterial color="#38bdf8" wireframe transparent opacity={0.05} />
+        </mesh>
 
-      {/* Inner Glow Sphere */}
-      <mesh>
-        <sphereGeometry args={[1.98, 32, 32]} />
-        <meshBasicMaterial 
-          color="#0ea5e9" 
-          transparent 
-          opacity={0.05} 
-        />
-      </mesh>
+        {/* RISK NODES (RED) */}
+        {risks.map((node, i) => (
+          <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" />
+        ))}
 
-      {/* Risk Points (Data Clusters) */}
-      {risks.map((risk, i) => (
-        <RiskPoint key={i} lat={risk.lat} lng={risk.lng} severity={risk.severity} />
-      ))}
+        {/* OPPORTUNITY NODES (GREEN) */}
+        {opportunities.map((node, i) => (
+          <Marker key={`opp-${i}`} node={node} color="#10b981" type="OPPORTUNITY" />
+        ))}
+      </mesh>
     </group>
   )
 }
 
-function RiskPoint({ lat, lng, severity }) {
-  // Convert lat/lng to 3D coordinates
+function Marker({ node, color, type }) {
+  const { lat, lng, title, hub } = node
+  const [hovered, setHovered] = React.useState(false)
+  
   const position = useMemo(() => {
     const phi = (90 - lat) * (Math.PI / 180)
     const theta = (lng + 180) * (Math.PI / 180)
-    const radius = 2
-    
+    const radius = 2.03 
     return [
       -radius * Math.sin(phi) * Math.cos(theta),
       radius * Math.cos(phi),
@@ -58,38 +56,70 @@ function RiskPoint({ lat, lng, severity }) {
     ]
   }, [lat, lng])
 
-  const color = severity === 'high' ? '#ef4444' : '#f59e0b'
-
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-      <mesh position={position}>
-        <sphereGeometry args={[0.05, 16, 16]} />
-        <meshBasicMaterial color={color} />
-        
-        {/* Glow Ring */}
-        <mesh scale={[2.5, 2.5, 2.5]}>
-          <circleGeometry args={[0.05, 32]} />
-          <meshBasicMaterial color={color} transparent opacity={0.3} side={THREE.DoubleSide} />
-        </mesh>
+    <mesh 
+      position={position} 
+      onPointerOver={() => setHovered(true)} 
+      onPointerOut={() => setHovered(false)}
+    >
+      {/* CORE DOT — bigger and vivid */}
+      <sphereGeometry args={[0.07, 16, 16]} />
+      <meshBasicMaterial color={color} />
+      
+      {/* OUTER GLOW RING */}
+      <mesh scale={[1, 1, 1]}>
+        <sphereGeometry args={[0.13, 16, 16]} />
+        <meshBasicMaterial color={color} transparent opacity={0.25} />
       </mesh>
-    </Float>
+
+      {/* WIDE PULSE DISC */}
+      <mesh scale={[8, 8, 8]}>
+        <circleGeometry args={[0.07, 32]} />
+        <meshBasicMaterial color={color} transparent opacity={0.12} side={THREE.DoubleSide} />
+      </mesh>
+      
+      <Html distanceFactor={8} zIndexRange={[100, 0]}>
+        <div className="pointer-events-none select-none">
+          {hovered && (
+            <motion.div 
+              initial={{ opacity: 0, x: -10 }} 
+              animate={{ opacity: 1, x: 0 }} 
+              className="flex flex-col bg-black/90 border-l-2 px-3 py-2 shadow-2xl rounded-r-lg" 
+              style={{ borderColor: color }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: color }} />
+                <span className="text-white text-[10px] font-mono font-bold uppercase tracking-widest whitespace-nowrap">
+                  {type === 'OPPORTUNITY' ? hub : title}
+                </span>
+              </div>
+              {type === 'OPPORTUNITY' && (
+                <div className="text-[9px] font-mono mt-1" style={{ color }}>
+                  {title}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </div>
+      </Html>
+    </mesh>
   )
 }
 
-export default function Globe({ risks = [] }) {
+export default function Globe({ risks = [], opportunities = [], autoRotate = true }) {
   return (
     <div className="w-full h-full">
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <Earth risks={risks} />
-        <OrbitControls 
-          enablePan={false} 
-          enableZoom={true} 
-          minDistance={3} 
-          maxDistance={10} 
-          autoRotate={false}
-        />
+      <Canvas shadows antialias="true">
+        <PerspectiveCamera makeDefault position={[0, 0, 6]} />
+        <ambientLight intensity={2.5} />
+        <pointLight position={[10, 10, 10]} intensity={4} color="#ffffff" />
+        <pointLight position={[-10, 10, 5]} intensity={2} color="#38bdf8" />
+        
+        <React.Suspense fallback={<Html center><div className="text-sky-400 font-mono text-[10px] animate-pulse">SYNCING_MAP...</div></Html>}>
+          <Earth risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
+        </React.Suspense>
+        
+        <OrbitControls enablePan={false} minDistance={3} maxDistance={12} rotateSpeed={0.5} />
       </Canvas>
     </div>
   )

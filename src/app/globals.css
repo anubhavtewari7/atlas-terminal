@@ -1,50 +1,33 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-background: #020617;
+  --color-foreground: #f8fafc;
+  --color-accent: #38bdf8;
+  --color-accent-muted: rgba(56, 189, 248, 0.1);
+  --color-glass: rgba(15, 23, 42, 0.8);
+  --color-glass-border: rgba(255, 255, 255, 0.05);
+  --color-titanium: #94a3b8;
+}
 
 :root {
   --background: #020617;
   --foreground: #f8fafc;
-  --accent: #38bdf8;
-  --accent-muted: rgba(56, 189, 248, 0.1);
-  --glass: rgba(15, 23, 42, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.05);
-  --titanium: #94a3b8;
-  --danger: #ef4444;
-  --warning: #f59e0b;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  overflow: hidden; /* We want a fixed dashboard look */
+  overflow: hidden;
 }
 
-/* Custom Scrollbar for a more hi-tech look */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--glass-border);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
-}
-
+/* Custom UI Components */
 .glass-panel {
-  background: var(--glass);
+  background: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-}
-
-.hologram-glow {
-  box-shadow: 0 0 20px var(--accent-muted);
 }
 
 .industrial-label {
@@ -52,7 +35,18 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--titanium);
+  color: #94a3b8;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 @keyframes pulse-slow {
