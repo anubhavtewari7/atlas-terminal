@@ -143,13 +143,23 @@ export default function Dashboard() {
   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
 
   useEffect(() => {
+    // Mount flag exists solely to defer client-only rendering (e.g. clock
+    // timestamps) until after hydration, avoiding an SSR/client mismatch.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true)
-    fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
-    fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
+    const loadLiveData = () => {
+      fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
+      fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
+    }
+    loadLiveData()
+    // Refresh periodically so data actually moves while the terminal stays
+    // open, instead of freezing at whatever was live on page load.
+    const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
     try {
       const saved = localStorage.getItem('atlas_missions')
       if (saved) setMissionHistory(JSON.parse(saved))
     } catch {}
+    return () => clearInterval(interval)
   }, [])
 
   // Auto-scroll terminal log
@@ -175,7 +185,7 @@ export default function Dashboard() {
 
   const replayMission = (mission) => {
     setSearchQuery(mission.query)
-    setShowSearch(true)
+    handleSearch(null, mission.query)
   }
 
   const clearHistory = () => {
@@ -196,13 +206,15 @@ export default function Dashboard() {
     return (filters[newsFilter] || []).some(kw => text.includes(kw))
   })
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (e, overrideQuery) => {
     if (e) e.preventDefault()
-    if (!searchQuery.trim()) return
+    const activeQuery = overrideQuery ?? searchQuery
+    if (!activeQuery.trim()) return
 
     setIsAnalyzing(true)
     setSelectedNode(null)
-    addLog(`[SCAN] Initiating: "${searchQuery}"`)
+    setSearchQuery(activeQuery)
+    addLog(`[SCAN] Initiating: "${activeQuery}"`)
     addLog('[AI] Mapping global industrial hubs...')
 
     const controller = new AbortController()
@@ -212,7 +224,7 @@ export default function Dashboard() {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ material: searchQuery }),
+        body: JSON.stringify({ material: activeQuery }),
         signal: controller.signal
       })
       clearTimeout(timeoutId)
@@ -227,9 +239,9 @@ export default function Dashboard() {
         setMarketData(data.market_data || null)
         addLog(`[SUCCESS] Scan complete. ${data.opportunities.length} hubs identified.`)
         if (data.category) addLog(`[INFO] Category: ${data.category.toUpperCase()}`)
-        saveMission(searchQuery, data.opportunities, data.directive)
+        saveMission(activeQuery, data.opportunities, data.directive)
         setShowSearch(false)
-        setProfile(prev => ({ ...prev, material: searchQuery }))
+        setProfile(prev => ({ ...prev, material: activeQuery }))
         return
       }
       throw new Error('No opportunities returned')
@@ -239,7 +251,7 @@ export default function Dashboard() {
       addLog('[WARN] Server scan delayed. Activating local intelligence mode...')
 
       // Client-side fallback — same categorization logic as server
-      const cat = clientCategorize(searchQuery)
+      const cat = clientCategorize(activeQuery)
       const hubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
       const fallbackRisks = FALLBACK_RISKS[cat] || FALLBACK_RISKS.electronics
       const selectedHub = hubs[0]
@@ -250,7 +262,7 @@ export default function Dashboard() {
         route:        selectedHub.logistics.port_wait_days === 0
                         ? 'Domestic Ground Transport'
                         : 'Global Logistics Corridor',
-        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${searchQuery}". Primary recommendation: ${selectedHub.hub}.`,
+        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${activeQuery}". Primary recommendation: ${selectedHub.hub}.`,
         tariff_alert: `HTS: ${selectedHub.customs.hts_code} | Duty: ${selectedHub.customs.duty_rate} — ${selectedHub.customs.compliance_note}`
       }
 
@@ -260,11 +272,11 @@ export default function Dashboard() {
       setMarketData({
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
         price_history: [{ month:'Q1',price:95 },{ month:'Q2',price:88 },{ month:'Q3',price:97 },{ month:'Q4',price:105 }],
-        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${searchQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
+        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${activeQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
       })
-      saveMission(searchQuery, hubs, fbDir)
+      saveMission(activeQuery, hubs, fbDir)
       setShowSearch(false)
-      setProfile(prev => ({ ...prev, material: searchQuery }))
+      setProfile(prev => ({ ...prev, material: activeQuery }))
       addLog(`[LOCAL] ${hubs.length} hubs loaded via local intelligence.`)
 
     } finally {
@@ -357,8 +369,8 @@ export default function Dashboard() {
       {/* ── COMMODITY TICKER ── */}
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mr-8 shrink-0">
-          <Activity size={12} className="text-amber-500" />
-          <span className="text-amber-500">Live Spot</span>
+          <Activity size={12} className="text-slate-500" />
+          <span className="text-slate-500" title="Indicative reference prices for context — not a live market data feed. For decision-grade pricing, verify with your commodity broker or exchange terminal.">Reference Prices</span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
@@ -460,9 +472,9 @@ export default function Dashboard() {
                 </h2>
                 <p className="text-[11px] text-slate-600 mb-8 font-sans leading-relaxed">
                   Describe what you need to procure — be specific. Include the material, application, and any constraints.
-                  <br/>e.g. <span className="text-slate-500 italic">"neodymium magnets for automotive sun visor actuators"</span>,
-                  &nbsp;<span className="text-slate-500 italic">"food-grade soy for QSR chain supply"</span>,
-                  &nbsp;<span className="text-slate-500 italic">"IATF-certified steel stamping for EV chassis frames"</span>
+                  <br/>e.g. <span className="text-slate-500 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
+                  &nbsp;<span className="text-slate-500 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
+                  &nbsp;<span className="text-slate-500 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
                 </p>
                 <form onSubmit={handleSearch} className="space-y-6">
                   <textarea
@@ -688,7 +700,7 @@ export default function Dashboard() {
                               <div className="text-[11px] text-slate-300 font-bold">{selectedNode.esg.carbon_footprint}</div>
                             </div>
                           </div>
-                          <p className="text-[10px] text-slate-500 italic leading-snug">"{selectedNode.esg.sustainability_note}"</p>
+                          <p className="text-[10px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
                         </div>
                       )}
                     </div>
@@ -920,7 +932,7 @@ export default function Dashboard() {
                   <div className="text-[10px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
                 </div>
                 <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
-                  "{directive.summary}"
+                  &ldquo;{directive.summary}&rdquo;
                 </div>
               </div>
             ) : (

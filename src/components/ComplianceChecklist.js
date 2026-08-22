@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { X, Loader2, AlertTriangle, CheckSquare, Square, ClipboardList, ShieldCheck, Download, Copy } from 'lucide-react'
+import { X, ClipboardList, CheckSquare, Square, Copy } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const COMPLIANCE_RULES = {

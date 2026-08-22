@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
 import { X, Search, FileText, ShieldAlert, CheckCircle, AlertTriangle, Loader2, ExternalLink } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 export default function TariffLookup({ onClose }) {
   const [query, setQuery] = useState('')

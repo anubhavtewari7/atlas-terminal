@@ -27,8 +27,11 @@ function Earth({ risks, opportunities, autoRotate }) {
           <meshBasicMaterial color="#38bdf8" wireframe transparent opacity={0.05} />
         </mesh>
 
-        {/* RISK NODES (RED) */}
-        {risks.map((node, i) => (
+        {/* RISK NODES (RED) — only risks tied to a physical location have
+            lat/lng; abstract/geopolitical risks (export controls, tariff
+            exposure, etc.) have none and would otherwise render as NaN
+            markers. They're shown in the sidebar risk list instead. */}
+        {risks.filter(node => typeof node.lat === 'number' && typeof node.lng === 'number').map((node, i) => (
           <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" />
         ))}
 

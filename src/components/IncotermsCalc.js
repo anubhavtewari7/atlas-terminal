@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { X, Scale, ChevronDown } from 'lucide-react'
+import { X, Scale } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const INCOTERMS = {

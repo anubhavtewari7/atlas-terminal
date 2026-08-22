@@ -10,7 +10,12 @@ export default function SupplierComparison({ hubs, onClose }) {
     let best = null, bestVal = Infinity
     hubs.forEach(h => {
       let val
-      if (metric === 'duty') val = parseFloat(h.customs?.duty_rate) || 0
+      if (metric === 'duty') {
+        const raw = h.customs?.duty_rate || ''
+        // Guard against future non-percentage duty formats (e.g. "$0.35/kg")
+        // silently parsing to 0 and wrongly winning "cheapest".
+        val = raw.includes('%') ? (parseFloat(raw) || 0) : Infinity
+      }
       if (metric === 'freight') val = parseFloat((h.logistics?.freight_cost_estimate || '').replace(/[^0-9.]/g, '')) || 999
       if (metric === 'lead') val = h.logistics?.port_wait_days || 99
       if (metric === 'esg') val = { 'AA': 0, 'A+': 1, 'A': 2, 'A-': 3, 'B+': 4, 'B': 5, 'B-': 6, 'C': 7 }[h.esg?.ethical_rating] ?? 5

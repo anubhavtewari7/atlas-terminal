@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import { X, Anchor, RefreshCw, Clock, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react'
+import { X, Anchor, AlertTriangle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // Realistic port data — updated weekly in production via API

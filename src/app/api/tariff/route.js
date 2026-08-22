@@ -11,9 +11,17 @@ export async function POST(req) {
 
     const t = lookupTariff(product);
 
+    // HTS codes are stored like "8505.11.00" (10 digits with period
+    // separators). Taking a plain substring(0,6) cuts mid-digit ("8505.1")
+    // instead of the real 6-digit HS code ("8505.11") — this both displays
+    // wrong and breaks the USITC verification link built from it.
+    const digitsOnly = t.hts.replace(/\./g, '');
+    const hs6Digits = digitsOnly.slice(0, 6).padEnd(6, '0');
+    const hs6Formatted = `${hs6Digits.slice(0, 4)}.${hs6Digits.slice(4, 6)}`;
+
     const data = {
       hts_code: t.hts,
-      hs6_code: t.hts.substring(0, 6) || "8542.31",
+      hs6_code: hs6Formatted,
       description: `Automated deterministic classification for ${product}.`,
       mfn_rate: t.duty,
       section301_rate: t.duty.includes("25") ? "25%" : "N/A",

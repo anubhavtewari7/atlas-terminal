@@ -1,0 +1,410 @@
+diff --git a/src/app/api/analyze/analyze_route.js b/src/app/api/analyze/route.js
+similarity index 100%
+rename from src/app/api/analyze/analyze_route.js
+rename to src/app/api/analyze/route.js
+diff --git a/src/app/api/news/route.js b/src/app/api/news/route.js
+index fd60436..2ca31fd 100644
+--- a/src/app/api/news/route.js
++++ b/src/app/api/news/route.js
+@@ -1,31 +1,63 @@
+ import { NextResponse } from 'next/server';
+ 
++const FALLBACK_NEWS = [
++  { title: 'Suez Canal Congestion Monitoring', description: 'Real-time tracking of vessel backlog in major corridors.', link: '#', pubDate: 'LIVE' },
++  { title: 'Shanghai Port Throughput Data', description: 'Analysis of export volume trends in East Asian hubs.', link: '#', pubDate: 'LIVE' }
++];
++
++function parseRss(text) {
++  return text.split('<item>').slice(1).map(item => {
++    const title = item.match(/<title>(<!\[CDATA\[)?(.*?)(]]>)?<\/title>/)?.[2] || 'Global Trade Update';
++    const description = item.match(/<description>(<!\[CDATA\[)?(.*?)(]]>)?<\/description>/)?.[2] || '';
++    const link = item.match(/<link>(<!\[CDATA\[)?(.*?)(]]>)?<\/link>/)?.[2] || '#';
++    const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
++    const parsedDate = pubDate ? new Date(pubDate) : null;
++    return {
++      title: title.replace(/&amp;/g, '&'),
++      description: description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...',
++      link,
++      pubDate: parsedDate && !isNaN(parsedDate) ? parsedDate.toLocaleDateString() : '',
++      // kept for correct chronological sorting once feeds are merged
++      _sortTs: parsedDate && !isNaN(parsedDate) ? parsedDate.getTime() : 0
++    };
++  });
++}
++
++// Two independent sources so a single feed being unreachable, or a single
++// niche topic (shipping-only), doesn't leave the Market Intelligence panel
++// with too little content for the regional filters to find matches in.
++const SOURCES = [
++  'https://gcaptain.com/feed/',              // maritime / shipping / logistics
++  'https://feeds.bbci.co.uk/news/business/rss.xml' // broad global business & trade
++];
++
+ export async function GET() {
+   try {
+-    // Using a more reliable supply chain / maritime news RSS feed
+-    const res = await fetch('https://gcaptain.com/feed/', { next: { revalidate: 3600 } });
+-    const text = await res.text();
+-
+-    // Basic XML to JSON parser for RSS
+-    const items = text.split('<item>').slice(1).map(item => {
+-      const title = item.match(/<title>(<!\[CDATA\[)?(.*?)(]]>)?<\/title>/)?.[2] || 'Global Trade Update';
+-      const description = item.match(/<description>(<!\[CDATA\[)?(.*?)(]]>)?<\/description>/)?.[2] || '';
+-      const link = item.match(/<link>(<!\[CDATA\[)?(.*?)(]]>)?<\/link>/)?.[2] || '#';
+-      const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
+-      
+-      return { 
+-        title: title.replace(/&amp;/g, '&'), 
+-        description: description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...',
+-        link,
+-        pubDate: new Date(pubDate).toLocaleDateString()
+-      };
+-    }).slice(0, 10);
+-
+-    return NextResponse.json(items);
++    const results = await Promise.allSettled(
++      SOURCES.map(url => fetch(url, { next: { revalidate: 1800 } }).then(r => r.text()))
++    );
++
++    let items = [];
++    for (const r of results) {
++      if (r.status === 'fulfilled') items = items.concat(parseRss(r.value));
++    }
++
++    // De-dupe (same headline occasionally appears in multiple feeds) and
++    // sort newest-first so "latest market news" is actually chronological.
++    const seen = new Set();
++    items = items.filter(i => {
++      if (seen.has(i.title)) return false;
++      seen.add(i.title);
++      return true;
++    }).sort((a, b) => b._sortTs - a._sortTs).map(({ _sortTs, ...rest }) => rest);
++
++    // A fetch can succeed at the network layer but still return a body that
++    // isn't parseable RSS (blocked, rate-limited, format change). Treat
++    // "nothing parsed from either source" the same as a failed fetch.
++    if (items.length === 0) return NextResponse.json(FALLBACK_NEWS);
++
++    return NextResponse.json(items.slice(0, 20));
+   } catch (error) {
+-    return NextResponse.json([
+-      { title: 'Suez Canal Congestion Monitoring', description: 'Real-time tracking of vessel backlog in major corridors.', link: '#', pubDate: 'LIVE' },
+-      { title: 'Shanghai Port Throughput Data', description: 'Analysis of export volume trends in East Asian hubs.', link: '#', pubDate: 'LIVE' }
+-    ]);
++    return NextResponse.json(FALLBACK_NEWS);
+   }
+ }
+diff --git a/src/app/api/risk/route.js b/src/app/api/risk/route.js
+index f4977e4..c20f685 100644
+--- a/src/app/api/risk/route.js
++++ b/src/app/api/risk/route.js
+@@ -135,7 +135,7 @@ function generateKeyAlert(origin, destination, product, topFactor, topScore) {
+ 
+   if (o.includes('china') && topFactor === 'geopolitical') return `Section 301 tariffs (25%) apply on ${product || 'this product'} from China. De-risking to Mexico (USMCA 0%) or Vietnam could reduce landed cost by 18–25%.`
+   if (o.includes('taiwan') && topFactor === 'geopolitical') return `Taiwan Strait risk is existential for advanced chip supply. TSMC\'s Arizona and Japan fabs now online — begin qualification immediately.`
+-  if ((d.includes('los angeles') || d.includes('usa')) && topFactor === 'labor') return `ILWU contract at LA/LB ports expires in 2025. Historical precedent: 3–4 week disruptions. Pre-position 6 weeks safety stock before negotiation windows.`
++  if ((d.includes('los angeles') || d.includes('usa')) && topFactor === 'labor') return `West Coast ports (ILWU-affiliated) have a history of multi-week disruptions around contract negotiation windows. Pre-position 6 weeks of safety stock ahead of any known negotiation cycle.`
+   if (topFactor === 'weather' && topScore >= 30) return `Major weather event risk on this corridor. Build seasonal disruption weeks into your S&OP planning. Consider cargo insurance at 1%+ of CIF value.`
+   if (p.includes('magnet') || p.includes('rare earth')) return `China controls 90% of rare earth magnet supply. Any export restriction could halt production within 4–6 weeks. Immediately qualify Japan/US domestic alternate sources.`
+   if (topScore >= 60) return `HIGH RISK corridor: ${topFactor.replace('_',' ')} exposure is critical. Recommend immediate escalation to CPO level and contingency sourcing activation.`
+diff --git a/src/app/api/tariff/route.js b/src/app/api/tariff/route.js
+index a19c4af..6e8711d 100644
+--- a/src/app/api/tariff/route.js
++++ b/src/app/api/tariff/route.js
+@@ -11,9 +11,17 @@ export async function POST(req) {
+ 
+     const t = lookupTariff(product);
+ 
++    // HTS codes are stored like "8505.11.00" (10 digits with period
++    // separators). Taking a plain substring(0,6) cuts mid-digit ("8505.1")
++    // instead of the real 6-digit HS code ("8505.11") — this both displays
++    // wrong and breaks the USITC verification link built from it.
++    const digitsOnly = t.hts.replace(/\./g, '');
++    const hs6Digits = digitsOnly.slice(0, 6).padEnd(6, '0');
++    const hs6Formatted = `${hs6Digits.slice(0, 4)}.${hs6Digits.slice(4, 6)}`;
++
+     const data = {
+       hts_code: t.hts,
+-      hs6_code: t.hts.substring(0, 6) || "8542.31",
++      hs6_code: hs6Formatted,
+       description: `Automated deterministic classification for ${product}.`,
+       mfn_rate: t.duty,
+       section301_rate: t.duty.includes("25") ? "25%" : "N/A",
+diff --git a/src/app/page.js b/src/app/page.js
+index 5b927d3..a64447d 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -143,13 +143,23 @@ export default function Dashboard() {
+   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
+ 
+   useEffect(() => {
++    // Mount flag exists solely to defer client-only rendering (e.g. clock
++    // timestamps) until after hydration, avoiding an SSR/client mismatch.
++    // eslint-disable-next-line react-hooks/set-state-in-effect
+     setIsMounted(true)
+-    fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
+-    fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
++    const loadLiveData = () => {
++      fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
++      fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
++    }
++    loadLiveData()
++    // Refresh periodically so data actually moves while the terminal stays
++    // open, instead of freezing at whatever was live on page load.
++    const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
+     try {
+       const saved = localStorage.getItem('atlas_missions')
+       if (saved) setMissionHistory(JSON.parse(saved))
+     } catch {}
++    return () => clearInterval(interval)
+   }, [])
+ 
+   // Auto-scroll terminal log
+@@ -175,7 +185,7 @@ export default function Dashboard() {
+ 
+   const replayMission = (mission) => {
+     setSearchQuery(mission.query)
+-    setShowSearch(true)
++    handleSearch(null, mission.query)
+   }
+ 
+   const clearHistory = () => {
+@@ -196,13 +206,15 @@ export default function Dashboard() {
+     return (filters[newsFilter] || []).some(kw => text.includes(kw))
+   })
+ 
+-  const handleSearch = async (e) => {
++  const handleSearch = async (e, overrideQuery) => {
+     if (e) e.preventDefault()
+-    if (!searchQuery.trim()) return
++    const activeQuery = overrideQuery ?? searchQuery
++    if (!activeQuery.trim()) return
+ 
+     setIsAnalyzing(true)
+     setSelectedNode(null)
+-    addLog(`[SCAN] Initiating: "${searchQuery}"`)
++    setSearchQuery(activeQuery)
++    addLog(`[SCAN] Initiating: "${activeQuery}"`)
+     addLog('[AI] Mapping global industrial hubs...')
+ 
+     const controller = new AbortController()
+@@ -212,7 +224,7 @@ export default function Dashboard() {
+       const res = await fetch('/api/analyze', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+-        body: JSON.stringify({ material: searchQuery }),
++        body: JSON.stringify({ material: activeQuery }),
+         signal: controller.signal
+       })
+       clearTimeout(timeoutId)
+@@ -227,9 +239,9 @@ export default function Dashboard() {
+         setMarketData(data.market_data || null)
+         addLog(`[SUCCESS] Scan complete. ${data.opportunities.length} hubs identified.`)
+         if (data.category) addLog(`[INFO] Category: ${data.category.toUpperCase()}`)
+-        saveMission(searchQuery, data.opportunities, data.directive)
++        saveMission(activeQuery, data.opportunities, data.directive)
+         setShowSearch(false)
+-        setProfile(prev => ({ ...prev, material: searchQuery }))
++        setProfile(prev => ({ ...prev, material: activeQuery }))
+         return
+       }
+       throw new Error('No opportunities returned')
+@@ -239,7 +251,7 @@ export default function Dashboard() {
+       addLog('[WARN] Server scan delayed. Activating local intelligence mode...')
+ 
+       // Client-side fallback — same categorization logic as server
+-      const cat = clientCategorize(searchQuery)
++      const cat = clientCategorize(activeQuery)
+       const hubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
+       const fallbackRisks = FALLBACK_RISKS[cat] || FALLBACK_RISKS.electronics
+       const selectedHub = hubs[0]
+@@ -250,7 +262,7 @@ export default function Dashboard() {
+         route:        selectedHub.logistics.port_wait_days === 0
+                         ? 'Domestic Ground Transport'
+                         : 'Global Logistics Corridor',
+-        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${searchQuery}". Primary recommendation: ${selectedHub.hub}.`,
++        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${activeQuery}". Primary recommendation: ${selectedHub.hub}.`,
+         tariff_alert: `HTS: ${selectedHub.customs.hts_code} | Duty: ${selectedHub.customs.duty_rate} — ${selectedHub.customs.compliance_note}`
+       }
+ 
+@@ -260,11 +272,11 @@ export default function Dashboard() {
+       setMarketData({
+         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
+         price_history: [{ month:'Q1',price:95 },{ month:'Q2',price:88 },{ month:'Q3',price:97 },{ month:'Q4',price:105 }],
+-        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${searchQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
++        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${activeQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
+       })
+-      saveMission(searchQuery, hubs, fbDir)
++      saveMission(activeQuery, hubs, fbDir)
+       setShowSearch(false)
+-      setProfile(prev => ({ ...prev, material: searchQuery }))
++      setProfile(prev => ({ ...prev, material: activeQuery }))
+       addLog(`[LOCAL] ${hubs.length} hubs loaded via local intelligence.`)
+ 
+     } finally {
+@@ -357,8 +369,8 @@ export default function Dashboard() {
+       {/* ── COMMODITY TICKER ── */}
+       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
+         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mr-8 shrink-0">
+-          <Activity size={12} className="text-amber-500" />
+-          <span className="text-amber-500">Live Spot</span>
++          <Activity size={12} className="text-slate-500" />
++          <span className="text-slate-500" title="Indicative reference prices for context — not a live market data feed. For decision-grade pricing, verify with your commodity broker or exchange terminal.">Reference Prices</span>
+         </div>
+         <style dangerouslySetInnerHTML={{__html:`
+           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
+@@ -460,9 +472,9 @@ export default function Dashboard() {
+                 </h2>
+                 <p className="text-[11px] text-slate-600 mb-8 font-sans leading-relaxed">
+                   Describe what you need to procure — be specific. Include the material, application, and any constraints.
+-                  <br/>e.g. <span className="text-slate-500 italic">"neodymium magnets for automotive sun visor actuators"</span>,
+-                  &nbsp;<span className="text-slate-500 italic">"food-grade soy for QSR chain supply"</span>,
+-                  &nbsp;<span className="text-slate-500 italic">"IATF-certified steel stamping for EV chassis frames"</span>
++                  <br/>e.g. <span className="text-slate-500 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
++                  &nbsp;<span className="text-slate-500 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
++                  &nbsp;<span className="text-slate-500 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
+                 </p>
+                 <form onSubmit={handleSearch} className="space-y-6">
+                   <textarea
+@@ -688,7 +700,7 @@ export default function Dashboard() {
+                               <div className="text-[11px] text-slate-300 font-bold">{selectedNode.esg.carbon_footprint}</div>
+                             </div>
+                           </div>
+-                          <p className="text-[10px] text-slate-500 italic leading-snug">"{selectedNode.esg.sustainability_note}"</p>
++                          <p className="text-[10px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
+                         </div>
+                       )}
+                     </div>
+@@ -920,7 +932,7 @@ export default function Dashboard() {
+                   <div className="text-[10px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
+                 </div>
+                 <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
+-                  "{directive.summary}"
++                  &ldquo;{directive.summary}&rdquo;
+                 </div>
+               </div>
+             ) : (
+diff --git a/src/components/ComplianceChecklist.js b/src/components/ComplianceChecklist.js
+index 8dff471..6169932 100644
+--- a/src/components/ComplianceChecklist.js
++++ b/src/components/ComplianceChecklist.js
+@@ -1,6 +1,6 @@
+ "use client"
+ import React, { useState } from 'react'
+-import { X, Loader2, AlertTriangle, CheckSquare, Square, ClipboardList, ShieldCheck, Download, Copy } from 'lucide-react'
++import { X, ClipboardList, CheckSquare, Square, Copy } from 'lucide-react'
+ import { motion } from 'framer-motion'
+ 
+ const COMPLIANCE_RULES = {
+diff --git a/src/components/Globe.js b/src/components/Globe.js
+index 03e3eed..c042b09 100644
+--- a/src/components/Globe.js
++++ b/src/components/Globe.js
+@@ -27,8 +27,11 @@ function Earth({ risks, opportunities, autoRotate }) {
+           <meshBasicMaterial color="#38bdf8" wireframe transparent opacity={0.05} />
+         </mesh>
+ 
+-        {/* RISK NODES (RED) */}
+-        {risks.map((node, i) => (
++        {/* RISK NODES (RED) — only risks tied to a physical location have
++            lat/lng; abstract/geopolitical risks (export controls, tariff
++            exposure, etc.) have none and would otherwise render as NaN
++            markers. They're shown in the sidebar risk list instead. */}
++        {risks.filter(node => typeof node.lat === 'number' && typeof node.lng === 'number').map((node, i) => (
+           <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" />
+         ))}
+ 
+diff --git a/src/components/IncotermsCalc.js b/src/components/IncotermsCalc.js
+index 343104a..3cd52ec 100644
+--- a/src/components/IncotermsCalc.js
++++ b/src/components/IncotermsCalc.js
+@@ -1,6 +1,6 @@
+ "use client"
+ import React, { useState } from 'react'
+-import { X, Scale, ChevronDown } from 'lucide-react'
++import { X, Scale } from 'lucide-react'
+ import { motion } from 'framer-motion'
+ 
+ const INCOTERMS = {
+diff --git a/src/components/MissionHistory.js b/src/components/MissionHistory.js
+index 2c111bb..49fa298 100644
+--- a/src/components/MissionHistory.js
++++ b/src/components/MissionHistory.js
+@@ -1,7 +1,7 @@
+ "use client"
+ import React from 'react'
+-import { X, History, Clock, ChevronRight, Trash2, Target, MapPin } from 'lucide-react'
+-import { motion, AnimatePresence } from 'framer-motion'
++import { X, History, ChevronRight, Trash2, Target, MapPin } from 'lucide-react'
++import { motion } from 'framer-motion'
+ 
+ export default function MissionHistory({ missions, onClose, onReplay, onClear }) {
+   return (
+diff --git a/src/components/PortStatus.js b/src/components/PortStatus.js
+index 49c3ff0..a05239d 100644
+--- a/src/components/PortStatus.js
++++ b/src/components/PortStatus.js
+@@ -1,6 +1,6 @@
+ "use client"
+ import React, { useState, useEffect } from 'react'
+-import { X, Anchor, RefreshCw, Clock, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react'
++import { X, Anchor, AlertTriangle } from 'lucide-react'
+ import { motion } from 'framer-motion'
+ 
+ // Realistic port data — updated weekly in production via API
+diff --git a/src/components/SupplierComparison.js b/src/components/SupplierComparison.js
+index a41e0a1..0666c26 100644
+--- a/src/components/SupplierComparison.js
++++ b/src/components/SupplierComparison.js
+@@ -10,7 +10,12 @@ export default function SupplierComparison({ hubs, onClose }) {
+     let best = null, bestVal = Infinity
+     hubs.forEach(h => {
+       let val
+-      if (metric === 'duty') val = parseFloat(h.customs?.duty_rate) || 0
++      if (metric === 'duty') {
++        const raw = h.customs?.duty_rate || ''
++        // Guard against future non-percentage duty formats (e.g. "$0.35/kg")
++        // silently parsing to 0 and wrongly winning "cheapest".
++        val = raw.includes('%') ? (parseFloat(raw) || 0) : Infinity
++      }
+       if (metric === 'freight') val = parseFloat((h.logistics?.freight_cost_estimate || '').replace(/[^0-9.]/g, '')) || 999
+       if (metric === 'lead') val = h.logistics?.port_wait_days || 99
+       if (metric === 'esg') val = { 'AA': 0, 'A+': 1, 'A': 2, 'A-': 3, 'B+': 4, 'B': 5, 'B-': 6, 'C': 7 }[h.esg?.ethical_rating] ?? 5
+diff --git a/src/components/TLCCalculator.js b/src/components/TLCCalculator.js
+index fec7e75..fa5dba5 100644
+--- a/src/components/TLCCalculator.js
++++ b/src/components/TLCCalculator.js
+@@ -1,5 +1,5 @@
+ "use client"
+-import React, { useState, useEffect } from 'react'
++import React, { useState } from 'react'
+ import { X, Calculator, DollarSign, PackageOpen, Truck, Shield, AlertTriangle } from 'lucide-react'
+ import { motion } from 'framer-motion'
+ 
+diff --git a/src/components/TariffLookup.js b/src/components/TariffLookup.js
+index 18833ab..e72684c 100644
+--- a/src/components/TariffLookup.js
++++ b/src/components/TariffLookup.js
+@@ -1,7 +1,7 @@
+ "use client"
+ import React, { useState } from 'react'
+ import { X, Search, FileText, ShieldAlert, CheckCircle, AlertTriangle, Loader2, ExternalLink } from 'lucide-react'
+-import { motion, AnimatePresence } from 'framer-motion'
++import { motion } from 'framer-motion'
+ 
+ export default function TariffLookup({ onClose }) {
+   const [query, setQuery] = useState('')
+diff --git a/src/components/TradeRiskScore.js b/src/components/TradeRiskScore.js
+index 020fe58..be96535 100644
+--- a/src/components/TradeRiskScore.js
++++ b/src/components/TradeRiskScore.js
+@@ -1,7 +1,7 @@
+ "use client"
+ import React, { useState } from 'react'
+-import { X, Loader2, AlertTriangle, ShieldCheck, ShieldAlert, ChevronRight, CheckSquare, Square, Globe, Ship } from 'lucide-react'
+-import { motion, AnimatePresence } from 'framer-motion'
++import { X, Loader2, AlertTriangle, ShieldAlert } from 'lucide-react'
++import { motion } from 'framer-motion'
+ 
+ export default function TradeRiskScore({ onClose }) {
+   const [origin, setOrigin] = useState('')
