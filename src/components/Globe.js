@@ -112,7 +112,7 @@ function Marker({ node, color, type }) {
 export default function Globe({ risks = [], opportunities = [], autoRotate = true }) {
   return (
     <div className="w-full h-full">
-      <Canvas shadows antialias="true">
+      <Canvas shadows gl={{ antialias: true }}>
         <PerspectiveCamera makeDefault position={[0, 0, 6]} />
         <ambientLight intensity={2.5} />
         <pointLight position={[10, 10, 10]} intensity={4} color="#ffffff" />

@@ -482,9 +482,12 @@ export default function Dashboard() {
                     className="flex-1 h-14 bg-emerald-500 text-black font-bold uppercase text-[12px] tracking-widest hover:bg-emerald-400 transition-all rounded-lg">
                     Copy to Clipboard
                   </button>
-                  <button className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 transition-all rounded-lg">
+                  <a
+                    href={`mailto:?subject=${encodeURIComponent(`RFQ: ${searchQuery || profile.material}`)}&body=${encodeURIComponent(marketData?.rfq_template || '')}`}
+                    onClick={() => addLog('[SYSTEM] Opening email client with RFQ draft.')}
+                    className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 transition-all rounded-lg flex items-center justify-center">
                     Email to Procurement
-                  </button>
+                  </a>
                 </div>
               </motion.div>
             </motion.div>
