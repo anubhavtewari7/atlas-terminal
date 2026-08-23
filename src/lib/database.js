@@ -483,6 +483,28 @@ export const ATLAS_DB = {
 // QUERY CATEGORIZER — Maps user queries to database categories
 // Uses keyword priority: specific materials > applications > platforms
 // ============================================================
+// Picks the hub within a category most relevant to the specific query,
+// instead of always defaulting to whichever hub happens to be listed
+// first. Categories like "metals" bundle several distinct commodities
+// (lithium, copper, steel, cobalt) under one roof, so a query like "steel
+// rebar" needs to surface the steel hub, not a lithium mine, as the
+// headline recommendation. Uses each hub's own title/desc as the source
+// of keywords so it works across every category without hand-maintaining
+// a separate keyword map per hub.
+const STOPWORDS = new Set(['and','the','for','with','core','hub','mega','global','belt','processing','world','largest','primary','source']);
+export function pickBestHub(hubs, query) {
+  if (!hubs || hubs.length === 0) return null;
+  const q = (query || '').toLowerCase();
+  let best = hubs[0], bestScore = 0;
+  for (const h of hubs) {
+    const words = `${h.title || ''} ${h.desc || ''}`.toLowerCase().split(/[^a-z0-9]+/)
+      .filter(w => w.length > 3 && !STOPWORDS.has(w));
+    const score = words.reduce((s, w) => s + (q.includes(w) ? 1 : 0), 0);
+    if (score > bestScore) { bestScore = score; best = h; }
+  }
+  return best;
+}
+
 export function categorizeQuery(query) {
   const q = query.toLowerCase()
   const match = (keywords) => keywords.some(kw => q.includes(kw))
@@ -517,7 +539,14 @@ export function categorizeQuery(query) {
     'tier-1', 'tier 1', 'tier-2', 'oem automotive',
     'nafta', 'usmca', 'ford', 'gm ', 'toyota', 'honda',
     'bmw', 'mercedes', 'stellantis', 'rivian', 'seat assembly',
-    'window regulator', 'door panel', 'fuel system'
+    'window regulator', 'door panel', 'fuel system',
+    // Compound material+automotive terms — must be checked before the
+    // standalone material-only lists below (e.g. "leather car seats"
+    // would otherwise match "leather" under textiles and never reach
+    // the generic "car" keyword, which is checked much later).
+    'car seat', 'car seats', 'auto seat', 'vehicle seat', 'seat cover',
+    'seat trim', 'auto upholstery', 'vehicle upholstery', 'car interior',
+    'car door', 'car body', 'auto body panel', 'car wiring', 'wire harness'
   ])) return 'automotive'
 
   // Priority 4: Electronics and semiconductors
@@ -610,17 +639,23 @@ export const TARIFF_DATABASE = {
   // Textiles
   'shirt':           { code: '6109.10.00', base: '16.5%', notes: 'T-shirts, knitted or crocheted, of cotton.' },
   'shoes':           { code: '6404.11.00', base: '20.0%', notes: 'Sports footwear with rubber soles.' },
-  'cotton':          { code: '5201.00.00', base: '$0.31/kg', notes: 'Cotton, not carded or combed. WRO restrictions on Xinjiang origin (UFLPA).' }
+  'cotton':          { code: '5201.00.00', base: '$0.31/kg', notes: 'Cotton, not carded or combed. WRO restrictions on Xinjiang origin (UFLPA).' },
+  'leather':         { code: '4107.11.00', base: '2.4%–5.3%', notes: 'Full-grain bovine leather, not further prepared. Rate varies by tanning/finish stage — confirm exact HTS subheading with a customs broker.' },
+  'denim':           { code: '5209.42.00', base: '8.4%', notes: 'Denim fabric, cotton, woven.' }
 }
 
 export function lookupTariff(query) {
   const q = query.toLowerCase()
   for (const [key, data] of Object.entries(TARIFF_DATABASE)) {
     if (q.includes(key)) {
-      return { hts: data.code, duty: data.base, notes: data.notes }
+      return { hts: data.code, duty: data.base, notes: data.notes, matched: true }
     }
   }
-  // Smart fallback based on category
+  // Smart fallback based on category — this is a generic placeholder for
+  // the whole category, not a specific match for the product asked about.
+  // Callers must surface this distinction; presenting it with the same
+  // confidence as a real match risks someone filing customs paperwork
+  // against a fabricated HTS code.
   const cat = categorizeQuery(query)
   const fallbacks = {
     automotive:  { hts: '8708.99.81', duty: '2.5%',        notes: 'Other auto parts. Section 301 (25%) if China-origin.' },
@@ -630,7 +665,8 @@ export function lookupTariff(query) {
     metals:      { hts: '7204.49.00', duty: '1.5%',        notes: 'Ferrous waste and scrap. Specific tariffs may apply.' },
     textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' }
   }
-  return fallbacks[cat] || fallbacks.electronics
+  const fb = fallbacks[cat] || fallbacks.electronics
+  return { ...fb, matched: false }
 }
 
 // ============================================================

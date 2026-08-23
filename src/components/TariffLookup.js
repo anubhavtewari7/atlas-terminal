@@ -99,6 +99,14 @@ export default function TariffLookup({ onClose }) {
 
           {result && (
             <div className="space-y-5">
+              {result.matched === false && (
+                <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+                  <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-amber-200 leading-snug">
+                    No exact database entry for this product — the code below is a generic placeholder for its broader category, not a specific match. Verify with a licensed customs broker before filing.
+                  </p>
+                </div>
+              )}
               {/* Code Header */}
               <div className="flex items-start justify-between p-5 bg-sky-500/5 border border-sky-500/20 rounded-xl">
                 <div>

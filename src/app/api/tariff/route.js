@@ -22,7 +22,10 @@ export async function POST(req) {
     const data = {
       hts_code: t.hts,
       hs6_code: hs6Formatted,
-      description: `Automated deterministic classification for ${product}.`,
+      matched: t.matched,
+      description: t.matched
+        ? `Automated deterministic classification for ${product}.`
+        : `No specific database entry for "${product}". Showing a generic placeholder for its category — verify with a licensed customs broker before filing.`,
       mfn_rate: t.duty,
       section301_rate: t.duty.includes("25") ? "25%" : "N/A",
       total_us_duty: t.duty,

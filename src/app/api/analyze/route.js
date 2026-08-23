@@ -4,7 +4,7 @@
 // ============================================================
 
 import { NextResponse } from 'next/server';
-import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS } from '@/lib/database';
+import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS, pickBestHub } from '@/lib/database';
 
 export async function POST(req) {
   try {
@@ -16,8 +16,12 @@ export async function POST(req) {
 
     const query = material.trim();
     const category = categorizeQuery(query);
-    const opportunities = ATLAS_DB[category] || ATLAS_DB.electronics;
-    const selectedHub = opportunities[0];
+    const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.electronics;
+    const selectedHub = pickBestHub(baseOpportunities, query);
+    // Surface the most relevant hub first in the browsable list too, so it
+    // matches the "Primary recommendation" in the directive instead of
+    // contradicting it.
+    const opportunities = [selectedHub, ...baseOpportunities.filter(h => h.id !== selectedHub.id)];
 
     // Build a sharp, category-aware summary
     const categoryLabels = {

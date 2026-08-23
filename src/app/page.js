@@ -27,7 +27,7 @@ function clientCategorize(query) {
   const match = (kws) => kws.some(kw => q.includes(kw))
   if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','fastener','o-ring','gasket','actuator','solenoid','precision gear','industrial motor','sintered'])) return 'industrial'
   if (match(['lithium','cobalt','titanium','tungsten','neodymium oxide','rare earth mineral','steel coil','aluminum ingot','copper cathode'])) return 'metals'
-  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis'])) return 'automotive'
+  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis','car seat','car seats','auto seat','vehicle seat','seat cover','seat trim','auto upholstery','vehicle upholstery','car interior','car door','car body'])) return 'automotive'
   if (match(['chip','semiconductor','wafer','pcb','display panel','oled','processor','memory chip','microchip','tsmc','circuit board','nand','dram'])) return 'electronics'
   if (match(['beef','meat','patty','wheat','soybean','food','agri','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','mcdonald'])) return 'agriculture'
   if (match(['steel','aluminum','copper','iron','zinc','mineral','mining','metal','alloy','rare earth'])) return 'metals'
@@ -92,6 +92,24 @@ const FALLBACK_RISKS = {
     { id:'fr_tex_1', title:'UFLPA Forced Labor Risk', type:'Risk', severity:'HIGH', desc:'UFLPA creates rebuttable presumption of forced labor for all Xinjiang-origin goods. Cotton supply chains highly exposed.', mitigation:'Map fiber chain to raw material origin. Audit Tier-2/3 for Xinjiang exposure. Use SLCP audit standard.' },
     { id:'fr_tex_2', title:'Lead Time vs. Fashion Cycle Mismatch', type:'Risk', severity:'MEDIUM', desc:'Asia ocean freight adds 25-40 days. Fast fashion cycles require 4-8 week total lead time.', mitigation:'Near-shore to Turkey or Mexico for responsive lines. Reserve Asia for core basics with predictable demand.' },
   ],
+}
+
+// ── Picks the most relevant hub within a category for the specific query,
+//    mirroring lib/database.js's pickBestHub so the offline fallback never
+//    contradicts the server path (e.g. "steel" shouldn't recommend a
+//    lithium mine just because it's first in the metals array). ──
+const FALLBACK_STOPWORDS = new Set(['and','the','for','with','core','hub','mega','global','belt','processing','world','largest','primary','source'])
+function pickBestFallbackHub(hubs, query) {
+  if (!hubs || hubs.length === 0) return null
+  const q = (query || '').toLowerCase()
+  let best = hubs[0], bestScore = 0
+  for (const h of hubs) {
+    const words = `${h.title || ''} ${h.desc || ''}`.toLowerCase().split(/[^a-z0-9]+/)
+      .filter(w => w.length > 3 && !FALLBACK_STOPWORDS.has(w))
+    const score = words.reduce((s, w) => s + (q.includes(w) ? 1 : 0), 0)
+    if (score > bestScore) { bestScore = score; best = h }
+  }
+  return best
 }
 
 // ── Severity color helper ──
@@ -242,9 +260,10 @@ export default function Dashboard() {
 
       // Client-side fallback — same categorization logic as server
       const cat = clientCategorize(activeQuery)
-      const hubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
+      const baseHubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
       const fallbackRisks = FALLBACK_RISKS[cat] || FALLBACK_RISKS.electronics
-      const selectedHub = hubs[0]
+      const selectedHub = pickBestFallbackHub(baseHubs, activeQuery)
+      const hubs = [selectedHub, ...baseHubs.filter(h => h.id !== selectedHub.id)]
 
       const fbDir = {
         best_region:  selectedHub.hub,
@@ -291,27 +310,49 @@ export default function Dashboard() {
       doc.setFontSize(14)
       doc.text('EXECUTIVE MISSION BRIEF', 20, 40)
 
+      let yPos = 55
       doc.setFontSize(10)
       doc.setTextColor(150, 150, 150)
-      doc.text(`Target: ${searchQuery || profile.material}`, 20, 55)
-      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 62)
+      doc.text(`Target: ${searchQuery || profile.material}`, 20, yPos)
+      yPos += 7
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, yPos)
+      yPos += 13
 
       if (directive) {
         doc.setTextColor(16, 185, 129)
         doc.setFontSize(12)
-        doc.text('STRATEGIC DIRECTIVE:', 20, 75)
+        doc.text('STRATEGIC DIRECTIVE:', 20, yPos)
+        yPos += 8
         doc.setTextColor(200, 200, 200)
         doc.setFontSize(10)
+        // Compute vertical offset from the actual number of wrapped lines
+        // instead of a fixed gap — a long directive summary would otherwise
+        // visually overlap the "Target Hub" line below it.
         const splitSummary = doc.splitTextToSize(directive.summary, 170)
-        doc.text(splitSummary, 20, 83)
-        doc.text(`Target Hub: ${directive.best_region}`, 20, 100)
-        doc.text(`Primary Partner: ${directive.best_partner}`, 20, 107)
+        doc.text(splitSummary, 20, yPos)
+        yPos += splitSummary.length * 5 + 5
+        doc.text(`Target Hub: ${directive.best_region}`, 20, yPos)
+        yPos += 7
+        doc.text(`Primary Partner: ${directive.best_partner}`, 20, yPos)
+        yPos += 7
         const splitAlert = doc.splitTextToSize(`Tariff: ${directive.tariff_alert}`, 170)
-        doc.text(splitAlert, 20, 114)
+        doc.text(splitAlert, 20, yPos)
+        yPos += splitAlert.length * 5 + 10
+      } else {
+        yPos += 5
       }
 
-      let yPos = 132
+      const ensureSpace = (needed) => {
+        if (yPos + needed > 280) {
+          doc.addPage()
+          doc.setFillColor(10, 10, 10)
+          doc.rect(0, 0, 210, 297, 'F')
+          yPos = 20
+        }
+      }
+
       if (opportunities.length > 0) {
+        ensureSpace(15)
         doc.setTextColor(56, 189, 248)
         doc.setFontSize(12)
         doc.text('TOP GLOBAL SOURCING HUBS:', 20, yPos)
@@ -319,6 +360,7 @@ export default function Dashboard() {
         doc.setTextColor(200, 200, 200)
         doc.setFontSize(9)
         opportunities.slice(0, 5).forEach((opp, i) => {
+          ensureSpace(8)
           doc.text(`${i + 1}. ${opp.hub} — ${opp.companies[0]?.name || 'Multiple'} | ${opp.industry_kpi?.label}: ${opp.industry_kpi?.value}`, 20, yPos)
           yPos += 8
         })
@@ -326,6 +368,7 @@ export default function Dashboard() {
 
       if (risks.length > 0) {
         yPos += 5
+        ensureSpace(13)
         doc.setTextColor(239, 68, 68)
         doc.setFontSize(12)
         doc.text('KEY RISK FACTORS:', 20, yPos)
@@ -334,6 +377,7 @@ export default function Dashboard() {
         doc.setFontSize(9)
         risks.slice(0, 3).forEach((r, i) => {
           const split = doc.splitTextToSize(`${i + 1}. [${r.severity}] ${r.title}: ${r.mitigation}`, 170)
+          ensureSpace(split.length * 6 + 3)
           doc.text(split, 20, yPos)
           yPos += split.length * 6 + 3
         })

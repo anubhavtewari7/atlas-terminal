@@ -19,9 +19,16 @@ const INCOTERMS = {
 
 const COST_ESTIMATE = {
   EXW: { landedCostMultiplier: 1.45, notes: 'Budget +35-45% on top of ex-works price for full landed cost' },
-  FOB: { landedCostMultiplier: 1.25, notes: 'Budget +15-25% for freight, insurance, and import duties' },
-  CIF: { landedCostMultiplier: 1.10, notes: 'Budget +5-10% for import duties and local handling' },
+  FCA: { landedCostMultiplier: 1.28, notes: 'Budget +23-28% for main freight, insurance, and import duties' },
+  CPT: { landedCostMultiplier: 1.15, notes: 'Budget +10-15% for insurance, unloading, and import duties' },
+  CIP: { landedCostMultiplier: 1.12, notes: 'Budget +8-12% for unloading and import duties' },
+  DAP: { landedCostMultiplier: 1.08, notes: 'Budget +5-8% for import duties and unloading' },
+  DPU: { landedCostMultiplier: 1.06, notes: 'Budget +3-6% for import customs clearance only' },
   DDP: { landedCostMultiplier: 1.02, notes: 'Near-zero additional cost. Invoice price = landed cost' },
+  FAS: { landedCostMultiplier: 1.27, notes: 'Budget +22-27% for loading, main freight, and insurance' },
+  FOB: { landedCostMultiplier: 1.25, notes: 'Budget +15-25% for freight, insurance, and import duties' },
+  CFR: { landedCostMultiplier: 1.13, notes: 'Budget +8-13% for insurance, unloading, and import duties' },
+  CIF: { landedCostMultiplier: 1.10, notes: 'Budget +5-10% for import duties and local handling' },
 }
 
 export default function IncotermsCalc({ onClose }) {
