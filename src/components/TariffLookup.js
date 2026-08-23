@@ -99,11 +99,18 @@ export default function TariffLookup({ onClose }) {
 
           {result && (
             <div className="space-y-5">
-              {result.matched === false && (
+              {result.source === 'usitc_live' ? (
+                <div className="flex items-center gap-2 p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg">
+                  <CheckCircle size={14} className="text-emerald-400 shrink-0" />
+                  <p className="text-[10px] text-emerald-300 font-bold uppercase tracking-widest">
+                    Live data — U.S. International Trade Commission official HTS database
+                  </p>
+                </div>
+              ) : (
                 <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg">
                   <AlertTriangle size={16} className="text-amber-400 shrink-0 mt-0.5" />
                   <p className="text-[11px] text-amber-200 leading-snug">
-                    No exact database entry for this product — the code below is a generic placeholder for its broader category, not a specific match. Verify with a licensed customs broker before filing.
+                    {result.description}
                   </p>
                 </div>
               )}
@@ -112,7 +119,9 @@ export default function TariffLookup({ onClose }) {
                 <div>
                   <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 tracking-widest">{result.chapter}</div>
                   <div className="text-[28px] font-mono font-bold text-white tracking-wider">{result.hts_code}</div>
-                  <div className="text-[12px] text-slate-400 mt-1">{result.description}</div>
+                  {result.source === 'usitc_live' && (
+                    <div className="text-[12px] text-slate-400 mt-1">{result.description}</div>
+                  )}
                 </div>
                 <div className="text-right">
                   <div className="text-[9px] text-slate-600 uppercase mb-1">Unit</div>
@@ -121,13 +130,11 @@ export default function TariffLookup({ onClose }) {
               </div>
 
               {/* Duty Rates Grid */}
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: 'US MFN Rate', value: result.mfn_rate, icon: '🇺🇸' },
-                  { label: 'Section 301 Surcharge', value: result.section301_rate, icon: '⚠️' },
-                  { label: 'Total US Duty', value: result.total_us_duty, icon: '📊', highlight: true },
-                  { label: 'EU Duty Rate', value: result.eu_duty, icon: '🇪🇺' },
-                  { label: 'UK Duty Rate', value: result.uk_duty, icon: '🇬🇧' },
+                  { label: 'General (MFN) Rate', value: result.mfn_rate, icon: '🇺🇸', highlight: true },
+                  { label: 'Preferential/FTA Rate', value: result.special_rate || 'Not specified', icon: '🤝' },
+                  { label: 'Column 2 (Non-NTR) Rate', value: result.column2_rate || 'Not specified', icon: '⚠️' },
                   { label: 'HS6 Code', value: result.hs6_code, icon: '🌐' },
                 ].map((item, i) => (
                   <div key={i} className={`p-4 rounded-xl border ${item.highlight ? 'bg-amber-500/10 border-amber-500/30' : 'bg-[#111] border-white/5'}`}>
@@ -161,9 +168,9 @@ export default function TariffLookup({ onClose }) {
                 </div>
               )}
 
-              {/* CBP Link */}
+              {/* USITC Link */}
               <a
-                href={`https://hts.usitc.gov/reststop/api/details/htsno/${result.hs6_code}`}
+                href={`https://hts.usitc.gov/search?query=${encodeURIComponent(result.hts_code)}`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-between p-3 bg-[#111] border border-white/5 rounded-xl hover:border-sky-500/30 transition-all group"
               >
