@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Globe from '@/components/Globe'
 import TariffLookup from '@/components/TariffLookup'
 import MissionHistory from '@/components/MissionHistory'
@@ -13,7 +13,7 @@ import TLCCalculator from '@/components/TLCCalculator'
 import { jsPDF } from 'jspdf'
 import {
   ShieldAlert, Zap, Globe as GlobeIcon, ChevronRight,
-  Pause, Play, Newspaper, X, Terminal, Target, Factory,
+  Pause, Play, Newspaper, X, Target, Factory,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
@@ -118,7 +118,7 @@ export default function Dashboard() {
   const [showSearch, setShowSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [terminalLogs, setTerminalLogs] = useState([
+  const [, setTerminalLogs] = useState([
     "[SYSTEM] ATLAS Intelligence Core v3.0 — Online.",
     "[SYSTEM] Universal Resource Engine initialized.",
     "[SYSTEM] Supply chain database loaded: 6 categories, 32 global hubs."
@@ -126,7 +126,6 @@ export default function Dashboard() {
   const [directive, setDirective] = useState(null)
   const [marketData, setMarketData] = useState(null)
   const [showRFQ, setShowRFQ] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
   const [missionHistory, setMissionHistory] = useState([])
   const [fxData, setFxData] = useState(null)
   const [showTariff, setShowTariff] = useState(false)
@@ -138,15 +137,10 @@ export default function Dashboard() {
   const [showCompliance, setShowCompliance] = useState(false)
   const [showTLC, setShowTLC] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
-  const logRef = useRef(null)
 
   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
 
   useEffect(() => {
-    // Mount flag exists solely to defer client-only rendering (e.g. clock
-    // timestamps) until after hydration, avoiding an SSR/client mismatch.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsMounted(true)
     const loadLiveData = () => {
       fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
       fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
@@ -157,15 +151,11 @@ export default function Dashboard() {
     const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
     try {
       const saved = localStorage.getItem('atlas_missions')
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setMissionHistory(JSON.parse(saved))
     } catch {}
     return () => clearInterval(interval)
   }, [])
-
-  // Auto-scroll terminal log
-  useEffect(() => {
-    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [terminalLogs])
 
   const saveMission = (query, opps, dir) => {
     const mission = {
@@ -521,9 +511,14 @@ export default function Dashboard() {
 
           {/* Port Throughput */}
           <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-            <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
-              <Anchor size={14} /> Logistics Throughput
-            </h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                <Anchor size={14} /> Logistics Throughput
+              </h2>
+              <button onClick={() => setShowPorts(true)} className="text-[8px] text-slate-600 hover:text-sky-400 font-bold uppercase transition-colors">
+                View all →
+              </button>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { label:'Port of LA',    status:'Stable',   wait:'2d' },
@@ -531,13 +526,15 @@ export default function Dashboard() {
                 { label:'Port of Rotterdam',status:'Watch', wait:'3d' },
                 { label:'Port Klang',    status:'Stable',   wait:'2d' },
               ].map((p, i) => (
-                <div key={i} className="bg-[#111] p-2.5 border border-white/5 rounded-lg">
+                <button key={i} onClick={() => setShowPorts(true)}
+                  className="bg-[#111] p-2.5 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer"
+                  title={`View full congestion detail for ${p.label}`}>
                   <div className="text-[8px] text-slate-500 uppercase font-bold mb-1 truncate">{p.label}</div>
                   <div className="flex items-center justify-between">
                     <span className={`text-[12px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : 'text-amber-400'}`}>{p.status}</span>
                     <span className="text-[9px] text-slate-600">{p.wait}</span>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -818,36 +815,19 @@ export default function Dashboard() {
 
             </div>
           </div>
-
-          {/* Terminal Log */}
-          <div className="h-36 bg-[#0a0a0a] border border-white/10 p-4 font-mono rounded-xl shrink-0">
-            <div className="flex items-center gap-2 text-[10px] text-slate-700 uppercase font-bold mb-2 border-b border-white/5 pb-1.5">
-              <Terminal size={12} /> Advisory_Log_Stream
-            </div>
-            <div ref={logRef} className="overflow-y-auto text-[11px] text-sky-500/70 space-y-1 custom-scrollbar h-16">
-              {terminalLogs.map((log, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <span className="text-slate-800 shrink-0 text-[10px]">
-                    [{isMounted ? new Date().toLocaleTimeString() : '--:--:--'}]
-                  </span>
-                  <span>{log}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </main>
 
         {/* ════════════════════════════════════
             RIGHT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10">
+        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
           {/* Market Trends Chart */}
           {marketData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-4 shadow-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-3 shadow-xl shrink-0">
               <div className="flex items-center justify-between">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                  <BarChart3 size={16} /> Market Trends
+                  <BarChart3 size={16} /> Price Trend Index
                 </h2>
                 <div className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                   marketData.currency.impact === 'Stable' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
@@ -855,12 +835,16 @@ export default function Dashboard() {
                   {marketData.currency.impact}
                 </div>
               </div>
+              <p className="text-[9px] text-slate-600 leading-snug">
+                Indicative quarterly pricing trend for the current mission&rsquo;s category. Hover a bar for the exact index value.
+              </p>
               <div className="flex items-end justify-between gap-2" style={{ height: '72px' }}>
                 {marketData.price_history.map((d, i) => {
                   const max = Math.max(...marketData.price_history.map(p => p.price))
                   const px = Math.max(8, Math.round((d.price / max) * 64))
                   return (
-                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group cursor-help">
+                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group cursor-help" title={`${d.month}: index ${d.price}`}>
+                      <span className="text-[8px] text-slate-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">{d.price}</span>
                       <div className="w-full rounded-t relative group-hover:brightness-125 transition-all"
                         style={{ height:`${px}px`, background:'linear-gradient(to top, rgba(56,189,248,0.7), rgba(56,189,248,0.1))' }}>
                         <div className="absolute bottom-0 left-0 right-0 h-px bg-sky-400" />
@@ -884,16 +868,22 @@ export default function Dashboard() {
 
           {/* Live FX Rates */}
           {fxData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.2em] uppercase flex items-center gap-2">
                   <TrendingUp size={14} /> Live FX Rates
                 </h2>
-                <span className="text-[9px] text-slate-700 font-mono">{fxData.date}</span>
+                <button
+                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
+                  className="flex items-center gap-1 text-[8px] text-slate-600 hover:text-amber-400 font-mono transition-colors"
+                  title="Rates refresh automatically every 5 minutes. Click to refresh now.">
+                  <span>as of {fxData.date}</span>
+                  <span className="text-[10px]">⟳</span>
+                </button>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
-                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg">
+                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
                     <div>
                       <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
                       <div className="text-[9px] text-slate-600 mt-0.5 leading-tight">
@@ -910,8 +900,8 @@ export default function Dashboard() {
           )}
 
           {/* Strategic Directive */}
-          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-3"><Zap size={20} className="text-emerald-500/10" /></div>
+          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative shrink-0">
+            <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
             <h2 className="text-[10px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
               <Target size={14} /> Strategic Directive
             </h2>
@@ -943,7 +933,7 @@ export default function Dashboard() {
           </div>
 
           {/* Market Intelligence / News */}
-          <div className="bg-[#0a0a0a] border border-white/10 flex-1 p-4 flex flex-col gap-3 overflow-hidden rounded-xl shadow-xl min-h-0">
+          <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
             <div className="flex items-center justify-between shrink-0">
               <h2 className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
