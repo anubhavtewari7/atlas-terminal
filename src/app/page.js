@@ -10,9 +10,9 @@ import TradeRiskScore from '@/components/TradeRiskScore'
 import PortStatus from '@/components/PortStatus'
 import ComplianceChecklist from '@/components/ComplianceChecklist'
 import TLCCalculator from '@/components/TLCCalculator'
-import { jsPDF } from 'jspdf'
+import AtlasLogo from '@/components/AtlasLogo'
 import {
-  ShieldAlert, Zap, Globe as GlobeIcon, ChevronRight,
+  ShieldAlert, Zap, ChevronRight,
   Pause, Play, Newspaper, X, Target, Factory,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
@@ -540,7 +540,7 @@ export default function Dashboard() {
           <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 rounded-lg">
-                <GlobeIcon size={22} />
+                <AtlasLogo size={22} />
               </div>
               <div>
                 <h1 className="font-bold text-xl tracking-widest leading-none text-white">ATLAS</h1>
