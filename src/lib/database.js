@@ -479,6 +479,98 @@ export const ATLAS_DB = {
   ]
 }
 
+// 7. PLASTICS, POLYMERS & ELASTOMERS
+// Covers: TPE, ABS, PP, PVC, nylon, PEEK, polycarbonate, polyurethane,
+//         silicone rubber, composites, injection/blow/roto molding,
+//         epoxy resins, carbon fiber, fiberglass, packaging film
+  plastics: [
+    {
+      id: 'h_pla_1', lat: 22.5, lng: 114.1,
+      hub: 'GUANGDONG, CHINA', title: 'Global Injection Molding & Polymer Hub',
+      companies: [
+        { name: 'Kingfa Sci & Tech', website: 'https://www.kingfa.com/' },
+        { name: 'Sinopec (polymer resins)', website: 'https://www.sinopec.com/' },
+        { name: 'Hi-Tech Mold & Engineering', website: 'https://www.hitechmold.com/' }
+      ],
+      desc: 'World\'s largest plastic parts manufacturing cluster. Unmatched capacity for high-volume injection molding, blow molding, and overmolding across automotive, consumer, and industrial applications. Key hub for TPE, ABS, and PP compound production.',
+      customs: { hts_code: '3926.90.99', duty_rate: '5.3% + 25% (Sec 301)', compliance_note: 'Section 301 List 3 tariffs apply to most finished plastic articles. Verify REACH and RoHS compliance for EU re-export.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'C+', sustainability_note: 'High energy intensity from molding presses. Plastics recycling mandates increasing under China\'s EPR regulations.' },
+      logistics: { port_wait_days: 14, freight_cost_estimate: '$3.2k/FEU' },
+      industry_kpi: { label: 'Capacity', value: 'World\'s Largest' }
+    },
+    {
+      id: 'h_pla_2', lat: 49.4, lng: 8.7,
+      hub: 'RHINE VALLEY, GERMANY', title: 'European Specialty Polymer Hub',
+      companies: [
+        { name: 'BASF SE', website: 'https://www.basf.com/' },
+        { name: 'Covestro', website: 'https://www.covestro.com/' },
+        { name: 'Lanxess', website: 'https://www.lanxess.com/' }
+      ],
+      desc: 'Global center for engineering thermoplastics, specialty resins, and polyurethane systems. BASF and Covestro supply automotive OEMs worldwide with IATF-grade nylon, PBT, and polycarbonate. Preferred source for high-performance, REACH-compliant polymers.',
+      customs: { hts_code: '3908.10.00', duty_rate: '0% (EU–US MFN for polyamides)', compliance_note: 'REACH registration mandatory for EU-origin imports into EU. No Section 301. Preferred source for sustainability-focused supply chains.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'BASF committed to carbon-neutral operations by 2050. Circular economy portfolio (ChemCycling). High ESG transparency.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'Grade', value: 'Specialty / Engineering' }
+    },
+    {
+      id: 'h_pla_3', lat: 29.7, lng: -95.0,
+      hub: 'HOUSTON / BAYTOWN, USA', title: 'North American Polyolefin Hub',
+      companies: [
+        { name: 'ExxonMobil Chemical', website: 'https://www.exxonmobilchemical.com/' },
+        { name: 'LyondellBasell', website: 'https://www.lyondellbasell.com/' },
+        { name: 'Braskem America', website: 'https://www.braskem.com.br/' }
+      ],
+      desc: 'World\'s largest concentration of polyolefin (PP, PE, LLDPE) production. Domestic US supply with zero tariff exposure, short lead times, and full traceability. Preferred for USMCA-origin compliance and reshoring supply chains.',
+      customs: { hts_code: '3902.10.00', duty_rate: '0% (domestic)', compliance_note: 'No import duties for domestic supply. USMCA-compliant for Canada/Mexico export. FDA food-contact grades available.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Significant bio-based PP investments underway. Domestic production reduces shipping emissions substantially.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$0.8k/Truck' },
+      industry_kpi: { label: 'Origin', value: '100% US Domestic' }
+    },
+    {
+      id: 'h_pla_4', lat: 22.3, lng: 73.1,
+      hub: 'VADODARA / SURAT, INDIA', title: 'Asia Polymer & Compounding Hub',
+      companies: [
+        { name: 'Reliance Industries (polymers)', website: 'https://www.ril.com/' },
+        { name: 'Supreme Industries', website: 'https://www.supreme.co.in/' },
+        { name: 'Atul Ltd', website: 'https://www.atulltd.com/' }
+      ],
+      desc: 'Reliance Industries operates the world\'s largest single-site refinery-petrochemical complex. Growing hub for polymer compounding, masterbatch, and specialty plastic components. Competitive cost base with improving quality standards.',
+      customs: { hts_code: '3901.20.00', duty_rate: '0% (GSP suspended; MFN 6.5%)', compliance_note: 'India GSP benefits suspended for US importers. MFN rate applies. Strong cost advantage for commodity grades.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Reliance investing in green H2 and circular economy. Compounders increasingly using recycled feedstock.' },
+      logistics: { port_wait_days: 8, freight_cost_estimate: '$3.0k/FEU' },
+      industry_kpi: { label: 'Scale', value: 'Largest Asia Refinery' }
+    },
+    {
+      id: 'h_pla_5', lat: 35.5, lng: 129.4,
+      hub: 'ULSAN, SOUTH KOREA', title: 'Specialty Elastomer & Engineering Polymer Hub',
+      companies: [
+        { name: 'LG Chem', website: 'https://www.lgchem.com/' },
+        { name: 'Lotte Chemical', website: 'https://www.lottechem.com/' },
+        { name: 'SK Geo Centric', website: 'https://www.skgeocentric.com/' }
+      ],
+      desc: 'Global leader in specialty elastomers, ABS, and engineering plastics. LG Chem supplies automotive-grade ABS and SAN to Hyundai, GM, and Ford. KORUS FTA eliminates import duties for US buyers. Strong quality and traceability standards.',
+      customs: { hts_code: '4002.59.00', duty_rate: '0% (KORUS FTA)', compliance_note: 'KORUS FTA duty elimination on synthetic rubber and most polymer grades. Korean origin documentation required.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'LG Chem target: 100% renewable energy by 2050. Bio-circular ABS available for automotive OEMs.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$2.6k/FEU' },
+      industry_kpi: { label: 'Tariff', value: '0% KORUS FTA' }
+    },
+    {
+      id: 'h_pla_6', lat: 1.3, lng: 103.7,
+      hub: 'JURONG ISLAND, SINGAPORE', title: 'SE Asia Chemical & Polymer Gateway',
+      companies: [
+        { name: 'Shell Chemicals Asia', website: 'https://www.shell.com/' },
+        { name: 'ExxonMobil Chemical Asia', website: 'https://www.exxonmobilchemical.com/' },
+        { name: 'Mitsui Chemicals Asia', website: 'https://www.mitsuichemicals.com/' }
+      ],
+      desc: 'Jurong Island hosts 100+ chemical and petrochemical companies on a single industrial island. Key trading and production hub for polyolefins, PVC, and specialty chemicals for the ASEAN region. Excellent logistics, zero political supply risk.',
+      customs: { hts_code: '3904.10.00', duty_rate: '6.5% (MFN PVC)', compliance_note: 'Singapore Free Trade Agreements with US (USSFTA) provide 0% duty on most goods. Favorable duty treatment.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Singapore EDB sustainability mandates. Carbon tax on industrial emitters. High environmental compliance standards.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.4k/FEU' },
+      industry_kpi: { label: 'FTA Duty', value: '0% (USSFTA)' }
+    }
+  ]
+}
+
 // ============================================================
 // QUERY CATEGORIZER — Maps user queries to database categories
 // Uses keyword priority: specific materials > applications > platforms
@@ -509,7 +601,30 @@ export function categorizeQuery(query) {
   const q = query.toLowerCase()
   const match = (keywords) => keywords.some(kw => q.includes(kw))
 
-  // Priority 1: Specific industrial components (magnets, bearings, seals, etc.)
+  // Priority 1: Plastics, polymers, elastomers, rubber, composites
+  // Must be first — "injection mold" would otherwise fall to electronics default
+  if (match([
+    'tpe', 'thermoplastic elastomer', 'thermoplastic', 'thermoset',
+    'polymer', 'polymers', 'resin compound', 'plastic resin',
+    'abs plastic', 'abs compound', 'polypropylene', 'polyethylene',
+    'hdpe', 'ldpe', 'lldpe', 'pvc pipe', 'pvc compound',
+    'nylon compound', 'nylon part', 'peek', 'pom resin', 'delrin', 'acetal',
+    'polycarbonate', 'polyurethane', 'pu foam', 'foam molding',
+    'injection mold', 'injection mould', 'injection molded', 'injection moulded',
+    'blow mold', 'blow mould', 'roto mold', 'roto mould',
+    'plastic part', 'plastic component', 'plastic housing', 'plastic enclosure',
+    'molded part', 'moulded part', 'overmold', 'overmould', 'insert mold',
+    'elastomer', 'epdm', 'nbr rubber', 'silicone rubber', 'silicone part',
+    'rubber compound', 'synthetic rubber', 'natural rubber',
+    'carbon fiber', 'carbon fibre', 'fiberglass', 'fibreglass',
+    'composite part', 'epoxy resin', 'epoxy compound',
+    'plastic film', 'packaging film', 'stretch film', 'shrink wrap',
+    'plastic extrusion', 'extrusion profile', 'plastic tube',
+    'masterbatch', 'color concentrate', 'flame retardant compound',
+    'engineering plastic', 'specialty polymer', 'bio-based plastic'
+  ])) return 'plastics'
+
+  // Priority 2: Specific industrial components (magnets, bearings, seals, etc.)
   // Must be before automotive to catch "magnets for cars/visors" → industrial category
   if (match([
     'magnet', 'neodymium', 'ndfeb', 'ferrite magnet', 'permanent magnet',
@@ -522,7 +637,7 @@ export function categorizeQuery(query) {
     'sintered', 'powder metallurgy'
   ])) return 'industrial'
 
-  // Priority 2: Specific metals and minerals (raw material level)
+  // Priority 3: Specific metals and minerals (raw material level)
   if (match([
     'lithium', 'cobalt', 'neodymium oxide', 'rare earth mineral',
     'titanium sponge', 'tungsten', 'molybdenum', 'platinum',
@@ -663,7 +778,8 @@ export function lookupTariff(query) {
     electronics: { hts: '8542.31.00', duty: '0% (ITA)',    notes: 'Electronic integrated circuits. Information Technology Agreement duty-free.' },
     agriculture: { hts: '2106.90.99', duty: '6.4%',        notes: 'Food preparations. Actual rate varies by product and origin.' },
     metals:      { hts: '7204.49.00', duty: '1.5%',        notes: 'Ferrous waste and scrap. Specific tariffs may apply.' },
-    textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' }
+    textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' },
+    plastics:    { hts: '3926.90.99', duty: '5.3% + 25% (China Sec 301)', notes: 'Other plastic articles. Duty-free from Korea (KORUS), Singapore (USSFTA), Germany (MFN). Section 301 applies to China-origin.' }
   }
   const fb = fallbacks[cat] || fallbacks.electronics
   return { ...fb, matched: false }
@@ -892,6 +1008,29 @@ export const CATEGORY_RISKS = {
       id: 'r_tex_3', title: 'Lead Time vs. Fashion Cycle Mismatch', type: 'Risk', severity: 'MEDIUM',
       desc: 'Standard Asia ocean freight adds 25-40 days to lead time. Fast fashion and responsive retail cycles require 4-8 week total lead time, creating inventory overstock risk when sales miss forecasts.',
       mitigation: 'Near-shore to Turkey, Morocco, or Mexico for speed-to-market collections. Reserve Bangladesh/Vietnam for core basics with predictable demand. Implement demand-sensing analytics to improve forecast accuracy.'
+    }
+  ],
+
+  plastics: [
+    {
+      id: 'r_pla_1', title: 'China Section 301 Tariff on Plastic Articles', type: 'Risk', severity: 'HIGH',
+      desc: 'Most finished plastic parts sourced from China face 25% Section 301 tariffs on top of MFN rates, adding 25–30% to landed cost. Applies to injection-molded parts, extrusions, and assembled plastic components under HTS Chapter 39.',
+      mitigation: 'Qualify alternative tooling in South Korea (0% KORUS), Germany (MFN ~0-5%), or domestic US compounders. Nearshore injection molding capacity to Mexico under USMCA. Request First Sale valuation ruling from CBP to reduce dutiable value.'
+    },
+    {
+      id: 'r_pla_2', title: 'Crude Oil Price Correlation', type: 'Risk', severity: 'HIGH',
+      desc: 'Polymer feedstock prices (naphtha, ethylene, propylene) are directly tied to crude oil. A 20% crude spike typically raises polymer costs 12-18% within 60-90 days, compressing margins and triggering supplier price escalation clauses.',
+      mitigation: 'Include feedstock index price adjustment clauses (CPI/PPI linked) in LTAs. Source from US Gulf Coast suppliers with domestic natural gas-based feedstock, which is structurally cheaper and less oil-correlated. Hedge with financial instruments if volume justifies.'
+    },
+    {
+      id: 'r_pla_3', title: 'REACH / RoHS Restricted Substance Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'EU REACH regulations cover 240+ substances of very high concern (SVHCs) commonly used in polymer additives, plasticizers, and flame retardants (e.g., PFAS, phthalates, BPA, halogenated FRs). Non-compliant products face customs seizure and market bans.',
+      mitigation: 'Require full material declaration (FMD) and RoHS/REACH compliance certificate from all polymer suppliers. Use IEC 62474 declarable substance database as the reference. Conduct annual chemical compliance audits. Specify SVHC-free grade variants in purchase specs.'
+    },
+    {
+      id: 'r_pla_4', title: 'Tooling & Mold Lead Time Risk', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Injection mold fabrication for complex parts takes 8-20 weeks and costs $15,000–$250,000+ per tool. A single mold failure, tool damage, or supplier exit can halt production with no quick recovery path.',
+      mitigation: 'Own your tooling — ensure purchase orders specify tooling ownership with your company. Maintain mold drawings and CAD files. Qualify a secondary molder with duplicate or back-up tooling for critical production parts. Inspect tools annually.'
     }
   ]
 }
