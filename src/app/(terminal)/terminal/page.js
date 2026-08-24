@@ -230,6 +230,14 @@ export default function Dashboard() {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setMissionHistory(JSON.parse(saved))
     } catch {}
+    // Auto-run scan from URL ?q= param (enables shareable links)
+    if (typeof window !== 'undefined') {
+      const q = new URLSearchParams(window.location.search).get('q')
+      if (q) {
+        setSearchQuery(q)
+        setTimeout(() => handleSearch(null, q), 600)
+      }
+    }
     return () => clearInterval(interval)
   }, [])
 
@@ -316,6 +324,12 @@ export default function Dashboard() {
     setSearchQuery(activeQuery)
     addLog(`[SCAN] Initiating: "${activeQuery}"`)
     addLog('[AI] Mapping global industrial hubs...')
+    // Push query to URL so scan is shareable
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href)
+      url.searchParams.set('q', activeQuery)
+      window.history.replaceState({}, '', url.toString())
+    }
 
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 45000)
@@ -679,8 +693,25 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ── MOBILE HEADER BAR (hidden on desktop) ── */}
+      <div className="lg:hidden flex items-center justify-between px-3 py-2 bg-[#0a0a0a] border-b border-white/10 shrink-0">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center rounded-md">
+            <AtlasLogo size={16} />
+          </div>
+          <span className="text-[11px] font-bold tracking-widest text-white">ATLAS</span>
+        </div>
+        <div className="flex-1 mx-3 text-[10px] text-sky-400 truncate text-center">
+          {opportunities.length > 0 ? `${opportunities.length} hubs · ${profile.material}` : 'Supply Chain Intelligence'}
+        </div>
+        <button onClick={() => setShowSearch(true)}
+          className="text-[10px] font-bold bg-emerald-500 text-black px-3 py-1.5 rounded-lg shrink-0">
+          SCAN
+        </button>
+      </div>
+
       {/* ── MAIN CONTENT ── */}
-      <div className="flex flex-1 overflow-hidden p-4 gap-4">
+      <div className="flex flex-1 overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
 
         {/* ── MODALS ── */}
         <AnimatePresence>
@@ -767,7 +798,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             LEFT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10">
+        <aside className="hidden lg:flex w-80 flex-col gap-4 shrink-0 z-10">
 
           {/* Brand + Mission */}
           <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
@@ -858,7 +889,20 @@ export default function Dashboard() {
               </h2>
               <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
                 {opportunities.length === 0 ? (
-                  <p className="text-[10px] text-slate-700 italic">No hubs mapped yet. Run a mission scan.</p>
+                  <div className="space-y-1.5 pt-1">
+                    <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">Try an example:</p>
+                    {[
+                      'IATF-certified brake pads for passenger vehicles',
+                      'Neodymium magnets for EV motor assembly',
+                      'Food-grade soy for QSR supply chain',
+                      'Semiconductor wafers for automotive ECU',
+                    ].map((q) => (
+                      <button key={q} onClick={() => handleSearch(null, q)}
+                        className="w-full text-left text-[10px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-2.5 rounded-lg transition-all">
+                        → {q}
+                      </button>
+                    ))}
+                  </div>
                 ) : opportunities.map((o, i) => (
                   <div key={o.id || i}
                     onClick={() => setSelectedNode(selectedNode?.id === o.id ? null : o)}
@@ -1118,7 +1162,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             RIGHT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
+        <aside className="hidden lg:flex w-80 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
           {/* Market Trends Chart */}
           {marketData && (

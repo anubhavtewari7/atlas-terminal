@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AtlasLogo from '@/components/AtlasLogo';
+import HeroSearch from '@/components/HeroSearch';
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -296,8 +297,8 @@ export default function LandingPage() {
         </div>
         <h1>Know your supply chain<br/>before it fails you</h1>
         <p className="hero-sub">Real-time sourcing intelligence, tariff data, and geopolitical risk — built for procurement professionals who can&apos;t afford surprises.</p>
-        <div className="hero-actions">
-          <Link href="/terminal" className="btn-primary">Run a free scan →</Link>
+        <HeroSearch />
+        <div className="hero-actions" style={{ marginTop: '1.5rem' }}>
           <a href="#features" className="btn-ghost">See how it works</a>
         </div>
       </section>
