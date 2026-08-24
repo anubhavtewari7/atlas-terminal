@@ -799,7 +799,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             LEFT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10">
+        <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
           {/* Brand + Mission */}
           <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
@@ -870,15 +870,15 @@ export default function Dashboard() {
           </div>
 
           {/* Risk Panels */}
-          <div className="flex-1 overflow-hidden flex flex-col gap-3 min-h-0">
+          <div className="flex flex-col gap-3">
 
             {/* Global Threats */}
-            <div className="flex-1 bg-[#0a0a0a] border border-white/10 p-4 flex flex-col overflow-hidden rounded-xl min-h-0">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
               <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
                 <ShieldAlert size={14} /> Global Threats
                 {risks.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{risks.length} active</span>}
               </h2>
-              <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+              <div className="space-y-2">
                 {risks.length === 0 ? (
                   <p className="text-[10px] text-slate-700 italic">Run a sourcing scan to surface relevant risk factors.</p>
                 ) : risks.map((r, i) => (
@@ -901,12 +901,12 @@ export default function Dashboard() {
             </div>
 
             {/* Sourcing Hubs */}
-            <div className="flex-1 bg-[#0a0a0a] border border-white/10 p-4 flex flex-col overflow-hidden rounded-xl min-h-0">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
               <h2 className="text-[10px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
                 <Factory size={14} /> Sourcing Hubs
                 {opportunities.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{opportunities.length} identified</span>}
               </h2>
-              <div className="flex-1 overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+              <div className="space-y-2">
                 {opportunities.length === 0 ? (
                   <div className="space-y-1.5 pt-1">
                     <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">Try an example:</p>
