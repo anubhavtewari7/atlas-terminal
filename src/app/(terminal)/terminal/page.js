@@ -394,6 +394,7 @@ export default function Dashboard() {
     setIsExportingPDF(true)
     addLog('[SYSTEM] Generating Executive Mission Brief (PDF)...')
     try {
+      const { jsPDF } = await import('jspdf')
       const doc = new jsPDF('p', 'mm', 'a4')
       doc.setFillColor(10, 10, 10)
       doc.rect(0, 0, 210, 297, 'F')
