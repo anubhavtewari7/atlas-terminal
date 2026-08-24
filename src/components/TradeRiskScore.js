@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react'
-import { X, Loader2, AlertTriangle, ShieldCheck, ShieldAlert, ChevronRight, CheckSquare, Square, Globe, Ship } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { X, Loader2, AlertTriangle, ShieldAlert } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function TradeRiskScore({ onClose }) {
   const [origin, setOrigin] = useState('')

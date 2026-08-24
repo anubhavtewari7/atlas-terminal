@@ -4,7 +4,8 @@
 // ============================================================
 
 import { NextResponse } from 'next/server';
-import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS } from '@/lib/database';
+import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS, pickBestHub } from '@/lib/database';
+import { enrichWithRealTradeData } from '@/lib/comtrade';
 
 export async function POST(req) {
   try {
@@ -16,7 +17,18 @@ export async function POST(req) {
 
     const query = material.trim();
     const category = categorizeQuery(query);
-    const opportunities = ATLAS_DB[category] || ATLAS_DB.electronics;
+    const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.electronics;
+    const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
+    // Surface the most relevant hub first in the browsable list too, so it
+    // matches the "Primary recommendation" in the directive instead of
+    // contradicting it.
+    const orderedOpportunities = [selectedHubUnenriched, ...baseOpportunities.filter(h => h.id !== selectedHubUnenriched.id)];
+
+    // Attach real UN Comtrade export figures where available. This is a
+    // best-effort enrichment — network issues or missing Comtrade coverage
+    // for a given country/HS/year simply leave a hub without the badge,
+    // never blocks or fails the mission scan itself.
+    const opportunities = await enrichWithRealTradeData(orderedOpportunities);
     const selectedHub = opportunities[0];
 
     // Build a sharp, category-aware summary

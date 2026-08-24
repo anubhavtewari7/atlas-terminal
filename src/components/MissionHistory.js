@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
-import { X, History, Clock, ChevronRight, Trash2, Target, MapPin } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { X, History, ChevronRight, Trash2, Target, MapPin } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 export default function MissionHistory({ missions, onClose, onReplay, onClear }) {
   return (

@@ -1,46 +1,63 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
-export const revalidate = 3600
+const FALLBACK_NEWS = [
+  { title: 'Suez Canal Congestion Monitoring', description: 'Real-time tracking of vessel backlog in major corridors.', link: '#', pubDate: 'LIVE' },
+  { title: 'Shanghai Port Throughput Data', description: 'Analysis of export volume trends in East Asian hubs.', link: '#', pubDate: 'LIVE' }
+];
+
+function parseRss(text) {
+  return text.split('<item>').slice(1).map(item => {
+    const title = item.match(/<title>(<!\[CDATA\[)?(.*?)(]]>)?<\/title>/)?.[2] || 'Global Trade Update';
+    const description = item.match(/<description>(<!\[CDATA\[)?(.*?)(]]>)?<\/description>/)?.[2] || '';
+    const link = item.match(/<link>(<!\[CDATA\[)?(.*?)(]]>)?<\/link>/)?.[2] || '#';
+    const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
+    const parsedDate = pubDate ? new Date(pubDate) : null;
+    return {
+      title: title.replace(/&amp;/g, '&'),
+      description: description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...',
+      link,
+      pubDate: parsedDate && !isNaN(parsedDate) ? parsedDate.toLocaleDateString() : '',
+      // kept for correct chronological sorting once feeds are merged
+      _sortTs: parsedDate && !isNaN(parsedDate) ? parsedDate.getTime() : 0
+    };
+  });
+}
+
+// Two independent sources so a single feed being unreachable, or a single
+// niche topic (shipping-only), doesn't leave the Market Intelligence panel
+// with too little content for the regional filters to find matches in.
+const SOURCES = [
+  'https://gcaptain.com/feed/',              // maritime / shipping / logistics
+  'https://feeds.bbci.co.uk/news/business/rss.xml' // broad global business & trade
+];
 
 export async function GET() {
   try {
-    const res = await fetch('https://gcaptain.com/feed/', {
-      next: { revalidate: 3600 },
-      headers: { 'User-Agent': 'ATLAS-Terminal/1.0 (supply chain intelligence)' }
-    })
+    const results = await Promise.allSettled(
+      SOURCES.map(url => fetch(url, { next: { revalidate: 1800 } }).then(r => r.text()))
+    );
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const xml = await res.text()
+    let items = [];
+    for (const r of results) {
+      if (r.status === 'fulfilled') items = items.concat(parseRss(r.value));
+    }
 
-    const itemMatches = xml.match(/<item[\s>][\s\S]*?<\/item>/g) || []
+    // De-dupe (same headline occasionally appears in multiple feeds) and
+    // sort newest-first so "latest market news" is actually chronological.
+    const seen = new Set();
+    items = items.filter(i => {
+      if (seen.has(i.title)) return false;
+      seen.add(i.title);
+      return true;
+    }).sort((a, b) => b._sortTs - a._sortTs).map(({ _sortTs, ...rest }) => rest);
 
-    const items = itemMatches.slice(0, 10).map(item => {
-      const getTag = (tag) => {
-        const cdataMatch = item.match(new RegExp(`<${tag}[^>]*><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\/${tag}>`, 'i'))
-        if (cdataMatch) return cdataMatch[1].trim()
-        const plainMatch = item.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)<\/${tag}>`, 'i'))
-        return plainMatch ? plainMatch[1].replace(/<[^>]+>/g, '').trim() : ''
-      }
+    // A fetch can succeed at the network layer but still return a body that
+    // isn't parseable RSS (blocked, rate-limited, format change). Treat
+    // "nothing parsed from either source" the same as a failed fetch.
+    if (items.length === 0) return NextResponse.json(FALLBACK_NEWS);
 
-      let link = ''
-      const linkMatch = item.match(/<link>([\s\S]*?)<\/link>/i) || item.match(/<guid[^>]*>([\s\S]*?)<\/guid>/i)
-      if (linkMatch) link = linkMatch[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim()
-
-      const rawDate = getTag('pubDate')
-      let pubDate = rawDate
-      try { pubDate = new Date(rawDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) } catch {}
-
-      const rawDesc = getTag('description')
-      const cleanDesc = rawDesc.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().slice(0, 160)
-
-      return { title: getTag('title'), link, description: cleanDesc, pubDate }
-    }).filter(item => item.title && item.link)
-
-    if (items.length === 0) throw new Error('No items parsed')
-    return NextResponse.json(items)
-
-  } catch (err) {
-    console.error('[ATLAS] News fetch failed:', err.message)
-    return NextResponse.json([])
+    return NextResponse.json(items.slice(0, 20));
+  } catch (error) {
+    return NextResponse.json(FALLBACK_NEWS);
   }
 }

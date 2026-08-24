@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { X, Calculator, DollarSign, PackageOpen, Truck, Shield, AlertTriangle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
@@ -13,14 +13,16 @@ export default function TLCCalculator({ onClose, defaultDuty = 0, defaultFreight
   // Calculations
   const cargoValue = unitCost * quantity
   const insuranceCost = cargoValue * (insurancePercent / 100)
-  // CIF Value = Cargo + Insurance + Freight (Customs value in many countries)
-  const cifValue = cargoValue + insuranceCost + freightCost
-  // Duty is usually calculated on CIF or FOB depending on country; we'll use FOB (cargo value) for US standard
+  // Duty is calculated on CIF or FOB depending on country; using FOB (cargo
+  // value) here as the US standard basis, per the "Import Duty" label.
   const dutyCost = cargoValue * (dutyPercent / 100)
-  
+
   const totalLandedCost = cargoValue + freightCost + insuranceCost + dutyCost
-  const landedCostPerUnit = totalLandedCost / quantity
-  const marginImpact = ((landedCostPerUnit - unitCost) / unitCost) * 100
+  // Guard against divide-by-zero if the quantity field is emptied or set
+  // to 0 — without this, the UI would render "$Infinity".
+  const safeQuantity = quantity > 0 ? quantity : 1
+  const landedCostPerUnit = totalLandedCost / safeQuantity
+  const marginImpact = unitCost > 0 ? ((landedCostPerUnit - unitCost) / unitCost) * 100 : 0
 
   return (
     <motion.div
@@ -56,7 +58,8 @@ export default function TLCCalculator({ onClose, defaultDuty = 0, defaultFreight
               </div>
               <div>
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 flex items-center gap-2"><PackageOpen size={12}/> Order Quantity</label>
-                <input type="number" value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="w-full bg-[#111] border border-white/10 rounded-lg py-2.5 px-3 text-[14px] text-white focus:outline-none focus:border-emerald-500/50" />
+                <input type="number" min="0" value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="w-full bg-[#111] border border-white/10 rounded-lg py-2.5 px-3 text-[14px] text-white focus:outline-none focus:border-emerald-500/50" />
+                {quantity <= 0 && <p className="text-[10px] text-amber-400 mt-1">Enter a quantity greater than 0 to calculate per-unit cost.</p>}
               </div>
             </div>
 

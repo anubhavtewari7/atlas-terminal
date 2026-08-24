@@ -135,7 +135,7 @@ function generateKeyAlert(origin, destination, product, topFactor, topScore) {
 
   if (o.includes('china') && topFactor === 'geopolitical') return `Section 301 tariffs (25%) apply on ${product || 'this product'} from China. De-risking to Mexico (USMCA 0%) or Vietnam could reduce landed cost by 18–25%.`
   if (o.includes('taiwan') && topFactor === 'geopolitical') return `Taiwan Strait risk is existential for advanced chip supply. TSMC\'s Arizona and Japan fabs now online — begin qualification immediately.`
-  if ((d.includes('los angeles') || d.includes('usa')) && topFactor === 'labor') return `ILWU contract at LA/LB ports expires in 2025. Historical precedent: 3–4 week disruptions. Pre-position 6 weeks safety stock before negotiation windows.`
+  if ((d.includes('los angeles') || d.includes('usa')) && topFactor === 'labor') return `West Coast ports (ILWU-affiliated) have a history of multi-week disruptions around contract negotiation windows. Pre-position 6 weeks of safety stock ahead of any known negotiation cycle.`
   if (topFactor === 'weather' && topScore >= 30) return `Major weather event risk on this corridor. Build seasonal disruption weeks into your S&OP planning. Consider cargo insurance at 1%+ of CIF value.`
   if (p.includes('magnet') || p.includes('rare earth')) return `China controls 90% of rare earth magnet supply. Any export restriction could halt production within 4–6 weeks. Immediately qualify Japan/US domestic alternate sources.`
   if (topScore >= 60) return `HIGH RISK corridor: ${topFactor.replace('_',' ')} exposure is critical. Recommend immediate escalation to CPO level and contingency sourcing activation.`

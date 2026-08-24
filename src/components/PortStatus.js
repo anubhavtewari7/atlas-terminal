@@ -1,6 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import { X, Anchor, RefreshCw, Clock, TrendingUp, AlertTriangle, CheckCircle } from 'lucide-react'
+import { X, Anchor, AlertTriangle } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // Realistic port data — updated weekly in production via API
@@ -39,7 +39,6 @@ function CongestionBar({ score }) {
 
 export default function PortStatus({ onClose }) {
   const [filter, setFilter] = useState('all')
-  const [lastUpdated] = useState(new Date().toLocaleTimeString())
 
   const regions = { all: 'All Ports', asia: 'Asia Pacific', europe: 'Europe', usa: 'North America', mideast: 'Middle East / Others' }
   const filtered = PORT_DATA.filter(p => {
@@ -69,7 +68,9 @@ export default function PortStatus({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase">Global Port Congestion Monitor</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">Top 20 global ports — Industry Reference Data</p>
+              <p className="text-[10px] text-slate-600 mt-0.5" title="This is illustrative baseline data for planning purposes, not a live feed. For current conditions, check your carrier's terminal tracker or a subscription service (e.g. MarineTraffic, project44).">
+                Top 20 global ports — Illustrative baseline data
+              </p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>

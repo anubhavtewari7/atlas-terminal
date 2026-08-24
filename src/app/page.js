@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import Globe from '@/components/Globe'
 import TariffLookup from '@/components/TariffLookup'
 import MissionHistory from '@/components/MissionHistory'
@@ -10,10 +10,10 @@ import TradeRiskScore from '@/components/TradeRiskScore'
 import PortStatus from '@/components/PortStatus'
 import ComplianceChecklist from '@/components/ComplianceChecklist'
 import TLCCalculator from '@/components/TLCCalculator'
-import { jsPDF } from 'jspdf'
+import AtlasLogo from '@/components/AtlasLogo'
 import {
-  ShieldAlert, Zap, Globe as GlobeIcon, ChevronRight,
-  Pause, Play, Newspaper, X, Terminal, Target, Factory,
+  ShieldAlert, Zap, ChevronRight,
+  Pause, Play, Newspaper, X, Target, Factory,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
@@ -27,7 +27,7 @@ function clientCategorize(query) {
   const match = (kws) => kws.some(kw => q.includes(kw))
   if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','fastener','o-ring','gasket','actuator','solenoid','precision gear','industrial motor','sintered'])) return 'industrial'
   if (match(['lithium','cobalt','titanium','tungsten','neodymium oxide','rare earth mineral','steel coil','aluminum ingot','copper cathode'])) return 'metals'
-  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis'])) return 'automotive'
+  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis','car seat','car seats','auto seat','vehicle seat','seat cover','seat trim','auto upholstery','vehicle upholstery','car interior','car door','car body'])) return 'automotive'
   if (match(['chip','semiconductor','wafer','pcb','display panel','oled','processor','memory chip','microchip','tsmc','circuit board','nand','dram'])) return 'electronics'
   if (match(['beef','meat','patty','wheat','soybean','food','agri','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','mcdonald'])) return 'agriculture'
   if (match(['steel','aluminum','copper','iron','zinc','mineral','mining','metal','alloy','rare earth'])) return 'metals'
@@ -94,6 +94,24 @@ const FALLBACK_RISKS = {
   ],
 }
 
+// ── Picks the most relevant hub within a category for the specific query,
+//    mirroring lib/database.js's pickBestHub so the offline fallback never
+//    contradicts the server path (e.g. "steel" shouldn't recommend a
+//    lithium mine just because it's first in the metals array). ──
+const FALLBACK_STOPWORDS = new Set(['and','the','for','with','core','hub','mega','global','belt','processing','world','largest','primary','source'])
+function pickBestFallbackHub(hubs, query) {
+  if (!hubs || hubs.length === 0) return null
+  const q = (query || '').toLowerCase()
+  let best = hubs[0], bestScore = 0
+  for (const h of hubs) {
+    const words = `${h.title || ''} ${h.desc || ''}`.toLowerCase().split(/[^a-z0-9]+/)
+      .filter(w => w.length > 3 && !FALLBACK_STOPWORDS.has(w))
+    const score = words.reduce((s, w) => s + (q.includes(w) ? 1 : 0), 0)
+    if (score > bestScore) { bestScore = score; best = h }
+  }
+  return best
+}
+
 // ── Severity color helper ──
 const severityStyle = (s) => {
   if (!s) return 'text-slate-400 border-slate-500/20 bg-slate-500/5'
@@ -118,7 +136,7 @@ export default function Dashboard() {
   const [showSearch, setShowSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [terminalLogs, setTerminalLogs] = useState([
+  const [, setTerminalLogs] = useState([
     "[SYSTEM] ATLAS Intelligence Core v3.0 — Online.",
     "[SYSTEM] Universal Resource Engine initialized.",
     "[SYSTEM] Supply chain database loaded: 6 categories, 32 global hubs."
@@ -126,7 +144,6 @@ export default function Dashboard() {
   const [directive, setDirective] = useState(null)
   const [marketData, setMarketData] = useState(null)
   const [showRFQ, setShowRFQ] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
   const [missionHistory, setMissionHistory] = useState([])
   const [fxData, setFxData] = useState(null)
   const [showTariff, setShowTariff] = useState(false)
@@ -138,24 +155,25 @@ export default function Dashboard() {
   const [showCompliance, setShowCompliance] = useState(false)
   const [showTLC, setShowTLC] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
-  const logRef = useRef(null)
 
   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
 
   useEffect(() => {
-    setIsMounted(true)
-    fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
-    fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
+    const loadLiveData = () => {
+      fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
+      fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
+    }
+    loadLiveData()
+    // Refresh periodically so data actually moves while the terminal stays
+    // open, instead of freezing at whatever was live on page load.
+    const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
     try {
       const saved = localStorage.getItem('atlas_missions')
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (saved) setMissionHistory(JSON.parse(saved))
     } catch {}
+    return () => clearInterval(interval)
   }, [])
-
-  // Auto-scroll terminal log
-  useEffect(() => {
-    if (logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [terminalLogs])
 
   const saveMission = (query, opps, dir) => {
     const mission = {
@@ -175,7 +193,7 @@ export default function Dashboard() {
 
   const replayMission = (mission) => {
     setSearchQuery(mission.query)
-    setShowSearch(true)
+    handleSearch(null, mission.query)
   }
 
   const clearHistory = () => {
@@ -196,13 +214,15 @@ export default function Dashboard() {
     return (filters[newsFilter] || []).some(kw => text.includes(kw))
   })
 
-  const handleSearch = async (e) => {
+  const handleSearch = async (e, overrideQuery) => {
     if (e) e.preventDefault()
-    if (!searchQuery.trim()) return
+    const activeQuery = overrideQuery ?? searchQuery
+    if (!activeQuery.trim()) return
 
     setIsAnalyzing(true)
     setSelectedNode(null)
-    addLog(`[SCAN] Initiating: "${searchQuery}"`)
+    setSearchQuery(activeQuery)
+    addLog(`[SCAN] Initiating: "${activeQuery}"`)
     addLog('[AI] Mapping global industrial hubs...')
 
     const controller = new AbortController()
@@ -212,7 +232,7 @@ export default function Dashboard() {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ material: searchQuery }),
+        body: JSON.stringify({ material: activeQuery }),
         signal: controller.signal
       })
       clearTimeout(timeoutId)
@@ -227,9 +247,9 @@ export default function Dashboard() {
         setMarketData(data.market_data || null)
         addLog(`[SUCCESS] Scan complete. ${data.opportunities.length} hubs identified.`)
         if (data.category) addLog(`[INFO] Category: ${data.category.toUpperCase()}`)
-        saveMission(searchQuery, data.opportunities, data.directive)
+        saveMission(activeQuery, data.opportunities, data.directive)
         setShowSearch(false)
-        setProfile(prev => ({ ...prev, material: searchQuery }))
+        setProfile(prev => ({ ...prev, material: activeQuery }))
         return
       }
       throw new Error('No opportunities returned')
@@ -239,10 +259,11 @@ export default function Dashboard() {
       addLog('[WARN] Server scan delayed. Activating local intelligence mode...')
 
       // Client-side fallback — same categorization logic as server
-      const cat = clientCategorize(searchQuery)
-      const hubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
+      const cat = clientCategorize(activeQuery)
+      const baseHubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
       const fallbackRisks = FALLBACK_RISKS[cat] || FALLBACK_RISKS.electronics
-      const selectedHub = hubs[0]
+      const selectedHub = pickBestFallbackHub(baseHubs, activeQuery)
+      const hubs = [selectedHub, ...baseHubs.filter(h => h.id !== selectedHub.id)]
 
       const fbDir = {
         best_region:  selectedHub.hub,
@@ -250,7 +271,7 @@ export default function Dashboard() {
         route:        selectedHub.logistics.port_wait_days === 0
                         ? 'Domestic Ground Transport'
                         : 'Global Logistics Corridor',
-        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${searchQuery}". Primary recommendation: ${selectedHub.hub}.`,
+        summary:      `Local intelligence mode: ${hubs.length} strategic hubs identified for "${activeQuery}". Primary recommendation: ${selectedHub.hub}.`,
         tariff_alert: `HTS: ${selectedHub.customs.hts_code} | Duty: ${selectedHub.customs.duty_rate} — ${selectedHub.customs.compliance_note}`
       }
 
@@ -260,11 +281,11 @@ export default function Dashboard() {
       setMarketData({
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
         price_history: [{ month:'Q1',price:95 },{ month:'Q2',price:88 },{ month:'Q3',price:97 },{ month:'Q4',price:105 }],
-        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${searchQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
+        rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${activeQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
       })
-      saveMission(searchQuery, hubs, fbDir)
+      saveMission(activeQuery, hubs, fbDir)
       setShowSearch(false)
-      setProfile(prev => ({ ...prev, material: searchQuery }))
+      setProfile(prev => ({ ...prev, material: activeQuery }))
       addLog(`[LOCAL] ${hubs.length} hubs loaded via local intelligence.`)
 
     } finally {
@@ -289,27 +310,49 @@ export default function Dashboard() {
       doc.setFontSize(14)
       doc.text('EXECUTIVE MISSION BRIEF', 20, 40)
 
+      let yPos = 55
       doc.setFontSize(10)
       doc.setTextColor(150, 150, 150)
-      doc.text(`Target: ${searchQuery || profile.material}`, 20, 55)
-      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 62)
+      doc.text(`Target: ${searchQuery || profile.material}`, 20, yPos)
+      yPos += 7
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, yPos)
+      yPos += 13
 
       if (directive) {
         doc.setTextColor(16, 185, 129)
         doc.setFontSize(12)
-        doc.text('STRATEGIC DIRECTIVE:', 20, 75)
+        doc.text('STRATEGIC DIRECTIVE:', 20, yPos)
+        yPos += 8
         doc.setTextColor(200, 200, 200)
         doc.setFontSize(10)
+        // Compute vertical offset from the actual number of wrapped lines
+        // instead of a fixed gap — a long directive summary would otherwise
+        // visually overlap the "Target Hub" line below it.
         const splitSummary = doc.splitTextToSize(directive.summary, 170)
-        doc.text(splitSummary, 20, 83)
-        doc.text(`Target Hub: ${directive.best_region}`, 20, 100)
-        doc.text(`Primary Partner: ${directive.best_partner}`, 20, 107)
+        doc.text(splitSummary, 20, yPos)
+        yPos += splitSummary.length * 5 + 5
+        doc.text(`Target Hub: ${directive.best_region}`, 20, yPos)
+        yPos += 7
+        doc.text(`Primary Partner: ${directive.best_partner}`, 20, yPos)
+        yPos += 7
         const splitAlert = doc.splitTextToSize(`Tariff: ${directive.tariff_alert}`, 170)
-        doc.text(splitAlert, 20, 114)
+        doc.text(splitAlert, 20, yPos)
+        yPos += splitAlert.length * 5 + 10
+      } else {
+        yPos += 5
       }
 
-      let yPos = 132
+      const ensureSpace = (needed) => {
+        if (yPos + needed > 280) {
+          doc.addPage()
+          doc.setFillColor(10, 10, 10)
+          doc.rect(0, 0, 210, 297, 'F')
+          yPos = 20
+        }
+      }
+
       if (opportunities.length > 0) {
+        ensureSpace(15)
         doc.setTextColor(56, 189, 248)
         doc.setFontSize(12)
         doc.text('TOP GLOBAL SOURCING HUBS:', 20, yPos)
@@ -317,6 +360,7 @@ export default function Dashboard() {
         doc.setTextColor(200, 200, 200)
         doc.setFontSize(9)
         opportunities.slice(0, 5).forEach((opp, i) => {
+          ensureSpace(8)
           doc.text(`${i + 1}. ${opp.hub} — ${opp.companies[0]?.name || 'Multiple'} | ${opp.industry_kpi?.label}: ${opp.industry_kpi?.value}`, 20, yPos)
           yPos += 8
         })
@@ -324,6 +368,7 @@ export default function Dashboard() {
 
       if (risks.length > 0) {
         yPos += 5
+        ensureSpace(13)
         doc.setTextColor(239, 68, 68)
         doc.setFontSize(12)
         doc.text('KEY RISK FACTORS:', 20, yPos)
@@ -332,6 +377,7 @@ export default function Dashboard() {
         doc.setFontSize(9)
         risks.slice(0, 3).forEach((r, i) => {
           const split = doc.splitTextToSize(`${i + 1}. [${r.severity}] ${r.title}: ${r.mitigation}`, 170)
+          ensureSpace(split.length * 6 + 3)
           doc.text(split, 20, yPos)
           yPos += split.length * 6 + 3
         })
@@ -357,8 +403,8 @@ export default function Dashboard() {
       {/* ── COMMODITY TICKER ── */}
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mr-8 shrink-0">
-          <Activity size={12} className="text-amber-500" />
-          <span className="text-amber-500">Reference Prices</span>
+          <Activity size={12} className="text-slate-500" />
+          <span className="text-slate-500" title="Indicative reference prices for context — not a live market data feed. For decision-grade pricing, verify with your commodity broker or exchange terminal.">Reference Prices</span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
@@ -412,7 +458,7 @@ export default function Dashboard() {
           {showRisk      && <TradeRiskScore onClose={() => setShowRisk(false)} />}
           {showPorts     && <PortStatus onClose={() => setShowPorts(false)} />}
           {showCompliance && <ComplianceChecklist onClose={() => setShowCompliance(false)} />}
-          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={(() => { const m = (opportunities[0]?.customs?.duty_rate || '').match(/[\d.]+/); return m ? parseFloat(m[0]) : 0 })()} />}
+          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
         </AnimatePresence>
 
         {/* ── RFQ MODAL ── */}
@@ -436,9 +482,12 @@ export default function Dashboard() {
                     className="flex-1 h-14 bg-emerald-500 text-black font-bold uppercase text-[12px] tracking-widest hover:bg-emerald-400 transition-all rounded-lg">
                     Copy to Clipboard
                   </button>
-                  <button className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 transition-all rounded-lg">
+                  <a
+                    href={`mailto:?subject=${encodeURIComponent(`RFQ: ${searchQuery || profile.material}`)}&body=${encodeURIComponent(marketData?.rfq_template || '')}`}
+                    onClick={() => addLog('[SYSTEM] Opening email client with RFQ draft.')}
+                    className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 transition-all rounded-lg flex items-center justify-center">
                     Email to Procurement
-                  </button>
+                  </a>
                 </div>
               </motion.div>
             </motion.div>
@@ -460,9 +509,9 @@ export default function Dashboard() {
                 </h2>
                 <p className="text-[11px] text-slate-600 mb-8 font-sans leading-relaxed">
                   Describe what you need to procure — be specific. Include the material, application, and any constraints.
-                  <br/>e.g. <span className="text-slate-500 italic">"neodymium magnets for automotive sun visor actuators"</span>,
-                  &nbsp;<span className="text-slate-500 italic">"food-grade soy for QSR chain supply"</span>,
-                  &nbsp;<span className="text-slate-500 italic">"IATF-certified steel stamping for EV chassis frames"</span>
+                  <br/>e.g. <span className="text-slate-500 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
+                  &nbsp;<span className="text-slate-500 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
+                  &nbsp;<span className="text-slate-500 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
                 </p>
                 <form onSubmit={handleSearch} className="space-y-6">
                   <textarea
@@ -491,7 +540,7 @@ export default function Dashboard() {
           <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 rounded-lg">
-                <GlobeIcon size={22} />
+                <AtlasLogo size={22} />
               </div>
               <div>
                 <h1 className="font-bold text-xl tracking-widest leading-none text-white">ATLAS</h1>
@@ -509,9 +558,14 @@ export default function Dashboard() {
 
           {/* Port Throughput */}
           <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-            <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
-              <Anchor size={14} /> Logistics Throughput
-            </h2>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                <Anchor size={14} /> Logistics Throughput
+              </h2>
+              <button onClick={() => setShowPorts(true)} className="text-[8px] text-slate-600 hover:text-sky-400 font-bold uppercase transition-colors">
+                View all →
+              </button>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { label:'Port of LA',    status:'Stable',   wait:'2d' },
@@ -519,13 +573,15 @@ export default function Dashboard() {
                 { label:'Port of Rotterdam',status:'Watch', wait:'3d' },
                 { label:'Port Klang',    status:'Stable',   wait:'2d' },
               ].map((p, i) => (
-                <div key={i} className="bg-[#111] p-2.5 border border-white/5 rounded-lg">
+                <button key={i} onClick={() => setShowPorts(true)}
+                  className="bg-[#111] p-2.5 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer"
+                  title={`View full congestion detail for ${p.label}`}>
                   <div className="text-[8px] text-slate-500 uppercase font-bold mb-1 truncate">{p.label}</div>
                   <div className="flex items-center justify-between">
                     <span className={`text-[12px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : 'text-amber-400'}`}>{p.status}</span>
                     <span className="text-[9px] text-slate-600">{p.wait}</span>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
@@ -580,6 +636,12 @@ export default function Dashboard() {
                     }`}>
                     <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest">{o.hub}</div>
                     <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
+                    {o.real_export_value_usd && (
+                      <div className="mt-1.5 flex items-center gap-1 text-[9px] text-sky-400 font-mono" title={`Official UN Comtrade export statistics, ${o.real_trade_data_year}`}>
+                        <CheckCircle size={9} />
+                        ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year}, UN Comtrade)
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -675,6 +737,18 @@ export default function Dashboard() {
                             <div className="text-[16px] font-bold text-white">{selectedNode.industry_kpi.value}</div>
                           </div>
                         )}
+                        {selectedNode.real_export_value_usd && (
+                          <div className="bg-sky-500/10 border border-sky-500/25 p-3 rounded-lg mt-2 flex items-center gap-2">
+                            <CheckCircle size={14} className="text-sky-400 shrink-0" />
+                            <div>
+                              <div className="text-[8px] text-sky-400 uppercase font-bold tracking-widest">Real, official trade data</div>
+                              <div className="text-[13px] font-bold text-white">
+                                ${(selectedNode.real_export_value_usd / 1e6).toLocaleString(undefined, { maximumFractionDigits: 0 })}M exported in {selectedNode.real_trade_data_year}
+                              </div>
+                              <div className="text-[8px] text-slate-500">Source: UN Comtrade official statistics</div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                       {selectedNode.esg && (
                         <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl">
@@ -688,7 +762,7 @@ export default function Dashboard() {
                               <div className="text-[11px] text-slate-300 font-bold">{selectedNode.esg.carbon_footprint}</div>
                             </div>
                           </div>
-                          <p className="text-[10px] text-slate-500 italic leading-snug">"{selectedNode.esg.sustainability_note}"</p>
+                          <p className="text-[10px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
                         </div>
                       )}
                     </div>
@@ -806,36 +880,19 @@ export default function Dashboard() {
 
             </div>
           </div>
-
-          {/* Terminal Log */}
-          <div className="h-36 bg-[#0a0a0a] border border-white/10 p-4 font-mono rounded-xl shrink-0">
-            <div className="flex items-center gap-2 text-[10px] text-slate-700 uppercase font-bold mb-2 border-b border-white/5 pb-1.5">
-              <Terminal size={12} /> Advisory_Log_Stream
-            </div>
-            <div ref={logRef} className="overflow-y-auto text-[11px] text-sky-500/70 space-y-1 custom-scrollbar h-16">
-              {terminalLogs.map((log, i) => (
-                <div key={i} className="flex gap-2 items-start">
-                  <span className="text-slate-800 shrink-0 text-[10px]">
-                    [{isMounted ? new Date().toLocaleTimeString() : '--:--:--'}]
-                  </span>
-                  <span>{log}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </main>
 
         {/* ════════════════════════════════════
             RIGHT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10">
+        <aside className="w-80 flex flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
           {/* Market Trends Chart */}
           {marketData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-4 shadow-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-3 shadow-xl shrink-0">
               <div className="flex items-center justify-between">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                  <BarChart3 size={16} /> Market Trends
+                  <BarChart3 size={16} /> Price Trend Index
                 </h2>
                 <div className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                   marketData.currency.impact === 'Stable' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
@@ -843,12 +900,16 @@ export default function Dashboard() {
                   {marketData.currency.impact}
                 </div>
               </div>
+              <p className="text-[9px] text-slate-600 leading-snug">
+                Indicative quarterly pricing trend for the current mission&rsquo;s category. Hover a bar for the exact index value.
+              </p>
               <div className="flex items-end justify-between gap-2" style={{ height: '72px' }}>
                 {marketData.price_history.map((d, i) => {
                   const max = Math.max(...marketData.price_history.map(p => p.price))
                   const px = Math.max(8, Math.round((d.price / max) * 64))
                   return (
-                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group cursor-help">
+                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group cursor-help" title={`${d.month}: index ${d.price}`}>
+                      <span className="text-[8px] text-slate-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">{d.price}</span>
                       <div className="w-full rounded-t relative group-hover:brightness-125 transition-all"
                         style={{ height:`${px}px`, background:'linear-gradient(to top, rgba(56,189,248,0.7), rgba(56,189,248,0.1))' }}>
                         <div className="absolute bottom-0 left-0 right-0 h-px bg-sky-400" />
@@ -872,16 +933,22 @@ export default function Dashboard() {
 
           {/* Live FX Rates */}
           {fxData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.2em] uppercase flex items-center gap-2">
                   <TrendingUp size={14} /> Live FX Rates
                 </h2>
-                <span className="text-[9px] text-slate-700 font-mono">{fxData.date}</span>
+                <button
+                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
+                  className="flex items-center gap-1 text-[8px] text-slate-600 hover:text-amber-400 font-mono transition-colors"
+                  title="Rates refresh automatically every 5 minutes. Click to refresh now.">
+                  <span>as of {fxData.date}</span>
+                  <span className="text-[10px]">⟳</span>
+                </button>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
                 {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
-                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg">
+                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
                     <div>
                       <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
                       <div className="text-[9px] text-slate-600 mt-0.5 leading-tight">
@@ -898,8 +965,8 @@ export default function Dashboard() {
           )}
 
           {/* Strategic Directive */}
-          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-3"><Zap size={20} className="text-emerald-500/10" /></div>
+          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative shrink-0">
+            <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
             <h2 className="text-[10px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
               <Target size={14} /> Strategic Directive
             </h2>
@@ -920,7 +987,7 @@ export default function Dashboard() {
                   <div className="text-[10px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
                 </div>
                 <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
-                  "{directive.summary}"
+                  &ldquo;{directive.summary}&rdquo;
                 </div>
               </div>
             ) : (
@@ -931,7 +998,7 @@ export default function Dashboard() {
           </div>
 
           {/* Market Intelligence / News */}
-          <div className="bg-[#0a0a0a] border border-white/10 flex-1 p-4 flex flex-col gap-3 overflow-hidden rounded-xl shadow-xl min-h-0">
+          <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
             <div className="flex items-center justify-between shrink-0">
               <h2 className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
