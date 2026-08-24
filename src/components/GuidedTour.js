@@ -121,6 +121,26 @@ function clampedStyle(raw, tooltipW, tooltipH, windowW, windowH) {
   return { ...style, left: clampedLeft, top: clampedTop }
 }
 
+// Liquid glass card style — shared by modal and tooltip
+const GLASS = {
+  background: 'linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 55%, rgba(56,189,248,0.06) 100%)',
+  backdropFilter: 'blur(44px) saturate(160%) brightness(1.08)',
+  WebkitBackdropFilter: 'blur(44px) saturate(160%) brightness(1.08)',
+  border: '1px solid rgba(255,255,255,0.16)',
+  boxShadow: '0 24px 60px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.14), 0 0 0 0.5px rgba(255,255,255,0.06)',
+}
+
+// Thin specular highlight drawn inside each card
+function GlassHighlight() {
+  return (
+    <div style={{
+      position: 'absolute', top: 0, left: '8%', right: '8%', height: 1,
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%)',
+      borderRadius: 999, pointerEvents: 'none',
+    }} />
+  )
+}
+
 export default function GuidedTour({ onComplete, onStartScan }) {
   const [step, setStep]   = useState(0)
   const [rect, setRect]   = useState(null)
@@ -239,28 +259,29 @@ export default function GuidedTour({ onComplete, onStartScan }) {
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
           >
             <div
-              className="bg-[#080808] border border-sky-500/25 rounded-2xl p-8 shadow-[0_0_80px_rgba(56,189,248,0.12)]"
-              style={{ width: 440 }}
+              className="relative rounded-2xl p-8"
+              style={{ width: 440, ...GLASS }}
             >
+              <GlassHighlight />
               <div className="text-5xl mb-5">{current.emoji}</div>
-              <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3">{current.title}</h2>
-              <p className="text-[13px] text-slate-300 leading-relaxed font-sans mb-8">{current.content}</p>
+              <h2 className="text-[13px] font-bold text-sky-300 tracking-[0.2em] uppercase mb-3">{current.title}</h2>
+              <p className="text-[13px] text-white/80 leading-relaxed font-sans mb-8">{current.content}</p>
 
               {/* Progress dots */}
               <div className="flex gap-1.5 mb-6">
                 {STEPS.map((_, i) => (
-                  <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === step ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/15'}`} />
+                  <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === step ? 'w-5 bg-sky-300' : 'w-1.5 bg-white/20'}`} />
                 ))}
               </div>
 
               <div className="flex items-center justify-between">
-                <button onClick={onComplete} className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors uppercase tracking-widest font-bold">
+                <button onClick={onComplete} className="text-[10px] text-white/30 hover:text-white/60 transition-colors uppercase tracking-widest font-bold">
                   Skip tour
                 </button>
                 <div className="flex gap-2">
                   {!isFirst && (
                     <button onClick={goPrev}
-                      className="flex items-center gap-1 px-4 h-9 border border-white/10 text-slate-400 hover:text-white text-[10px] font-bold uppercase rounded-lg transition-all">
+                      className="flex items-center gap-1 px-4 h-9 border border-white/15 text-white/60 hover:text-white text-[10px] font-bold uppercase rounded-lg transition-all backdrop-blur-sm">
                       <ChevronLeft size={13} /> Back
                     </button>
                   )}
@@ -287,41 +308,42 @@ export default function GuidedTour({ onComplete, onStartScan }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{   opacity: 0, y: 6 }}
             transition={{ duration: 0.18 }}
-            className="absolute bg-[#080808] border border-sky-500/25 rounded-xl shadow-[0_0_40px_rgba(56,189,248,0.12)]"
-            style={{ ...tooltipStyle, width: TOOLTIP_W, zIndex: 2 }}
+            className="absolute rounded-xl"
+            style={{ ...tooltipStyle, width: TOOLTIP_W, zIndex: 2, ...GLASS }}
           >
-            <div className="p-5">
+            <div className="relative p-5">
+              <GlassHighlight />
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2.5">
                   <span className="text-2xl leading-none">{current.emoji}</span>
-                  <h3 className="text-[10px] font-bold text-sky-400 tracking-[0.18em] uppercase leading-snug">{current.title}</h3>
+                  <h3 className="text-[10px] font-bold text-sky-300 tracking-[0.18em] uppercase leading-snug">{current.title}</h3>
                 </div>
-                <button onClick={onComplete} className="text-slate-600 hover:text-slate-300 transition-colors ml-2 mt-0.5 shrink-0">
+                <button onClick={onComplete} className="text-white/25 hover:text-white/70 transition-colors ml-2 mt-0.5 shrink-0">
                   <X size={13} />
                 </button>
               </div>
 
               {/* Content */}
-              <p className="text-[12px] text-slate-300 leading-relaxed font-sans mb-4">{current.content}</p>
+              <p className="text-[12px] text-white/80 leading-relaxed font-sans mb-4">{current.content}</p>
 
               {/* Progress dots */}
               <div className="flex gap-1 mb-4">
                 {STEPS.map((_, i) => (
-                  <div key={i} className={`h-0.5 rounded-full transition-all duration-300 ${i === step ? 'w-4 bg-sky-400' : 'w-1 bg-white/15'}`} />
+                  <div key={i} className={`h-0.5 rounded-full transition-all duration-300 ${i === step ? 'w-4 bg-sky-300' : 'w-1 bg-white/15'}`} />
                 ))}
               </div>
 
               {/* Nav */}
               <div className="flex items-center justify-between">
-                <span className="text-[9px] text-slate-700 font-mono">{step + 1} / {STEPS.length}</span>
+                <span className="text-[9px] text-white/25 font-mono">{step + 1} / {STEPS.length}</span>
                 <div className="flex gap-1.5">
                   <button onClick={goPrev}
-                    className="flex items-center gap-0.5 px-3 h-7 border border-white/10 text-slate-400 hover:text-white text-[9px] font-bold uppercase rounded-lg transition-all">
+                    className="flex items-center gap-0.5 px-3 h-7 border border-white/15 text-white/60 hover:text-white text-[9px] font-bold uppercase rounded-lg transition-all backdrop-blur-sm">
                     <ChevronLeft size={11} /> Back
                   </button>
                   <button onClick={goNext}
-                    className="flex items-center gap-0.5 px-3 h-7 bg-sky-500 text-black font-bold text-[9px] uppercase rounded-lg hover:bg-sky-400 transition-all">
+                    className="flex items-center gap-0.5 px-3 h-7 bg-sky-400/90 text-black font-bold text-[9px] uppercase rounded-lg hover:bg-sky-300 transition-all backdrop-blur-sm">
                     {isLast ? 'Done' : 'Next'} <ChevronRight size={11} />
                   </button>
                 </div>
