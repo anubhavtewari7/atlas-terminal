@@ -11,9 +11,10 @@ import PortStatus from '@/components/PortStatus'
 import ComplianceChecklist from '@/components/ComplianceChecklist'
 import TLCCalculator from '@/components/TLCCalculator'
 import AtlasLogo from '@/components/AtlasLogo'
+import GuidedTour from '@/components/GuidedTour'
 import {
   ShieldAlert, Zap, ChevronRight,
-  Pause, Play, Newspaper, X, Target, Factory,
+  Pause, Play, Newspaper, X, Target, Factory, Map,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
@@ -214,6 +215,15 @@ export default function Dashboard() {
   const [showTLC, setShowTLC] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
+  const [showTour, setShowTour] = useState(false)
+
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem('atlas_tour_done')) {
+        setTimeout(() => setShowTour(true), 800)
+      }
+    } catch {}
+  }, [])
 
   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
 
@@ -726,6 +736,19 @@ export default function Dashboard() {
           {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
         </AnimatePresence>
 
+        {/* ── GUIDED TOUR ── */}
+        <AnimatePresence>
+          {showTour && (
+            <GuidedTour
+              onComplete={() => {
+                setShowTour(false)
+                try { localStorage.setItem('atlas_tour_done', '1') } catch {}
+              }}
+              onStartScan={() => setShowSearch(true)}
+            />
+          )}
+        </AnimatePresence>
+
         {/* ── RFQ MODAL ── */}
         <AnimatePresence>
           {showRFQ && (
@@ -812,7 +835,7 @@ export default function Dashboard() {
                 <p className="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence</p>
               </div>
             </div>
-            <div onClick={() => setShowSearch(true)}
+            <div onClick={() => setShowSearch(true)} data-tour="mission"
               className="p-3 bg-[#111] border border-white/5 cursor-pointer hover:border-sky-500/30 transition-all rounded-lg group">
               <div className="text-[10px] text-slate-600 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
                 Active Mission
@@ -822,7 +845,7 @@ export default function Dashboard() {
           </div>
 
           {/* Port Throughput */}
-          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="ports">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Anchor size={14} /> Logistics Throughput
@@ -873,7 +896,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-3">
 
             {/* Global Threats */}
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
                 <ShieldAlert size={14} /> Global Threats
                 {risks.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{risks.length} active</span>}
@@ -901,7 +924,7 @@ export default function Dashboard() {
             </div>
 
             {/* Sourcing Hubs */}
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
               <h2 className="text-[10px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
                 <Factory size={14} /> Sourcing Hubs
                 {opportunities.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{opportunities.length} identified</span>}
@@ -952,7 +975,7 @@ export default function Dashboard() {
         <main className="flex-1 flex flex-col gap-4 overflow-hidden min-w-0">
 
           {/* Globe */}
-          <div className="flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0">
+          <div className="flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
@@ -968,12 +991,17 @@ export default function Dashboard() {
                 {autoRotate ? <Pause size={12} /> : <Play size={12} />}
                 <span className="text-[10px] font-bold uppercase tracking-widest">{autoRotate ? 'Pause' : 'Resume'}</span>
               </button>
+              <button onClick={() => setShowTour(true)}
+                className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/50 hover:text-sky-400">
+                <Map size={12} />
+                <span className="text-[10px] font-bold uppercase tracking-widest">How it works</span>
+              </button>
             </div>
 
             {/* ── STRATEGIC ADVISORY HUD ── */}
             <div className="hidden lg:flex absolute bottom-4 left-4 right-4 z-10 items-end justify-between gap-3">
 
-              <div className="bg-black/95 border border-white/10 p-6 flex-1 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0 border-t-sky-500/10">
+              <div className="bg-black/95 border border-white/10 p-6 flex-1 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0 border-t-sky-500/10" data-tour="directive">
                 <div className="flex justify-between items-start mb-4">
                   <div className="text-[10px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
                     <Zap size={14} /> Strategic Advisory HUD
@@ -1152,7 +1180,7 @@ export default function Dashboard() {
               </div>
 
               {/* ── TOOLS TOOLBAR ── */}
-              <div className="flex flex-col gap-2 shrink-0">
+              <div className="flex flex-col gap-2 shrink-0" data-tour="tools">
                 {/* Row 1 */}
                 <div className="flex items-center gap-2 overflow-x-auto lg:flex-wrap lg:justify-end pb-0.5 no-scrollbar">
                   {[
@@ -1187,7 +1215,7 @@ export default function Dashboard() {
                   ))}
                 </div>
                 {/* Primary CTAs */}
-                <div className="flex items-center gap-2 justify-end">
+                <div className="flex items-center gap-2 justify-end" data-tour="pdf">
                   <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
                     className="px-3 h-9 border border-white/20 text-white hover:bg-white/10 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 disabled:opacity-25">
                     {isExportingPDF ? 'GENERATING...' : <><Download size={12} /> Export PDF</>}
@@ -1210,7 +1238,7 @@ export default function Dashboard() {
 
           {/* Market Trends Chart */}
           {marketData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-3 shadow-xl shrink-0">
+            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-3 shadow-xl shrink-0" data-tour="market">
               <div className="flex items-center justify-between">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                   <BarChart3 size={16} /> Price Trend Index
@@ -1254,7 +1282,7 @@ export default function Dashboard() {
 
           {/* Live FX Rates */}
           {fxData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0">
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="fx">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.2em] uppercase flex items-center gap-2">
                   <TrendingUp size={14} /> Live FX Rates
