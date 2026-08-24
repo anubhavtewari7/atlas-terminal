@@ -396,89 +396,225 @@ export default function Dashboard() {
     try {
       const { jsPDF } = await import('jspdf')
       const doc = new jsPDF('p', 'mm', 'a4')
-      doc.setFillColor(10, 10, 10)
+
+      const BG = [10, 10, 10]
+      const newPage = () => {
+        doc.addPage()
+        doc.setFillColor(...BG)
+        doc.rect(0, 0, 210, 297, 'F')
+        yPos = 20
+      }
+      const ensureSpace = (needed) => { if (yPos + needed > 278) newPage() }
+      const sectionHeader = (label, rgb) => {
+        ensureSpace(16)
+        yPos += 4
+        doc.setFillColor(...rgb)
+        doc.rect(20, yPos - 4, 3, 10, 'F')
+        doc.setTextColor(...rgb)
+        doc.setFontSize(11)
+        doc.text(label, 26, yPos + 3)
+        yPos += 12
+      }
+      const row = (label, value, labelColor = [150,150,150], valueColor = [220,220,220]) => {
+        ensureSpace(7)
+        doc.setFontSize(8.5)
+        doc.setTextColor(...labelColor)
+        doc.text(label, 26, yPos)
+        doc.setTextColor(...valueColor)
+        const wrapped = doc.splitTextToSize(String(value), 120)
+        doc.text(wrapped, 90, yPos)
+        yPos += wrapped.length * 5 + 1
+      }
+
+      // ── PAGE 1: COVER ──────────────────────────────────────────────────────
+      doc.setFillColor(...BG)
       doc.rect(0, 0, 210, 297, 'F')
+      // accent bar
+      doc.setFillColor(56, 189, 248)
+      doc.rect(0, 0, 6, 297, 'F')
 
-      // Header
       doc.setTextColor(56, 189, 248)
-      doc.setFontSize(24)
-      doc.text('ATLAS INTELLIGENCE', 20, 30)
+      doc.setFontSize(28)
+      doc.text('ATLAS', 20, 40)
       doc.setTextColor(255, 255, 255)
-      doc.setFontSize(14)
-      doc.text('EXECUTIVE MISSION BRIEF', 20, 40)
+      doc.setFontSize(13)
+      doc.text('SUPPLY CHAIN INTELLIGENCE', 20, 50)
 
-      let yPos = 55
-      doc.setFontSize(10)
+      doc.setFillColor(30, 30, 30)
+      doc.rect(18, 58, 174, 0.5, 'F')
+
+      doc.setTextColor(200, 200, 200)
+      doc.setFontSize(18)
+      doc.text('EXECUTIVE MISSION BRIEF', 20, 72)
+
       doc.setTextColor(150, 150, 150)
-      doc.text(`Target: ${searchQuery || profile.material}`, 20, yPos)
-      yPos += 7
-      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, yPos)
-      yPos += 13
+      doc.setFontSize(9)
+      doc.text(`Mission Query:`, 20, 85)
+      doc.setTextColor(255, 255, 255)
+      doc.setFontSize(10)
+      const missionWrapped = doc.splitTextToSize(searchQuery || profile.material, 170)
+      doc.text(missionWrapped, 20, 93)
 
+      doc.setTextColor(150, 150, 150)
+      doc.setFontSize(8.5)
+      doc.text(`Generated: ${new Date().toLocaleString()}`, 20, 105)
+      doc.text(`Sourcing Hubs Identified: ${opportunities.length}`, 20, 112)
+      doc.text(`Risk Factors Detected: ${risks.length}`, 20, 119)
+
+      // Summary table on cover
       if (directive) {
+        doc.setFillColor(20, 30, 20)
+        doc.roundedRect(18, 130, 174, 50, 3, 3, 'F')
         doc.setTextColor(16, 185, 129)
-        doc.setFontSize(12)
-        doc.text('STRATEGIC DIRECTIVE:', 20, yPos)
-        yPos += 8
-        doc.setTextColor(200, 200, 200)
+        doc.setFontSize(9)
+        doc.text('STRATEGIC RECOMMENDATION', 26, 142)
+        doc.setFillColor(16, 185, 129)
+        doc.rect(18, 145, 174, 0.4, 'F')
+        doc.setTextColor(255, 255, 255)
         doc.setFontSize(10)
-        // Compute vertical offset from the actual number of wrapped lines
-        // instead of a fixed gap — a long directive summary would otherwise
-        // visually overlap the "Target Hub" line below it.
-        const splitSummary = doc.splitTextToSize(directive.summary, 170)
-        doc.text(splitSummary, 20, yPos)
-        yPos += splitSummary.length * 5 + 5
-        doc.text(`Target Hub: ${directive.best_region}`, 20, yPos)
-        yPos += 7
-        doc.text(`Primary Partner: ${directive.best_partner}`, 20, yPos)
-        yPos += 7
-        const splitAlert = doc.splitTextToSize(`Tariff: ${directive.tariff_alert}`, 170)
-        doc.text(splitAlert, 20, yPos)
-        yPos += splitAlert.length * 5 + 10
-      } else {
-        yPos += 5
+        doc.text(directive.best_region || '—', 26, 155)
+        doc.setTextColor(150, 150, 150)
+        doc.setFontSize(8.5)
+        doc.text(`Primary Partner: ${directive.best_partner || '—'}`, 26, 163)
+        const alertWrapped = doc.splitTextToSize(directive.tariff_alert || '—', 160)
+        doc.text(alertWrapped, 26, 170)
       }
 
-      const ensureSpace = (needed) => {
-        if (yPos + needed > 280) {
-          doc.addPage()
-          doc.setFillColor(10, 10, 10)
-          doc.rect(0, 0, 210, 297, 'F')
-          yPos = 20
-        }
+      doc.setTextColor(60, 60, 60)
+      doc.setFontSize(7)
+      doc.text('CONFIDENTIAL — For internal procurement use only. Atlas Terminal data is for strategic reference; verify with primary sources before contracting.', 20, 285, { maxWidth: 170 })
+
+      let yPos = 20
+
+      // ── PAGE 2+: STRATEGIC DIRECTIVE ──────────────────────────────────────
+      newPage()
+      doc.setFillColor(56, 189, 248)
+      doc.rect(0, 0, 6, 297, 'F')
+
+      sectionHeader('STRATEGIC DIRECTIVE', [16, 185, 129])
+      if (directive) {
+        doc.setTextColor(200, 200, 200)
+        doc.setFontSize(9)
+        const sumWrapped = doc.splitTextToSize(directive.summary || '', 170)
+        ensureSpace(sumWrapped.length * 5 + 5)
+        doc.text(sumWrapped, 26, yPos)
+        yPos += sumWrapped.length * 5 + 8
+        row('Recommended Hub', directive.best_region || '—', [150,150,150], [255,255,255])
+        row('Primary Partner', directive.best_partner || '—', [150,150,150], [255,255,255])
+        row('Tariff / Compliance', directive.tariff_alert || '—', [150,150,150], [239,200,100])
       }
 
-      if (opportunities.length > 0) {
-        ensureSpace(15)
+      // ── SOURCING HUB DETAIL ────────────────────────────────────────────────
+      sectionHeader(`SOURCING HUB ANALYSIS  (${opportunities.length} identified)`, [56, 189, 248])
+
+      opportunities.forEach((opp, i) => {
+        ensureSpace(60)
+        // Hub title bar
+        doc.setFillColor(20, 25, 35)
+        doc.roundedRect(18, yPos - 2, 174, 10, 2, 2, 'F')
         doc.setTextColor(56, 189, 248)
-        doc.setFontSize(12)
-        doc.text('TOP GLOBAL SOURCING HUBS:', 20, yPos)
-        yPos += 10
-        doc.setTextColor(200, 200, 200)
-        doc.setFontSize(9)
-        opportunities.slice(0, 5).forEach((opp, i) => {
-          ensureSpace(8)
-          doc.text(`${i + 1}. ${opp.hub} — ${opp.companies[0]?.name || 'Multiple'} | ${opp.industry_kpi?.label}: ${opp.industry_kpi?.value}`, 20, yPos)
-          yPos += 8
+        doc.setFontSize(9.5)
+        doc.text(`${i + 1}.  ${opp.hub}`, 22, yPos + 5)
+        yPos += 13
+
+        // Companies
+        const companyList = (opp.companies || []).map(c => c.name).join('  ·  ')
+        row('Target Partners', companyList || '—', [150,150,150], [200,200,200])
+
+        // KPI
+        if (opp.industry_kpi) row(opp.industry_kpi.label, opp.industry_kpi.value, [150,150,150], [16,185,129])
+
+        // Customs
+        if (opp.customs) {
+          row('HTS Code', opp.customs.hts_code || '—')
+          row('Duty Rate', opp.customs.duty_rate || '—', [150,150,150], [239,200,100])
+          const complianceWrapped = doc.splitTextToSize(opp.customs.compliance_note || '—', 120)
+          ensureSpace(complianceWrapped.length * 5 + 3)
+          doc.setFontSize(8.5)
+          doc.setTextColor(150, 150, 150)
+          doc.text('Compliance', 26, yPos)
+          doc.setTextColor(200, 200, 200)
+          doc.text(complianceWrapped, 90, yPos)
+          yPos += complianceWrapped.length * 5 + 2
+        }
+
+        // Logistics
+        if (opp.logistics) {
+          row('Port Lead Time', `${opp.logistics.port_wait_days} day${opp.logistics.port_wait_days !== 1 ? 's' : ''} wait`)
+          row('Est. Freight', opp.logistics.freight_cost_estimate || '—')
+        }
+
+        // ESG
+        if (opp.esg) {
+          row('ESG Rating', `${opp.esg.ethical_rating}  |  Carbon: ${opp.esg.carbon_footprint}`, [150,150,150], [100,220,150])
+          const esgWrapped = doc.splitTextToSize(opp.esg.sustainability_note || '', 120)
+          ensureSpace(esgWrapped.length * 5 + 3)
+          doc.setFontSize(8.5)
+          doc.setTextColor(150, 150, 150)
+          doc.text('ESG Note', 26, yPos)
+          doc.setTextColor(180, 180, 180)
+          doc.text(esgWrapped, 90, yPos)
+          yPos += esgWrapped.length * 5 + 2
+        }
+
+        yPos += 6
+        doc.setFillColor(30, 30, 30)
+        doc.rect(26, yPos, 166, 0.3, 'F')
+        yPos += 6
+      })
+
+      // ── RISK ANALYSIS ──────────────────────────────────────────────────────
+      if (risks.length > 0) {
+        sectionHeader(`RISK ANALYSIS  (${risks.length} active)`, [239, 68, 68])
+        risks.forEach((r, i) => {
+          ensureSpace(28)
+          const sevColor = r.severity === 'HIGH' ? [239,68,68] : r.severity === 'MEDIUM' ? [251,191,36] : [100,200,100]
+          doc.setFillColor(...sevColor)
+          doc.roundedRect(18, yPos - 1, 174, 8, 1, 1, 'F')
+          doc.setTextColor(10, 10, 10)
+          doc.setFontSize(8.5)
+          doc.text(`${r.severity}  —  ${r.title}`, 22, yPos + 4)
+          yPos += 11
+          doc.setTextColor(200, 200, 200)
+          doc.setFontSize(8.5)
+          const mitWrapped = doc.splitTextToSize(`Mitigation: ${r.mitigation || '—'}`, 166)
+          ensureSpace(mitWrapped.length * 5 + 4)
+          doc.text(mitWrapped, 26, yPos)
+          yPos += mitWrapped.length * 5 + 7
         })
       }
 
-      if (risks.length > 0) {
-        yPos += 5
-        ensureSpace(13)
-        doc.setTextColor(239, 68, 68)
-        doc.setFontSize(12)
-        doc.text('KEY RISK FACTORS:', 20, yPos)
-        yPos += 8
-        doc.setTextColor(200, 200, 200)
-        doc.setFontSize(9)
-        risks.slice(0, 3).forEach((r, i) => {
-          const split = doc.splitTextToSize(`${i + 1}. [${r.severity}] ${r.title}: ${r.mitigation}`, 170)
-          ensureSpace(split.length * 6 + 3)
-          doc.text(split, 20, yPos)
-          yPos += split.length * 6 + 3
+      // ── FX SNAPSHOT ────────────────────────────────────────────────────────
+      if (fxData?.rates) {
+        sectionHeader('LIVE FX RATES SNAPSHOT', [168, 85, 247])
+        doc.setFontSize(8.5)
+        const pairs = Object.entries(fxData.rates).slice(0, 8)
+        pairs.forEach(([code, info]) => {
+          ensureSpace(7)
+          doc.setTextColor(168, 85, 247)
+          doc.text(code, 26, yPos)
+          doc.setTextColor(220, 220, 220)
+          doc.text(String(info.rate ?? info), 60, yPos)
+          if (info.label) {
+            doc.setTextColor(130, 130, 130)
+            doc.text(info.label, 90, yPos)
+          }
+          yPos += 6
         })
+        doc.setTextColor(100, 100, 100)
+        doc.setFontSize(7.5)
+        doc.text(`As of: ${fxData.date || new Date().toLocaleDateString()}`, 26, yPos + 2)
+        yPos += 8
       }
+
+      // ── FOOTER on last page ────────────────────────────────────────────────
+      ensureSpace(12)
+      yPos = 282
+      doc.setFillColor(30, 30, 30)
+      doc.rect(18, yPos - 3, 174, 0.4, 'F')
+      doc.setTextColor(60, 60, 60)
+      doc.setFontSize(7)
+      doc.text('ATLAS SUPPLY CHAIN INTELLIGENCE  ·  atlas-terminal-tau.vercel.app  ·  For strategic reference only — verify before contracting.', 20, yPos + 3, { maxWidth: 170 })
 
       doc.save(`ATLAS_Brief_${(searchQuery || 'Mission').replace(/\s+/g, '_')}.pdf`)
       addLog('[SUCCESS] Executive Brief generated and downloaded.')
