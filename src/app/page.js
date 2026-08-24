@@ -636,6 +636,12 @@ export default function Dashboard() {
                     }`}>
                     <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest">{o.hub}</div>
                     <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
+                    {o.real_export_value_usd && (
+                      <div className="mt-1.5 flex items-center gap-1 text-[9px] text-sky-400 font-mono" title={`Official UN Comtrade export statistics, ${o.real_trade_data_year}`}>
+                        <CheckCircle size={9} />
+                        ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year}, UN Comtrade)
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -729,6 +735,18 @@ export default function Dashboard() {
                           <div className="bg-[#111] p-3 border-l-2 border-sky-500 rounded-r-lg">
                             <div className="text-[8px] text-slate-600 uppercase font-bold mb-0.5">{selectedNode.industry_kpi.label}</div>
                             <div className="text-[16px] font-bold text-white">{selectedNode.industry_kpi.value}</div>
+                          </div>
+                        )}
+                        {selectedNode.real_export_value_usd && (
+                          <div className="bg-sky-500/10 border border-sky-500/25 p-3 rounded-lg mt-2 flex items-center gap-2">
+                            <CheckCircle size={14} className="text-sky-400 shrink-0" />
+                            <div>
+                              <div className="text-[8px] text-sky-400 uppercase font-bold tracking-widest">Real, official trade data</div>
+                              <div className="text-[13px] font-bold text-white">
+                                ${(selectedNode.real_export_value_usd / 1e6).toLocaleString(undefined, { maximumFractionDigits: 0 })}M exported in {selectedNode.real_trade_data_year}
+                              </div>
+                              <div className="text-[8px] text-slate-500">Source: UN Comtrade official statistics</div>
+                            </div>
                           </div>
                         )}
                       </div>
