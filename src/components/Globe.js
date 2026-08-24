@@ -12,7 +12,7 @@ function Earth({ risks, opportunities, autoRotate }) {
 
   useFrame((state, delta) => {
     if (autoRotate && meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.08
+      meshRef.current.rotation.y += delta * 0.04
     }
   })
 

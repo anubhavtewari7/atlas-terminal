@@ -28,7 +28,7 @@ function clientCategorize(query) {
   if (match(['tpe','thermoplastic elastomer','thermoplastic','thermoset','polymer','polymers','resin compound','plastic resin','abs plastic','abs compound','polypropylene','polyethylene','hdpe','ldpe','pvc pipe','pvc compound','nylon compound','nylon part','peek','pom resin','delrin','acetal','polycarbonate','polyurethane','pu foam','injection mold','injection mould','injection molded','injection moulded','blow mold','plastic part','plastic component','plastic housing','molded part','moulded part','overmold','elastomer','epdm','nbr rubber','silicone rubber','silicone part','rubber compound','synthetic rubber','natural rubber','carbon fiber','carbon fibre','fiberglass','fibreglass','composite part','epoxy resin','plastic film','packaging film','stretch film','plastic extrusion','extrusion profile','masterbatch','engineering plastic','specialty polymer'])) return 'plastics'
   if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','fastener','o-ring','gasket','actuator','solenoid','precision gear','industrial motor','sintered'])) return 'industrial'
   if (match(['lithium','cobalt','titanium','tungsten','neodymium oxide','rare earth mineral','steel coil','aluminum ingot','copper cathode'])) return 'metals'
-  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis','car seat','car seats','auto seat','vehicle seat','seat cover','seat trim','auto upholstery','vehicle upholstery','car interior','car door','car body'])) return 'automotive'
+  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis','car seat','car seats','auto seat','vehicle seat','seat cover','seat trim','auto upholstery','vehicle upholstery','car interior','car door','car body','trim','interior trim','plated trim','door trim','plastic trim','cargo shade','cargo cover','shade cover','window shade','sunshade','cargo liner','boot liner','parcel shelf','tonneau','boot cover','interior accessory','interior component'])) return 'automotive'
   if (match(['chip','semiconductor','wafer','pcb','display panel','oled','processor','memory chip','microchip','tsmc','circuit board','nand','dram'])) return 'electronics'
   if (match(['beef','meat','patty','wheat','soybean','food','agri','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','mcdonald'])) return 'agriculture'
   if (match(['adhesive','glue','sealant','bonding agent','coating','paint','primer','varnish','lacquer','powder coat','lubricant','grease','cutting fluid','solvent','thinner','acetone','surfactant','specialty chemical','fine chemical','industrial chemical','chemical compound'])) return 'chemicals'
@@ -38,7 +38,7 @@ function clientCategorize(query) {
   if (match(['steel','aluminum','copper','iron','zinc','mineral','mining','metal','alloy','rare earth'])) return 'metals'
   if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn'])) return 'textiles'
   if (match(['car ','cars','engine part','brake','tire','tyre','transmission','exhaust','wheel','airbag','windshield'])) return 'automotive'
-  return 'electronics'
+  return 'automotive'
 }
 
 // ── Lightweight client-side hub data for offline fallback ──
@@ -50,9 +50,9 @@ const FALLBACK_HUBS = {
     { id:'fb_ind_4', lat:41.6, lng:-72.7, hub:'CONNECTICUT, USA', title:'US Domestic Magnetics', companies:[{name:'Arnold Magnetic Technologies',website:'https://www.arnoldmagnetics.com/'},{name:'Electron Energy Corp',website:'https://www.electronenergy.com/'}], desc:'100% domestic US magnet manufacturing. ITAR/DFARS compliant. No China-origin exposure.', customs:{hts_code:'8505.11',duty_rate:'0% (Domestic)',compliance_note:'ITAR/DFARS compliant. Buy America Act eligible.'}, esg:{carbon_footprint:'Low',ethical_rating:'A+',sustainability_note:'US-origin rare earth from MP Materials.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.2k/Ground'}, industry_kpi:{label:'Compliance',value:'ITAR/DFARS'} },
   ],
   automotive: [
-    { id:'fb_auto_1', lat:25.6, lng:-100.3, hub:'MONTERREY, MEXICO', title:'NAFTA Tier-1 Cluster', companies:[{name:'Grupo Antolin',website:'https://www.grupoantolin.com/'},{name:'Nemak',website:'https://www.nemak.com/'}], desc:'Primary nearshoring hub for NA automotive OEMs. Interiors, chassis, headliners, visor assemblies.', customs:{hts_code:'8708.29',duty_rate:'0% (USMCA)',compliance_note:'USMCA Rules of Origin. RVC ≥ 75%.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'Water scarcity risk in Monterrey metro.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$2.1k/Truck'}, industry_kpi:{label:'Tooling Lead',value:'12 Weeks'} },
-    { id:'fb_auto_2', lat:42.3, lng:-83.0, hub:'DETROIT, USA', title:'Great Lakes Auto Cluster', companies:[{name:'Lear Corp',website:'https://www.lear.com/'},{name:'Magna International',website:'https://www.magna.com/'}], desc:'Legacy US auto hub. Domestic sourcing for Ford, GM, Stellantis.', customs:{hts_code:'8708.29',duty_rate:'0% (Domestic)',compliance_note:'Buy America Act eligible.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'UAW unionized. EV transition investment active.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.5k/Ground'}, industry_kpi:{label:'Proximity',value:'Same-Day JIT'} },
-    { id:'fb_auto_3', lat:31.2, lng:121.4, hub:'SHANGHAI, CHINA', title:'East China Auto Zone', companies:[{name:'Yanfeng Automotive',website:'https://www.yfai.com/'},{name:'Huayu Auto',website:'https://www.hasco-group.com/'}], desc:'Scale production for auto plastics, electronics, and interiors.', customs:{hts_code:'8708.29',duty_rate:'25% (Sec 301)',compliance_note:'Section 301 tariffs active.'}, esg:{carbon_footprint:'High',ethical_rating:'B',sustainability_note:'Renewable grid transition by 2030.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$4.5k/FEU'}, industry_kpi:{label:'Scale',value:'Unlimited'} },
+    { id:'fb_auto_1', lat:25.6, lng:-100.3, hub:'MONTERREY, MEXICO', title:'NAFTA Tier-1 Cluster', companies:[{name:'Grupo Antolin',website:'https://www.grupoantolin.com/',turnover:'>$1B'},{name:'Nemak',website:'https://www.nemak.com/',turnover:'>$1B'},{name:'Draxton Mexico',website:'https://www.draxton.com/',turnover:'$100M-$1B'},{name:'Cimco Group',website:'https://www.cimco.com.mx/',turnover:'$10M-$100M'}], desc:'Primary nearshoring hub for NA automotive OEMs. Interiors, chassis, headliners, visor assemblies.', customs:{hts_code:'8708.29',duty_rate:'0% (USMCA)',compliance_note:'USMCA Rules of Origin. RVC ≥ 75%.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'Water scarcity risk in Monterrey metro.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$2.1k/Truck'}, industry_kpi:{label:'Tooling Lead',value:'12 Weeks'} },
+    { id:'fb_auto_2', lat:42.3, lng:-83.0, hub:'DETROIT, USA', title:'Great Lakes Auto Cluster', companies:[{name:'Lear Corp',website:'https://www.lear.com/',turnover:'>$1B'},{name:'Magna International',website:'https://www.magna.com/',turnover:'>$1B'},{name:'Shape Corp',website:'https://www.shapecorp.com/',turnover:'$100M-$1B'},{name:'Gentex Corp',website:'https://www.gentex.com/',turnover:'$100M-$1B'}], desc:'Legacy US auto hub. Domestic sourcing for Ford, GM, Stellantis.', customs:{hts_code:'8708.29',duty_rate:'0% (Domestic)',compliance_note:'Buy America Act eligible.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'UAW unionized. EV transition investment active.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.5k/Ground'}, industry_kpi:{label:'Proximity',value:'Same-Day JIT'} },
+    { id:'fb_auto_3', lat:31.2, lng:121.4, hub:'SHANGHAI, CHINA', title:'East China Auto Zone', companies:[{name:'Yanfeng Automotive',website:'https://www.yfai.com/',turnover:'>$1B'},{name:'Huayu Auto',website:'https://www.hasco-group.com/',turnover:'>$1B'},{name:'Fuyao Glass',website:'https://www.fuyaogroup.com/',turnover:'>$1B'},{name:'Minth Group',website:'https://www.minthgroup.com/',turnover:'$100M-$1B'}], desc:'Scale production for auto plastics, electronics, and interiors.', customs:{hts_code:'8708.29',duty_rate:'25% (Sec 301)',compliance_note:'Section 301 tariffs active.'}, esg:{carbon_footprint:'High',ethical_rating:'B',sustainability_note:'Renewable grid transition by 2030.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$4.5k/FEU'}, industry_kpi:{label:'Scale',value:'Unlimited'} },
   ],
   electronics: [
     { id:'fb_tech_1', lat:24.8, lng:120.9, hub:'HSINCHU, TAIWAN', title:'Global Semiconductor Nexus', companies:[{name:'TSMC',website:'https://www.tsmc.com/'},{name:'MediaTek',website:'https://www.mediatek.com/'}], desc:'Center of global advanced semiconductor manufacturing. 90%+ of world\'s advanced logic chips.', customs:{hts_code:'8542.31',duty_rate:'0% (ITA)',compliance_note:'Export controls on advanced nodes apply.'}, esg:{carbon_footprint:'High',ethical_rating:'A-',sustainability_note:'High water consumption risk.'}, logistics:{port_wait_days:3,freight_cost_estimate:'$8.5k/Air'}, industry_kpi:{label:'Node',value:'3nm / 2nm'} },
@@ -213,6 +213,7 @@ export default function Dashboard() {
   const [showCompliance, setShowCompliance] = useState(false)
   const [showTLC, setShowTLC] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
+  const [turnoverFilter, setTurnoverFilter] = useState(null)
 
   const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
 
@@ -1085,14 +1086,39 @@ export default function Dashboard() {
                         <div className="text-[9px] font-bold text-emerald-400 uppercase mb-2 flex items-center gap-2">
                           <Factory size={11} /> Target Strategic Partners
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
-                          {selectedNode.companies.map((c, i) => (
-                            <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
-                              className="text-[11px] text-slate-300 font-mono bg-white/5 p-3 border border-white/5 rounded-lg hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all flex items-center justify-between group">
-                              <span className="truncate">{c.name}</span>
-                              <ExternalLink size={10} className="opacity-30 group-hover:opacity-100 text-emerald-400 shrink-0 ml-1" />
-                            </a>
+                        {/* Turnover filter */}
+                        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
+                          <span className="text-[9px] text-slate-600 uppercase font-bold tracking-widest shrink-0">Size:</span>
+                          {[null, '>$1B', '$100M-$1B', '$10M-$100M', '<$10M'].map(f => (
+                            <button key={f ?? 'all'} onClick={() => setTurnoverFilter(f)}
+                              className={`px-2 py-0.5 rounded text-[9px] font-bold border transition-all ${
+                                turnoverFilter === f
+                                  ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
+                                  : 'bg-white/5 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-400'
+                              }`}>
+                              {f ?? 'All'}
+                            </button>
                           ))}
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                          {(() => {
+                            const filteredCompanies = (selectedNode.companies || []).filter(c =>
+                              turnoverFilter === null || c.turnover === turnoverFilter
+                            )
+                            if (filteredCompanies.length === 0) {
+                              return <p className="text-[10px] text-slate-600 italic col-span-3">No suppliers in this bracket for this hub.</p>
+                            }
+                            return filteredCompanies.map((c, i) => (
+                              <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
+                                className="text-[11px] text-slate-300 font-mono bg-white/5 p-3 border border-white/5 rounded-lg hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all flex items-center justify-between group">
+                                <span className="truncate">{c.name}</span>
+                                <div className="flex flex-col items-end gap-0.5 shrink-0 ml-1">
+                                  {c.turnover && <span className="text-[8px] text-slate-600 font-mono">{c.turnover}</span>}
+                                  <ExternalLink size={10} className="opacity-30 group-hover:opacity-100 text-emerald-400" />
+                                </div>
+                              </a>
+                            ))
+                          })()}
                         </div>
                       </div>
                     )}

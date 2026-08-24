@@ -11,9 +11,12 @@ export const ATLAS_DB = {
       id: 'h_auto_1', lat: 25.6, lng: -100.3,
       hub: 'MONTERREY, MEXICO', title: 'NAFTA Tier-1 Auto Cluster',
       companies: [
-        { name: 'Grupo Antolin', website: 'https://www.grupoantolin.com/' },
-        { name: 'Nemak', website: 'https://www.nemak.com/' },
-        { name: 'Metalsa', website: 'https://www.metalsa.com/' }
+        { name: 'Grupo Antolin', website: 'https://www.grupoantolin.com/', turnover: '>$1B' },
+        { name: 'Nemak', website: 'https://www.nemak.com/', turnover: '>$1B' },
+        { name: 'Metalsa', website: 'https://www.metalsa.com/', turnover: '>$1B' },
+        { name: 'Draxton Mexico', website: 'https://www.draxton.com/', turnover: '$100M-$1B' },
+        { name: 'Cimco Group', website: 'https://www.cimco.com.mx/', turnover: '$10M-$100M' },
+        { name: 'Arneses de México', website: 'https://www.sumitomo-sei.co.jp/', turnover: '$10M-$100M' }
       ],
       desc: 'Primary nearshoring hub for North American automotive OEMs. Specializes in interiors, chassis, headliners, and sun visor assemblies.',
       customs: { hts_code: '8708.29', duty_rate: '0% (USMCA)', compliance_note: 'USMCA Rules of Origin apply. Regional Value Content (RVC) ≥ 75% required.' },
@@ -25,9 +28,9 @@ export const ATLAS_DB = {
       id: 'h_auto_2', lat: 31.2, lng: 121.4,
       hub: 'SHANGHAI, CHINA', title: 'East China Auto Zone',
       companies: [
-        { name: 'Yanfeng Automotive', website: 'https://www.yfai.com/' },
-        { name: 'Huayu Auto', website: 'https://www.hasco-group.com/' },
-        { name: 'Fuyao Glass', website: 'https://www.fuyaogroup.com/' }
+        { name: 'Yanfeng Automotive', website: 'https://www.yfai.com/', turnover: '>$1B' },
+        { name: 'Huayu Auto', website: 'https://www.hasco-group.com/', turnover: '>$1B' },
+        { name: 'Fuyao Glass', website: 'https://www.fuyaogroup.com/', turnover: '>$1B' }
       ],
       desc: 'Massive scale production for automotive plastics, electronics, glass, and interior systems. Competitive cost base.',
       customs: { hts_code: '8708.29', duty_rate: '25% (Sec 301)', compliance_note: 'Subject to Section 301 tariffs. Check entity list restrictions.' },
@@ -39,9 +42,12 @@ export const ATLAS_DB = {
       id: 'h_auto_3', lat: 48.1, lng: 11.5,
       hub: 'BAVARIA, GERMANY', title: 'EU Premium Parts Hub',
       companies: [
-        { name: 'Continental AG', website: 'https://www.continental.com/' },
-        { name: 'Bosch', website: 'https://www.bosch.com/' },
-        { name: 'Brose Group', website: 'https://www.brose.com/' }
+        { name: 'Continental AG', website: 'https://www.continental.com/', turnover: '>$1B' },
+        { name: 'Bosch', website: 'https://www.bosch.com/', turnover: '>$1B' },
+        { name: 'Brose Group', website: 'https://www.brose.com/', turnover: '>$1B' },
+        { name: 'Grammer AG', website: 'https://www.grammer.com/', turnover: '$100M-$1B' },
+        { name: 'Kiekert AG', website: 'https://www.kiekert.com/', turnover: '$100M-$1B' },
+        { name: 'Polytec Group', website: 'https://www.polytec-group.com/', turnover: '$100M-$1B' }
       ],
       desc: 'High-precision engineering and premium trim components for luxury OEMs (BMW, Mercedes, Audi). CE-certified.',
       customs: { hts_code: '8708.29', duty_rate: '2.5% (Non-EU)', compliance_note: 'CE Marking required. REACH compliance mandatory.' },
@@ -53,9 +59,9 @@ export const ATLAS_DB = {
       id: 'h_auto_4', lat: 35.1, lng: 136.9,
       hub: 'AICHI, JAPAN', title: 'J-OEM Sourcing Cluster',
       companies: [
-        { name: 'Toyota Boshoku', website: 'https://www.toyota-boshoku.com/' },
-        { name: 'Denso', website: 'https://www.denso.com/' },
-        { name: 'Aisin', website: 'https://www.aisin.com/' }
+        { name: 'Toyota Boshoku', website: 'https://www.toyota-boshoku.com/', turnover: '>$1B' },
+        { name: 'Denso', website: 'https://www.denso.com/', turnover: '>$1B' },
+        { name: 'Aisin', website: 'https://www.aisin.com/', turnover: '>$1B' }
       ],
       desc: 'Just-in-time manufacturing excellence for Japanese OEMs. World benchmark for quality systems and lean processes.',
       customs: { hts_code: '8708.29', duty_rate: '0% (CPTPP)', compliance_note: 'Strict J-Quality standards apply. CPTPP origin rules.' },
@@ -67,9 +73,13 @@ export const ATLAS_DB = {
       id: 'h_auto_5', lat: 42.3, lng: -83.0,
       hub: 'DETROIT, USA', title: 'Great Lakes Auto Cluster',
       companies: [
-        { name: 'Lear Corp', website: 'https://www.lear.com/' },
-        { name: 'Magna International', website: 'https://www.magna.com/' },
-        { name: 'IAC Group', website: 'https://www.iacgroup.com/' }
+        { name: 'Lear Corp', website: 'https://www.lear.com/', turnover: '>$1B' },
+        { name: 'Magna International', website: 'https://www.magna.com/', turnover: '>$1B' },
+        { name: 'IAC Group', website: 'https://www.iacgroup.com/', turnover: '$100M-$1B' },
+        { name: 'Shape Corp', website: 'https://www.shapecorp.com/', turnover: '$100M-$1B' },
+        { name: 'Lacks Enterprises', website: 'https://www.lacks.net/', turnover: '$100M-$1B' },
+        { name: 'Gentex Corp', website: 'https://www.gentex.com/', turnover: '$100M-$1B' },
+        { name: 'Tower International', website: 'https://www.towerint.com/', turnover: '$10M-$100M' }
       ],
       desc: 'Legacy US automotive engineering and final assembly hub. Domestic sourcing for Ford, GM, Stellantis supply chains.',
       customs: { hts_code: '8708.29', duty_rate: '0% (Domestic)', compliance_note: 'Domestic supply. Buy America Act eligible.' },
@@ -846,7 +856,11 @@ export function categorizeQuery(query) {
     // the generic "car" keyword, which is checked much later).
     'car seat', 'car seats', 'auto seat', 'vehicle seat', 'seat cover',
     'seat trim', 'auto upholstery', 'vehicle upholstery', 'car interior',
-    'car door', 'car body', 'auto body panel', 'car wiring', 'wire harness'
+    'car door', 'car body', 'auto body panel', 'car wiring', 'wire harness',
+    'trim', 'interior trim', 'plated trim', 'door trim', 'plastic trim',
+    'cargo shade', 'cargo cover', 'shade cover', 'window shade', 'sunshade',
+    'cargo liner', 'boot liner', 'parcel shelf', 'tonneau', 'boot cover',
+    'interior accessory', 'interior component'
   ])) return 'automotive'
 
   // Priority 4: Electronics and semiconductors
