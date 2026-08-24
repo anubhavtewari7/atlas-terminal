@@ -798,7 +798,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             LEFT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="hidden lg:flex w-80 flex-col gap-4 shrink-0 z-10">
+        <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10">
 
           {/* Brand + Mission */}
           <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
@@ -813,10 +813,10 @@ export default function Dashboard() {
             </div>
             <div onClick={() => setShowSearch(true)}
               className="p-3 bg-[#111] border border-white/5 cursor-pointer hover:border-sky-500/30 transition-all rounded-lg group">
-              <div className="text-[9px] text-slate-600 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
+              <div className="text-[10px] text-slate-600 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
                 Active Mission
               </div>
-              <div className="text-[12px] font-bold text-sky-400 uppercase truncate">{profile.material}</div>
+              <div className="text-[13px] font-bold text-sky-400 uppercase truncate">{profile.material}</div>
             </div>
           </div>
 
@@ -840,10 +840,10 @@ export default function Dashboard() {
                 <button key={i} onClick={() => setShowPorts(true)}
                   className="bg-[#111] p-2.5 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer"
                   title={`View full congestion detail for ${p.label}`}>
-                  <div className="text-[8px] text-slate-500 uppercase font-bold mb-1 truncate">{p.label}</div>
+                  <div className="text-[9px] text-slate-500 uppercase font-bold mb-1 truncate">{p.label}</div>
                   <div className="flex items-center justify-between">
-                    <span className={`text-[12px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : 'text-amber-400'}`}>{p.status}</span>
-                    <span className="text-[9px] text-slate-600">{p.wait}</span>
+                    <span className={`text-[13px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : 'text-amber-400'}`}>{p.status}</span>
+                    <span className="text-[10px] text-slate-600">{p.wait}</span>
                   </div>
                 </button>
               ))}
@@ -874,7 +874,7 @@ export default function Dashboard() {
                       <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
                         {r.severity || 'RISK'}
                       </span>
-                      <div className="text-[11px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
+                      <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
                     </div>
                   </div>
                 ))}
@@ -1162,7 +1162,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             RIGHT SIDEBAR
         ════════════════════════════════════ */}
-        <aside className="hidden lg:flex w-80 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
+        <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
           {/* Market Trends Chart */}
           {marketData && (
@@ -1198,8 +1198,8 @@ export default function Dashboard() {
               </div>
               <div className="pt-2 border-t border-white/5 flex items-center justify-between">
                 <div>
-                  <div className="text-[9px] text-slate-600 uppercase font-bold mb-0.5">Currency Index</div>
-                  <div className="text-[15px] font-bold text-white">{marketData.currency.pair} {marketData.currency.rate}</div>
+                  <div className="text-[10px] text-slate-600 uppercase font-bold mb-0.5">Currency Index</div>
+                  <div className="text-[16px] font-bold text-white">{marketData.currency.pair} {marketData.currency.rate}</div>
                 </div>
                 {marketData.currency.impact === 'Positive'
                   ? <ArrowDownRight className="text-emerald-400" size={20} />
