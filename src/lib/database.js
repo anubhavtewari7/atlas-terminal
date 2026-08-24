@@ -476,8 +476,7 @@ export const ATLAS_DB = {
       logistics: { port_wait_days: 5, freight_cost_estimate: '$3.5k/FEU' },
       industry_kpi: { label: 'Integration', value: 'Full Vertical' }
     }
-  ]
-}
+  ],
 
 // 7. PLASTICS, POLYMERS & ELASTOMERS
 // Covers: TPE, ABS, PP, PVC, nylon, PEEK, polycarbonate, polyurethane,
