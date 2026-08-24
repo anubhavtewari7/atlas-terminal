@@ -131,6 +131,7 @@ export default function Dashboard() {
   const [opportunities, setOpportunities] = useState([])
   const [news, setNews] = useState([])
   const [newsFilter, setNewsFilter] = useState('all')
+  const [missionKeywords, setMissionKeywords] = useState([])
   const [selectedNode, setSelectedNode] = useState(null)
   const [autoRotate, setAutoRotate] = useState(true)
   const [showSearch, setShowSearch] = useState(false)
@@ -175,6 +176,22 @@ export default function Dashboard() {
     return () => clearInterval(interval)
   }, [])
 
+  const buildMissionKeywords = (query, category) => {
+    const categoryKeywords = {
+      industrial:  ['magnet','rare earth','neodymium','critical mineral','mining','sintered','ferrite','ndfeb'],
+      automotive:  ['automotive','vehicle','ev ','electric vehicle','car ','tariff','usmca','tier-1','auto'],
+      electronics: ['semiconductor','chip','tsmc','taiwan','wafer','foundry','pcb','display'],
+      metals:      ['steel','aluminum','copper','lithium','cobalt','commodity','mining','metal'],
+      agriculture: ['food','agricultural','soybean','beef','grain','crop','farming','commodity'],
+      textiles:    ['textile','apparel','cotton','fashion','garment','fiber','yarn'],
+    }
+    const base = categoryKeywords[category] || []
+    // also extract significant words from the raw query (4+ chars, not stopwords)
+    const stopwords = new Set(['with','from','for','that','this','into','and','the','are','its','they','have','will','been','used','using'])
+    const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length >= 4 && !stopwords.has(w))
+    setMissionKeywords([...new Set([...base, ...queryWords])])
+  }
+
   const saveMission = (query, opps, dir) => {
     const mission = {
       query,
@@ -202,8 +219,12 @@ export default function Dashboard() {
   }
 
   const filteredNews = news.filter(item => {
-    if (newsFilter === 'all') return true
     const text = `${item.title} ${item.description}`.toLowerCase()
+    if (newsFilter === 'mission') {
+      if (!missionKeywords.length) return true
+      return missionKeywords.some(kw => text.includes(kw))
+    }
+    if (newsFilter === 'all') return true
     const filters = {
       china:  ['china','chinese','beijing','shanghai'],
       eu:     ['europe','european','eu ','german','french','rotterdam'],
@@ -250,6 +271,8 @@ export default function Dashboard() {
         saveMission(activeQuery, data.opportunities, data.directive)
         setShowSearch(false)
         setProfile(prev => ({ ...prev, material: activeQuery }))
+        buildMissionKeywords(activeQuery, data.category)
+        setNewsFilter('mission')
         return
       }
       throw new Error('No opportunities returned')
@@ -286,6 +309,8 @@ export default function Dashboard() {
       saveMission(activeQuery, hubs, fbDir)
       setShowSearch(false)
       setProfile(prev => ({ ...prev, material: activeQuery }))
+      buildMissionKeywords(activeQuery, cat)
+      setNewsFilter('mission')
       addLog(`[LOCAL] ${hubs.length} hubs loaded via local intelligence.`)
 
     } finally {
@@ -1006,6 +1031,16 @@ export default function Dashboard() {
             </div>
             {/* Region filter */}
             <div className="flex items-center gap-1 flex-wrap shrink-0">
+              {missionKeywords.length > 0 && (
+                <button onClick={() => setNewsFilter('mission')}
+                  className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all flex items-center gap-1 ${
+                    newsFilter === 'mission'
+                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                      : 'text-slate-600 hover:text-emerald-400 border border-white/5'
+                  }`}>
+                  ⚡ Mission
+                </button>
+              )}
               {[['all','All'],['china','🇨🇳'],['eu','🇪🇺'],['usa','🇺🇸'],['latam','🌎'],['india','🇮🇳']].map(([key, label]) => (
                 <button key={key} onClick={() => setNewsFilter(key)}
                   className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all ${
@@ -1020,7 +1055,9 @@ export default function Dashboard() {
             </div>
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
-                <p className="text-[10px] text-slate-700 italic py-2">No articles match this region filter.</p>
+                <p className="text-[10px] text-slate-700 italic py-2">
+                  {newsFilter === 'mission' ? 'No articles matching your current mission — try All.' : 'No articles match this filter.'}
+                </p>
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
                   className="block border-b border-white/5 pb-3 last:border-0 group">
