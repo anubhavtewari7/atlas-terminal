@@ -831,22 +831,40 @@ export default function Dashboard() {
                 View all →
               </button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-2.5">
               {[
-                { label:'Port of LA',    status:'Stable',   wait:'2d' },
-                { label:'Tuas Singapore',status:'Stable',   wait:'1d' },
-                { label:'Port of Rotterdam',status:'Watch', wait:'3d' },
-                { label:'Port Klang',    status:'Stable',   wait:'2d' },
-              ].map((p, i) => (
-                <button key={i} onClick={() => setShowPorts(true)}
-                  className="bg-[#111] p-2.5 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer"
-                  title={`View full congestion detail for ${p.label}`}>
-                  <div className="text-[9px] text-slate-500 uppercase font-bold mb-1 truncate">{p.label}</div>
-                  <div className="flex items-center justify-between">
-                    <span className={`text-[13px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : 'text-amber-400'}`}>{p.status}</span>
-                    <span className="text-[10px] text-slate-600">{p.wait}</span>
+                { seaboard: 'West Coast US', ports: [
+                  { label:'Los Angeles',  status:'Moderate', wait:'3d' },
+                  { label:'Long Beach',   status:'Stable',   wait:'2d' },
+                ]},
+                { seaboard: 'East Coast US', ports: [
+                  { label:'New York / NJ', status:'Stable',  wait:'2d' },
+                  { label:'Savannah',      status:'Stable',  wait:'1d' },
+                ]},
+                { seaboard: 'Asia Pacific', ports: [
+                  { label:'Singapore',    status:'Stable',   wait:'1d' },
+                  { label:'Busan',        status:'Stable',   wait:'1d' },
+                ]},
+                { seaboard: 'West Mexico', ports: [
+                  { label:'Manzanillo',         status:'Stable', wait:'3d' },
+                  { label:'Lázaro Cárdenas',    status:'Watch',  wait:'4d' },
+                ]},
+              ].map((group, gi) => (
+                <div key={gi}>
+                  <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest mb-1">{group.seaboard}</div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {group.ports.map((p, i) => (
+                      <button key={i} onClick={() => setShowPorts(true)}
+                        className="bg-[#111] p-2 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer">
+                        <div className="text-[8px] text-slate-500 uppercase font-bold mb-0.5 truncate">{p.label}</div>
+                        <div className="flex items-center justify-between">
+                          <span className={`text-[11px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : p.status === 'Moderate' ? 'text-amber-400' : 'text-orange-400'}`}>{p.status}</span>
+                          <span className="text-[9px] text-slate-600">{p.wait}</span>
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                </button>
+                </div>
               ))}
             </div>
           </div>
