@@ -18,6 +18,11 @@ const COMPLIANCE_RULES = {
   semiconductor: {
     usa: ['Export Control (EAR/ITAR) classification', 'HTS 8542.31 classification', 'OFAC sanctions screening', 'Certificate of Origin', 'CBP Bond'],
     eu: ['CE marking (if applicable)', 'REACH compliance', 'RoHS Directive (2011/65/EU)', 'WEEE compliance', 'Dual-use export authorization'],
+    uk: [
+      { id: 'uk_sec_1', rule: 'UK Strategic Export Control', detail: 'ECJU export license required for controlled semiconductor technology. Check UK Dual-Use List.', required: true },
+      { id: 'uk_sec_2', rule: 'UK REACH Compliance', detail: 'Chemical substances in semiconductor manufacturing must comply with UK REACH.', required: true },
+      { id: 'uk_sec_3', rule: 'UKCA Marking', detail: 'Electronic components placed on UK market require UKCA marking.', required: true },
+    ],
   },
   lithium: {
     usa: ['UN 3480/3481 hazmat labeling', 'DOT 49 CFR compliance', 'IATA dangerous goods declaration (air)', 'IMO IMDG code (sea)', 'Battery test summary (UN 38.3)', 'CBP entry documentation'],

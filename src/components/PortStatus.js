@@ -69,7 +69,7 @@ export default function PortStatus({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase">Global Port Congestion Monitor</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">Top 20 global ports — Updated: {lastUpdated}</p>
+              <p className="text-[10px] text-slate-600 mt-0.5">Top 20 global ports — Industry Reference Data</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>

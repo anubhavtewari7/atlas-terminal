@@ -32,8 +32,8 @@ export default function TradeRiskScore({ onClose }) {
   }
 
   const getRiskColor = (score) => {
-    if (score >= 70) return { bg: 'bg-rose-500', text: 'text-rose-400', border: 'border-rose-500/30', label: 'HIGH' }
-    if (score >= 40) return { bg: 'bg-amber-500', text: 'text-amber-400', border: 'border-amber-500/30', label: 'MEDIUM' }
+    if (score >= 65) return { bg: 'bg-rose-500', text: 'text-rose-400', border: 'border-rose-500/30', label: 'HIGH' }
+    if (score >= 35) return { bg: 'bg-amber-500', text: 'text-amber-400', border: 'border-amber-500/30', label: 'MEDIUM' }
     return { bg: 'bg-emerald-500', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'LOW' }
   }
 

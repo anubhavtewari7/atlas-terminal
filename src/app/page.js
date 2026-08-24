@@ -358,7 +358,7 @@ export default function Dashboard() {
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-amber-500" />
-          <span className="text-amber-500">Live Spot</span>
+          <span className="text-amber-500">Reference Prices</span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
@@ -412,7 +412,7 @@ export default function Dashboard() {
           {showRisk      && <TradeRiskScore onClose={() => setShowRisk(false)} />}
           {showPorts     && <PortStatus onClose={() => setShowPorts(false)} />}
           {showCompliance && <ComplianceChecklist onClose={() => setShowCompliance(false)} />}
-          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
+          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={(() => { const m = (opportunities[0]?.customs?.duty_rate || '').match(/[\d.]+/); return m ? parseFloat(m[0]) : 0 })()} />}
         </AnimatePresence>
 
         {/* ── RFQ MODAL ── */}

@@ -155,7 +155,7 @@ export default function TariffLookup({ onClose }) {
 
               {/* CBP Link */}
               <a
-                href={`https://hts.usitc.gov/reststop/api/details/htsno/${result.hs6_code}`}
+                href={`https://hts.usitc.gov/reststop/api/details/htsno/${(result.hs6_code||'').replace('.','')}`}
                 target="_blank" rel="noopener noreferrer"
                 className="flex items-center justify-between p-3 bg-[#111] border border-white/5 rounded-xl hover:border-sky-500/30 transition-all group"
               >
