@@ -218,22 +218,31 @@ export default function Dashboard() {
     try { localStorage.removeItem('atlas_missions') } catch {}
   }
 
-  const filteredNews = news.filter(item => {
-    const text = `${item.title} ${item.description}`.toLowerCase()
-    if (newsFilter === 'mission') {
-      if (!missionKeywords.length) return true
-      return missionKeywords.some(kw => text.includes(kw))
+  const filteredNews = (() => {
+    if (newsFilter === 'mission' && missionKeywords.length) {
+      // Sort: mission-relevant first, then all others — never hide content
+      const relevant = []
+      const rest = []
+      for (const item of news) {
+        const text = `${item.title} ${item.description}`.toLowerCase()
+        if (missionKeywords.some(kw => text.includes(kw))) relevant.push({ ...item, _mission: true })
+        else rest.push(item)
+      }
+      return [...relevant, ...rest]
     }
-    if (newsFilter === 'all') return true
-    const filters = {
-      china:  ['china','chinese','beijing','shanghai'],
-      eu:     ['europe','european','eu ','german','french','rotterdam'],
-      usa:    ['usa','united states','american','washington','port of'],
-      latam:  ['brazil','mexico','latin','colombia','chile','argentina'],
-      india:  ['india','indian','delhi','mumbai','chennai']
-    }
-    return (filters[newsFilter] || []).some(kw => text.includes(kw))
-  })
+    return news.filter(item => {
+      const text = `${item.title} ${item.description}`.toLowerCase()
+      if (newsFilter === 'all') return true
+      const filters = {
+        china:  ['china','chinese','beijing','shanghai'],
+        eu:     ['europe','european','eu ','german','french','rotterdam'],
+        usa:    ['usa','united states','american','washington','port of'],
+        latam:  ['brazil','mexico','latin','colombia','chile','argentina'],
+        india:  ['india','indian','delhi','mumbai','chennai']
+      }
+      return (filters[newsFilter] || []).some(kw => text.includes(kw))
+    })
+  })()
 
   const handleSearch = async (e, overrideQuery) => {
     if (e) e.preventDefault()
@@ -1056,13 +1065,13 @@ export default function Dashboard() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
                 <p className="text-[10px] text-slate-700 italic py-2">
-                  {newsFilter === 'mission' ? 'No articles matching your current mission — try All.' : 'No articles match this filter.'}
+                  {newsFilter === 'mission' ? 'No news loaded yet — run a mission scan first.' : 'No articles match this filter.'}
                 </p>
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
                   className="block border-b border-white/5 pb-3 last:border-0 group">
                   <div className="text-[8px] text-slate-600 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
-                    {item.pubDate}
+                    <span className="flex items-center gap-1">{item._mission && <span className="text-emerald-400">⚡</span>}{item.pubDate}</span>
                     <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 text-sky-400 transition-all" />
                   </div>
                   <h3 className="text-[11px] font-bold leading-snug mb-0.5 group-hover:text-sky-400 transition-all uppercase tracking-tight text-slate-200">
