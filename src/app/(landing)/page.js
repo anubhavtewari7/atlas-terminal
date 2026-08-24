@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import AtlasLogo from '@/components/AtlasLogo';
 
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -55,8 +56,7 @@ const css = `
   }
   .nav-logo {
     display: flex; align-items: center; gap: 10px;
-    font-size: 13px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase;
-    color: #fff; text-decoration: none;
+    text-decoration: none; color: #fff;
   }
   .nav-cta {
     display: inline-flex; align-items: center;
@@ -277,15 +277,13 @@ export default function LandingPage() {
       {/* Nav */}
       <nav>
         <Link href="/" className="nav-logo">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="9" stroke="rgba(0,229,160,0.6)" strokeWidth="1.5"/>
-            <circle cx="10" cy="10" r="3" fill="rgba(0,229,160,0.8)"/>
-            <line x1="10" y1="1" x2="10" y2="4" stroke="rgba(0,229,160,0.5)" strokeWidth="1.5"/>
-            <line x1="10" y1="16" x2="10" y2="19" stroke="rgba(0,229,160,0.5)" strokeWidth="1.5"/>
-            <line x1="1" y1="10" x2="4" y2="10" stroke="rgba(0,229,160,0.5)" strokeWidth="1.5"/>
-            <line x1="16" y1="10" x2="19" y2="10" stroke="rgba(0,229,160,0.5)" strokeWidth="1.5"/>
-          </svg>
-          ATLAS
+          <div style={{width:32,height:32,background:'rgba(56,189,248,0.1)',border:'1px solid rgba(56,189,248,0.2)',borderRadius:8,display:'flex',alignItems:'center',justifyContent:'center',color:'#38bdf8'}}>
+            <AtlasLogo size={18} />
+          </div>
+          <div>
+            <div style={{fontSize:13,fontWeight:700,letterSpacing:'0.15em',lineHeight:1}}>ATLAS</div>
+            <div style={{fontSize:8,color:'rgba(255,255,255,0.35)',letterSpacing:'0.18em',marginTop:3,fontWeight:600}}>SUPPLY CHAIN INTELLIGENCE</div>
+          </div>
         </Link>
         <Link href="/terminal" className="nav-cta">Launch Terminal →</Link>
       </nav>
