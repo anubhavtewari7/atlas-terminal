@@ -201,7 +201,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
       <div className="absolute inset-0 bg-black/75" />
 
       {/* ── SPOTLIGHT (positioned over target element) ── */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {rect && current.position !== 'center' && (
           <motion.div
             key={`spot-${step}`}
@@ -277,7 +277,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
       )}
 
       {/* ── POSITIONED TOOLTIP (spotlight steps) ── */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {rect && current.position !== 'center' && (
           <motion.div
             key={`tip-${step}`}
