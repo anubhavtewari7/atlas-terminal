@@ -4,7 +4,7 @@ export const metadata = {
   metadataBase: new URL('https://atlas-terminal-tau.vercel.app'),
   openGraph: {
     title: "Atlas Terminal — Supply Chain Intelligence",
-    description: "Real-time sourcing intelligence, tariff data, and geopolitical risk — built for procurement professionals who can't afford surprises.",
+    description: "Sourcing hubs, tariff data, and geopolitical risk for procurement professionals. Know your supply chain before it fails you.",
     url: "https://atlas-terminal-tau.vercel.app",
     siteName: "Atlas Terminal",
     images: [
