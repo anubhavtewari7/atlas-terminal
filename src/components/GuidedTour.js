@@ -123,19 +123,19 @@ function clampedStyle(raw, tooltipW, tooltipH, windowW, windowH) {
 
 // Liquid glass card style — shared by modal and tooltip
 const GLASS = {
-  background: 'linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 55%, rgba(56,189,248,0.06) 100%)',
-  backdropFilter: 'blur(44px) saturate(160%) brightness(1.08)',
-  WebkitBackdropFilter: 'blur(44px) saturate(160%) brightness(1.08)',
-  border: '1px solid rgba(255,255,255,0.16)',
-  boxShadow: '0 24px 60px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(0,0,0,0.14), 0 0 0 0.5px rgba(255,255,255,0.06)',
+  background: 'linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(120,180,255,0.07) 45%, rgba(56,189,248,0.10) 100%)',
+  backdropFilter: 'blur(48px) saturate(180%) brightness(1.15)',
+  WebkitBackdropFilter: 'blur(48px) saturate(180%) brightness(1.15)',
+  border: '1px solid rgba(255,255,255,0.24)',
+  boxShadow: '0 28px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.18), inset 0 0 40px rgba(56,189,248,0.04), 0 0 0 0.5px rgba(255,255,255,0.10)',
 }
 
 // Thin specular highlight drawn inside each card
 function GlassHighlight() {
   return (
     <div style={{
-      position: 'absolute', top: 0, left: '8%', right: '8%', height: 1,
-      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%)',
+      position: 'absolute', top: 0, left: '6%', right: '6%', height: 1,
+      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.70) 50%, transparent 100%)',
       borderRadius: 999, pointerEvents: 'none',
     }} />
   )
@@ -217,8 +217,8 @@ export default function GuidedTour({ onComplete, onStartScan }) {
   return (
     <div className="fixed inset-0 z-[500]">
 
-      {/* ── FULL DARK OVERLAY ── */}
-      <div className="absolute inset-0 bg-black/75" />
+      {/* ── FULL DARK OVERLAY — lighter on center steps so glass has content to blur through ── */}
+      <div className={`absolute inset-0 transition-all duration-300 ${current.position === 'center' ? 'bg-black/50' : 'bg-black/75'}`} />
 
       {/* ── SPOTLIGHT (positioned over target element) ── */}
       <AnimatePresence mode="wait">
