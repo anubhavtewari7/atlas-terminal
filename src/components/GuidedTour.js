@@ -225,60 +225,62 @@ export default function GuidedTour({ onComplete, onStartScan }) {
         )}
       </AnimatePresence>
 
-      {/* ── CENTERED MODAL (welcome / done) ── */}
-      {current.position === 'center' && (
-        <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 2 }}>
+      {/* ── CENTER MODAL or POSITIONED TOOLTIP — single AnimatePresence so old fully exits before new enters ── */}
+      <AnimatePresence mode="wait">
+        {current.position === 'center' ? (
+          /* CENTERED MODAL (welcome / done) */
           <motion.div
-            key={`modal-${step}`}
-            initial={{ scale: 0.93, opacity: 0, y: 12 }}
-            animate={{ scale: 1,    opacity: 1, y: 0  }}
-            exit={{   scale: 0.93, opacity: 0, y: 12 }}
+            key={`center-${step}`}
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ zIndex: 2 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            animate={{ opacity: 1, scale: 1,    y: 0  }}
+            exit={{   opacity: 0, scale: 0.95, y: 10 }}
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
-            className="bg-[#080808] border border-sky-500/25 rounded-2xl p-8 shadow-[0_0_80px_rgba(56,189,248,0.12)]"
-            style={{ width: 440 }}
           >
-            <div className="text-5xl mb-5">{current.emoji}</div>
-            <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3">{current.title}</h2>
-            <p className="text-[13px] text-slate-300 leading-relaxed font-sans mb-8">{current.content}</p>
+            <div
+              className="bg-[#080808] border border-sky-500/25 rounded-2xl p-8 shadow-[0_0_80px_rgba(56,189,248,0.12)]"
+              style={{ width: 440 }}
+            >
+              <div className="text-5xl mb-5">{current.emoji}</div>
+              <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3">{current.title}</h2>
+              <p className="text-[13px] text-slate-300 leading-relaxed font-sans mb-8">{current.content}</p>
 
-            {/* Progress dots */}
-            <div className="flex gap-1.5 mb-6">
-              {STEPS.map((_, i) => (
-                <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === step ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/15'}`} />
-              ))}
-            </div>
+              {/* Progress dots */}
+              <div className="flex gap-1.5 mb-6">
+                {STEPS.map((_, i) => (
+                  <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === step ? 'w-5 bg-sky-400' : 'w-1.5 bg-white/15'}`} />
+                ))}
+              </div>
 
-            <div className="flex items-center justify-between">
-              <button onClick={onComplete} className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors uppercase tracking-widest font-bold">
-                Skip tour
-              </button>
-              <div className="flex gap-2">
-                {!isFirst && (
-                  <button onClick={goPrev}
-                    className="flex items-center gap-1 px-4 h-9 border border-white/10 text-slate-400 hover:text-white text-[10px] font-bold uppercase rounded-lg transition-all">
-                    <ChevronLeft size={13} /> Back
-                  </button>
-                )}
-                {current.cta ? (
-                  <button onClick={() => { onComplete(); onStartScan?.() }}
-                    className="flex items-center gap-1.5 px-5 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
-                    Start Scanning <ChevronRight size={13} />
-                  </button>
-                ) : (
-                  <button onClick={goNext}
-                    className="flex items-center gap-1.5 px-5 h-9 bg-sky-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(56,189,248,0.25)]">
-                    {isFirst ? 'Take the Tour' : 'Next'} <ChevronRight size={13} />
-                  </button>
-                )}
+              <div className="flex items-center justify-between">
+                <button onClick={onComplete} className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors uppercase tracking-widest font-bold">
+                  Skip tour
+                </button>
+                <div className="flex gap-2">
+                  {!isFirst && (
+                    <button onClick={goPrev}
+                      className="flex items-center gap-1 px-4 h-9 border border-white/10 text-slate-400 hover:text-white text-[10px] font-bold uppercase rounded-lg transition-all">
+                      <ChevronLeft size={13} /> Back
+                    </button>
+                  )}
+                  {current.cta ? (
+                    <button onClick={() => { onComplete(); onStartScan?.() }}
+                      className="flex items-center gap-1.5 px-5 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                      Start Scanning <ChevronRight size={13} />
+                    </button>
+                  ) : (
+                    <button onClick={goNext}
+                      className="flex items-center gap-1.5 px-5 h-9 bg-sky-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(56,189,248,0.25)]">
+                      {isFirst ? 'Take the Tour' : 'Next'} <ChevronRight size={13} />
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
-        </div>
-      )}
-
-      {/* ── POSITIONED TOOLTIP (spotlight steps) ── */}
-      <AnimatePresence mode="wait">
-        {rect && current.position !== 'center' && (
+        ) : rect ? (
+          /* POSITIONED TOOLTIP (spotlight steps) */
           <motion.div
             key={`tip-${step}`}
             initial={{ opacity: 0, y: 6 }}
@@ -326,7 +328,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
               </div>
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
 
     </div>
