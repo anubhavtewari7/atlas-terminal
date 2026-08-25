@@ -728,7 +728,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="flex flex-1 overflow-y-auto lg:overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
+      <div className="flex flex-1 overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
 
         {/* ── MODALS ── */}
         <AnimatePresence>
@@ -1245,17 +1245,17 @@ export default function Dashboard() {
           {/* ── Tab Bar ── */}
           <div className="flex shrink-0 border-b border-white/10 bg-[#080808]">
             {[
-              { id: 'intel',   label: 'Intel',                                      icon: <Zap size={11}/> },
-              { id: 'hubs',    label: opportunities.length > 0 ? `Hubs (${opportunities.length})` : 'Hubs',       icon: <Factory size={11}/> },
-              { id: 'threats', label: risks.length > 0 ? `Threats (${risks.length})` : 'Threats', icon: <ShieldAlert size={11}/> },
-              { id: 'tools',   label: 'Tools',                                      icon: <Target size={11}/> },
+              { id: 'intel',   label: 'Intel',   icon: <Zap size={13}/> },
+              { id: 'hubs',    label: opportunities.length > 0 ? `Hubs (${opportunities.length})` : 'Hubs', icon: <Factory size={13}/> },
+              { id: 'threats', label: risks.length > 0 ? `Threats (${risks.length})` : 'Threats', icon: <ShieldAlert size={13}/> },
+              { id: 'tools',   label: 'Tools',   icon: <Target size={13}/> },
             ].map(tab => (
               <button key={tab.id}
                 onClick={() => { setActiveMobileTab(tab.id); setSelectedNode(null) }}
-                className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[8px] font-bold uppercase tracking-wider transition-all border-b-2 ${
+                className={`flex-1 flex flex-col items-center gap-1 py-3 text-[9px] font-bold uppercase tracking-wider transition-all border-b-2 ${
                   activeMobileTab === tab.id
                     ? 'border-sky-500 text-sky-400 bg-sky-500/5'
-                    : 'border-transparent text-slate-600 hover:text-slate-400'
+                    : 'border-transparent text-slate-500 active:text-slate-300'
                 }`}>
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -1349,8 +1349,8 @@ export default function Dashboard() {
                 {selectedNode && isOpportunity ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[9px] text-slate-500 hover:text-sky-400 font-bold uppercase tracking-wider transition-all">
-                      <ChevronRight size={12} className="rotate-180"/> Back to Hubs
+                      className="flex items-center gap-2 text-[10px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Hubs
                     </button>
                     <div className="bg-[#111] border border-emerald-500/30 p-4 rounded-xl space-y-1">
                       <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{selectedNode.hub}</div>
@@ -1404,9 +1404,9 @@ export default function Dashboard() {
                         ))}
                       </div>
                     )}
-                    <div className="grid grid-cols-2 gap-2">
-                      <button onClick={() => setShowTLC(true)} className="py-3 text-[10px] font-bold uppercase border border-emerald-500/30 text-emerald-400 rounded-xl">TLC Calc</button>
-                      <button onClick={() => setShowRFQ(true)} className="py-3 text-[10px] font-bold uppercase border border-sky-500/30 text-sky-400 rounded-xl">Generate RFQ</button>
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      <button onClick={() => setShowTLC(true)} className="py-4 text-[11px] font-bold uppercase border border-emerald-500/30 text-emerald-400 rounded-xl active:bg-emerald-500/10 transition-all">TLC Calc</button>
+                      <button onClick={() => setShowRFQ(true)} className="py-4 text-[11px] font-bold uppercase bg-sky-500 text-black rounded-xl active:bg-sky-400 transition-all">Generate RFQ</button>
                     </div>
                   </div>
                 ) : (
@@ -1422,16 +1422,16 @@ export default function Dashboard() {
                       </div>
                     ) : opportunities.map((o, i) => (
                       <button key={o.id || i} onClick={() => setSelectedNode(o)}
-                        className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/5 rounded-xl transition-all">
-                        <div className="flex items-center justify-between mb-1">
+                        className="w-full text-left p-4 bg-[#111] border border-white/5 active:border-emerald-500/30 active:bg-emerald-500/5 rounded-xl transition-all">
+                        <div className="flex items-center justify-between mb-1.5">
                           <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
-                          <ChevronRight size={12} className="text-slate-600"/>
+                          <ChevronRight size={14} className="text-slate-600"/>
                         </div>
-                        <div className="text-[12px] font-bold uppercase leading-tight text-white">{o.title}</div>
-                        <div className="flex items-center gap-3 mt-1.5">
-                          {o.customs?.duty_rate && <span className="text-[9px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
-                          {o.logistics?.port_wait_days && <span className="text-[9px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
-                          {o.real_export_value_usd && <span className="text-[9px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={8}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
+                        <div className="text-[13px] font-bold uppercase leading-tight text-white">{o.title}</div>
+                        <div className="flex items-center gap-3 mt-2">
+                          {o.customs?.duty_rate && <span className="text-[10px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
+                          {o.logistics?.port_wait_days !== undefined && <span className="text-[10px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
+                          {o.real_export_value_usd && <span className="text-[10px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={9}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
                         </div>
                       </button>
                     ))}
@@ -1447,8 +1447,8 @@ export default function Dashboard() {
                 {selectedNode && isRisk ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[9px] text-slate-500 hover:text-sky-400 font-bold uppercase tracking-wider transition-all">
-                      <ChevronRight size={12} className="rotate-180"/> Back to Threats
+                      className="flex items-center gap-2 text-[10px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Threats
                     </button>
                     <div className={`p-4 rounded-xl border space-y-3 ${
                       selectedNode.severity === 'CRITICAL' ? 'bg-red-900/10 border-red-500/30' :
@@ -1471,11 +1471,11 @@ export default function Dashboard() {
                     )}
                     <div className="grid grid-cols-2 gap-2 pt-1">
                       <button onClick={() => setShowCompliance(true)}
-                        className="py-3 text-[10px] font-bold uppercase border border-amber-500/30 text-amber-400 rounded-xl hover:bg-amber-500/10 transition-all">
+                        className="py-4 text-[11px] font-bold uppercase border border-amber-500/30 text-amber-400 rounded-xl active:bg-amber-500/10 transition-all">
                         Compliance Check
                       </button>
                       <button onClick={() => setShowRisk(true)}
-                        className="py-3 text-[10px] font-bold uppercase border border-rose-500/30 text-rose-400 rounded-xl hover:bg-rose-500/10 transition-all">
+                        className="py-4 text-[11px] font-bold uppercase bg-rose-500 text-white rounded-xl active:bg-rose-600 transition-all">
                         Risk Score
                       </button>
                     </div>
@@ -1493,16 +1493,16 @@ export default function Dashboard() {
                       </div>
                     ) : risks.map((r, i) => (
                       <button key={r.id || i} onClick={() => setSelectedNode(r)}
-                        className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-rose-500/30 hover:bg-rose-500/5 rounded-xl transition-all">
-                        <div className="flex items-start gap-2">
-                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
+                        className="w-full text-left p-4 bg-[#111] border border-white/5 active:border-rose-500/30 active:bg-rose-500/5 rounded-xl transition-all">
+                        <div className="flex items-start gap-3">
+                          <span className={`text-[8px] font-bold px-2 py-1 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
                             {r.severity || 'RISK'}
                           </span>
                           <div className="flex-1 min-w-0">
-                            <div className="text-[12px] font-bold uppercase leading-snug text-white">{r.title || r.risk}</div>
-                            {r.desc && <p className="text-[10px] text-slate-500 mt-0.5 leading-tight line-clamp-2">{r.desc}</p>}
+                            <div className="text-[13px] font-bold uppercase leading-snug text-white">{r.title || r.risk}</div>
+                            {r.desc && <p className="text-[11px] text-slate-500 mt-1 leading-snug line-clamp-2">{r.desc}</p>}
                           </div>
-                          <ChevronRight size={12} className="text-slate-600 shrink-0 mt-0.5"/>
+                          <ChevronRight size={14} className="text-slate-600 shrink-0 mt-1"/>
                         </div>
                       </button>
                     ))}
@@ -1540,7 +1540,7 @@ export default function Dashboard() {
                     { label: 'Mission Archive',  icon: <History size={15}/>,     color: 'slate',   action: () => setShowHistory(true),     needsScan: false },
                   ].map((t, i) => (
                     <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all relative ${
+                      className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all relative ${
                         t.disabled
                           ? 'bg-white/5 border-white/5 text-slate-700 cursor-not-allowed'
                           : t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 active:bg-emerald-500/20' :
