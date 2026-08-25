@@ -216,6 +216,12 @@ export default function Dashboard() {
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
+  const [activeMobileTab, setActiveMobileTab] = useState('intel')
+
+  // Auto-switch to hubs tab when scan returns data
+  useEffect(() => {
+    if (opportunities.length > 0) setActiveMobileTab('hubs')
+  }, [opportunities.length])
 
   useEffect(() => {
     try {
@@ -1232,211 +1238,301 @@ export default function Dashboard() {
         </main>
 
         {/* ════════════════════════════════════
-            MOBILE RESULTS (lg:hidden)
+            MOBILE — TAB LAYOUT (lg:hidden)
         ════════════════════════════════════ */}
-        <div className="lg:hidden flex flex-col gap-3">
+        <div className="lg:hidden flex flex-col flex-1 min-h-0 border border-white/10 rounded-xl overflow-hidden bg-[#0a0a0a]">
 
-          {/* Empty state — example queries */}
-          {opportunities.length === 0 && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-              <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-3 font-bold">Try an example scan:</p>
-              <div className="space-y-2">
-                {[
-                  'IATF-certified brake pads for passenger vehicles',
-                  'Neodymium magnets for EV motor assembly',
-                  'Food-grade soy for QSR supply chain',
-                  'Semiconductor wafers for automotive ECU',
-                ].map((q) => (
-                  <button key={q} onClick={() => handleSearch(null, q)}
-                    className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-3 rounded-lg transition-all">
-                    → {q}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* ── Tab Bar ── */}
+          <div className="flex shrink-0 border-b border-white/10 bg-[#080808]">
+            {[
+              { id: 'intel',   label: 'Intel',                                      icon: <Zap size={11}/> },
+              { id: 'hubs',    label: opportunities.length > 0 ? `Hubs (${opportunities.length})` : 'Hubs',       icon: <Factory size={11}/> },
+              { id: 'threats', label: risks.length > 0 ? `Threats (${risks.length})` : 'Threats', icon: <ShieldAlert size={11}/> },
+              { id: 'tools',   label: 'Tools',                                      icon: <Target size={11}/> },
+            ].map(tab => (
+              <button key={tab.id}
+                onClick={() => { setActiveMobileTab(tab.id); setSelectedNode(null) }}
+                className={`flex-1 flex flex-col items-center gap-0.5 py-2.5 text-[8px] font-bold uppercase tracking-wider transition-all border-b-2 ${
+                  activeMobileTab === tab.id
+                    ? 'border-sky-500 text-sky-400 bg-sky-500/5'
+                    : 'border-transparent text-slate-600 hover:text-slate-400'
+                }`}>
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            ))}
+          </div>
 
-          {/* Strategic Directive */}
-          {opportunities.length > 0 && directive && (
-            <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
-              <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2 mb-3">
-                <Zap size={12} /> Strategic Advisory
-              </div>
-              <p className="text-[12px] text-slate-300 leading-relaxed">{directive.summary}</p>
-              {directive.tariff_alert && (
-                <p className="text-[11px] text-amber-400 mt-2 font-mono border-t border-white/5 pt-2">{directive.tariff_alert}</p>
-              )}
-              <div className="flex gap-2 mt-3 flex-wrap">
-                <button onClick={() => setShowTLC(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-emerald-500/30 text-emerald-400 rounded-lg">TLC Calc</button>
-                <button onClick={() => setShowRisk(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-rose-500/30 text-rose-400 rounded-lg">Risk Score</button>
-                <button onClick={() => setShowComparison(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-sky-500/30 text-sky-400 rounded-lg">Compare</button>
-                <button onClick={() => setShowPorts(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-white/10 text-slate-400 rounded-lg">Ports</button>
-              </div>
-            </div>
-          )}
+          {/* ── Tab Content ── */}
+          <div className="flex-1 overflow-y-auto p-3 space-y-3">
 
-          {/* Selected Node Detail (mobile) */}
-          {selectedNode && (
-            <div className="bg-[#0a0a0a] border border-sky-500/30 p-4 rounded-xl">
-              <div className="flex items-center justify-between mb-3">
-                <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase">
-                  {isRisk ? '⚠ Risk Detail' : '🏭 Hub Detail'}
-                </div>
-                <button onClick={() => setSelectedNode(null)} className="text-slate-500 hover:text-white p-1">
-                  <X size={14} />
-                </button>
-              </div>
-
-              {isRisk && (
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2">
-                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(selectedNode.severity)}`}>
-                      {selectedNode.severity || 'RISK'}
-                    </span>
-                    <div className="text-[13px] font-bold uppercase leading-snug text-white">{selectedNode.title || selectedNode.risk}</div>
+            {/* ── INTEL TAB ── */}
+            {activeMobileTab === 'intel' && (
+              <>
+                {opportunities.length === 0 ? (
+                  <div className="space-y-2 pt-1">
+                    <p className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-3">Try an example scan:</p>
+                    {[
+                      'IATF-certified brake pads for passenger vehicles',
+                      'Neodymium magnets for EV motor assembly',
+                      'Food-grade soy for QSR supply chain',
+                      'Semiconductor wafers for automotive ECU',
+                    ].map((q) => (
+                      <button key={q} onClick={() => handleSearch(null, q)}
+                        className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-3 rounded-lg transition-all leading-snug">
+                        → {q}
+                      </button>
+                    ))}
                   </div>
-                  <p className="text-[12px] text-slate-400 leading-relaxed">{selectedNode.desc}</p>
-                  {selectedNode.mitigation && (
-                    <div className="p-3 bg-sky-500/5 border border-sky-500/20 rounded-lg">
-                      <div className="text-[9px] text-sky-400 uppercase font-bold mb-1 tracking-widest">Mitigation</div>
-                      <p className="text-[11px] text-slate-300 leading-relaxed">{selectedNode.mitigation}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {isOpportunity && (
-                <div className="space-y-3">
-                  <div>
-                    <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest mb-1">{selectedNode.hub}</div>
-                    <div className="text-[13px] font-bold uppercase text-white">{selectedNode.title}</div>
-                    <p className="text-[11px] text-slate-400 leading-relaxed mt-1">{selectedNode.desc}</p>
-                  </div>
-                  {selectedNode.esg && (
-                    <div className="flex items-center gap-3 p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
-                      <div className="text-[28px] font-bold text-white">{selectedNode.esg.ethical_rating}</div>
-                      <div>
-                        <div className="text-[9px] text-emerald-400 font-bold uppercase mb-0.5">ESG Rating · {selectedNode.esg.carbon_footprint} CO₂</div>
-                        <p className="text-[10px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
-                      </div>
-                    </div>
-                  )}
-                  {selectedNode.customs && (
-                    <div className="grid grid-cols-2 gap-2 p-3 bg-sky-500/5 border border-sky-500/20 rounded-lg">
-                      <div>
-                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">HTS Code</div>
-                        <div className="text-[13px] font-mono text-white">{selectedNode.customs.hts_code}</div>
-                      </div>
-                      <div>
-                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Duty Rate</div>
-                        <div className="text-[13px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div>
-                      </div>
-                      <div>
-                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Lead Time</div>
-                        <div className="text-[12px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} Days</div>
-                      </div>
-                      <div>
-                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Est. Freight</div>
-                        <div className="text-[12px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div>
-                      </div>
-                      {selectedNode.customs.compliance_note && (
-                        <div className="col-span-2 border-t border-white/5 pt-2">
-                          <p className="text-[10px] text-slate-500 leading-tight">{selectedNode.customs.compliance_note}</p>
+                ) : (
+                  <>
+                    {directive && (
+                      <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl space-y-3">
+                        <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
+                          <Zap size={11}/> Strategic Advisory
                         </div>
-                      )}
+                        <p className="text-[12px] text-slate-300 leading-relaxed">{directive.summary}</p>
+                        {directive.tariff_alert && (
+                          <p className="text-[11px] text-amber-400 font-mono border-t border-white/5 pt-3">{directive.tariff_alert}</p>
+                        )}
+                      </div>
+                    )}
+                    {marketData && (
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
+                        <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                          <BarChart3 size={11}/> Price Trend Index
+                          <span className={`ml-auto px-2 py-0.5 rounded text-[8px] font-bold ${marketData.currency.impact === 'Stable' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                            {marketData.currency.impact}
+                          </span>
+                        </div>
+                        <div className="flex items-end justify-between gap-1" style={{ height: 56 }}>
+                          {marketData.price_history.map((d, i) => {
+                            const max = Math.max(...marketData.price_history.map(p => p.price))
+                            const px = Math.max(6, Math.round((d.price / max) * 48))
+                            return (
+                              <div key={i} className="flex flex-col items-center gap-1 flex-1">
+                                <div className="w-full rounded-sm bg-sky-500/30 hover:bg-sky-500/60 transition-all" style={{ height: px }} title={`${d.quarter}: ${d.price}`}/>
+                                <span className="text-[7px] text-slate-700 rotate-0">{d.quarter}</span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+                    {fxData?.rates && (
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
+                        <div className="text-[9px] font-bold text-purple-400 tracking-[0.2em] uppercase mb-2">Live FX Rates</div>
+                        <div className="grid grid-cols-2 gap-2">
+                          {Object.entries(fxData.rates).slice(0, 6).map(([code, info]) => (
+                            <div key={code} className="bg-[#0a0a0a] border border-white/5 p-2.5 rounded-lg">
+                              <div className="text-[8px] text-slate-600 uppercase font-bold mb-0.5">{code}</div>
+                              <div className="text-[14px] font-bold text-white font-mono">{typeof info === 'object' ? info.rate : info}</div>
+                              {info.label && <div className="text-[8px] text-slate-600 leading-tight">{info.label}</div>}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    <button onClick={() => setShowSearch(true)}
+                      className="w-full py-3 bg-sky-500 text-black font-bold uppercase text-[11px] rounded-xl tracking-widest flex items-center justify-center gap-2 transition-all">
+                      New Mission <SearchCode size={13}/>
+                    </button>
+                  </>
+                )}
+              </>
+            )}
+
+            {/* ── HUBS TAB ── */}
+            {activeMobileTab === 'hubs' && (
+              <>
+                {/* Hub detail view */}
+                {selectedNode && isOpportunity ? (
+                  <div className="space-y-3">
+                    <button onClick={() => setSelectedNode(null)}
+                      className="flex items-center gap-2 text-[9px] text-slate-500 hover:text-sky-400 font-bold uppercase tracking-wider transition-all">
+                      <ChevronRight size={12} className="rotate-180"/> Back to Hubs
+                    </button>
+                    <div className="bg-[#111] border border-emerald-500/30 p-4 rounded-xl space-y-1">
+                      <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{selectedNode.hub}</div>
+                      <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title}</div>
+                      <p className="text-[11px] text-slate-400 leading-relaxed pt-1">{selectedNode.desc}</p>
                     </div>
-                  )}
-                  {selectedNode.companies && selectedNode.companies.length > 0 && (
-                    <div>
-                      <div className="text-[9px] font-bold text-emerald-400 uppercase mb-2">Key Suppliers</div>
-                      <div className="space-y-1.5">
-                        {selectedNode.companies.slice(0, 4).map((c, i) => (
+                    {selectedNode.esg && (
+                      <div className="bg-[#111] border border-emerald-500/20 p-4 rounded-xl flex items-center gap-3">
+                        <div className="text-[32px] font-bold text-white shrink-0">{selectedNode.esg.ethical_rating}</div>
+                        <div className="min-w-0">
+                          <div className="text-[9px] text-emerald-400 font-bold uppercase mb-0.5">ESG · {selectedNode.esg.carbon_footprint}</div>
+                          <p className="text-[10px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
+                        </div>
+                      </div>
+                    )}
+                    {selectedNode.customs && (
+                      <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl">
+                        <div className="text-[9px] text-sky-400 font-bold uppercase mb-3 flex items-center gap-1.5"><FileText size={10}/> Regulatory</div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">HTS Code</div><div className="text-[14px] font-mono text-white">{selectedNode.customs.hts_code}</div></div>
+                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Duty Rate</div><div className="text-[14px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div></div>
+                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Lead Time</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} days</div></div>
+                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Est. Freight</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div></div>
+                        </div>
+                        {selectedNode.customs.compliance_note && (
+                          <p className="text-[10px] text-slate-500 border-t border-white/5 mt-3 pt-3 leading-relaxed">{selectedNode.customs.compliance_note}</p>
+                        )}
+                      </div>
+                    )}
+                    {selectedNode.real_export_value_usd && (
+                      <div className="bg-sky-500/10 border border-sky-500/25 p-3 rounded-xl flex items-center gap-3">
+                        <CheckCircle size={16} className="text-sky-400 shrink-0"/>
+                        <div>
+                          <div className="text-[8px] text-sky-400 uppercase font-bold tracking-widest">UN Comtrade Official Data</div>
+                          <div className="text-[13px] font-bold text-white">${(selectedNode.real_export_value_usd / 1e6).toLocaleString(undefined, {maximumFractionDigits:0})}M exported in {selectedNode.real_trade_data_year}</div>
+                        </div>
+                      </div>
+                    )}
+                    {selectedNode.companies?.length > 0 && (
+                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
+                        <div className="text-[9px] font-bold text-emerald-400 uppercase mb-1 flex items-center gap-1.5"><Factory size={10}/> Key Suppliers</div>
+                        {selectedNode.companies.slice(0, 6).map((c, i) => (
                           <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
-                            className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all">
+                            className="flex items-center justify-between p-3 bg-[#0a0a0a] border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all">
                             <span className="text-[11px] text-slate-300 font-mono truncate">{c.name}</span>
                             <div className="flex items-center gap-1 shrink-0 ml-2">
                               {c.turnover && <span className="text-[8px] text-slate-600">{c.turnover}</span>}
-                              <ExternalLink size={10} className="text-emerald-400 opacity-50" />
+                              <ExternalLink size={10} className="text-emerald-400 opacity-60"/>
                             </div>
                           </a>
                         ))}
                       </div>
+                    )}
+                    <div className="grid grid-cols-2 gap-2">
+                      <button onClick={() => setShowTLC(true)} className="py-3 text-[10px] font-bold uppercase border border-emerald-500/30 text-emerald-400 rounded-xl">TLC Calc</button>
+                      <button onClick={() => setShowRFQ(true)} className="py-3 text-[10px] font-bold uppercase border border-sky-500/30 text-sky-400 rounded-xl">Generate RFQ</button>
                     </div>
-                  )}
-                  <div className="flex gap-2 flex-wrap">
-                    <button onClick={() => setShowTLC(true)} className="flex-1 text-[9px] font-bold uppercase px-3 py-2 border border-emerald-500/30 text-emerald-400 rounded-lg">TLC Calc</button>
-                    {isOpportunity && <button onClick={() => setShowRFQ(true)} className="flex-1 text-[9px] font-bold uppercase px-3 py-2 border border-sky-500/30 text-sky-400 rounded-lg">Generate RFQ</button>}
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                ) : (
+                  /* Hubs list */
+                  <div className="space-y-2">
+                    {opportunities.length === 0 ? (
+                      <p className="text-[11px] text-slate-600 italic p-2">Run a scan to identify sourcing hubs.</p>
+                    ) : opportunities.map((o, i) => (
+                      <button key={o.id || i} onClick={() => setSelectedNode(o)}
+                        className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/5 rounded-xl transition-all">
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
+                          <ChevronRight size={12} className="text-slate-600"/>
+                        </div>
+                        <div className="text-[12px] font-bold uppercase leading-tight text-white">{o.title}</div>
+                        <div className="flex items-center gap-3 mt-1.5">
+                          {o.customs?.duty_rate && <span className="text-[9px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
+                          {o.logistics?.port_wait_days && <span className="text-[9px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
+                          {o.real_export_value_usd && <span className="text-[9px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={8}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
 
-          {/* Sourcing Hubs */}
-          {opportunities.length > 0 && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-              <h2 className="text-[10px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-                <Factory size={13} /> Sourcing Hubs
-                <span className="ml-auto text-[9px] text-slate-600">{opportunities.length} identified</span>
-              </h2>
-              <div className="space-y-2">
-                {opportunities.map((o, i) => (
-                  <div key={o.id || i}
-                    onClick={() => setSelectedNode(selectedNode?.id === o.id ? null : o)}
-                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
-                      selectedNode?.id === o.id
-                        ? 'bg-emerald-500/10 border-emerald-500/40'
-                        : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
+            {/* ── THREATS TAB ── */}
+            {activeMobileTab === 'threats' && (
+              <>
+                {/* Risk detail view */}
+                {selectedNode && isRisk ? (
+                  <div className="space-y-3">
+                    <button onClick={() => setSelectedNode(null)}
+                      className="flex items-center gap-2 text-[9px] text-slate-500 hover:text-sky-400 font-bold uppercase tracking-wider transition-all">
+                      <ChevronRight size={12} className="rotate-180"/> Back to Threats
+                    </button>
+                    <div className={`p-4 rounded-xl border space-y-3 ${
+                      selectedNode.severity === 'CRITICAL' ? 'bg-red-900/10 border-red-500/30' :
+                      selectedNode.severity === 'HIGH' ? 'bg-rose-900/10 border-rose-500/30' :
+                      'bg-amber-900/10 border-amber-500/30'
                     }`}>
-                    <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest">{o.hub}</div>
-                    <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
-                    {o.real_export_value_usd && (
-                      <div className="mt-1 flex items-center gap-1 text-[9px] text-sky-400 font-mono">
-                        <CheckCircle size={9} /> ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year})
+                      <div className="flex items-start gap-2">
+                        <span className={`text-[8px] font-bold px-2 py-1 rounded border shrink-0 ${severityStyle(selectedNode.severity)}`}>
+                          {selectedNode.severity || 'RISK'}
+                        </span>
+                        <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title || selectedNode.risk}</div>
+                      </div>
+                      <p className="text-[12px] text-slate-300 leading-relaxed">{selectedNode.desc}</p>
+                    </div>
+                    {selectedNode.mitigation && (
+                      <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl space-y-2">
+                        <div className="text-[9px] text-sky-400 uppercase font-bold tracking-widest flex items-center gap-1.5"><CheckCircle size={10}/> Mitigation Strategy</div>
+                        <p className="text-[12px] text-slate-200 leading-relaxed">{selectedNode.mitigation}</p>
                       </div>
                     )}
                   </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Global Threats */}
-          {risks.length > 0 && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-              <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-                <ShieldAlert size={13} /> Global Threats
-                <span className="ml-auto text-[9px] text-slate-600">{risks.length} active</span>
-              </h2>
-              <div className="space-y-2">
-                {risks.map((r, i) => (
-                  <div key={r.id || i}
-                    onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
-                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
-                      selectedNode?.id === (r.id || i)
-                        ? 'bg-rose-500/10 border-rose-500/40'
-                        : 'bg-[#111] border-white/5 hover:border-rose-500/20'
-                    }`}>
-                    <div className="flex items-start gap-2">
-                      <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
-                        {r.severity || 'RISK'}
-                      </span>
-                      <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
-                    </div>
+                ) : (
+                  /* Threats list */
+                  <div className="space-y-2">
+                    {risks.length === 0 ? (
+                      <p className="text-[11px] text-slate-600 italic p-2">Run a scan to surface active threats.</p>
+                    ) : risks.map((r, i) => (
+                      <button key={r.id || i} onClick={() => setSelectedNode(r)}
+                        className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-rose-500/30 hover:bg-rose-500/5 rounded-xl transition-all">
+                        <div className="flex items-start gap-2">
+                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
+                            {r.severity || 'RISK'}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-[12px] font-bold uppercase leading-snug text-white">{r.title || r.risk}</div>
+                            {r.desc && <p className="text-[10px] text-slate-500 mt-0.5 leading-tight line-clamp-2">{r.desc}</p>}
+                          </div>
+                          <ChevronRight size={12} className="text-slate-600 shrink-0 mt-0.5"/>
+                        </div>
+                      </button>
+                    ))}
                   </div>
-                ))}
+                )}
+              </>
+            )}
+
+            {/* ── TOOLS TAB ── */}
+            {activeMobileTab === 'tools' && (
+              <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: 'TLC Calculator',    icon: <DollarSign size={16}/>,  color: 'emerald', action: () => setShowTLC(true) },
+                    { label: 'Risk Score',         icon: <ShieldAlert size={16}/>, color: 'rose',    action: () => setShowRisk(true) },
+                    { label: 'Compare Regions',    icon: <Scale size={16}/>,       color: 'purple',  action: () => setShowComparison(true), disabled: opportunities.length === 0 },
+                    { label: 'Port Monitor',       icon: <Anchor size={16}/>,      color: 'sky',     action: () => setShowPorts(true) },
+                    { label: 'HS Code Lookup',     icon: <FileText size={16}/>,    color: 'amber',   action: () => setShowTariff(true) },
+                    { label: 'Incoterms 2020',     icon: <Ship size={16}/>,        color: 'purple',  action: () => setShowIncoterms(true) },
+                    { label: 'Compliance',         icon: <CheckCircle size={16}/>, color: 'emerald', action: () => setShowCompliance(true) },
+                    { label: 'Mission Archive',    icon: <History size={16}/>,     color: 'slate',   action: () => setShowHistory(true) },
+                  ].map((t, i) => (
+                    <button key={i} onClick={t.action} disabled={t.disabled}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all disabled:opacity-30 ${
+                        t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15' :
+                        t.color === 'rose'    ? 'bg-rose-500/5 border-rose-500/20 text-rose-400 hover:bg-rose-500/15' :
+                        t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 hover:bg-sky-500/15' :
+                        t.color === 'amber'   ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 hover:bg-amber-500/15' :
+                        t.color === 'purple'  ? 'bg-purple-500/5 border-purple-500/20 text-purple-400 hover:bg-purple-500/15' :
+                        'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'
+                      }`}>
+                      {t.icon}
+                      <span className="text-[9px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
+                    </button>
+                  ))}
+                </div>
+                {opportunities.length > 0 && (
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button onClick={exportToPDF} disabled={isExportingPDF}
+                      className="flex items-center justify-center gap-2 py-3 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-wider disabled:opacity-30">
+                      <Download size={13}/> Export PDF
+                    </button>
+                    <button onClick={() => setShowSearch(true)}
+                      className="flex items-center justify-center gap-2 py-3 bg-sky-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider">
+                      <SearchCode size={13}/> New Mission
+                    </button>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
 
-          {/* New scan CTA */}
-          {opportunities.length > 0 && (
-            <button onClick={() => setShowSearch(true)}
-              className="w-full py-3 bg-sky-500 text-black font-bold uppercase text-[11px] hover:bg-sky-400 rounded-xl tracking-widest flex items-center justify-center gap-2 transition-all">
-              New Mission <SearchCode size={13} />
-            </button>
-          )}
-
+          </div>
         </div>
 
         {/* ════════════════════════════════════
