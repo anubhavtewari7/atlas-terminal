@@ -728,7 +728,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="flex flex-1 overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
+      <div className="flex flex-1 overflow-hidden p-2 lg:p-4 gap-2 lg:gap-4 flex-col lg:flex-row">
 
         {/* ── MODALS ── */}
         <AnimatePresence>
@@ -978,7 +978,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             CENTER — GLOBE + HUD
         ════════════════════════════════════ */}
-        <main className="flex-1 flex flex-col gap-4 overflow-hidden min-w-0">
+        <main className="flex flex-col gap-2 overflow-hidden min-w-0 lg:flex-1 lg:gap-4">
 
           {/* Globe */}
           <div className="flex-1 max-h-[28vh] lg:max-h-none bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
