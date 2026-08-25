@@ -107,21 +107,15 @@ const STEPS = [
 function clampedStyle(raw, tooltipW, tooltipH, windowW, windowH) {
   const pad = 12
   let style = { ...raw }
-
-  // Convert to absolute left/top for clamping
   const left  = style.left  !== undefined ? style.left  : (windowW - tooltipW - (style.right  || 0))
   const top   = style.top   !== undefined ? style.top   : (windowH - tooltipH - (style.bottom || 0))
-
   const clampedLeft = Math.min(Math.max(pad, left), windowW - tooltipW - pad)
   const clampedTop  = Math.min(Math.max(pad, top),  windowH - tooltipH - pad)
-
-  // If we had a transform translate, absorb it
   if (style.transform) style = { ...style, transform: undefined }
-
   return { ...style, left: clampedLeft, top: clampedTop }
 }
 
-// Liquid glass card style — shared by modal and tooltip
+// Liquid glass card style
 const GLASS = {
   background: 'linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(120,180,255,0.07) 45%, rgba(56,189,248,0.10) 100%)',
   backdropFilter: 'blur(48px) saturate(180%) brightness(1.15)',
@@ -130,7 +124,6 @@ const GLASS = {
   boxShadow: '0 28px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.30), inset 0 -1px 0 rgba(0,0,0,0.18), inset 0 0 40px rgba(56,189,248,0.04), 0 0 0 0.5px rgba(255,255,255,0.10)',
 }
 
-// Thin specular highlight drawn inside each card
 function GlassHighlight() {
   return (
     <div style={{
@@ -150,6 +143,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
   const current = STEPS[step]
   const isFirst = step === 0
   const isLast  = step === STEPS.length - 1
+  const isMobile = win.w < 1024
 
   // Track window size
   useEffect(() => {
@@ -166,6 +160,13 @@ export default function GuidedTour({ onComplete, onStartScan }) {
     const measure = () => {
       const el = document.querySelector(`[data-tour="${current.target}"]`)
       if (el) {
+        const r = el.getBoundingClientRect()
+        // If the element has zero dimensions it's hidden (e.g. desktop sidebar on mobile)
+        // — treat as no target and fall through to center modal
+        if (r.width === 0 && r.height === 0) {
+          setRect(null)
+          return
+        }
         el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
         setTimeout(() => {
           setRect(el.getBoundingClientRect())
@@ -180,7 +181,6 @@ export default function GuidedTour({ onComplete, onStartScan }) {
 
   const goNext = useCallback(() => {
     if (isLast) { onComplete(); return }
-    // If next step's target doesn't exist, skip it
     let nextStep = step + 1
     while (nextStep < STEPS.length - 1 && STEPS[nextStep].target) {
       const el = document.querySelector(`[data-tour="${STEPS[nextStep].target}"]`)
@@ -192,7 +192,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
 
   const goPrev = useCallback(() => setStep(s => Math.max(0, s - 1)), [])
 
-  // Tooltip positioning
+  // Desktop tooltip positioning
   const TOOLTIP_W = 320
   const TOOLTIP_H = 240
   const PAD = 16
@@ -208,21 +208,31 @@ export default function GuidedTour({ onComplete, onStartScan }) {
     }
   }
 
-  const tooltipStyle = rect
+  const tooltipStyle = rect && !isMobile
     ? clampedStyle(rawStyle(), TOOLTIP_W, TOOLTIP_H, win.w, win.h)
     : {}
 
   const spotlightPad = 8
+  // Modal width: responsive on mobile
+  const modalWidth = Math.min(440, win.w - 32)
+
+  // On mobile with a visible rect, we show the spotlight + a bottom sheet tooltip
+  // On mobile without a rect (hidden desktop element), we show a center modal
+  // On desktop: original behavior
+  const showCenterModal = current.position === 'center' || (isMobile && !rect && current.target !== null) || (!rect && current.target !== null && current.position !== 'center')
+  const showSpotlight   = !!rect && current.position !== 'center'
+  const showDesktopTip  = !!rect && !isMobile && current.position !== 'center'
+  const showMobileSheet = !!rect && isMobile && current.position !== 'center'
 
   return (
     <div className="fixed inset-0 z-[500]">
 
-      {/* ── FULL DARK OVERLAY — lighter on center steps so glass has content to blur through ── */}
-      <div className={`absolute inset-0 transition-all duration-300 ${current.position === 'center' ? 'bg-black/50' : 'bg-black/75'}`} />
+      {/* ── FULL DARK OVERLAY ── */}
+      <div className={`absolute inset-0 transition-all duration-300 ${(current.position === 'center' || showCenterModal) ? 'bg-black/50' : 'bg-black/75'}`} />
 
-      {/* ── SPOTLIGHT (positioned over target element) ── */}
+      {/* ── SPOTLIGHT ── */}
       <AnimatePresence mode="wait">
-        {rect && current.position !== 'center' && (
+        {showSpotlight && (
           <motion.div
             key={`spot-${step}`}
             initial={{ opacity: 0 }}
@@ -245,13 +255,12 @@ export default function GuidedTour({ onComplete, onStartScan }) {
         )}
       </AnimatePresence>
 
-      {/* ── CENTER MODAL or POSITIONED TOOLTIP — single AnimatePresence so old fully exits before new enters ── */}
+      {/* ── CENTER MODAL (welcome / done / hidden-target steps on mobile) ── */}
       <AnimatePresence mode="wait">
-        {current.position === 'center' ? (
-          /* CENTERED MODAL (welcome / done) */
+        {(current.position === 'center' || showCenterModal) && (
           <motion.div
             key={`center-${step}`}
-            className="absolute inset-0 flex items-center justify-center"
+            className="absolute inset-0 flex items-center justify-center px-4"
             style={{ zIndex: 2 }}
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1,    y: 0  }}
@@ -259,16 +268,16 @@ export default function GuidedTour({ onComplete, onStartScan }) {
             transition={{ type: 'spring', stiffness: 340, damping: 28 }}
           >
             <div
-              className="relative rounded-2xl p-8"
-              style={{ width: 440, ...GLASS }}
+              className="relative rounded-2xl p-6 md:p-8"
+              style={{ width: modalWidth, ...GLASS }}
             >
               <GlassHighlight />
-              <div className="text-5xl mb-5">{current.emoji}</div>
-              <h2 className="text-[13px] font-bold text-sky-300 tracking-[0.2em] uppercase mb-3">{current.title}</h2>
-              <p className="text-[13px] text-white/80 leading-relaxed font-sans mb-8">{current.content}</p>
+              <div className="text-4xl md:text-5xl mb-4 md:mb-5">{current.emoji}</div>
+              <h2 className="text-[12px] md:text-[13px] font-bold text-sky-300 tracking-[0.2em] uppercase mb-2 md:mb-3">{current.title}</h2>
+              <p className="text-[12px] md:text-[13px] text-white/80 leading-relaxed font-sans mb-6 md:mb-8">{current.content}</p>
 
               {/* Progress dots */}
-              <div className="flex gap-1.5 mb-6">
+              <div className="flex gap-1.5 mb-5 md:mb-6 flex-wrap">
                 {STEPS.map((_, i) => (
                   <div key={i} className={`h-1 rounded-full transition-all duration-300 ${i === step ? 'w-5 bg-sky-300' : 'w-1.5 bg-white/20'}`} />
                 ))}
@@ -300,8 +309,12 @@ export default function GuidedTour({ onComplete, onStartScan }) {
               </div>
             </div>
           </motion.div>
-        ) : rect ? (
-          /* POSITIONED TOOLTIP (spotlight steps) */
+        )}
+      </AnimatePresence>
+
+      {/* ── DESKTOP POSITIONED TOOLTIP ── */}
+      <AnimatePresence mode="wait">
+        {showDesktopTip && (
           <motion.div
             key={`tip-${step}`}
             initial={{ opacity: 0, y: 6 }}
@@ -313,7 +326,6 @@ export default function GuidedTour({ onComplete, onStartScan }) {
           >
             <div className="relative p-5">
               <GlassHighlight />
-              {/* Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2.5">
                   <span className="text-2xl leading-none">{current.emoji}</span>
@@ -323,18 +335,12 @@ export default function GuidedTour({ onComplete, onStartScan }) {
                   <X size={13} />
                 </button>
               </div>
-
-              {/* Content */}
               <p className="text-[12px] text-white/80 leading-relaxed font-sans mb-4">{current.content}</p>
-
-              {/* Progress dots */}
               <div className="flex gap-1 mb-4">
                 {STEPS.map((_, i) => (
                   <div key={i} className={`h-0.5 rounded-full transition-all duration-300 ${i === step ? 'w-4 bg-sky-300' : 'w-1 bg-white/15'}`} />
                 ))}
               </div>
-
-              {/* Nav */}
               <div className="flex items-center justify-between">
                 <span className="text-[9px] text-white/25 font-mono">{step + 1} / {STEPS.length}</span>
                 <div className="flex gap-1.5">
@@ -350,7 +356,56 @@ export default function GuidedTour({ onComplete, onStartScan }) {
               </div>
             </div>
           </motion.div>
-        ) : null}
+        )}
+      </AnimatePresence>
+
+      {/* ── MOBILE BOTTOM SHEET (visible element on mobile, e.g. globe) ── */}
+      <AnimatePresence mode="wait">
+        {showMobileSheet && (
+          <motion.div
+            key={`sheet-${step}`}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{   opacity: 0, y: 40 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+            className="absolute bottom-0 left-0 right-0 rounded-t-2xl"
+            style={{ zIndex: 2, ...GLASS }}
+          >
+            <div className="relative p-5 pb-8">
+              <GlassHighlight />
+              {/* Drag handle */}
+              <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl leading-none">{current.emoji}</span>
+                  <h3 className="text-[11px] font-bold text-sky-300 tracking-[0.18em] uppercase leading-snug">{current.title}</h3>
+                </div>
+                <button onClick={onComplete} className="text-white/25 active:text-white/70 transition-colors ml-2 mt-0.5 shrink-0">
+                  <X size={14} />
+                </button>
+              </div>
+              <p className="text-[12px] text-white/80 leading-relaxed font-sans mb-4">{current.content}</p>
+              <div className="flex gap-1 mb-4 flex-wrap">
+                {STEPS.map((_, i) => (
+                  <div key={i} className={`h-0.5 rounded-full transition-all duration-300 ${i === step ? 'w-4 bg-sky-300' : 'w-1 bg-white/15'}`} />
+                ))}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[9px] text-white/25 font-mono">{step + 1} / {STEPS.length}</span>
+                <div className="flex gap-2">
+                  <button onClick={goPrev}
+                    className="flex items-center gap-0.5 px-4 h-9 border border-white/15 text-white/60 active:text-white text-[10px] font-bold uppercase rounded-xl transition-all">
+                    <ChevronLeft size={12} /> Back
+                  </button>
+                  <button onClick={goNext}
+                    className="flex items-center gap-0.5 px-4 h-9 bg-sky-500 text-black font-bold text-[10px] uppercase rounded-xl active:bg-sky-400 transition-all">
+                    {isLast ? 'Done' : 'Next'} <ChevronRight size={12} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
       </AnimatePresence>
 
     </div>
