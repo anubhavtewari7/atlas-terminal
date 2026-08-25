@@ -975,7 +975,7 @@ export default function Dashboard() {
         <main className="flex-1 flex flex-col gap-4 overflow-hidden min-w-0">
 
           {/* Globe */}
-          <div className="flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
+          <div className="flex-1 max-h-[45vh] lg:max-h-none bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
@@ -1272,6 +1272,103 @@ export default function Dashboard() {
                 <button onClick={() => setShowComparison(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-sky-500/30 text-sky-400 rounded-lg">Compare</button>
                 <button onClick={() => setShowPorts(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-white/10 text-slate-400 rounded-lg">Ports</button>
               </div>
+            </div>
+          )}
+
+          {/* Selected Node Detail (mobile) */}
+          {selectedNode && (
+            <div className="bg-[#0a0a0a] border border-sky-500/30 p-4 rounded-xl">
+              <div className="flex items-center justify-between mb-3">
+                <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase">
+                  {isRisk ? '⚠ Risk Detail' : '🏭 Hub Detail'}
+                </div>
+                <button onClick={() => setSelectedNode(null)} className="text-slate-500 hover:text-white p-1">
+                  <X size={14} />
+                </button>
+              </div>
+
+              {isRisk && (
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(selectedNode.severity)}`}>
+                      {selectedNode.severity || 'RISK'}
+                    </span>
+                    <div className="text-[13px] font-bold uppercase leading-snug text-white">{selectedNode.title || selectedNode.risk}</div>
+                  </div>
+                  <p className="text-[12px] text-slate-400 leading-relaxed">{selectedNode.desc}</p>
+                  {selectedNode.mitigation && (
+                    <div className="p-3 bg-sky-500/5 border border-sky-500/20 rounded-lg">
+                      <div className="text-[9px] text-sky-400 uppercase font-bold mb-1 tracking-widest">Mitigation</div>
+                      <p className="text-[11px] text-slate-300 leading-relaxed">{selectedNode.mitigation}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {isOpportunity && (
+                <div className="space-y-3">
+                  <div>
+                    <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest mb-1">{selectedNode.hub}</div>
+                    <div className="text-[13px] font-bold uppercase text-white">{selectedNode.title}</div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed mt-1">{selectedNode.desc}</p>
+                  </div>
+                  {selectedNode.esg && (
+                    <div className="flex items-center gap-3 p-3 bg-emerald-500/5 border border-emerald-500/20 rounded-lg">
+                      <div className="text-[28px] font-bold text-white">{selectedNode.esg.ethical_rating}</div>
+                      <div>
+                        <div className="text-[9px] text-emerald-400 font-bold uppercase mb-0.5">ESG Rating · {selectedNode.esg.carbon_footprint} CO₂</div>
+                        <p className="text-[10px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
+                      </div>
+                    </div>
+                  )}
+                  {selectedNode.customs && (
+                    <div className="grid grid-cols-2 gap-2 p-3 bg-sky-500/5 border border-sky-500/20 rounded-lg">
+                      <div>
+                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">HTS Code</div>
+                        <div className="text-[13px] font-mono text-white">{selectedNode.customs.hts_code}</div>
+                      </div>
+                      <div>
+                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Duty Rate</div>
+                        <div className="text-[13px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div>
+                      </div>
+                      <div>
+                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Lead Time</div>
+                        <div className="text-[12px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} Days</div>
+                      </div>
+                      <div>
+                        <div className="text-[8px] text-slate-600 uppercase mb-0.5">Est. Freight</div>
+                        <div className="text-[12px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div>
+                      </div>
+                      {selectedNode.customs.compliance_note && (
+                        <div className="col-span-2 border-t border-white/5 pt-2">
+                          <p className="text-[10px] text-slate-500 leading-tight">{selectedNode.customs.compliance_note}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {selectedNode.companies && selectedNode.companies.length > 0 && (
+                    <div>
+                      <div className="text-[9px] font-bold text-emerald-400 uppercase mb-2">Key Suppliers</div>
+                      <div className="space-y-1.5">
+                        {selectedNode.companies.slice(0, 4).map((c, i) => (
+                          <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
+                            className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all">
+                            <span className="text-[11px] text-slate-300 font-mono truncate">{c.name}</span>
+                            <div className="flex items-center gap-1 shrink-0 ml-2">
+                              {c.turnover && <span className="text-[8px] text-slate-600">{c.turnover}</span>}
+                              <ExternalLink size={10} className="text-emerald-400 opacity-50" />
+                            </div>
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex gap-2 flex-wrap">
+                    <button onClick={() => setShowTLC(true)} className="flex-1 text-[9px] font-bold uppercase px-3 py-2 border border-emerald-500/30 text-emerald-400 rounded-lg">TLC Calc</button>
+                    {isOpportunity && <button onClick={() => setShowRFQ(true)} className="flex-1 text-[9px] font-bold uppercase px-3 py-2 border border-sky-500/30 text-sky-400 rounded-lg">Generate RFQ</button>}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
