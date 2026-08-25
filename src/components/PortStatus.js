@@ -97,10 +97,10 @@ export default function PortStatus({ onClose }) {
         )}
 
         {/* Filters */}
-        <div className="px-6 py-3 border-b border-white/5 flex items-center gap-2 shrink-0">
+        <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
           {Object.entries(regions).map(([key, label]) => (
             <button key={key} onClick={() => setFilter(key)}
-              className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${filter === key ? 'bg-sky-500/20 border border-sky-500/30 text-sky-400' : 'text-slate-500 hover:text-slate-300'}`}>
+              className={`shrink-0 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${filter === key ? 'bg-sky-500/20 border border-sky-500/30 text-sky-400' : 'text-slate-500 hover:text-slate-300 active:text-slate-300'}`}>
               {label}
             </button>
           ))}
@@ -108,7 +108,8 @@ export default function PortStatus({ onClose }) {
 
         {/* Port list */}
         <div className="overflow-y-auto flex-1 custom-scrollbar">
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px]">
             <thead className="sticky top-0 bg-[#080808] border-b border-white/5">
               <tr>
                 {['#', 'Port', 'Country', 'Congestion', 'Wait Time', 'Volume', 'Trend', 'Status'].map(h => (
@@ -150,6 +151,7 @@ export default function PortStatus({ onClose }) {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </motion.div>
     </motion.div>

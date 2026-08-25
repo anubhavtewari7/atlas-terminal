@@ -86,7 +86,7 @@ export default function ComplianceChecklist({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-2xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] overflow-hidden"
+        className="bg-[#080808] border border-white/10 w-full max-w-2xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -98,11 +98,11 @@ export default function ComplianceChecklist({ onClose }) {
               <p className="text-[10px] text-slate-600 mt-0.5">Import/export requirements by product and destination</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
-        <form onSubmit={handleGenerate} className="p-6 border-b border-white/5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleGenerate} className="p-4 md:p-6 border-b border-white/5 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Product / Commodity</label>
               <input autoFocus value={product} onChange={e => setProduct(e.target.value)} placeholder="e.g. Beef patties, Microchips, Lithium batteries"
@@ -114,7 +114,7 @@ export default function ComplianceChecklist({ onClose }) {
                 className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl placeholder:text-slate-700" />
             </div>
           </div>
-          <button type="submit" className="w-full h-12 bg-emerald-500 text-black font-bold text-[12px] uppercase tracking-widest hover:bg-emerald-400 transition-all rounded-xl">
+          <button type="submit" className="w-full h-12 bg-emerald-500 text-black font-bold text-[12px] uppercase tracking-widest hover:bg-emerald-400 active:bg-emerald-400 transition-all rounded-xl">
             Generate Compliance Checklist
           </button>
         </form>

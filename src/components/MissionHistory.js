@@ -11,7 +11,7 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-2xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] overflow-hidden"
+        className="bg-[#080808] border border-white/10 w-full max-w-2xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -27,12 +27,12 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
             {missions.length > 0 && (
               <button
                 onClick={onClear}
-                className="flex items-center gap-2 px-3 py-1.5 text-[10px] text-slate-500 hover:text-rose-400 font-mono uppercase tracking-widest transition-all"
+                className="flex items-center gap-2 px-3 py-1.5 text-[10px] text-slate-500 hover:text-rose-400 active:text-rose-400 font-mono uppercase tracking-widest transition-all"
               >
                 <Trash2 size={12} /> Clear All
               </button>
             )}
-            <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+            <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
           </div>
         </div>
 
@@ -51,7 +51,7 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="group p-4 bg-[#111] border border-white/5 rounded-xl hover:border-emerald-500/30 transition-all cursor-pointer"
+                  className="group p-4 bg-[#111] border border-white/5 rounded-xl hover:border-emerald-500/30 active:border-emerald-500/30 transition-all cursor-pointer"
                   onClick={() => { onReplay(m); onClose(); }}
                 >
                   <div className="flex items-start justify-between gap-4">

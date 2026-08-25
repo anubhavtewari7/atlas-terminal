@@ -46,7 +46,7 @@ export default function TariffLookup({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(56,189,248,0.1)] overflow-hidden"
+        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(56,189,248,0.1)] max-h-[90vh] overflow-y-auto"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5">
@@ -59,7 +59,7 @@ export default function TariffLookup({ onClose }) {
               <p className="text-[10px] text-slate-600 mt-0.5">WTO & CBP Schedule B — Global Duty Intelligence</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
         {/* Search */}

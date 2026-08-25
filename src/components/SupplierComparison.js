@@ -51,7 +51,7 @@ export default function SupplierComparison({ hubs, onClose }) {
         style={{ maxHeight: '90vh' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-8 py-5 border-b border-white/5 shrink-0">
+        <div className="flex items-center justify-between px-4 md:px-8 py-4 md:py-5 border-b border-white/5 shrink-0">
           <div className="flex items-center gap-4">
             <div className="w-11 h-11 bg-sky-500/10 border border-sky-500/20 rounded-xl flex items-center justify-center">
               <BarChart3 size={22} className="text-sky-400" />
@@ -79,7 +79,7 @@ export default function SupplierComparison({ hubs, onClose }) {
                     <div className="flex flex-wrap justify-center gap-2 mt-3">
                       {(hub.companies || []).slice(0, 2).map((c, ci) => (
                         <a key={ci} href={c.website} target="_blank" rel="noopener noreferrer"
-                          className="text-[12px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-3 py-1 rounded-lg hover:bg-sky-500/20 transition-all flex items-center gap-1.5"
+                          className="text-[12px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-3 py-1 rounded-lg hover:bg-sky-500/20 active:bg-sky-500/20 transition-all flex items-center gap-1.5"
                         >
                           {c.name} <ExternalLink size={10} />
                         </a>
@@ -118,7 +118,7 @@ export default function SupplierComparison({ hubs, onClose }) {
           </table>
         </div>
 
-        <div className="px-8 py-4 border-t border-white/5 flex items-center gap-3 shrink-0 bg-[#090909]">
+        <div className="px-4 md:px-8 py-4 border-t border-white/5 flex items-center gap-3 shrink-0 bg-[#090909]">
           <CheckCircle size={14} className="text-emerald-400" />
           <span className="text-[13px] text-slate-500 font-mono">Green highlighted cells = best-in-class for that metric across all regions.</span>
         </div>
