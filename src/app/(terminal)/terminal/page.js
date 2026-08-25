@@ -1311,8 +1311,8 @@ export default function Dashboard() {
                             const px = Math.max(6, Math.round((d.price / max) * 48))
                             return (
                               <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                                <div className="w-full rounded-sm bg-sky-500/30 hover:bg-sky-500/60 transition-all" style={{ height: px }} title={`${d.quarter}: ${d.price}`}/>
-                                <span className="text-[7px] text-slate-700 rotate-0">{d.quarter}</span>
+                                <div className="w-full rounded-sm bg-sky-500/30 hover:bg-sky-500/60 transition-all" style={{ height: px }} title={`${d.month}: ${d.price}`}/>
+                                <span className="text-[7px] text-slate-700 rotate-0">{d.month}</span>
                               </div>
                             )
                           })}
@@ -1413,7 +1413,13 @@ export default function Dashboard() {
                   /* Hubs list */
                   <div className="space-y-2">
                     {opportunities.length === 0 ? (
-                      <p className="text-[11px] text-slate-600 italic p-2">Run a scan to identify sourcing hubs.</p>
+                      <div className="space-y-3 pt-1">
+                        <p className="text-[11px] text-slate-600 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
+                        <button onClick={() => setShowSearch(true)}
+                          className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[10px] rounded-xl hover:bg-emerald-500/15 transition-all flex items-center justify-center gap-2">
+                          <Factory size={12}/> Find Sourcing Hubs
+                        </button>
+                      </div>
                     ) : opportunities.map((o, i) => (
                       <button key={o.id || i} onClick={() => setSelectedNode(o)}
                         className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-emerald-500/30 hover:bg-emerald-500/5 rounded-xl transition-all">
@@ -1463,12 +1469,28 @@ export default function Dashboard() {
                         <p className="text-[12px] text-slate-200 leading-relaxed">{selectedNode.mitigation}</p>
                       </div>
                     )}
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      <button onClick={() => setShowCompliance(true)}
+                        className="py-3 text-[10px] font-bold uppercase border border-amber-500/30 text-amber-400 rounded-xl hover:bg-amber-500/10 transition-all">
+                        Compliance Check
+                      </button>
+                      <button onClick={() => setShowRisk(true)}
+                        className="py-3 text-[10px] font-bold uppercase border border-rose-500/30 text-rose-400 rounded-xl hover:bg-rose-500/10 transition-all">
+                        Risk Score
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   /* Threats list */
                   <div className="space-y-2">
                     {risks.length === 0 ? (
-                      <p className="text-[11px] text-slate-600 italic p-2">Run a scan to surface active threats.</p>
+                      <div className="space-y-3 pt-1">
+                        <p className="text-[11px] text-slate-600 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
+                        <button onClick={() => setShowSearch(true)}
+                          className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[10px] rounded-xl hover:bg-rose-500/15 transition-all flex items-center justify-center gap-2">
+                          <ShieldAlert size={12}/> Run Threat Scan
+                        </button>
+                      </div>
                     ) : risks.map((r, i) => (
                       <button key={r.id || i} onClick={() => setSelectedNode(r)}
                         className="w-full text-left p-3 bg-[#111] border border-white/5 hover:border-rose-500/30 hover:bg-rose-500/5 rounded-xl transition-all">
@@ -1491,43 +1513,58 @@ export default function Dashboard() {
 
             {/* ── TOOLS TAB ── */}
             {activeMobileTab === 'tools' && (
-              <div className="space-y-2">
+              <div className="space-y-3">
+                {/* Always-visible primary actions */}
+                <div className="grid grid-cols-2 gap-2">
+                  <button onClick={() => setShowSearch(true)}
+                    className="flex items-center justify-center gap-2 py-3.5 bg-sky-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider">
+                    <SearchCode size={13}/> New Mission
+                  </button>
+                  <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
+                    className="flex items-center justify-center gap-2 py-3.5 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-wider disabled:opacity-30">
+                    <Download size={13}/> {isExportingPDF ? 'Generating...' : 'Export PDF'}
+                  </button>
+                </div>
+
+                <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
+
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { label: 'TLC Calculator',    icon: <DollarSign size={16}/>,  color: 'emerald', action: () => setShowTLC(true) },
-                    { label: 'Risk Score',         icon: <ShieldAlert size={16}/>, color: 'rose',    action: () => setShowRisk(true) },
-                    { label: 'Compare Regions',    icon: <Scale size={16}/>,       color: 'purple',  action: () => setShowComparison(true), disabled: opportunities.length === 0 },
-                    { label: 'Port Monitor',       icon: <Anchor size={16}/>,      color: 'sky',     action: () => setShowPorts(true) },
-                    { label: 'HS Code Lookup',     icon: <FileText size={16}/>,    color: 'amber',   action: () => setShowTariff(true) },
-                    { label: 'Incoterms 2020',     icon: <Ship size={16}/>,        color: 'purple',  action: () => setShowIncoterms(true) },
-                    { label: 'Compliance',         icon: <CheckCircle size={16}/>, color: 'emerald', action: () => setShowCompliance(true) },
-                    { label: 'Mission Archive',    icon: <History size={16}/>,     color: 'slate',   action: () => setShowHistory(true) },
+                    { label: 'TLC Calculator',  icon: <DollarSign size={15}/>,  color: 'emerald', action: () => setShowTLC(true),         needsScan: false },
+                    { label: 'Risk Score',       icon: <ShieldAlert size={15}/>, color: 'rose',    action: () => setShowRisk(true),        needsScan: false },
+                    { label: 'HS Code Lookup',   icon: <FileText size={15}/>,    color: 'amber',   action: () => setShowTariff(true),      needsScan: false },
+                    { label: 'Port Monitor',     icon: <Anchor size={15}/>,      color: 'sky',     action: () => setShowPorts(true),       needsScan: false },
+                    { label: 'Incoterms 2020',   icon: <Ship size={15}/>,        color: 'purple',  action: () => setShowIncoterms(true),   needsScan: false },
+                    { label: 'Compliance',       icon: <CheckCircle size={15}/>, color: 'emerald', action: () => setShowCompliance(true),  needsScan: false },
+                    { label: 'Compare Regions',  icon: <Scale size={15}/>,       color: 'purple',  action: () => setShowComparison(true),  needsScan: true,  disabled: opportunities.length < 2 },
+                    { label: 'Mission Archive',  icon: <History size={15}/>,     color: 'slate',   action: () => setShowHistory(true),     needsScan: false },
                   ].map((t, i) => (
-                    <button key={i} onClick={t.action} disabled={t.disabled}
-                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all disabled:opacity-30 ${
-                        t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/15' :
-                        t.color === 'rose'    ? 'bg-rose-500/5 border-rose-500/20 text-rose-400 hover:bg-rose-500/15' :
-                        t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 hover:bg-sky-500/15' :
-                        t.color === 'amber'   ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 hover:bg-amber-500/15' :
-                        t.color === 'purple'  ? 'bg-purple-500/5 border-purple-500/20 text-purple-400 hover:bg-purple-500/15' :
-                        'bg-white/5 border-white/10 text-slate-400 hover:bg-white/10'
+                    <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
+                      className={`flex flex-col items-center gap-2 p-4 rounded-xl border transition-all relative ${
+                        t.disabled
+                          ? 'bg-white/5 border-white/5 text-slate-700 cursor-not-allowed'
+                          : t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 active:bg-emerald-500/20' :
+                            t.color === 'rose'    ? 'bg-rose-500/5 border-rose-500/20 text-rose-400 active:bg-rose-500/20' :
+                            t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 active:bg-sky-500/20' :
+                            t.color === 'amber'   ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 active:bg-amber-500/20' :
+                            t.color === 'purple'  ? 'bg-purple-500/5 border-purple-500/20 text-purple-400 active:bg-purple-500/20' :
+                            'bg-white/5 border-white/10 text-slate-400 active:bg-white/10'
                       }`}>
                       {t.icon}
                       <span className="text-[9px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
+                      {t.disabled && t.needsScan && (
+                        <span className="absolute top-1.5 right-1.5 text-[7px] font-bold text-slate-700 uppercase">2+ hubs</span>
+                      )}
                     </button>
                   ))}
                 </div>
+
+                {/* Generate RFQ — only when scan has results */}
                 {opportunities.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button onClick={exportToPDF} disabled={isExportingPDF}
-                      className="flex items-center justify-center gap-2 py-3 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-wider disabled:opacity-30">
-                      <Download size={13}/> Export PDF
-                    </button>
-                    <button onClick={() => setShowSearch(true)}
-                      className="flex items-center justify-center gap-2 py-3 bg-sky-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider">
-                      <SearchCode size={13}/> New Mission
-                    </button>
-                  </div>
+                  <button onClick={() => setShowRFQ(true)}
+                    className="w-full py-3.5 flex items-center justify-center gap-2 border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 rounded-xl text-[10px] font-bold uppercase tracking-wider active:bg-emerald-500/15 transition-all">
+                    <Mail size={13}/> Generate RFQ
+                  </button>
                 )}
               </div>
             )}
