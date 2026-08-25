@@ -371,7 +371,7 @@ export default function GuidedTour({ onComplete, onStartScan }) {
             className="absolute bottom-0 left-0 right-0 rounded-t-2xl"
             style={{ zIndex: 2, ...GLASS }}
           >
-            <div className="relative p-5 pb-8">
+            <div className="relative p-5" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom, 2rem))' }}>
               <GlassHighlight />
               {/* Drag handle */}
               <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4" />
