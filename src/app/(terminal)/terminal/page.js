@@ -1264,7 +1264,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Tab Content ── */}
-          <div className="flex-1 overflow-y-auto p-3 pb-6 space-y-3">
+          <div className="flex-1 overflow-y-auto p-3 pb-20 space-y-3">
 
             {/* ── INTEL TAB ── */}
             {activeMobileTab === 'intel' && (
@@ -1526,6 +1526,14 @@ export default function Dashboard() {
                   </button>
                 </div>
 
+                {/* Generate RFQ — primary CTA when scan has results */}
+                {opportunities.length > 0 && (
+                  <button onClick={() => setShowRFQ(true)}
+                    className="w-full py-3.5 flex items-center justify-center gap-2 bg-emerald-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider active:bg-emerald-400 transition-all">
+                    <Mail size={13}/> Generate RFQ
+                  </button>
+                )}
+
                 <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
 
                 <div className="grid grid-cols-2 gap-2">
@@ -1559,13 +1567,6 @@ export default function Dashboard() {
                   ))}
                 </div>
 
-                {/* Generate RFQ — only when scan has results */}
-                {opportunities.length > 0 && (
-                  <button onClick={() => setShowRFQ(true)}
-                    className="w-full py-3.5 flex items-center justify-center gap-2 border border-emerald-500/30 bg-emerald-500/5 text-emerald-400 rounded-xl text-[10px] font-bold uppercase tracking-wider active:bg-emerald-500/15 transition-all">
-                    <Mail size={13}/> Generate RFQ
-                  </button>
-                )}
               </div>
             )}
 
