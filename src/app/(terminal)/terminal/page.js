@@ -981,7 +981,7 @@ export default function Dashboard() {
         <main className="flex-1 flex flex-col gap-4 overflow-hidden min-w-0">
 
           {/* Globe */}
-          <div className="flex-1 max-h-[45vh] lg:max-h-none bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
+          <div className="flex-1 max-h-[28vh] lg:max-h-none bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
@@ -1264,7 +1264,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Tab Content ── */}
-          <div className="flex-1 overflow-y-auto p-3 space-y-3">
+          <div className="flex-1 overflow-y-auto p-3 pb-6 space-y-3">
 
             {/* ── INTEL TAB ── */}
             {activeMobileTab === 'intel' && (
@@ -1742,8 +1742,8 @@ export default function Dashboard() {
         </aside>
       </div>
 
-      {/* System health pill */}
-      <div className="fixed bottom-5 left-5 z-[120] flex items-center gap-2 bg-black/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-2xl">
+      {/* System health pill — desktop only */}
+      <div className="hidden lg:flex fixed bottom-5 left-5 z-[120] items-center gap-2 bg-black/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-2xl">
         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">System_Integrity: 100%</span>
       </div>
