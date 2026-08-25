@@ -722,7 +722,7 @@ export default function Dashboard() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="flex flex-1 overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
+      <div className="flex flex-1 overflow-y-auto lg:overflow-hidden p-2 lg:p-4 gap-3 lg:gap-4 flex-col lg:flex-row">
 
         {/* ── MODALS ── */}
         <AnimatePresence>
@@ -1230,6 +1230,117 @@ export default function Dashboard() {
             </div>
           </div>
         </main>
+
+        {/* ════════════════════════════════════
+            MOBILE RESULTS (lg:hidden)
+        ════════════════════════════════════ */}
+        <div className="lg:hidden flex flex-col gap-3">
+
+          {/* Empty state — example queries */}
+          {opportunities.length === 0 && (
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+              <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-3 font-bold">Try an example scan:</p>
+              <div className="space-y-2">
+                {[
+                  'IATF-certified brake pads for passenger vehicles',
+                  'Neodymium magnets for EV motor assembly',
+                  'Food-grade soy for QSR supply chain',
+                  'Semiconductor wafers for automotive ECU',
+                ].map((q) => (
+                  <button key={q} onClick={() => handleSearch(null, q)}
+                    className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-3 rounded-lg transition-all">
+                    → {q}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Strategic Directive */}
+          {opportunities.length > 0 && directive && (
+            <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
+              <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2 mb-3">
+                <Zap size={12} /> Strategic Advisory
+              </div>
+              <p className="text-[12px] text-slate-300 leading-relaxed">{directive.summary}</p>
+              {directive.tariff_alert && (
+                <p className="text-[11px] text-amber-400 mt-2 font-mono border-t border-white/5 pt-2">{directive.tariff_alert}</p>
+              )}
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <button onClick={() => setShowTLC(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-emerald-500/30 text-emerald-400 rounded-lg">TLC Calc</button>
+                <button onClick={() => setShowRisk(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-rose-500/30 text-rose-400 rounded-lg">Risk Score</button>
+                <button onClick={() => setShowComparison(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-sky-500/30 text-sky-400 rounded-lg">Compare</button>
+                <button onClick={() => setShowPorts(true)} className="text-[9px] font-bold uppercase px-3 py-1.5 border border-white/10 text-slate-400 rounded-lg">Ports</button>
+              </div>
+            </div>
+          )}
+
+          {/* Sourcing Hubs */}
+          {opportunities.length > 0 && (
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+              <h2 className="text-[10px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                <Factory size={13} /> Sourcing Hubs
+                <span className="ml-auto text-[9px] text-slate-600">{opportunities.length} identified</span>
+              </h2>
+              <div className="space-y-2">
+                {opportunities.map((o, i) => (
+                  <div key={o.id || i}
+                    onClick={() => setSelectedNode(selectedNode?.id === o.id ? null : o)}
+                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
+                      selectedNode?.id === o.id
+                        ? 'bg-emerald-500/10 border-emerald-500/40'
+                        : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
+                    }`}>
+                    <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest">{o.hub}</div>
+                    <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
+                    {o.real_export_value_usd && (
+                      <div className="mt-1 flex items-center gap-1 text-[9px] text-sky-400 font-mono">
+                        <CheckCircle size={9} /> ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year})
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Global Threats */}
+          {risks.length > 0 && (
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+              <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                <ShieldAlert size={13} /> Global Threats
+                <span className="ml-auto text-[9px] text-slate-600">{risks.length} active</span>
+              </h2>
+              <div className="space-y-2">
+                {risks.map((r, i) => (
+                  <div key={r.id || i}
+                    onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
+                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
+                      selectedNode?.id === (r.id || i)
+                        ? 'bg-rose-500/10 border-rose-500/40'
+                        : 'bg-[#111] border-white/5 hover:border-rose-500/20'
+                    }`}>
+                    <div className="flex items-start gap-2">
+                      <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
+                        {r.severity || 'RISK'}
+                      </span>
+                      <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* New scan CTA */}
+          {opportunities.length > 0 && (
+            <button onClick={() => setShowSearch(true)}
+              className="w-full py-3 bg-sky-500 text-black font-bold uppercase text-[11px] hover:bg-sky-400 rounded-xl tracking-widest flex items-center justify-center gap-2 transition-all">
+              New Mission <SearchCode size={13} />
+            </button>
+          )}
+
+        </div>
 
         {/* ════════════════════════════════════
             RIGHT SIDEBAR
