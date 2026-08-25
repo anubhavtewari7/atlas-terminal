@@ -92,7 +92,7 @@ export default function TLCCalculator({ onClose, defaultDuty = 0, defaultFreight
 
         {/* Right Side - Outputs */}
         <div className="w-full md:w-1/2 p-6 md:p-8 bg-[#050505] relative">
-          <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-all rounded-lg hover:bg-white/5">
+          <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white active:text-white transition-all rounded-lg hover:bg-white/5 active:bg-white/5">
             <X size={22} />
           </button>
 

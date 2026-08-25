@@ -284,24 +284,24 @@ export default function GuidedTour({ onComplete, onStartScan }) {
               </div>
 
               <div className="flex items-center justify-between">
-                <button onClick={onComplete} className="text-[10px] text-white/30 hover:text-white/60 transition-colors uppercase tracking-widest font-bold">
+                <button onClick={onComplete} className="text-[10px] text-white/30 hover:text-white/60 active:text-white/60 transition-colors uppercase tracking-widest font-bold">
                   Skip tour
                 </button>
                 <div className="flex gap-2">
                   {!isFirst && (
                     <button onClick={goPrev}
-                      className="flex items-center gap-1 px-4 h-9 border border-white/15 text-white/60 hover:text-white text-[10px] font-bold uppercase rounded-lg transition-all backdrop-blur-sm">
+                      className="flex items-center gap-1 px-4 h-9 border border-white/15 text-white/60 hover:text-white active:text-white text-[10px] font-bold uppercase rounded-lg transition-all backdrop-blur-sm">
                       <ChevronLeft size={13} /> Back
                     </button>
                   )}
                   {current.cta ? (
                     <button onClick={() => { onComplete(); onStartScan?.() }}
-                      className="flex items-center gap-1.5 px-5 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                      className="flex items-center gap-1.5 px-5 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-emerald-400 active:bg-emerald-400 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                       Start Scanning <ChevronRight size={13} />
                     </button>
                   ) : (
                     <button onClick={goNext}
-                      className="flex items-center gap-1.5 px-5 h-9 bg-sky-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-sky-400 transition-all shadow-[0_0_20px_rgba(56,189,248,0.25)]">
+                      className="flex items-center gap-1.5 px-5 h-9 bg-sky-500 text-black font-bold text-[10px] uppercase rounded-lg hover:bg-sky-400 active:bg-sky-400 transition-all shadow-[0_0_20px_rgba(56,189,248,0.25)]">
                       {isFirst ? 'Take the Tour' : 'Next'} <ChevronRight size={13} />
                     </button>
                   )}

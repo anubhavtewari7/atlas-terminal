@@ -722,7 +722,7 @@ export default function Dashboard() {
           {opportunities.length > 0 ? `${opportunities.length} hubs · ${profile.material}` : 'Supply Chain Intelligence'}
         </div>
         <button onClick={() => setShowSearch(true)}
-          className="text-[10px] font-bold bg-emerald-500 text-black px-3 py-1.5 rounded-lg shrink-0">
+          className="text-[10px] font-bold bg-emerald-500 text-black px-3 py-1.5 rounded-lg shrink-0 active:bg-emerald-400 transition-colors">
           SCAN
         </button>
       </div>
@@ -761,25 +761,25 @@ export default function Dashboard() {
             <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
               className="fixed inset-0 z-[150] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4">
               <motion.div initial={{y:20}} animate={{y:0}}
-                className="bg-[#0a0a0a] border border-emerald-500/30 p-10 w-full max-w-3xl rounded-2xl shadow-[0_0_100px_rgba(16,185,129,0.15)]">
+                className="bg-[#0a0a0a] border border-emerald-500/30 p-6 md:p-10 w-full max-w-3xl rounded-2xl shadow-[0_0_100px_rgba(16,185,129,0.15)] max-h-[90vh] overflow-y-auto">
                 <div className="flex justify-between items-center mb-8">
                   <h2 className="text-[12px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-3">
                     <Mail size={18} /> Smart RFQ Generator
                   </h2>
-                  <button onClick={() => setShowRFQ(false)} className="text-slate-500 hover:text-white"><X size={24} /></button>
+                  <button onClick={() => setShowRFQ(false)} className="text-slate-500 hover:text-white active:text-white transition-colors"><X size={24} /></button>
                 </div>
                 <textarea readOnly rows={13} value={marketData?.rfq_template}
                   className="w-full bg-[#111] border border-white/10 p-6 text-[13px] font-mono focus:outline-none rounded-xl mb-8 leading-relaxed text-slate-300" />
                 <div className="flex gap-4">
                   <button
                     onClick={() => { navigator.clipboard.writeText(marketData?.rfq_template || ''); addLog('[SYSTEM] RFQ copied to clipboard.') }}
-                    className="flex-1 h-14 bg-emerald-500 text-black font-bold uppercase text-[12px] tracking-widest hover:bg-emerald-400 transition-all rounded-lg">
+                    className="flex-1 h-14 bg-emerald-500 text-black font-bold uppercase text-[12px] tracking-widest hover:bg-emerald-400 active:bg-emerald-400 transition-all rounded-lg">
                     Copy to Clipboard
                   </button>
                   <a
                     href={`mailto:?subject=${encodeURIComponent(`RFQ: ${searchQuery || profile.material}`)}&body=${encodeURIComponent(marketData?.rfq_template || '')}`}
                     onClick={() => addLog('[SYSTEM] Opening email client with RFQ draft.')}
-                    className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 transition-all rounded-lg flex items-center justify-center">
+                    className="flex-1 h-14 border border-white/10 text-white font-bold uppercase text-[12px] tracking-widest hover:bg-white/5 active:bg-white/5 transition-all rounded-lg flex items-center justify-center">
                     Email to Procurement
                   </a>
                 </div>
@@ -794,8 +794,8 @@ export default function Dashboard() {
             <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
               className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
               <motion.div initial={{scale:0.95}} animate={{scale:1}}
-                className="bg-[#0a0a0a] border border-white/10 p-10 w-full max-w-2xl shadow-[0_0_80px_rgba(56,189,248,0.15)] relative rounded-2xl">
-                <button onClick={() => setShowSearch(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white">
+                className="bg-[#0a0a0a] border border-white/10 p-6 md:p-10 w-full max-w-2xl shadow-[0_0_80px_rgba(56,189,248,0.15)] relative rounded-2xl max-h-[90vh] overflow-y-auto">
+                <button onClick={() => setShowSearch(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white active:text-white transition-colors">
                   <X size={24} />
                 </button>
                 <h2 className="text-[12px] font-bold text-sky-400 tracking-[0.3em] mb-3 flex items-center gap-3">
@@ -815,7 +815,7 @@ export default function Dashboard() {
                     className="w-full bg-[#111] border border-white/10 p-6 text-[15px] font-mono focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-700 resize-none leading-relaxed rounded-xl"
                   />
                   <button type="submit" disabled={isAnalyzing || !searchQuery.trim()}
-                    className="w-full h-16 bg-emerald-500 text-black font-bold flex items-center justify-center gap-3 hover:bg-emerald-400 transition-all disabled:opacity-50 text-[14px] uppercase tracking-widest rounded-xl">
+                    className="w-full h-16 bg-emerald-500 text-black font-bold flex items-center justify-center gap-3 hover:bg-emerald-400 active:bg-emerald-400 transition-all disabled:opacity-50 text-[14px] uppercase tracking-widest rounded-xl">
                     {isAnalyzing ? 'SCANNING GLOBAL DATABASE...' : 'EXECUTE INTELLIGENCE SCAN'}
                     <ChevronRight size={22} />
                   </button>
@@ -1299,7 +1299,7 @@ export default function Dashboard() {
                       'Semiconductor wafers for automotive ECU',
                     ].map((q) => (
                       <button key={q} onClick={() => handleSearch(null, q)}
-                        className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-3 rounded-lg transition-all leading-snug">
+                        className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 active:text-emerald-400 border border-white/5 hover:border-emerald-500/30 active:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 active:bg-emerald-500/5 p-3 rounded-lg transition-all leading-snug">
                         → {q}
                       </button>
                     ))}
@@ -1354,7 +1354,7 @@ export default function Dashboard() {
                       </div>
                     )}
                     <button onClick={() => setShowSearch(true)}
-                      className="w-full py-3 bg-sky-500 text-black font-bold uppercase text-[11px] rounded-xl tracking-widest flex items-center justify-center gap-2 transition-all">
+                      className="w-full py-3 bg-sky-500 text-black font-bold uppercase text-[11px] rounded-xl tracking-widest flex items-center justify-center gap-2 transition-all active:bg-sky-400">
                       New Mission <SearchCode size={13}/>
                     </button>
                   </>
@@ -1436,7 +1436,7 @@ export default function Dashboard() {
                       <div className="space-y-3 pt-1">
                         <p className="text-[11px] text-slate-600 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
                         <button onClick={() => setShowSearch(true)}
-                          className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[10px] rounded-xl hover:bg-emerald-500/15 transition-all flex items-center justify-center gap-2">
+                          className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[10px] rounded-xl hover:bg-emerald-500/15 active:bg-emerald-500/20 transition-all flex items-center justify-center gap-2">
                           <Factory size={12}/> Find Sourcing Hubs
                         </button>
                       </div>
@@ -1507,7 +1507,7 @@ export default function Dashboard() {
                       <div className="space-y-3 pt-1">
                         <p className="text-[11px] text-slate-600 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
                         <button onClick={() => setShowSearch(true)}
-                          className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[10px] rounded-xl hover:bg-rose-500/15 transition-all flex items-center justify-center gap-2">
+                          className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[10px] rounded-xl hover:bg-rose-500/15 active:bg-rose-500/20 transition-all flex items-center justify-center gap-2">
                           <ShieldAlert size={12}/> Run Threat Scan
                         </button>
                       </div>
