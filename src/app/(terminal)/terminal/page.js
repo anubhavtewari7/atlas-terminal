@@ -978,16 +978,16 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             CENTER — GLOBE + HUD
         ════════════════════════════════════ */}
-        <main className="flex flex-col gap-2 overflow-hidden min-w-0 lg:flex-1 lg:gap-4">
+        <main className="flex flex-col gap-2 overflow-hidden min-w-0 flex-1 lg:gap-4">
 
           {/* Globe */}
-          <div className="flex-1 max-h-[28vh] lg:max-h-none bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
+          <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
 
-            {/* Globe controls */}
-            <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
+            {/* Globe controls — desktop only (overlaid on globe) */}
+            <div className="hidden lg:flex absolute top-4 left-4 z-10 flex-col gap-2">
               <div className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 rounded-lg backdrop-blur-md">
                 <Activity size={12} className="text-emerald-400" />
                 <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Live_Global_Stream</span>
@@ -1002,6 +1002,26 @@ export default function Dashboard() {
                 <Map size={12} />
                 <span className="text-[10px] font-bold uppercase tracking-widest">How it works</span>
               </button>
+            </div>
+
+            {/* Globe controls — mobile compact overlay (bottom strip, doesn't cover globe) */}
+            <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-3 py-2 bg-black/70 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5">
+                <Activity size={10} className="text-emerald-400" />
+                <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-400">Live Stream</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => setAutoRotate(!autoRotate)}
+                  className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/70 active:bg-white/20 transition-all">
+                  {autoRotate ? <Pause size={10} /> : <Play size={10} />}
+                  <span className="text-[9px] font-bold uppercase">{autoRotate ? 'Pause' : 'Resume'}</span>
+                </button>
+                <button onClick={() => setShowTour(true)}
+                  className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/50 active:bg-white/20 transition-all">
+                  <Map size={10} />
+                  <span className="text-[9px] font-bold uppercase">Tour</span>
+                </button>
+              </div>
             </div>
 
             {/* ── STRATEGIC ADVISORY HUD ── */}
