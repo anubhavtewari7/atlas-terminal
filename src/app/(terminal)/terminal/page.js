@@ -1332,7 +1332,7 @@ export default function Dashboard() {
                             return (
                               <div key={i} className="flex flex-col items-center gap-1 flex-1">
                                 <div className="w-full rounded-sm bg-sky-500/30 hover:bg-sky-500/60 transition-all" style={{ height: px }} title={`${d.month}: ${d.price}`}/>
-                                <span className="text-[7px] text-slate-700 rotate-0">{d.month}</span>
+                                <span className="text-[9px] text-slate-700 rotate-0">{d.month}</span>
                               </div>
                             )
                           })}
@@ -1581,7 +1581,7 @@ export default function Dashboard() {
                       {t.icon}
                       <span className="text-[9px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
                       {t.disabled && t.needsScan && (
-                        <span className="absolute top-1.5 right-1.5 text-[7px] font-bold text-slate-700 uppercase">2+ hubs</span>
+                        <span className="absolute top-1.5 right-1.5 text-[8px] font-bold text-slate-700 uppercase">2+ hubs</span>
                       )}
                     </button>
                   ))}

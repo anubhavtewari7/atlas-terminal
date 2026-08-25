@@ -88,7 +88,7 @@ export default function TradeRiskScore({ onClose }) {
         {result && (() => {
           const overall = getRiskColor(result.overall_score)
           return (
-            <div className="p-6 space-y-5 max-h-[50vh] overflow-y-auto custom-scrollbar">
+            <div className="p-4 md:p-6 space-y-5">
               {/* Overall score */}
               <div className={`p-5 border ${overall.border} rounded-xl bg-[#0f0f0f]`}>
                 <div className="flex items-center justify-between mb-3">

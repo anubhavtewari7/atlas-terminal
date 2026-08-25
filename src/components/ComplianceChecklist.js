@@ -130,12 +130,12 @@ export default function ComplianceChecklist({ onClose }) {
                 <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${(completedCount / checklist.length) * 100}%` }} />
                 </div>
-                <button onClick={handleCopy} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[10px] text-slate-400 hover:text-white hover:border-white/20 transition-all">
+                <button onClick={handleCopy} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[10px] text-slate-400 hover:text-white active:text-white hover:border-white/20 active:border-white/20 transition-all">
                   <Copy size={10} /> Copy
                 </button>
               </div>
             </div>
-            <div className="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2">
+            <div className="space-y-2">
               {checklist.map((item, i) => (
                 <motion.div
                   key={i}

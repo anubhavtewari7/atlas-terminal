@@ -84,7 +84,7 @@ export default function TariffLookup({ onClose }) {
         </form>
 
         {/* Results */}
-        <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+        <div className="p-4 md:p-6">
           {error && (
             <div className="flex items-center gap-3 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400 text-[13px]">
               <AlertTriangle size={16} /> {error}
@@ -172,7 +172,7 @@ export default function TariffLookup({ onClose }) {
               <a
                 href={`https://hts.usitc.gov/search?query=${encodeURIComponent(result.hts_code)}`}
                 target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 bg-[#111] border border-white/5 rounded-xl hover:border-sky-500/30 transition-all group"
+                className="flex items-center justify-between p-3 bg-[#111] border border-white/5 rounded-xl hover:border-sky-500/30 active:border-sky-500/30 transition-all group"
               >
                 <span className="text-[11px] text-slate-500 font-mono">Verify on USITC Official Database →</span>
                 <ExternalLink size={12} className="text-sky-400 opacity-50 group-hover:opacity-100 transition-all" />

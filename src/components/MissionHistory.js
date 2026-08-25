@@ -36,7 +36,7 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
           </div>
         </div>
 
-        <div className="p-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+        <div className="p-4 md:p-6">
           {missions.length === 0 ? (
             <div className="text-center py-12">
               <History size={32} className="mx-auto text-slate-800 mb-4" />

@@ -61,7 +61,7 @@ export default function SupplierComparison({ hubs, onClose }) {
               <p className="text-[13px] text-slate-500 mt-0.5">Side-by-side analysis · {hubs.length} global sourcing regions</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2.5 text-slate-500 hover:text-white transition-all rounded-lg hover:bg-white/5">
+          <button onClick={onClose} className="p-2.5 text-slate-500 hover:text-white active:text-white transition-all rounded-lg hover:bg-white/5 active:bg-white/5">
             <X size={22} />
           </button>
         </div>

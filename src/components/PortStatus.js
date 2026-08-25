@@ -81,7 +81,7 @@ export default function PortStatus({ onClose }) {
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
         {/* Active alerts bar */}
