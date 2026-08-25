@@ -978,7 +978,7 @@ export default function Dashboard() {
         {/* ════════════════════════════════════
             CENTER — GLOBE + HUD
         ════════════════════════════════════ */}
-        <main className="flex flex-col gap-2 overflow-hidden min-w-0 flex-1 lg:gap-4">
+        <main className="flex flex-col gap-2 overflow-hidden min-w-0 shrink-0 lg:flex-1 lg:gap-4">
 
           {/* Globe */}
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
