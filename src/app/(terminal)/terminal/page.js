@@ -178,6 +178,136 @@ const severityStyle = (s) => {
   return 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'
 }
 
+// ── Port-level risk scores & active alerts ───────────────────────────────────
+// Score 0–100 (higher = safer). Composite: WB country stability + port-specific
+// factors (labor risk, congestion, weather, infrastructure, geopolitical proximity).
+// Alerts are based on publicly known standing risk factors.
+const PORT_RISK = {
+  // ── USA East Coast ──
+  'New York / Newark':        { score:52, alerts:[{ lvl:'warn', msg:'Chronic congestion — avg vessel dwell +1.5 days' }] },
+  'Baltimore':                { score:55, alerts:[{ lvl:'warn', msg:'Francis Scott Key Bridge collapse reduced capacity; terminal rerouting ongoing' }] },
+  'Savannah':                 { score:63, alerts:[] },
+  'Charleston':               { score:65, alerts:[] },
+  'Miami':                    { score:57, alerts:[{ lvl:'info', msg:'Hurricane exposure Jun–Nov; have contingency routing' }] },
+  'Philadelphia':             { score:54, alerts:[] },
+  // ── USA West Coast ──
+  'Los Angeles / Long Beach': { score:46, alerts:[{ lvl:'warn', msg:'ILWU labor contract — periodic slowdowns & work-to-rule risk' }, { lvl:'warn', msg:'Congestion: avg vessel anchor wait 3–5 days at peak' }] },
+  'Seattle / Tacoma':         { score:57, alerts:[{ lvl:'info', msg:'Winter weather delays Nov–Feb; fog disruptions' }] },
+  'Oakland / San Francisco':  { score:54, alerts:[{ lvl:'info', msg:'Outer Harbor infrastructure constraints; berth productivity below benchmark' }] },
+  // ── USA Gulf Coast ──
+  'Houston':                  { score:50, alerts:[{ lvl:'warn', msg:'Hurricane/tropical storm exposure Jun–Nov (Cat 3+ landfall history)' }] },
+  'New Orleans':              { score:46, alerts:[{ lvl:'warn', msg:'Hurricane exposure Jun–Nov' }, { lvl:'info', msg:'Mississippi River low-water risk in drought years — barge delays' }] },
+  'Tampa':                    { score:58, alerts:[{ lvl:'info', msg:'Hurricane exposure Jun–Nov' }] },
+  // ── USA Great Lakes ──
+  'Detroit':                  { score:50, alerts:[] },
+  'Chicago':                  { score:51, alerts:[{ lvl:'info', msg:'Inland port — high trucking dependency; I-290/I-94 corridor congestion' }] },
+  'Cleveland':                { score:49, alerts:[] },
+  'Pittsburgh':               { score:47, alerts:[{ lvl:'info', msg:'River port — Ohio River low-water periods cause barge delays' }] },
+  // ── Canada ──
+  'Vancouver':                { score:64, alerts:[{ lvl:'info', msg:'ILWU Canada labor tensions — historical rotating strikes' }] },
+  'Prince Rupert':            { score:67, alerts:[] },
+  'Halifax':                  { score:70, alerts:[] },
+  'Montreal / St. Lawrence':  { score:68, alerts:[{ lvl:'info', msg:'Winter ice restrictions Jan–Mar; icebreaker assistance required' }] },
+  'Toronto':                  { score:70, alerts:[] },
+  'Winnipeg':                 { score:69, alerts:[] },
+  // ── Mexico ──
+  'Monterrey':                { score:33, alerts:[{ lvl:'high', msg:'Organized crime activity in Nuevo León — cargo theft elevated' }] },
+  'Juárez':                   { score:25, alerts:[{ lvl:'high', msg:'High cartel activity — border crossing security incidents' }, { lvl:'warn', msg:'US-MX border crossing delays unpredictable' }] },
+  'Tijuana':                  { score:28, alerts:[{ lvl:'high', msg:'Cargo theft risk; cartel-related port disruptions reported' }] },
+  'Manzanillo':               { score:36, alerts:[{ lvl:'warn', msg:'Cartel influence in Colima state — port vicinity security incidents' }] },
+  'Lázaro Cárdenas':          { score:30, alerts:[{ lvl:'high', msg:'Significant cartel presence; cargo extortion documented' }, { lvl:'warn', msg:'Labor unrest history at terminal' }] },
+  'Veracruz':                 { score:38, alerts:[{ lvl:'warn', msg:'Port corruption risk — customs delays above average' }] },
+  'Altamira':                 { score:36, alerts:[] },
+  // ── China ──
+  'Shenzhen':                 { score:40, alerts:[{ lvl:'warn', msg:'US Section 301 tariffs — 25%+ on most goods; verify HTS' }, { lvl:'info', msg:'Geopolitical risk: Taiwan Strait tension scenarios' }] },
+  'Guangzhou':                { score:41, alerts:[{ lvl:'warn', msg:'Section 301 tariffs active' }] },
+  'Hong Kong':                { score:38, alerts:[{ lvl:'warn', msg:'National Security Law — reduced autonomous trade status' }, { lvl:'warn', msg:'US no longer grants Hong Kong preferential treatment (same tariffs as China)' }] },
+  'Shanghai':                 { score:41, alerts:[{ lvl:'warn', msg:'Section 301 tariffs; lockdown disruption history — assess contingency ports' }] },
+  'Ningbo':                   { score:42, alerts:[{ lvl:'warn', msg:'Section 301 tariffs; typhoon exposure Jul–Sep' }] },
+  'Suzhou':                   { score:43, alerts:[{ lvl:'info', msg:'Inland industrial hub — road/rail to Ningbo/Shanghai required' }] },
+  'Tianjin':                  { score:40, alerts:[{ lvl:'info', msg:'Proximity to Beijing — heightened inspection activity reported' }] },
+  'Dalian':                   { score:41, alerts:[{ lvl:'info', msg:'Winter ice risk Nov–Mar; icebreaker-assisted departures' }] },
+  'Qingdao':                  { score:42, alerts:[] },
+  // ── Japan ──
+  'Tokyo / Yokohama':         { score:68, alerts:[{ lvl:'info', msg:'Seismic zone — earthquake contingency protocols recommended' }] },
+  'Chiba':                    { score:69, alerts:[] },
+  'Nagoya':                   { score:71, alerts:[{ lvl:'info', msg:'Seismic exposure; Nankai Trough scenario in long-range risk planning' }] },
+  'Aichi':                    { score:72, alerts:[] },
+  'Osaka':                    { score:69, alerts:[] },
+  'Kobe':                     { score:68, alerts:[] },
+  // ── South Korea ──
+  'Busan':                    { score:60, alerts:[{ lvl:'info', msg:'North Korea ballistic missile tests — intermittent NOTAM disruptions' }] },
+  'Ulsan':                    { score:58, alerts:[{ lvl:'info', msg:'Heavy industrial port — congestion during peak auto export season' }] },
+  'Incheon':                  { score:59, alerts:[] },
+  'Pyeongtaek':               { score:58, alerts:[] },
+  'Seoul':                    { score:57, alerts:[] },
+  // ── Taiwan ──
+  'Taipei / Keelung':         { score:62, alerts:[{ lvl:'warn', msg:'PRC military exercises — periodic strait disruptions & airspace closures' }] },
+  'Taoyuan':                  { score:63, alerts:[{ lvl:'info', msg:'Air freight hub; ground transport congestion near TSMC fabs' }] },
+  'Hsinchu':                  { score:64, alerts:[] },
+  'Taichung':                 { score:63, alerts:[] },
+  'Kaohsiung':                { score:62, alerts:[{ lvl:'warn', msg:'Closest major port to Taiwan Strait flashpoint; contingency routing advised' }] },
+  'Tainan':                   { score:63, alerts:[] },
+  // ── Vietnam ──
+  'Ho Chi Minh City':         { score:50, alerts:[{ lvl:'info', msg:'Ongoing anti-corruption crackdowns — customs processing slower' }] },
+  'Binh Duong':               { score:51, alerts:[] },
+  'Dong Nai':                 { score:50, alerts:[] },
+  'Hanoi':                    { score:51, alerts:[] },
+  'Hai Phong':                { score:50, alerts:[{ lvl:'info', msg:'Typhoon exposure May–Nov; port closures 2–3×/year on average' }] },
+  // ── India ──
+  'Bangalore':                { score:30, alerts:[{ lvl:'info', msg:'Landlocked — Bengaluru to Chennai/JNPT adds 1–2 transit days' }] },
+  'Chennai':                  { score:28, alerts:[{ lvl:'info', msg:'Cyclone risk Oct–Dec (Bay of Bengal)' }] },
+  'Mumbai / JNPT':            { score:29, alerts:[{ lvl:'warn', msg:'Port congestion at JNPT — avg dwell 4+ days' }, { lvl:'info', msg:'Monsoon disruptions Jun–Sep' }] },
+  'Pune':                     { score:29, alerts:[] },
+  'Mundra':                   { score:30, alerts:[] },
+  'Delhi / Noida':            { score:27, alerts:[{ lvl:'info', msg:'Landlocked — requires ICD to Mundra/JNPT (3–4 days)' }] },
+  'Jaipur':                   { score:27, alerts:[] },
+  // ── Singapore ──
+  'Port of Singapore':        { score:84, alerts:[] },
+  'Jurong Island':            { score:83, alerts:[] },
+  'Changi':                   { score:84, alerts:[] },
+  // ── Germany ──
+  'Hamburg':                  { score:68, alerts:[{ lvl:'info', msg:'GDL rail strikes periodic — alternate road routing needed' }] },
+  'Bremen / Bremerhaven':     { score:67, alerts:[] },
+  'Frankfurt am Main':        { score:68, alerts:[] },
+  'Cologne / Duisburg':       { score:67, alerts:[{ lvl:'info', msg:'Rhine River low-water Aug–Oct limits barge capacity' }] },
+  'Munich / Bavaria':         { score:68, alerts:[] },
+  'Stuttgart':                { score:68, alerts:[] },
+  'Nuremberg':                { score:67, alerts:[] },
+  // ── UK ──
+  'London / Felixstowe':      { score:60, alerts:[{ lvl:'info', msg:'Post-Brexit customs friction — additional documentation & delays at GB/EU border' }] },
+  'Southampton':              { score:61, alerts:[] },
+  'Dover':                    { score:59, alerts:[{ lvl:'warn', msg:'Post-Brexit border checks — peak queues 6–12 hrs; Operation Brock activated during surges' }] },
+  'Birmingham':               { score:61, alerts:[] },
+  'Coventry':                 { score:61, alerts:[] },
+  'Liverpool':                { score:60, alerts:[] },
+  'Glasgow':                  { score:61, alerts:[] },
+  'Manchester':               { score:61, alerts:[] },
+  // ── Netherlands ──
+  'Rotterdam / Europoort':    { score:68, alerts:[] },
+  'Amsterdam':                { score:68, alerts:[] },
+  'Moerdijk':                 { score:67, alerts:[] },
+  // ── Turkey ──
+  'Istanbul':                 { score:20, alerts:[{ lvl:'high', msg:'Lira volatility — FX hedging essential; cost unpredictability high' }, { lvl:'warn', msg:'NATO-Russia tensions — Bosphorus transit restrictions risk under Montreux Convention' }] },
+  'Bursa':                    { score:21, alerts:[{ lvl:'warn', msg:'Lira inflation risk; supplier payment terms volatile' }] },
+  'Kocaeli':                  { score:20, alerts:[{ lvl:'info', msg:'Seismic zone — North Anatolian Fault proximity' }] },
+  'Izmir / Aliağa':           { score:21, alerts:[{ lvl:'warn', msg:'Seismic risk; 2020 Izmir earthquake caused significant infrastructure damage' }] },
+  'Mersin':                   { score:19, alerts:[{ lvl:'warn', msg:'Proximity to Syria — regional instability monitoring required' }] },
+  'Adana':                    { score:19, alerts:[] },
+  // ── South America (key ports) ──
+  'São Paulo / Santos':       { score:47, alerts:[{ lvl:'info', msg:'Truckers\' strike history — have road alternatives' }] },
+  'Rio de Janeiro':           { score:46, alerts:[] },
+  'Buenos Aires / Exolgan':   { score:33, alerts:[{ lvl:'high', msg:'FX controls — parallel rate risk; USD payment restrictions' }, { lvl:'warn', msg:'Customs clearance averaging 7–10 days' }] },
+  'Lagos / Apapa':            { score:10, alerts:[{ lvl:'high', msg:'Severe congestion — avg clearance 14–21 days' }, { lvl:'high', msg:'Cargo theft & port corruption documented' }, { lvl:'warn', msg:'FX restrictions on USD repatriation' }] },
+  'Port Harcourt':            { score:9,  alerts:[{ lvl:'high', msg:'Niger Delta instability — vessel security incidents ongoing' }] },
+  // ── Australia ──
+  'Sydney / Port Botany':     { score:86, alerts:[] },
+  'Melbourne':                { score:86, alerts:[{ lvl:'info', msg:'MUA labor negotiations — periodic terminal slowdowns historically' }] },
+  'Brisbane':                 { score:85, alerts:[{ lvl:'info', msg:'Cyclone risk Nov–Apr (northern approaches)' }] },
+  'Fremantle / Perth':        { score:86, alerts:[] },
+  'Darwin':                   { score:84, alerts:[{ lvl:'info', msg:'Remote port — limited carrier calls; transshipment via Singapore often required' }] },
+}
+
 // ── Hub Stability Navigator data ─────────────────────────────────────────────
 const HUB_CONTINENTS = ['Asia','North America','South America','Europe','Africa','Oceania']
 const HUB_COUNTRIES = {
@@ -1045,14 +1175,46 @@ export default function Dashboard() {
 
                 {/* Level: Hubs */}
                 {level === 'hubs' && countryData && region && (
-                  <div className="space-y-1.5">
-                    {(countryData.zones[region] || []).map((hub, i) => (
-                      <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5 flex items-center gap-2">
-                        <Anchor size={10} className="text-sky-500/60 shrink-0" />
-                        <span className="text-[10px] font-bold text-slate-200 uppercase">{hub}</span>
-                      </div>
-                    ))}
-                    <p className="text-[8px] text-slate-700 mt-1 text-center">WB stability score applies to {country} nationally</p>
+                  <div className="space-y-2">
+                    {(countryData.zones[region] || []).map((hub, i) => {
+                      const pr = PORT_RISK[hub]
+                      const ps = pr?.score ?? countryData.score
+                      const pc = ps >= 60 ? 'bg-emerald-500' : ps >= 35 ? 'bg-amber-500' : 'bg-rose-500'
+                      const pt = ps >= 60 ? 'text-emerald-400' : ps >= 35 ? 'text-amber-400' : 'text-rose-400'
+                      const pl = ps >= 60 ? 'Stable' : ps >= 35 ? 'Moderate' : 'High Risk'
+                      const alerts = pr?.alerts || []
+                      const topAlert = alerts[0]
+                      const alertBorder = topAlert?.lvl === 'high' ? 'border-rose-500/30' : topAlert?.lvl === 'warn' ? 'border-amber-500/20' : 'border-white/5'
+                      return (
+                        <div key={i} className={`bg-[#111] border rounded-lg p-2.5 ${alertBorder}`}>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <div className="flex items-center gap-1.5 min-w-0">
+                              <Anchor size={9} className="text-sky-500/50 shrink-0" />
+                              <span className="text-[9px] font-bold text-slate-200 uppercase truncate">{hub}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                              <span className={`text-[9px] font-bold font-mono ${pt}`}>◆ {ps}</span>
+                              <span className={`text-[7px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
+                            </div>
+                          </div>
+                          <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mb-2">
+                            <div className={`h-full rounded-full ${pc}`} style={{ width:`${ps}%` }} />
+                          </div>
+                          {alerts.length > 0 && (
+                            <div className="space-y-1">
+                              {alerts.map((a, j) => (
+                                <div key={j} className={`flex items-start gap-1.5 text-[8px] leading-snug ${a.lvl === 'high' ? 'text-rose-400' : a.lvl === 'warn' ? 'text-amber-400' : 'text-slate-500'}`}>
+                                  <span className="shrink-0 mt-0.5">{a.lvl === 'high' ? '▲' : a.lvl === 'warn' ? '⚠' : '●'}</span>
+                                  <span>{a.msg}</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {alerts.length === 0 && <p className="text-[8px] text-slate-700">No active alerts</p>}
+                        </div>
+                      )
+                    })}
+                    <p className="text-[8px] text-slate-700 mt-1 text-center">Composite: WB stability + port-specific risk factors</p>
                   </div>
                 )}
               </div>
