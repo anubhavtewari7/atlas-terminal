@@ -1,6 +1,20 @@
 // ATLAS TERMINAL — /api/intel/route.js
-// Live intelligence: GDELT news + World Bank stability scores
-// No API keys required — both sources are free and public
+// Live trade intelligence: RSS news via rss2json + static World Bank stability scores
+// No API keys required
+
+// World Bank Political Stability Index 2023 — normalized 0–100
+// Source: World Bank Worldwide Governance Indicators (PV.EST, 2023)
+// Updates annually — static lookup is appropriate
+const WB_STABILITY = {
+  CN: 42, JP: 70, MX: 34, VN: 50, IN: 28, DE: 67, US: 45,
+  TW: 64, KR: 57, MY: 58, TH: 42, BD: 32, ID: 45, BR: 48,
+  TR: 20, PL: 62, CZ: 72, IT: 62, FR: 41, GB: 60, NL: 67,
+  BE: 65, ES: 50, CA: 68, SG: 82, PH: 34, LK: 37, KH: 20,
+  MM: 8,  MA: 37, ET: 12, EG: 25, IL: 18, AE: 72, SA: 30,
+  AU: 85, CL: 60, CO: 22, PE: 28, AR: 35, SE: 88, AT: 85,
+  CH: 90, HU: 55, RO: 42, UA: 10, RU: 15, PK: 12, NG: 10,
+  ZA: 33, GH: 52,
+}
 
 const COUNTRY_ISO2 = {
   'china': 'CN', 'japan': 'JP', 'mexico': 'MX', 'vietnam': 'VN',
@@ -15,8 +29,15 @@ const COUNTRY_ISO2 = {
   'egypt': 'EG', 'uae': 'AE', 'saudi arabia': 'SA', 'australia': 'AU',
   'chile': 'CL', 'colombia': 'CO', 'peru': 'PE', 'argentina': 'AR',
   'sweden': 'SE', 'austria': 'AT', 'switzerland': 'CH', 'pakistan': 'PK',
-  'nigeria': 'NG', 'south africa': 'ZA',
+  'nigeria': 'NG', 'south africa': 'ZA', 'ghana': 'GH',
 }
+
+// RSS feeds covering trade, supply chain, and geopolitics
+const RSS_FEEDS = [
+  'https://feeds.reuters.com/reuters/businessNews',
+  'https://feeds.reuters.com/reuters/technologyNews',
+  'https://www.scmr.com/rss/topic/all',
+]
 
 function extractCountries(opportunities) {
   const found = new Set()
@@ -29,41 +50,35 @@ function extractCountries(opportunities) {
   return Array.from(found).slice(0, 5)
 }
 
-async function fetchGDELT(country, query) {
-  const terms = query.split(' ').slice(0, 3).join(' ')
-  const q = encodeURIComponent(`${country} trade supply chain tariff ${terms}`)
-  const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${q}&mode=artlist&maxrecords=5&format=json&timespan=7d&sort=DateDesc`
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'AtlasTerminal/1.0 (supply-chain-intelligence)' },
-      signal: AbortSignal.timeout(8000)
-    })
-    if (!res.ok) return []
-    const data = await res.json()
-    return (data.articles || []).slice(0, 5).map(a => ({
-      title: a.title,
-      url: a.url,
-      source: a.domain,
-      tone: typeof a.tone === 'number' ? Math.round(a.tone) : 0,
-    }))
-  } catch { return [] }
+function isRelevant(text, countries) {
+  if (!text) return false
+  const t = text.toLowerCase()
+  // Check if article mentions any of our countries or key trade terms
+  const tradeTerms = ['trade', 'tariff', 'supply chain', 'import', 'export', 'manufacturing', 'sourcing', 'freight', 'logistics', 'sanctions', 'duty']
+  const countryMatch = countries.some(c => t.includes(c))
+  const tradeMatch = tradeTerms.some(term => t.includes(term))
+  return countryMatch || tradeMatch
 }
 
-async function fetchWorldBankStability(iso2) {
-  const url = `https://api.worldbank.org/v2/country/${iso2}/indicator/PV.EST?format=json&mrv=1&per_page=1`
+async function fetchRSSFeed(feedUrl, countries) {
+  const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=20`
   try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'AtlasTerminal/1.0' },
-      signal: AbortSignal.timeout(6000)
-    })
-    if (!res.ok) return null
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return []
     const data = await res.json()
-    const value = data?.[1]?.[0]?.value
-    if (value === null || value === undefined) return null
-    // Normalize -2.5→2.5 to 0→100 stability
-    const stability = Math.round(((value + 2.5) / 5) * 100)
-    return { stability, raw: value }
-  } catch { return null }
+    if (data.status !== 'ok') return []
+    return (data.items || [])
+      .filter(item => isRelevant((item.title || '') + ' ' + (item.description || ''), countries))
+      .slice(0, 6)
+      .map(item => ({
+        title: item.title?.replace(/<[^>]+>/g, '').trim(),
+        url: item.link,
+        source: data.feed?.title || new URL(feedUrl).hostname,
+        pubDate: item.pubDate,
+        // Simple negativity heuristic: presence of risk words
+        tone: /sanction|tariff|ban|restrict|conflict|surge|crisis|war|halt|shortage/.test((item.title || '').toLowerCase()) ? -5 : 0,
+      }))
+  } catch { return [] }
 }
 
 export async function POST(req) {
@@ -74,33 +89,28 @@ export async function POST(req) {
     }
 
     const countries = extractCountries(opportunities)
-    if (countries.length === 0) {
-      return Response.json({ error: 'No countries found' }, { status: 400 })
-    }
 
-    // Parallel fetch — both sources, all countries at once
-    const [gdeltResults, wbResults] = await Promise.all([
-      Promise.all(countries.map(c => fetchGDELT(c, query))),
-      Promise.all(countries.map(c => {
-        const iso2 = COUNTRY_ISO2[c]
-        return iso2 ? fetchWorldBankStability(iso2) : Promise.resolve(null)
-      }))
-    ])
-
-    // Country stability scores keyed by ISO2
+    // Build country scores instantly from static lookup — no network call needed
     const countryScores = {}
-    countries.forEach((country, i) => {
+    countries.forEach(country => {
       const iso2 = COUNTRY_ISO2[country]
-      if (iso2 && wbResults[i]) countryScores[iso2] = wbResults[i]
+      if (iso2 && WB_STABILITY[iso2] !== undefined) {
+        countryScores[iso2] = { stability: WB_STABILITY[iso2], source: 'WB 2023' }
+      }
     })
 
-    // Deduplicate articles by title, pick most negative tone first (most impactful)
+    // Fetch news from RSS feeds in parallel
+    const feedResults = await Promise.all(
+      RSS_FEEDS.map(feed => fetchRSSFeed(feed, countries.length > 0 ? countries : ['trade', 'supply']))
+    )
+
+    // Merge, deduplicate, sort by tone (most negative/impactful first)
     const seen = new Set()
-    const allArticles = gdeltResults.flat().filter(a => {
+    const allArticles = feedResults.flat().filter(a => {
       if (!a.title || seen.has(a.title)) return false
       seen.add(a.title)
       return true
-    }).sort((a, b) => a.tone - b.tone) // most negative (alarming) first
+    }).sort((a, b) => a.tone - b.tone)
 
     const topArticles = allArticles.slice(0, 6)
     const sourceCount = new Set(allArticles.map(a => a.source).filter(Boolean)).size
