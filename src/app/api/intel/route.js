@@ -1,6 +1,6 @@
 // ATLAS TERMINAL — /api/intel/route.js
-// Live trade intelligence: RSS news via rss2json + static World Bank stability scores
-// No API keys required
+// Live trade intelligence: NewsAPI.org + static World Bank stability scores
+// Requires NEWS_API_KEY environment variable
 
 // World Bank Political Stability Index 2023 — normalized 0–100
 // Source: World Bank Worldwide Governance Indicators (PV.EST, 2023)
@@ -32,12 +32,7 @@ const COUNTRY_ISO2 = {
   'nigeria': 'NG', 'south africa': 'ZA', 'ghana': 'GH',
 }
 
-// RSS feeds covering trade, supply chain, and geopolitics
-const RSS_FEEDS = [
-  'https://feeds.reuters.com/reuters/businessNews',
-  'https://feeds.reuters.com/reuters/technologyNews',
-  'https://www.scmr.com/rss/topic/all',
-]
+const NEWS_API_KEY = process.env.NEWS_API_KEY || ''
 
 function extractCountries(opportunities) {
   const found = new Set()
@@ -50,34 +45,24 @@ function extractCountries(opportunities) {
   return Array.from(found).slice(0, 5)
 }
 
-function isRelevant(text, countries) {
-  if (!text) return false
-  const t = text.toLowerCase()
-  // Check if article mentions any of our countries or key trade terms
-  const tradeTerms = ['trade', 'tariff', 'supply chain', 'import', 'export', 'manufacturing', 'sourcing', 'freight', 'logistics', 'sanctions', 'duty']
-  const countryMatch = countries.some(c => t.includes(c))
-  const tradeMatch = tradeTerms.some(term => t.includes(term))
-  return countryMatch || tradeMatch
-}
-
-async function fetchRSSFeed(feedUrl, countries) {
-  const url = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feedUrl)}&count=20`
+async function fetchNewsAPI(countries, query) {
+  if (!NEWS_API_KEY) return []
+  // Build a query combining country names and trade keywords
+  const countryTerms = countries.slice(0, 3).join(' OR ')
+  const q = encodeURIComponent(`(${countryTerms}) AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions)`)
+  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=8&apiKey=${NEWS_API_KEY}`
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(8000) })
+    const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
     if (!res.ok) return []
     const data = await res.json()
     if (data.status !== 'ok') return []
-    return (data.items || [])
-      .filter(item => isRelevant((item.title || '') + ' ' + (item.description || ''), countries))
-      .slice(0, 6)
-      .map(item => ({
-        title: item.title?.replace(/<[^>]+>/g, '').trim(),
-        url: item.link,
-        source: data.feed?.title || new URL(feedUrl).hostname,
-        pubDate: item.pubDate,
-        // Simple negativity heuristic: presence of risk words
-        tone: /sanction|tariff|ban|restrict|conflict|surge|crisis|war|halt|shortage/.test((item.title || '').toLowerCase()) ? -5 : 0,
-      }))
+    return (data.articles || []).map(a => ({
+      title: a.title,
+      url: a.url,
+      source: a.source?.name || 'NewsAPI',
+      pubDate: a.publishedAt,
+      tone: /sanction|tariff|ban|restrict|conflict|crisis|war|halt|shortage/.test((a.title || '').toLowerCase()) ? -5 : 0,
+    }))
   } catch { return [] }
 }
 
@@ -99,19 +84,8 @@ export async function POST(req) {
       }
     })
 
-    // Fetch news from RSS feeds in parallel
-    const feedResults = await Promise.all(
-      RSS_FEEDS.map(feed => fetchRSSFeed(feed, countries.length > 0 ? countries : ['trade', 'supply']))
-    )
-
-    // Merge, deduplicate, sort by tone (most negative/impactful first)
-    const seen = new Set()
-    const allArticles = feedResults.flat().filter(a => {
-      if (!a.title || seen.has(a.title)) return false
-      seen.add(a.title)
-      return true
-    }).sort((a, b) => a.tone - b.tone)
-
+    // Fetch news from NewsAPI
+    const allArticles = await fetchNewsAPI(countries, query)
     const topArticles = allArticles.slice(0, 6)
     const sourceCount = new Set(allArticles.map(a => a.source).filter(Boolean)).size
 
