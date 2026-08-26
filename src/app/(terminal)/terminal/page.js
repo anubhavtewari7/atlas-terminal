@@ -13,7 +13,7 @@ import TLCCalculator from '@/components/TLCCalculator'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
 import {
-  ShieldAlert, Zap, ChevronRight,
+  Shield, ShieldAlert, Zap, ChevronRight,
   Pause, Play, Newspaper, X, Target, Factory, Map,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
@@ -884,52 +884,48 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Port Throughput */}
-          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="ports">
+          {/* Hub Stability Index */}
+          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="hubs">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                <Anchor size={14} /> Logistics Throughput
+                <Shield size={14} /> Hub Stability Index
               </h2>
-              <button onClick={() => setShowPorts(true)} className="text-[8px] text-slate-600 hover:text-sky-400 font-bold uppercase transition-colors">
-                View all →
-              </button>
+              {opportunities.length > 0 && (
+                <span className="text-[8px] text-slate-600 font-bold uppercase">{opportunities.length} hubs</span>
+              )}
             </div>
-            <div className="space-y-2.5">
-              {[
-                { seaboard: 'West Coast US', ports: [
-                  { label:'Los Angeles',  status:'Moderate', wait:'3d' },
-                  { label:'Long Beach',   status:'Stable',   wait:'2d' },
-                ]},
-                { seaboard: 'East Coast US', ports: [
-                  { label:'New York / NJ', status:'Stable',  wait:'2d' },
-                  { label:'Savannah',      status:'Stable',  wait:'1d' },
-                ]},
-                { seaboard: 'Asia Pacific', ports: [
-                  { label:'Singapore',    status:'Stable',   wait:'1d' },
-                  { label:'Busan',        status:'Stable',   wait:'1d' },
-                ]},
-                { seaboard: 'West Mexico', ports: [
-                  { label:'Manzanillo',         status:'Stable', wait:'3d' },
-                  { label:'Lázaro Cárdenas',    status:'Watch',  wait:'4d' },
-                ]},
-              ].map((group, gi) => (
-                <div key={gi}>
-                  <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest mb-1">{group.seaboard}</div>
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {group.ports.map((p, i) => (
-                      <button key={i} onClick={() => setShowPorts(true)}
-                        className="bg-[#111] p-2 border border-white/5 rounded-lg text-left hover:border-sky-500/30 hover:bg-[#151515] transition-all cursor-pointer">
-                        <div className="text-[8px] text-slate-500 uppercase font-bold mb-0.5 truncate">{p.label}</div>
-                        <div className="flex items-center justify-between">
-                          <span className={`text-[11px] font-bold ${p.status === 'Stable' ? 'text-emerald-400' : p.status === 'Moderate' ? 'text-amber-400' : 'text-orange-400'}`}>{p.status}</span>
-                          <span className="text-[9px] text-slate-600">{p.wait}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            {opportunities.length === 0 ? (
+              <p className="text-[10px] text-slate-600 italic">Run a sourcing scan to rank hub stability.</p>
+            ) : (
+              <div className="space-y-1.5">
+                {opportunities.slice(0, 6).map((opp, i) => {
+                  const iso2 = getHubISO2(opp.hub)
+                  const score = iso2 && intelBrief?.countryScores?.[iso2]?.stability
+                  const scoreNum = typeof score === 'number' ? score : null
+                  const barColor = scoreNum === null ? 'bg-slate-700' : scoreNum >= 60 ? 'bg-emerald-500' : scoreNum >= 35 ? 'bg-amber-500' : 'bg-rose-500'
+                  const textColor = scoreNum === null ? 'text-slate-500' : scoreNum >= 60 ? 'text-emerald-400' : scoreNum >= 35 ? 'text-amber-400' : 'text-rose-400'
+                  const label = scoreNum === null ? '—' : scoreNum >= 60 ? 'Stable' : scoreNum >= 35 ? 'Moderate' : 'High Risk'
+                  return (
+                    <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[9px] font-bold text-slate-300 uppercase truncate max-w-[65%]">{opp.hub}</span>
+                        <span className={`text-[9px] font-bold font-mono ${textColor}`}>
+                          {scoreNum !== null ? `◆ ${scoreNum}` : '—'}
+                        </span>
+                      </div>
+                      <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: scoreNum !== null ? `${scoreNum}%` : '0%' }} />
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-[8px] text-slate-600">WB Political Stability</span>
+                        <span className={`text-[8px] font-bold ${textColor}`}>{label}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+                {!intelBrief && <p className="text-[9px] text-slate-700 italic mt-1">Scores load after intel fetch…</p>}
+              </div>
+            )}
           </div>
 
           {/* Risk Panels */}
@@ -1395,28 +1391,28 @@ export default function Dashboard() {
                         )}
                       </div>
                     )}
-                    {marketData && (
-                      <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
-                        <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                          <BarChart3 size={11}/> Price Trend Index
-                          <span className={`ml-auto px-2 py-0.5 rounded text-[8px] font-bold ${marketData.currency.impact === 'Stable' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                            {marketData.currency.impact}
-                          </span>
-                        </div>
-                        <div className="flex items-end justify-between gap-1" style={{ height: 56 }}>
-                          {marketData.price_history.map((d, i) => {
-                            const max = Math.max(...marketData.price_history.map(p => p.price))
-                            const px = Math.max(6, Math.round((d.price / max) * 48))
-                            return (
-                              <div key={i} className="flex flex-col items-center gap-1 flex-1">
-                                <div className="w-full rounded-sm bg-sky-500/30 hover:bg-sky-500/60 transition-all" style={{ height: px }} title={`${d.month}: ${d.price}`}/>
-                                <span className="text-[9px] text-slate-700 rotate-0">{d.month}</span>
-                              </div>
-                            )
-                          })}
-                        </div>
+                    <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
+                      <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-2">
+                        <BarChart3 size={11}/> Metals &amp; Materials
+                        <span className="ml-auto text-[8px] text-slate-600 font-mono">Reference</span>
                       </div>
-                    )}
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {[
+                          { n:'Brent',   p:'$89.24', c:'+1.2%', up:true },
+                          { n:'Copper',  p:'$4.12',  c:'+2.4%', up:true },
+                          { n:'Alum.',   p:'$2,350', c:'+0.5%', up:true },
+                          { n:'Nickel',  p:'$18.4k', c:'-0.9%', up:false },
+                          { n:'R.Earth', p:'$142',   c:'+6.8%', up:true },
+                          { n:'Steel',   p:'$840',   c:'-0.8%', up:false },
+                        ].map((item, i) => (
+                          <div key={i} className="bg-[#0a0a0a] border border-white/5 rounded-lg p-2 text-center">
+                            <div className="text-[7px] text-slate-600 uppercase font-bold mb-0.5 truncate">{item.n}</div>
+                            <div className="text-[11px] font-bold text-white font-mono">{item.p}</div>
+                            <div className={`text-[9px] font-bold ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                     {fxData?.rates && (
                       <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
                         <div className="text-[9px] font-bold text-purple-400 tracking-[0.2em] uppercase mb-2">Live FX Rates</div>
@@ -1707,49 +1703,32 @@ export default function Dashboard() {
         ════════════════════════════════════ */}
         <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
-          {/* Market Trends Chart */}
-          {marketData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl space-y-3 shadow-xl shrink-0" data-tour="market">
-              <div className="flex items-center justify-between">
-                <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                  <BarChart3 size={16} /> Price Trend Index
-                </h2>
-                <div className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                  marketData.currency.impact === 'Stable' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'
-                }`}>
-                  {marketData.currency.impact}
-                </div>
-              </div>
-              <p className="text-[9px] text-slate-600 leading-snug">
-                Indicative quarterly pricing trend for the current mission&rsquo;s category. Hover a bar for the exact index value.
-              </p>
-              <div className="flex items-end justify-between gap-2" style={{ height: '72px' }}>
-                {marketData.price_history.map((d, i) => {
-                  const max = Math.max(...marketData.price_history.map(p => p.price))
-                  const px = Math.max(8, Math.round((d.price / max) * 64))
-                  return (
-                    <div key={i} className="flex-1 flex flex-col items-center justify-end gap-1 group cursor-help" title={`${d.month}: index ${d.price}`}>
-                      <span className="text-[8px] text-slate-500 font-bold opacity-0 group-hover:opacity-100 transition-opacity">{d.price}</span>
-                      <div className="w-full rounded-t relative group-hover:brightness-125 transition-all"
-                        style={{ height:`${px}px`, background:'linear-gradient(to top, rgba(56,189,248,0.7), rgba(56,189,248,0.1))' }}>
-                        <div className="absolute bottom-0 left-0 right-0 h-px bg-sky-400" />
-                      </div>
-                      <span className="text-[9px] text-slate-600 font-bold">{d.month}</span>
-                    </div>
-                  )
-                })}
-              </div>
-              <div className="pt-2 border-t border-white/5 flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] text-slate-600 uppercase font-bold mb-0.5">Currency Index</div>
-                  <div className="text-[16px] font-bold text-white">{marketData.currency.pair} {marketData.currency.rate}</div>
-                </div>
-                {marketData.currency.impact === 'Positive'
-                  ? <ArrowDownRight className="text-emerald-400" size={20} />
-                  : <ArrowUpRight className="text-rose-400" size={20} />}
-              </div>
+          {/* Metals & Materials */}
+          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="market">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                <BarChart3 size={14} /> Metals &amp; Materials
+              </h2>
+              <span className="text-[8px] text-slate-600 font-mono uppercase">Reference</span>
             </div>
-          )}
+            <div className="grid grid-cols-2 gap-1.5">
+              {[
+                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true },
+                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true },
+                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true },
+                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false },
+                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true },
+                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false },
+              ].map((item, i) => (
+                <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5">
+                  <div className="text-[8px] text-slate-500 uppercase font-bold mb-1 truncate">{item.n}</div>
+                  <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[9px] text-slate-600">{item.u}</span></div>
+                  <div className={`text-[10px] font-bold mt-0.5 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
+                </div>
+              ))}
+            </div>
+            <p className="text-[8px] text-slate-700 mt-2">Indicative reference prices — verify with exchange terminal.</p>
+          </div>
 
           {/* Live FX Rates */}
           {fxData && (
