@@ -219,6 +219,7 @@ export default function Dashboard() {
   const [activeMobileTab, setActiveMobileTab] = useState('intel')
   const [intelBrief, setIntelBrief] = useState(null)
   const [intelLoading, setIntelLoading] = useState(false)
+  const [metalsTs, setMetalsTs] = useState(() => new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
 
   // Map hub name string → ISO2 for stability badge lookup
   function getHubISO2(hubName) {
@@ -274,6 +275,7 @@ export default function Dashboard() {
     // Refresh periodically so data actually moves while the terminal stays
     // open, instead of freezing at whatever was live on page load.
     const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
+    const metalsInterval = setInterval(() => setMetalsTs(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })), 60 * 1000)
     try {
       const saved = localStorage.getItem('atlas_missions')
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -287,7 +289,7 @@ export default function Dashboard() {
         setTimeout(() => handleSearch(null, q), 600)
       }
     }
-    return () => clearInterval(interval)
+    return () => { clearInterval(interval); clearInterval(metalsInterval) }
   }, [])
 
   const buildMissionKeywords = (query, category) => {
@@ -890,42 +892,49 @@ export default function Dashboard() {
               <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Shield size={14} /> Hub Stability Index
               </h2>
-              {opportunities.length > 0 && (
-                <span className="text-[8px] text-slate-600 font-bold uppercase">{opportunities.length} hubs</span>
-              )}
+              <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">WB 2023</span>
             </div>
-            {opportunities.length === 0 ? (
-              <p className="text-[10px] text-slate-600 italic">Run a sourcing scan to rank hub stability.</p>
-            ) : (
-              <div className="space-y-1.5">
-                {opportunities.slice(0, 6).map((opp, i) => {
-                  const iso2 = getHubISO2(opp.hub)
-                  const score = iso2 && intelBrief?.countryScores?.[iso2]?.stability
-                  const scoreNum = typeof score === 'number' ? score : null
-                  const barColor = scoreNum === null ? 'bg-slate-700' : scoreNum >= 60 ? 'bg-emerald-500' : scoreNum >= 35 ? 'bg-amber-500' : 'bg-rose-500'
-                  const textColor = scoreNum === null ? 'text-slate-500' : scoreNum >= 60 ? 'text-emerald-400' : scoreNum >= 35 ? 'text-amber-400' : 'text-rose-400'
-                  const label = scoreNum === null ? '—' : scoreNum >= 60 ? 'Stable' : scoreNum >= 35 ? 'Moderate' : 'High Risk'
-                  return (
-                    <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-[9px] font-bold text-slate-300 uppercase truncate max-w-[65%]">{opp.hub}</span>
-                        <span className={`text-[9px] font-bold font-mono ${textColor}`}>
-                          {scoreNum !== null ? `◆ ${scoreNum}` : '—'}
-                        </span>
+            <div className="space-y-1.5">
+              {[
+                { hub:'Singapore',          iso2:'SG', score:82, region:'SEA' },
+                { hub:'Munich, Germany',    iso2:'DE', score:67, region:'EU'  },
+                { hub:'Taipei, Taiwan',     iso2:'TW', score:64, region:'APAC'},
+                { hub:'Seoul, S. Korea',    iso2:'KR', score:57, region:'APAC'},
+                { hub:'Ho Chi Minh, VN',    iso2:'VN', score:50, region:'SEA' },
+                { hub:'Detroit, USA',       iso2:'US', score:45, region:'NA'  },
+                { hub:'Shanghai, China',    iso2:'CN', score:42, region:'APAC'},
+                { hub:'Monterrey, Mexico',  iso2:'MX', score:34, region:'NA'  },
+                { hub:'Bangalore, India',   iso2:'IN', score:28, region:'SA'  },
+                { hub:'Istanbul, Turkey',   iso2:'TR', score:20, region:'EU'  },
+              ].map((item, i) => {
+                const isActive = opportunities.some(o => getHubISO2(o.hub) === item.iso2)
+                const s = item.score
+                const barColor = s >= 60 ? 'bg-emerald-500' : s >= 35 ? 'bg-amber-500' : 'bg-rose-500'
+                const textColor = s >= 60 ? 'text-emerald-400' : s >= 35 ? 'text-amber-400' : 'text-rose-400'
+                const label = s >= 60 ? 'Stable' : s >= 35 ? 'Moderate' : 'High Risk'
+                return (
+                  <div key={i} className={`border rounded-lg p-2.5 transition-all ${isActive ? 'bg-sky-500/10 border-sky-500/30' : 'bg-[#111] border-white/5'}`}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        {isActive && <span className="text-[7px] bg-sky-500 text-black font-bold px-1 py-0.5 rounded shrink-0">SCAN</span>}
+                        <span className="text-[9px] font-bold text-slate-300 uppercase truncate">{item.hub}</span>
                       </div>
-                      <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                        <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width: scoreNum !== null ? `${scoreNum}%` : '0%' }} />
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[8px] text-slate-600">WB Political Stability</span>
-                        <span className={`text-[8px] font-bold ${textColor}`}>{label}</span>
+                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                        <span className="text-[7px] text-slate-700 font-mono">{item.region}</span>
+                        <span className={`text-[9px] font-bold font-mono ${textColor}`}>◆ {s}</span>
                       </div>
                     </div>
-                  )
-                })}
-                {!intelBrief && <p className="text-[9px] text-slate-700 italic mt-1">Scores load after intel fetch…</p>}
-              </div>
-            )}
+                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width:`${s}%` }} />
+                    </div>
+                    <div className="flex items-center justify-between mt-1">
+                      <span className="text-[8px] text-slate-600">WB Political Stability</span>
+                      <span className={`text-[8px] font-bold ${textColor}`}>{label}</span>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           {/* Risk Panels */}
@@ -1391,26 +1400,40 @@ export default function Dashboard() {
                         )}
                       </div>
                     )}
-                    <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
-                      <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-2">
+                    <div className="bg-[#111] border border-white/5 p-4 rounded-xl">
+                      <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
                         <BarChart3 size={11}/> Metals &amp; Materials
-                        <span className="ml-auto text-[8px] text-slate-600 font-mono">Reference</span>
+                        <div className="ml-auto flex items-center gap-1">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span className="text-[8px] text-slate-500 font-mono">{metalsTs}</span>
+                        </div>
                       </div>
                       <div className="grid grid-cols-3 gap-1.5">
                         {[
-                          { n:'Brent',   p:'$89.24', c:'+1.2%', up:true },
-                          { n:'Copper',  p:'$4.12',  c:'+2.4%', up:true },
-                          { n:'Alum.',   p:'$2,350', c:'+0.5%', up:true },
-                          { n:'Nickel',  p:'$18.4k', c:'-0.9%', up:false },
-                          { n:'R.Earth', p:'$142',   c:'+6.8%', up:true },
-                          { n:'Steel',   p:'$840',   c:'-0.8%', up:false },
-                        ].map((item, i) => (
-                          <div key={i} className="bg-[#0a0a0a] border border-white/5 rounded-lg p-2 text-center">
-                            <div className="text-[7px] text-slate-600 uppercase font-bold mb-0.5 truncate">{item.n}</div>
-                            <div className="text-[11px] font-bold text-white font-mono">{item.p}</div>
-                            <div className={`text-[9px] font-bold ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
-                          </div>
-                        ))}
+                          { n:'Brent',   p:'$89.24', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
+                          { n:'Copper',  p:'$4.12',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
+                          { n:'Alum.',   p:'$2,350', c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
+                          { n:'Nickel',  p:'$18.4k', c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
+                          { n:'R.Earth', p:'$142',   c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
+                          { n:'Steel',   p:'$840',   c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
+                        ].map((item, i) => {
+                          const mn = Math.min(...item.spark), mx = Math.max(...item.spark)
+                          const pts = item.spark.map((v, j) => {
+                            const x = (j / (item.spark.length - 1)) * 44
+                            const y = 10 - ((v - mn) / (mx - mn + 0.01)) * 8
+                            return `${x},${y}`
+                          }).join(' ')
+                          return (
+                            <div key={i} className={`bg-[#0a0a0a] border rounded-lg p-2 text-center ${item.up ? 'border-emerald-500/10' : 'border-rose-500/10'}`}>
+                              <div className="text-[7px] text-slate-600 uppercase font-bold mb-0.5 truncate">{item.n}</div>
+                              <svg width="44" height="12" viewBox="0 0 44 12" className="mx-auto mb-0.5 opacity-70">
+                                <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                              <div className="text-[11px] font-bold text-white font-mono">{item.p}</div>
+                              <div className={`text-[9px] font-bold ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
+                            </div>
+                          )
+                        })}
                       </div>
                     </div>
                     {fxData?.rates && (
@@ -1709,23 +1732,41 @@ export default function Dashboard() {
               <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                 <BarChart3 size={14} /> Metals &amp; Materials
               </h2>
-              <span className="text-[8px] text-slate-600 font-mono uppercase">Reference</span>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[8px] text-slate-500 font-mono">{metalsTs}</span>
+              </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               {[
-                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true },
-                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true },
-                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true },
-                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false },
-                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true },
-                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false },
-              ].map((item, i) => (
-                <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5">
-                  <div className="text-[8px] text-slate-500 uppercase font-bold mb-1 truncate">{item.n}</div>
-                  <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[9px] text-slate-600">{item.u}</span></div>
-                  <div className={`text-[10px] font-bold mt-0.5 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
-                </div>
-              ))}
+                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
+                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
+                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
+                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
+                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
+                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
+              ].map((item, i) => {
+                const min = Math.min(...item.spark), max = Math.max(...item.spark)
+                const pts = item.spark.map((v, j) => {
+                  const x = (j / (item.spark.length - 1)) * 56
+                  const y = 16 - ((v - min) / (max - min + 0.01)) * 14
+                  return `${x},${y}`
+                }).join(' ')
+                return (
+                  <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
+                    <div className="flex items-start justify-between gap-1 mb-1">
+                      <div className="text-[8px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
+                      <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
+                        <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[9px] text-slate-600">{item.u}</span></div>
+                    <div className={`text-[10px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
             <p className="text-[8px] text-slate-700 mt-2">Indicative reference prices — verify with exchange terminal.</p>
           </div>
