@@ -217,6 +217,38 @@ export default function Dashboard() {
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
   const [activeMobileTab, setActiveMobileTab] = useState('intel')
+  const [intelBrief, setIntelBrief] = useState(null)
+  const [intelLoading, setIntelLoading] = useState(false)
+
+  // Map hub name string → ISO2 for stability badge lookup
+  function getHubISO2(hubName) {
+    const n = (hubName || '').toLowerCase()
+    const map = {
+      china:'CN', japan:'JP', mexico:'MX', vietnam:'VN', india:'IN',
+      germany:'DE', 'united states':'US', usa:'US', taiwan:'TW',
+      'south korea':'KR', korea:'KR', malaysia:'MY', thailand:'TH',
+      bangladesh:'BD', indonesia:'ID', brazil:'BR', turkey:'TR',
+      poland:'PL', italy:'IT', france:'FR', 'united kingdom':'GB',
+      uk:'GB', netherlands:'NL', belgium:'BE', spain:'ES', canada:'CA',
+      singapore:'SG', philippines:'PH',
+    }
+    for (const [k, v] of Object.entries(map)) { if (n.includes(k)) return v }
+    return null
+  }
+
+  // Fire-and-forget intel fetch after a scan completes
+  function triggerIntelFetch(opps, query) {
+    setIntelBrief(null)
+    setIntelLoading(true)
+    fetch('/api/intel', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ opportunities: opps, query })
+    }).then(r => r.json()).then(data => {
+      if (!data.error) setIntelBrief(data)
+    }).catch(() => {}).finally(() => setIntelLoading(false))
+  }
+
 
   // Auto-switch to hubs tab when scan returns data
   useEffect(() => {
@@ -375,6 +407,7 @@ export default function Dashboard() {
         setProfile(prev => ({ ...prev, material: activeQuery }))
         buildMissionKeywords(activeQuery, data.category)
         setNewsFilter('mission')
+        triggerIntelFetch(data.opportunities, activeQuery)
         return
       }
       throw new Error('No opportunities returned')
@@ -413,6 +446,7 @@ export default function Dashboard() {
       setProfile(prev => ({ ...prev, material: activeQuery }))
       buildMissionKeywords(activeQuery, cat)
       setNewsFilter('mission')
+      triggerIntelFetch(hubs, activeQuery)
       addLog(`[LOCAL] ${hubs.length} hubs loaded via local intelligence.`)
 
     } finally {
@@ -901,6 +935,26 @@ export default function Dashboard() {
           {/* Risk Panels */}
           <div className="flex flex-col gap-3">
 
+            {/* Live Intelligence Brief */}
+            {(intelLoading || intelBrief) && (
+              <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
+                <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                  <Newspaper size={13} /> Live Intel Brief
+                  {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
+                </h2>
+                {intelLoading ? (
+                  <div className="space-y-2">
+                    <div className="h-2.5 bg-white/5 rounded animate-pulse w-full" />
+                    <div className="h-2.5 bg-white/5 rounded animate-pulse w-4/5" />
+                    <div className="h-2.5 bg-white/5 rounded animate-pulse w-3/5" />
+                  </div>
+                ) : intelBrief?.brief ? (
+                  <p className="text-[11px] text-slate-300 leading-relaxed">{intelBrief.brief}</p>
+                ) : null}
+                <p className="text-[9px] text-slate-700 mt-2">Sources: GDELT · World Bank · synthesized by Claude</p>
+              </div>
+            )}
+
             {/* Global Threats */}
             <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
@@ -959,7 +1013,16 @@ export default function Dashboard() {
                         ? 'bg-emerald-500/10 border-emerald-500/40'
                         : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
                     }`}>
-                    <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest">{o.hub}</div>
+                    <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
+                      {o.hub}
+                      {(() => {
+                        const iso2 = getHubISO2(o.hub)
+                        const score = iso2 && intelBrief?.countryScores?.[iso2]
+                        if (!score) return null
+                        const c = score.stability >= 60 ? 'text-emerald-400' : score.stability >= 35 ? 'text-amber-400' : 'text-rose-400'
+                        return <span className={`ml-auto font-mono text-[8px] ${c}`} title="World Bank Political Stability Score">◆ {score.stability}</span>
+                      })()}
+                    </div>
                     <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
                     {o.real_export_value_usd && (
                       <div className="mt-1.5 flex items-center gap-1 text-[9px] text-sky-400 font-mono" title={`Official UN Comtrade export statistics, ${o.real_trade_data_year}`}>
@@ -1503,6 +1566,25 @@ export default function Dashboard() {
                 ) : (
                   /* Threats list */
                   <div className="space-y-2">
+                    {/* Live Intel Brief — mobile */}
+                    {(intelLoading || intelBrief) && (
+                      <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
+                        <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
+                          <Newspaper size={12} /> Live Intel Brief
+                          {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles</span>}
+                        </div>
+                        {intelLoading ? (
+                          <div className="space-y-1.5">
+                            <div className="h-2.5 bg-white/5 rounded animate-pulse w-full" />
+                            <div className="h-2.5 bg-white/5 rounded animate-pulse w-4/5" />
+                            <div className="h-2.5 bg-white/5 rounded animate-pulse w-3/5" />
+                          </div>
+                        ) : intelBrief?.brief ? (
+                          <p className="text-[11px] text-slate-300 leading-relaxed">{intelBrief.brief}</p>
+                        ) : null}
+                        <p className="text-[9px] text-slate-700 mt-2">GDELT · World Bank · Claude</p>
+                      </div>
+                    )}
                     {risks.length === 0 ? (
                       <div className="space-y-3 pt-1">
                         <p className="text-[11px] text-slate-600 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
