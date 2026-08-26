@@ -939,7 +939,7 @@ export default function Dashboard() {
             {(intelLoading || intelBrief) && (
               <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                 <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
-                  <Newspaper size={13} /> Live Intel Brief
+                  <Newspaper size={13} /> Live Trade Intelligence
                   {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
                 </h2>
                 {intelLoading ? (
@@ -948,10 +948,25 @@ export default function Dashboard() {
                     <div className="h-2.5 bg-white/5 rounded animate-pulse w-4/5" />
                     <div className="h-2.5 bg-white/5 rounded animate-pulse w-3/5" />
                   </div>
-                ) : intelBrief?.brief ? (
-                  <p className="text-[11px] text-slate-300 leading-relaxed">{intelBrief.brief}</p>
-                ) : null}
-                <p className="text-[9px] text-slate-700 mt-2">Sources: GDELT · World Bank · synthesized by Claude</p>
+                ) : intelBrief?.articles?.length > 0 ? (
+                  <div className="space-y-2">
+                    {intelBrief.articles.map((a, i) => (
+                      <a key={i} href={a.url} target="_blank" rel="noopener noreferrer"
+                        className="block group">
+                        <div className="flex items-start gap-2">
+                          <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
+                          <div>
+                            <p className="text-[11px] text-slate-300 leading-snug group-hover:text-white transition-colors">{a.title}</p>
+                            <p className="text-[9px] text-slate-600 mt-0.5">{a.source}</p>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-[10px] text-slate-600 italic">No recent trade news found.</p>
+                )}
+                <p className="text-[9px] text-slate-700 mt-3">GDELT · World Bank Political Stability Index</p>
               </div>
             )}
 
@@ -1570,7 +1585,7 @@ export default function Dashboard() {
                     {(intelLoading || intelBrief) && (
                       <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                         <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
-                          <Newspaper size={12} /> Live Intel Brief
+                          <Newspaper size={12} /> Live Trade Intelligence
                           {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles</span>}
                         </div>
                         {intelLoading ? (
@@ -1579,10 +1594,22 @@ export default function Dashboard() {
                             <div className="h-2.5 bg-white/5 rounded animate-pulse w-4/5" />
                             <div className="h-2.5 bg-white/5 rounded animate-pulse w-3/5" />
                           </div>
-                        ) : intelBrief?.brief ? (
-                          <p className="text-[11px] text-slate-300 leading-relaxed">{intelBrief.brief}</p>
+                        ) : intelBrief?.articles?.length > 0 ? (
+                          <div className="space-y-2">
+                            {intelBrief.articles.slice(0, 4).map((a, i) => (
+                              <a key={i} href={a.url} target="_blank" rel="noopener noreferrer" className="block group">
+                                <div className="flex items-start gap-2">
+                                  <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
+                                  <div>
+                                    <p className="text-[11px] text-slate-300 leading-snug group-active:text-white transition-colors">{a.title}</p>
+                                    <p className="text-[9px] text-slate-600 mt-0.5">{a.source}</p>
+                                  </div>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
                         ) : null}
-                        <p className="text-[9px] text-slate-700 mt-2">GDELT · World Bank · Claude</p>
+                        <p className="text-[9px] text-slate-700 mt-2">GDELT · World Bank</p>
                       </div>
                     )}
                     {risks.length === 0 ? (

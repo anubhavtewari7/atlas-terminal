@@ -1,6 +1,6 @@
-import Anthropic from '@anthropic-ai/sdk'
-
-const client = new Anthropic()
+// ATLAS TERMINAL — /api/intel/route.js
+// Live intelligence: GDELT news + World Bank stability scores
+// No API keys required — both sources are free and public
 
 const COUNTRY_ISO2 = {
   'china': 'CN', 'japan': 'JP', 'mexico': 'MX', 'vietnam': 'VN',
@@ -12,12 +12,10 @@ const COUNTRY_ISO2 = {
   'netherlands': 'NL', 'belgium': 'BE', 'spain': 'ES', 'canada': 'CA',
   'singapore': 'SG', 'philippines': 'PH', 'sri lanka': 'LK',
   'cambodia': 'KH', 'myanmar': 'MM', 'morocco': 'MA', 'ethiopia': 'ET',
-  'egypt': 'EG', 'israel': 'IL', 'uae': 'AE', 'saudi arabia': 'SA',
-  'australia': 'AU', 'chile': 'CL', 'colombia': 'CO', 'peru': 'PE',
-  'argentina': 'AR', 'portugal': 'PT', 'sweden': 'SE', 'austria': 'AT',
-  'switzerland': 'CH', 'hungary': 'HU', 'romania': 'RO', 'ukraine': 'UA',
-  'russia': 'RU', 'pakistan': 'PK', 'nigeria': 'NG', 'kenya': 'KE',
-  'south africa': 'ZA', 'ghana': 'GH',
+  'egypt': 'EG', 'uae': 'AE', 'saudi arabia': 'SA', 'australia': 'AU',
+  'chile': 'CL', 'colombia': 'CO', 'peru': 'PE', 'argentina': 'AR',
+  'sweden': 'SE', 'austria': 'AT', 'switzerland': 'CH', 'pakistan': 'PK',
+  'nigeria': 'NG', 'south africa': 'ZA',
 }
 
 function extractCountries(opportunities) {
@@ -28,25 +26,25 @@ function extractCountries(opportunities) {
       if (name.includes(country)) { found.add(country); break }
     }
   }
-  return Array.from(found).slice(0, 5) // cap at 5 countries
+  return Array.from(found).slice(0, 5)
 }
 
 async function fetchGDELT(country, query) {
   const terms = query.split(' ').slice(0, 3).join(' ')
-  const q = encodeURIComponent(`${country} trade supply chain ${terms}`)
-  const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${q}&mode=artlist&maxrecords=6&format=json&timespan=7d&sort=DateDesc`
+  const q = encodeURIComponent(`${country} trade supply chain tariff ${terms}`)
+  const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${q}&mode=artlist&maxrecords=5&format=json&timespan=7d&sort=DateDesc`
   try {
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'AtlasTerminal/1.0 (supply-chain-intelligence; contact: anubhav.tewari@slate.auto)' },
+      headers: { 'User-Agent': 'AtlasTerminal/1.0 (supply-chain-intelligence)' },
       signal: AbortSignal.timeout(8000)
     })
     if (!res.ok) return []
     const data = await res.json()
-    return (data.articles || []).map(a => ({
+    return (data.articles || []).slice(0, 5).map(a => ({
       title: a.title,
       url: a.url,
       source: a.domain,
-      tone: a.tone
+      tone: typeof a.tone === 'number' ? Math.round(a.tone) : 0,
     }))
   } catch { return [] }
 }
@@ -62,7 +60,7 @@ async function fetchWorldBankStability(iso2) {
     const data = await res.json()
     const value = data?.[1]?.[0]?.value
     if (value === null || value === undefined) return null
-    // Normalize -2.5→2.5 to 0→100
+    // Normalize -2.5→2.5 to 0→100 stability
     const stability = Math.round(((value + 2.5) / 5) * 100)
     return { stability, raw: value }
   } catch { return null }
@@ -80,7 +78,7 @@ export async function POST(req) {
       return Response.json({ error: 'No countries found' }, { status: 400 })
     }
 
-    // Fetch GDELT news + World Bank scores in parallel
+    // Parallel fetch — both sources, all countries at once
     const [gdeltResults, wbResults] = await Promise.all([
       Promise.all(countries.map(c => fetchGDELT(c, query))),
       Promise.all(countries.map(c => {
@@ -89,52 +87,29 @@ export async function POST(req) {
       }))
     ])
 
-    // Build country scores keyed by ISO2
+    // Country stability scores keyed by ISO2
     const countryScores = {}
     countries.forEach((country, i) => {
       const iso2 = COUNTRY_ISO2[country]
       if (iso2 && wbResults[i]) countryScores[iso2] = wbResults[i]
     })
 
-    const allArticles = gdeltResults.flat()
-    const topArticles = allArticles.slice(0, 10)
+    // Deduplicate articles by title, pick most negative tone first (most impactful)
+    const seen = new Set()
+    const allArticles = gdeltResults.flat().filter(a => {
+      if (!a.title || seen.has(a.title)) return false
+      seen.add(a.title)
+      return true
+    }).sort((a, b) => a.tone - b.tone) // most negative (alarming) first
+
+    const topArticles = allArticles.slice(0, 6)
     const sourceCount = new Set(allArticles.map(a => a.source).filter(Boolean)).size
 
-    // Synthesize brief with Claude Haiku (fast + cheap)
-    const articleLines = topArticles.length > 0
-      ? topArticles.map(a => `• ${a.title} (${a.source || 'unknown'})`).join('\n')
-      : 'No recent trade news found for these countries.'
-
-    const countryContext = countries.map((c, i) => {
-      const wb = wbResults[i]
-      const iso2 = COUNTRY_ISO2[c]
-      return `${c.charAt(0).toUpperCase() + c.slice(1)} (${iso2 || '??'}): stability ${wb ? wb.stability + '/100' : 'N/A'}`
-    }).join(', ')
-
-    const msg = await client.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 280,
-      messages: [{
-        role: 'user',
-        content: `You are a supply chain intelligence analyst. Write a concise 3-sentence trade intelligence brief for a procurement professional sourcing "${query}".
-
-Country political stability scores (0=very unstable, 100=very stable, World Bank data):
-${countryContext}
-
-Recent trade news headlines (GDELT, last 7 days):
-${articleLines}
-
-Rules: 3 sentences maximum. No headers, no bullets, no markdown. Be specific — name countries, cite the stability scores where relevant, and flag the most actionable risk or opportunity. Plain prose only.`
-      }]
-    })
-
-    const brief = msg.content[0]?.text?.trim() || ''
-
     return Response.json({
-      brief,
+      articles: topArticles,
       countryScores,
-      sourceCount,
       articleCount: allArticles.length,
+      sourceCount,
       countries,
       timestamp: new Date().toISOString()
     })
