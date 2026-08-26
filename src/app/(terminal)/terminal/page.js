@@ -1078,7 +1078,7 @@ export default function Dashboard() {
             const textColor = s >= 60 ? 'text-emerald-400' : s >= 35 ? 'text-amber-400' : 'text-rose-400'
             const stabilityLabel = s >= 60 ? 'Stable' : s >= 35 ? 'Moderate' : 'High Risk'
             return (
-              <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="hubs">
+              <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="stability">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">

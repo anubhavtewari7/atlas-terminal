@@ -29,12 +29,12 @@ const STEPS = [
     content: 'Red markers = active supply chain risks tied to physical locations. Green markers = verified sourcing opportunities. Click any marker to load full hub intelligence into the Advisory HUD below. Drag to rotate, scroll to zoom, or use the pause button to freeze rotation.',
   },
   {
-    id: 'ports',
-    target: 'ports',
+    id: 'stability',
+    target: 'stability',
     position: 'right',
-    emoji: '⚓',
-    title: 'Logistics Throughput',
-    content: 'Real-time port congestion organised by seaboard — West Coast US, East Coast US, Asia Pacific, and West Mexico. Status indicators: Stable (green) = clear sailing, Moderate (amber) = add 1-2 day buffer, Watch (orange) = expect disruption. Click "View all" for the full 26-port global monitor.',
+    emoji: '🛡️',
+    title: 'Hub Stability Navigator',
+    content: 'Drill into any region of the world to assess port and manufacturing hub risk before committing to a sourcing route. Navigate continent → country → coast → individual hub. Each port shows a composite risk score (0–100) built from World Bank Political Stability data plus port-specific factors: labor disputes, congestion, hurricane/seismic exposure, customs reliability, and active geopolitical alerts.',
   },
   {
     id: 'risks',
@@ -57,8 +57,8 @@ const STEPS = [
     target: 'market',
     position: 'left',
     emoji: '📈',
-    title: 'Price Trend Index',
-    content: 'Indicative quarterly pricing trend for your mission\'s commodity category. Helps you time procurement decisions — spot seasonal dips before committing to long-term supply agreements or locking in volumes. Hover each bar for the exact index value.',
+    title: 'Metals & Materials',
+    content: 'Reference prices for key industrial commodities — Brent Crude, Copper, Aluminum, Nickel, Rare Earth, and HRC Steel — with directional sparklines showing recent trend shape. Use this to gauge raw material cost pressure on your supply chain and spot which inputs are running hot before locking in supplier contracts.',
   },
   {
     id: 'fx',
