@@ -1091,7 +1091,7 @@ export default function Dashboard() {
                         else if (level === 'region') setHubNav(n => ({ ...n, level:'country', country:null, region:null }))
                         else if (level === 'hubs') setHubNav(n => ({ ...n, level:'region', region:null }))
                       }}
-                      className="text-[8px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
+                      className="text-[10px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
                       ← back
                     </button>
                   )}
@@ -1100,9 +1100,9 @@ export default function Dashboard() {
                 {/* Breadcrumb */}
                 {level !== 'continent' && (
                   <div className="flex items-center gap-1 mb-3 flex-wrap">
-                    <span className="text-[8px] text-slate-600">{continent}</span>
-                    {country && <><span className="text-[8px] text-slate-700">›</span><span className="text-[8px] text-slate-500">{country}</span></>}
-                    {region  && <><span className="text-[8px] text-slate-700">›</span><span className="text-[8px] text-sky-500/70">{region}</span></>}
+                    <span className="text-[10px] text-slate-600">{continent}</span>
+                    {country && <><span className="text-[10px] text-slate-700">›</span><span className="text-[10px] text-slate-500">{country}</span></>}
+                    {region  && <><span className="text-[10px] text-slate-700">›</span><span className="text-[10px] text-sky-500/70">{region}</span></>}
                   </div>
                 )}
 
@@ -1110,15 +1110,15 @@ export default function Dashboard() {
                 {countryData && (
                   <div className="mb-3 p-2.5 bg-[#111] border border-white/5 rounded-lg">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[9px] font-bold text-slate-300 uppercase">{country}</span>
-                      <span className={`text-[9px] font-bold font-mono ${textColor}`}>◆ {s} / 100</span>
+                      <span className="text-[11px] font-bold text-slate-300 uppercase">{country}</span>
+                      <span className={`text-[11px] font-bold font-mono ${textColor}`}>◆ {s} / 100</span>
                     </div>
                     <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                       <div className={`h-full rounded-full ${barColor}`} style={{ width:`${s}%` }} />
                     </div>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-[8px] text-slate-600">WB Political Stability</span>
-                      <span className={`text-[8px] font-bold ${textColor}`}>{stabilityLabel}</span>
+                      <span className="text-[10px] text-slate-600">WB Political Stability</span>
+                      <span className={`text-[10px] font-bold ${textColor}`}>{stabilityLabel}</span>
                     </div>
                   </div>
                 )}
@@ -1130,8 +1130,8 @@ export default function Dashboard() {
                       <button key={c}
                         onClick={() => setHubNav({ level:'country', continent:c, country:null, region:null })}
                         className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
-                        <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
-                        <div className="text-[8px] text-slate-600 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
+                        <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
+                        <div className="text-[10px] text-slate-600 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
                       </button>
                     ))}
                   </div>
@@ -1148,8 +1148,8 @@ export default function Dashboard() {
                         <button key={cn}
                           onClick={() => setHubNav(n => ({ ...n, level:'region', country:cn }))}
                           className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
-                          <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight truncate">{cn}</div>
-                          {cs !== undefined && <div className={`text-[8px] font-bold mt-0.5 ${tc}`}>◆ {cs}</div>}
+                          <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight truncate">{cn}</div>
+                          {cs !== undefined && <div className={`text-[10px] font-bold mt-0.5 ${tc}`}>◆ {cs}</div>}
                         </button>
                       )
                     })}
@@ -1164,8 +1164,8 @@ export default function Dashboard() {
                         onClick={() => setHubNav(n => ({ ...n, level:'hubs', region:zone }))}
                         className="w-full bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group flex items-center justify-between">
                         <div>
-                          <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase">{zone}</div>
-                          <div className="text-[8px] text-slate-600 mt-0.5">{countryData.zones[zone].length} hubs</div>
+                          <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase">{zone}</div>
+                          <div className="text-[10px] text-slate-600 mt-0.5">{countryData.zones[zone].length} hubs</div>
                         </div>
                         <ChevronRight size={12} className="text-slate-700 group-hover:text-sky-400" />
                       </button>
@@ -1190,11 +1190,11 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-1.5">
                             <div className="flex items-center gap-1.5 min-w-0">
                               <Anchor size={9} className="text-sky-500/50 shrink-0" />
-                              <span className="text-[9px] font-bold text-slate-200 uppercase truncate">{hub}</span>
+                              <span className="text-[11px] font-bold text-slate-200 uppercase truncate">{hub}</span>
                             </div>
                             <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                              <span className={`text-[9px] font-bold font-mono ${pt}`}>◆ {ps}</span>
-                              <span className={`text-[7px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
+                              <span className={`text-[11px] font-bold font-mono ${pt}`}>◆ {ps}</span>
+                              <span className={`text-[9px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
                             </div>
                           </div>
                           <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mb-2">
@@ -1689,7 +1689,7 @@ export default function Dashboard() {
                         <BarChart3 size={11}/> Metals &amp; Materials
                         <div className="ml-auto flex items-center gap-1">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span className="text-[8px] text-slate-500 font-mono">{metalsTs}</span>
+                          <span className="text-[10px] text-slate-500 font-mono">{metalsTs}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-1.5">
@@ -2018,7 +2018,7 @@ export default function Dashboard() {
               </h2>
               <div className="flex items-center gap-1.5">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[8px] text-slate-500 font-mono">{metalsTs}</span>
+                <span className="text-[10px] text-slate-500 font-mono">{metalsTs}</span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
@@ -2039,12 +2039,12 @@ export default function Dashboard() {
                 return (
                   <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
                     <div className="flex items-start justify-between gap-1 mb-1">
-                      <div className="text-[8px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
+                      <div className="text-[10px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
                       <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
                         <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[9px] text-slate-600">{item.u}</span></div>
+                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[10px] text-slate-600">{item.u}</span></div>
                     <div className={`text-[10px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
                     </div>
@@ -2052,7 +2052,7 @@ export default function Dashboard() {
                 )
               })}
             </div>
-            <p className="text-[8px] text-slate-700 mt-2">Indicative reference prices — verify with exchange terminal.</p>
+            <p className="text-[9px] text-slate-700 mt-2">Indicative reference prices — verify with exchange terminal.</p>
           </div>
 
           {/* Live FX Rates */}
@@ -2075,7 +2075,7 @@ export default function Dashboard() {
                   <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
                     <div>
                       <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
-                      <div className="text-[9px] text-slate-600 mt-0.5 leading-tight">
+                      <div className="text-[10px] text-slate-600 mt-0.5 leading-tight">
                         {info.impact?.split(' ').slice(0, 3).join(' ')}
                       </div>
                     </div>
@@ -2132,7 +2132,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-1 flex-wrap shrink-0">
               {missionKeywords.length > 0 && (
                 <button onClick={() => setNewsFilter('mission')}
-                  className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all flex items-center gap-1 ${
+                  className={`px-2 py-0.5 text-[10px] font-bold rounded transition-all flex items-center gap-1 ${
                     newsFilter === 'mission'
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                       : 'text-slate-600 hover:text-emerald-400 border border-white/5'
@@ -2142,7 +2142,7 @@ export default function Dashboard() {
               )}
               {[['all','All'],['china','🇨🇳'],['eu','🇪🇺'],['usa','🇺🇸'],['latam','🌎'],['india','🇮🇳']].map(([key, label]) => (
                 <button key={key} onClick={() => setNewsFilter(key)}
-                  className={`px-2 py-0.5 text-[9px] font-bold rounded transition-all ${
+                  className={`px-2 py-0.5 text-[10px] font-bold rounded transition-all ${
                     newsFilter === key
                       ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
                       : 'text-slate-700 hover:text-slate-400'
@@ -2150,7 +2150,7 @@ export default function Dashboard() {
                   {label}
                 </button>
               ))}
-              <span className="ml-auto text-[9px] text-slate-700 font-mono">{filteredNews.length}</span>
+              <span className="ml-auto text-[10px] text-slate-700 font-mono">{filteredNews.length}</span>
             </div>
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
@@ -2160,14 +2160,14 @@ export default function Dashboard() {
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
                   className="block border-b border-white/5 pb-3 last:border-0 group">
-                  <div className="text-[8px] text-slate-600 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
+                  <div className="text-[10px] text-slate-600 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
                     <span className="flex items-center gap-1">{item._mission && <span className="text-emerald-400">⚡</span>}{item.pubDate}</span>
                     <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 text-sky-400 transition-all" />
                   </div>
-                  <h3 className="text-[11px] font-bold leading-snug mb-0.5 group-hover:text-sky-400 transition-all uppercase tracking-tight text-slate-200">
+                  <h3 className="text-xs font-bold leading-snug mb-0.5 group-hover:text-sky-400 transition-all uppercase tracking-tight text-slate-200">
                     {item.title}
                   </h3>
-                  <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed font-sans">{item.description}</p>
+                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed font-sans">{item.description}</p>
                 </a>
               ))}
             </div>
