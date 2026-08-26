@@ -178,6 +178,58 @@ const severityStyle = (s) => {
   return 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'
 }
 
+// ── Hub Stability Navigator data ─────────────────────────────────────────────
+const HUB_CONTINENTS = ['Asia','North America','South America','Europe','Africa','Oceania']
+const HUB_COUNTRIES = {
+  'Asia':          ['China','Japan','South Korea','Taiwan','Vietnam','India','Singapore','Malaysia','Thailand','Indonesia','Bangladesh','Philippines'],
+  'North America': ['USA','Canada','Mexico'],
+  'South America': ['Brazil','Chile','Colombia','Peru','Argentina'],
+  'Europe':        ['Germany','France','United Kingdom','Netherlands','Belgium','Spain','Italy','Poland','Czech Republic','Hungary','Romania','Turkey'],
+  'Africa':        ['South Africa','Nigeria','Ghana','Morocco','Egypt','Ethiopia'],
+  'Oceania':       ['Australia'],
+}
+const HUB_REGIONS = {
+  'China':          { iso2:'CN', score:42, zones:{ 'South Coast':['Shenzhen','Guangzhou','Hong Kong'], 'East Coast':['Shanghai','Ningbo','Suzhou'], 'North':['Tianjin','Dalian','Qingdao'] } },
+  'Japan':          { iso2:'JP', score:70, zones:{ 'Tokyo Bay':['Tokyo / Yokohama','Chiba'], 'Nagoya / Aichi':['Nagoya','Aichi'], 'Kansai':['Osaka','Kobe'] } },
+  'South Korea':    { iso2:'KR', score:57, zones:{ 'Southeast':['Ulsan','Busan'], 'West Coast':['Incheon','Pyeongtaek'], 'Capital':['Seoul'] } },
+  'Taiwan':         { iso2:'TW', score:64, zones:{ 'North':['Taipei / Keelung','Taoyuan','Hsinchu'], 'Central':['Taichung'], 'South':['Kaohsiung','Tainan'] } },
+  'Vietnam':        { iso2:'VN', score:50, zones:{ 'South':['Ho Chi Minh City','Binh Duong','Dong Nai'], 'North':['Hanoi','Hai Phong'] } },
+  'India':          { iso2:'IN', score:28, zones:{ 'South':['Bangalore','Chennai'], 'West Coast':['Mumbai / JNPT','Pune','Mundra'], 'North':['Delhi / Noida','Jaipur'] } },
+  'Singapore':      { iso2:'SG', score:82, zones:{ 'City-State':['Port of Singapore','Jurong Island','Changi'] } },
+  'Malaysia':       { iso2:'MY', score:58, zones:{ 'West Coast':['Port Klang / Kuala Lumpur','Penang','Shah Alam'], 'South':['Johor Bahru / Tanjung Pelepas'] } },
+  'Thailand':       { iso2:'TH', score:42, zones:{ 'Central':['Bangkok / Laem Chabang'], 'Eastern Seaboard':['Rayong','Chonburi','Amata City'] } },
+  'Indonesia':      { iso2:'ID', score:45, zones:{ 'Java':['Jakarta / Tanjung Priok','Surabaya','Bekasi'], 'Sumatra':['Batam','Medan'] } },
+  'Bangladesh':     { iso2:'BD', score:32, zones:{ 'South Coast':['Chattogram / Chittagong','Mongla'], 'Capital':['Dhaka','Narayanganj'] } },
+  'Philippines':    { iso2:'PH', score:34, zones:{ 'Luzon':['Manila / Port of Manila','Subic Bay','Clark'], 'Visayas':['Cebu'] } },
+  'USA':            { iso2:'US', score:45, zones:{ 'East Coast':['New York / Newark','Baltimore','Savannah','Charleston','Miami','Philadelphia'], 'West Coast':['Los Angeles / Long Beach','Seattle / Tacoma','Oakland / San Francisco'], 'Gulf Coast':['Houston','New Orleans','Tampa'], 'Great Lakes':['Detroit','Chicago','Cleveland','Pittsburgh'] } },
+  'Canada':         { iso2:'CA', score:68, zones:{ 'West Coast':['Vancouver','Prince Rupert'], 'East Coast':['Halifax','Montreal / St. Lawrence'], 'Central':['Toronto','Winnipeg'] } },
+  'Mexico':         { iso2:'MX', score:34, zones:{ 'North (Nearshore)':['Monterrey','Juárez','Tijuana'], 'Pacific Coast':['Manzanillo','Lázaro Cárdenas'], 'Gulf Coast':['Veracruz','Altamira'] } },
+  'Brazil':         { iso2:'BR', score:48, zones:{ 'Southeast':['São Paulo / Santos','Rio de Janeiro','Campinas'], 'South':['Paranaguá','Itajaí','Porto Alegre'], 'North':['Manaus','Belém'] } },
+  'Chile':          { iso2:'CL', score:60, zones:{ 'Central':['Santiago / Valparaíso','San Antonio'], 'North':['Antofagasta','Iquique'] } },
+  'Colombia':       { iso2:'CO', score:22, zones:{ 'Caribbean Coast':['Cartagena','Barranquilla'], 'Pacific Coast':['Buenaventura'], 'Capital':['Bogotá'] } },
+  'Peru':           { iso2:'PE', score:28, zones:{ 'West Coast':['Lima / Callao','Paita'] } },
+  'Argentina':      { iso2:'AR', score:35, zones:{ 'East Coast':['Buenos Aires / Exolgan','Rosario','Bahía Blanca'] } },
+  'Germany':        { iso2:'DE', score:67, zones:{ 'North (Ports)':['Hamburg','Bremen / Bremerhaven'], 'Central':['Frankfurt am Main','Cologne / Duisburg'], 'South':['Munich / Bavaria','Stuttgart','Nuremberg'] } },
+  'France':         { iso2:'FR', score:41, zones:{ 'North':['Paris','Le Havre','Dunkirk'], 'South':['Lyon','Marseille','Bordeaux'] } },
+  'United Kingdom': { iso2:'GB', score:60, zones:{ 'South':['London / Felixstowe','Southampton','Dover'], 'Midlands':['Birmingham','Coventry'], 'North':['Liverpool','Glasgow','Manchester'] } },
+  'Netherlands':    { iso2:'NL', score:67, zones:{ 'West (Port)':['Rotterdam / Europoort','Amsterdam','Moerdijk'] } },
+  'Belgium':        { iso2:'BE', score:65, zones:{ 'North':['Antwerp','Ghent / Zeebrugge'] } },
+  'Spain':          { iso2:'ES', score:50, zones:{ 'Northeast':['Barcelona','Tarragona'], 'South':['Algeciras','Valencia','Cartagena'] } },
+  'Italy':          { iso2:'IT', score:62, zones:{ 'North':['Turin','Milan / Genoa'], 'South':['Naples','Gioia Tauro','Salerno'] } },
+  'Poland':         { iso2:'PL', score:62, zones:{ 'Central':['Warsaw','Łódź','Katowice'], 'Baltic Coast':['Gdańsk / Gdynia'] } },
+  'Czech Republic': { iso2:'CZ', score:72, zones:{ 'Central':['Prague / Mladá Boleslav','Brno','Plzeň'] } },
+  'Hungary':        { iso2:'HU', score:55, zones:{ 'Central':['Budapest','Győr','Miskolc'] } },
+  'Romania':        { iso2:'RO', score:42, zones:{ 'Black Sea Coast':['Constanța'], 'Central':['Bucharest','Cluj-Napoca','Brașov'] } },
+  'Turkey':         { iso2:'TR', score:20, zones:{ 'Northwest':['Istanbul','Bursa','Kocaeli'], 'West':['Izmir / Aliağa'], 'South':['Mersin','Adana'] } },
+  'South Africa':   { iso2:'ZA', score:33, zones:{ 'West Coast':['Cape Town / Saldanha Bay'], 'East Coast':['Durban / Richards Bay'], 'Interior':['Johannesburg','Pretoria'] } },
+  'Nigeria':        { iso2:'NG', score:10, zones:{ 'Coast':['Lagos / Apapa','Port Harcourt'] } },
+  'Ghana':          { iso2:'GH', score:52, zones:{ 'Coast':['Accra / Tema','Takoradi'] } },
+  'Morocco':        { iso2:'MA', score:37, zones:{ 'North':['Tanger Med','Casablanca'] } },
+  'Egypt':          { iso2:'EG', score:25, zones:{ 'North':['Alexandria','Port Said / Suez Canal'], 'Interior':['Cairo / 10th of Ramadan'] } },
+  'Ethiopia':       { iso2:'ET', score:12, zones:{ 'Interior':['Addis Ababa (Dry Port)','Hawassa Industrial Park'] } },
+  'Australia':      { iso2:'AU', score:85, zones:{ 'East Coast':['Sydney / Port Botany','Melbourne','Brisbane'], 'West Coast':['Fremantle / Perth'], 'North':['Darwin'] } },
+}
+
 export default function Dashboard() {
   const [profile, setProfile] = useState({
     industry: 'Universal Intelligence Mode',
@@ -220,6 +272,7 @@ export default function Dashboard() {
   const [intelBrief, setIntelBrief] = useState(null)
   const [intelLoading, setIntelLoading] = useState(false)
   const [metalsTs, setMetalsTs] = useState(() => new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
+  const [hubNav, setHubNav] = useState({ level: 'continent', continent: null, country: null, region: null })
 
   // Map hub name string → ISO2 for stability badge lookup
   function getHubISO2(hubName) {
@@ -886,56 +939,125 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Hub Stability Index */}
-          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="hubs">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                <Shield size={14} /> Hub Stability Index
-              </h2>
-              <span className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">WB 2023</span>
-            </div>
-            <div className="space-y-1.5">
-              {[
-                { hub:'Singapore',          iso2:'SG', score:82, region:'SEA' },
-                { hub:'Munich, Germany',    iso2:'DE', score:67, region:'EU'  },
-                { hub:'Taipei, Taiwan',     iso2:'TW', score:64, region:'APAC'},
-                { hub:'Seoul, S. Korea',    iso2:'KR', score:57, region:'APAC'},
-                { hub:'Ho Chi Minh, VN',    iso2:'VN', score:50, region:'SEA' },
-                { hub:'Detroit, USA',       iso2:'US', score:45, region:'NA'  },
-                { hub:'Shanghai, China',    iso2:'CN', score:42, region:'APAC'},
-                { hub:'Monterrey, Mexico',  iso2:'MX', score:34, region:'NA'  },
-                { hub:'Bangalore, India',   iso2:'IN', score:28, region:'SA'  },
-                { hub:'Istanbul, Turkey',   iso2:'TR', score:20, region:'EU'  },
-              ].map((item, i) => {
-                const isActive = opportunities.some(o => getHubISO2(o.hub) === item.iso2)
-                const s = item.score
-                const barColor = s >= 60 ? 'bg-emerald-500' : s >= 35 ? 'bg-amber-500' : 'bg-rose-500'
-                const textColor = s >= 60 ? 'text-emerald-400' : s >= 35 ? 'text-amber-400' : 'text-rose-400'
-                const label = s >= 60 ? 'Stable' : s >= 35 ? 'Moderate' : 'High Risk'
-                return (
-                  <div key={i} className={`border rounded-lg p-2.5 transition-all ${isActive ? 'bg-sky-500/10 border-sky-500/30' : 'bg-[#111] border-white/5'}`}>
+          {/* Hub Stability Navigator */}
+          {(() => {
+            const { level, continent, country, region } = hubNav
+            const countryData = country ? HUB_REGIONS[country] : null
+            const s = countryData?.score
+            const barColor = s >= 60 ? 'bg-emerald-500' : s >= 35 ? 'bg-amber-500' : 'bg-rose-500'
+            const textColor = s >= 60 ? 'text-emerald-400' : s >= 35 ? 'text-amber-400' : 'text-rose-400'
+            const stabilityLabel = s >= 60 ? 'Stable' : s >= 35 ? 'Moderate' : 'High Risk'
+            return (
+              <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="hubs">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-3">
+                  <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                    <Shield size={14} /> Hub Stability
+                  </h2>
+                  {level !== 'continent' && (
+                    <button
+                      onClick={() => {
+                        if (level === 'country') setHubNav({ level:'continent', continent:null, country:null, region:null })
+                        else if (level === 'region') setHubNav(n => ({ ...n, level:'country', country:null, region:null }))
+                        else if (level === 'hubs') setHubNav(n => ({ ...n, level:'region', region:null }))
+                      }}
+                      className="text-[8px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
+                      ← back
+                    </button>
+                  )}
+                </div>
+
+                {/* Breadcrumb */}
+                {level !== 'continent' && (
+                  <div className="flex items-center gap-1 mb-3 flex-wrap">
+                    <span className="text-[8px] text-slate-600">{continent}</span>
+                    {country && <><span className="text-[8px] text-slate-700">›</span><span className="text-[8px] text-slate-500">{country}</span></>}
+                    {region  && <><span className="text-[8px] text-slate-700">›</span><span className="text-[8px] text-sky-500/70">{region}</span></>}
+                  </div>
+                )}
+
+                {/* Country stability bar (shown once country selected) */}
+                {countryData && (
+                  <div className="mb-3 p-2.5 bg-[#111] border border-white/5 rounded-lg">
                     <div className="flex items-center justify-between mb-1.5">
-                      <div className="flex items-center gap-1.5 min-w-0">
-                        {isActive && <span className="text-[7px] bg-sky-500 text-black font-bold px-1 py-0.5 rounded shrink-0">SCAN</span>}
-                        <span className="text-[9px] font-bold text-slate-300 uppercase truncate">{item.hub}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
-                        <span className="text-[7px] text-slate-700 font-mono">{item.region}</span>
-                        <span className={`text-[9px] font-bold font-mono ${textColor}`}>◆ {s}</span>
-                      </div>
+                      <span className="text-[9px] font-bold text-slate-300 uppercase">{country}</span>
+                      <span className={`text-[9px] font-bold font-mono ${textColor}`}>◆ {s} / 100</span>
                     </div>
-                    <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-                      <div className={`h-full rounded-full ${barColor} transition-all`} style={{ width:`${s}%` }} />
+                    <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                      <div className={`h-full rounded-full ${barColor}`} style={{ width:`${s}%` }} />
                     </div>
                     <div className="flex items-center justify-between mt-1">
                       <span className="text-[8px] text-slate-600">WB Political Stability</span>
-                      <span className={`text-[8px] font-bold ${textColor}`}>{label}</span>
+                      <span className={`text-[8px] font-bold ${textColor}`}>{stabilityLabel}</span>
                     </div>
                   </div>
-                )
-              })}
-            </div>
-          </div>
+                )}
+
+                {/* Level: Continents */}
+                {level === 'continent' && (
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {HUB_CONTINENTS.map(c => (
+                      <button key={c}
+                        onClick={() => setHubNav({ level:'country', continent:c, country:null, region:null })}
+                        className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
+                        <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
+                        <div className="text-[8px] text-slate-600 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Level: Countries */}
+                {level === 'country' && (
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {(HUB_COUNTRIES[continent] || []).map(cn => {
+                      const d = HUB_REGIONS[cn]
+                      const cs = d?.score
+                      const tc = cs >= 60 ? 'text-emerald-400' : cs >= 35 ? 'text-amber-400' : 'text-rose-400'
+                      return (
+                        <button key={cn}
+                          onClick={() => setHubNav(n => ({ ...n, level:'region', country:cn }))}
+                          className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
+                          <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight truncate">{cn}</div>
+                          {cs !== undefined && <div className={`text-[8px] font-bold mt-0.5 ${tc}`}>◆ {cs}</div>}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+
+                {/* Level: Regions/Coasts */}
+                {level === 'region' && countryData && (
+                  <div className="space-y-1.5">
+                    {Object.keys(countryData.zones).map(zone => (
+                      <button key={zone}
+                        onClick={() => setHubNav(n => ({ ...n, level:'hubs', region:zone }))}
+                        className="w-full bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group flex items-center justify-between">
+                        <div>
+                          <div className="text-[9px] font-bold text-slate-300 group-hover:text-sky-400 uppercase">{zone}</div>
+                          <div className="text-[8px] text-slate-600 mt-0.5">{countryData.zones[zone].length} hubs</div>
+                        </div>
+                        <ChevronRight size={12} className="text-slate-700 group-hover:text-sky-400" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Level: Hubs */}
+                {level === 'hubs' && countryData && region && (
+                  <div className="space-y-1.5">
+                    {(countryData.zones[region] || []).map((hub, i) => (
+                      <div key={i} className="bg-[#111] border border-white/5 rounded-lg p-2.5 flex items-center gap-2">
+                        <Anchor size={10} className="text-sky-500/60 shrink-0" />
+                        <span className="text-[10px] font-bold text-slate-200 uppercase">{hub}</span>
+                      </div>
+                    ))}
+                    <p className="text-[8px] text-slate-700 mt-1 text-center">WB stability score applies to {country} nationally</p>
+                  </div>
+                )}
+              </div>
+            )
+          })()}
 
           {/* Risk Panels */}
           <div className="flex flex-col gap-3">
