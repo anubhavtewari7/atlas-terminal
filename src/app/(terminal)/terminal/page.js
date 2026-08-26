@@ -470,6 +470,16 @@ export default function Dashboard() {
       if (q) {
         setSearchQuery(q)
         setTimeout(() => handleSearch(null, q), 600)
+      } else {
+        // First-time visitor with no saved missions → auto-run a demo scan
+        // so the globe is alive and populated before the tour even finishes
+        try {
+          const saved = localStorage.getItem('atlas_missions')
+          const isFirstVisit = !saved || saved === '[]' || JSON.parse(saved).length === 0
+          if (isFirstVisit) {
+            setTimeout(() => handleSearch(null, 'lithium-ion batteries for EV assembly'), 1500)
+          }
+        } catch {}
       }
     }
     return () => { clearInterval(interval); clearInterval(metalsInterval) }
