@@ -81,8 +81,16 @@ const STEPS = [
     target: 'tools',
     position: 'top',
     emoji: '🔧',
-    title: '8-Tool Procurement Suite',
-    content: 'Everything a procurement team needs in one terminal: HS Code Lookup (find the right tariff classification), Mission Archive (replay past scans), Supplier Comparison (side-by-side hub analysis), Total Landed Cost Calculator, Incoterms Guide, Trade Risk Score, Global Port Monitor (26 ports), and Compliance Checklist.',
+    title: '12-Tool Procurement Suite',
+    content: 'Everything a procurement team needs in one terminal: HS Code Lookup, Mission Archive, Supplier Comparison, Total Landed Cost Calculator, Incoterms Guide, Trade Risk Score, Global Port Monitor (26 ports), Compliance Checklist, BOM Analyzer, Sanctions Checker, Ocean Freight Spot Rates, and FTA Eligibility — all integrated, no tab-switching required.',
+  },
+  {
+    id: 'new-tools',
+    target: 'new-tools',
+    position: 'top',
+    emoji: '⚡',
+    title: 'New: Advanced Intelligence Tools',
+    content: 'Four powerful new tools: BOM Analyzer — paste your bill of materials and instantly see tariff risk, sourcing hub, and ESG flags per line item. Sanctions Checker — screen any entity or country against OFAC, EU, and UN lists. Ocean Freight Rates — live spot rates for 10+ global corridors with carrier breakdowns. FTA Checker — select origin and destination to see applicable free trade agreements and duty savings.',
   },
   {
     id: 'pdf',

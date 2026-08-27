@@ -10,6 +10,10 @@ import TradeRiskScore from '@/components/TradeRiskScore'
 import PortStatus from '@/components/PortStatus'
 import ComplianceChecklist from '@/components/ComplianceChecklist'
 import TLCCalculator from '@/components/TLCCalculator'
+import BomAnalyzer from '@/components/BomAnalyzer'
+import SanctionsChecker from '@/components/SanctionsChecker'
+import OceanFreightRates from '@/components/OceanFreightRates'
+import FtaChecker from '@/components/FtaChecker'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
 import {
@@ -395,6 +399,10 @@ export default function Dashboard() {
   const [showPorts, setShowPorts] = useState(false)
   const [showCompliance, setShowCompliance] = useState(false)
   const [showTLC, setShowTLC] = useState(false)
+  const [showBom, setShowBom] = useState(false)
+  const [showSanctions, setShowSanctions] = useState(false)
+  const [showOcean, setShowOcean] = useState(false)
+  const [showFta, setShowFta] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
@@ -969,6 +977,10 @@ export default function Dashboard() {
           {showPorts     && <PortStatus onClose={() => setShowPorts(false)} />}
           {showCompliance && <ComplianceChecklist onClose={() => setShowCompliance(false)} />}
           {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
+          {showBom       && <BomAnalyzer onClose={() => setShowBom(false)} />}
+          {showSanctions && <SanctionsChecker onClose={() => setShowSanctions(false)} />}
+          {showOcean     && <OceanFreightRates onClose={() => setShowOcean(false)} />}
+          {showFta       && <FtaChecker onClose={() => setShowFta(false)} />}
         </AnimatePresence>
 
         {/* ── GUIDED TOUR ── */}
@@ -1617,6 +1629,24 @@ export default function Dashboard() {
                     </button>
                   ))}
                 </div>
+                {/* Row 3 — New Features */}
+                <div className="flex items-center gap-2 overflow-x-auto lg:flex-wrap lg:justify-end pb-0.5 no-scrollbar" data-tour="new-tools">
+                  {[
+                    { icon:<Factory size={12}/>,  label:'BOM Analyzer',   action:()=>setShowBom(true),       color:'violet' },
+                    { icon:<Shield size={12}/>,   label:'Sanctions',      action:()=>setShowSanctions(true), color:'rose' },
+                    { icon:<Ship size={12}/>,     label:'Ocean Rates',    action:()=>setShowOcean(true),     color:'sky' },
+                    { icon:<Leaf size={12}/>,     label:'FTA Check',      action:()=>setShowFta(true),       color:'emerald' },
+                  ].map((t, i) => (
+                    <button key={i} onClick={t.action}
+                      className={`shrink-0 flex items-center gap-1.5 px-3 h-9 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all
+                        ${t.color==='violet'  ? 'border-violet-500/30 text-violet-400 hover:bg-violet-500/10' :
+                          t.color==='rose'    ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10' :
+                          t.color==='emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' :
+                          'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
+                      {t.icon}{t.label}
+                    </button>
+                  ))}
+                </div>
                 {/* Primary CTAs */}
                 <div className="flex items-center gap-2 justify-end" data-tour="pdf">
                   <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
@@ -1988,6 +2018,10 @@ export default function Dashboard() {
                     { label: 'Compliance',       icon: <CheckCircle size={15}/>, color: 'emerald', action: () => setShowCompliance(true),  needsScan: false },
                     { label: 'Compare Regions',  icon: <Scale size={15}/>,       color: 'purple',  action: () => setShowComparison(true),  needsScan: true,  disabled: opportunities.length < 2 },
                     { label: 'Mission Archive',  icon: <History size={15}/>,     color: 'slate',   action: () => setShowHistory(true),     needsScan: false },
+                    { label: 'BOM Analyzer',     icon: <Factory size={15}/>,     color: 'violet',  action: () => setShowBom(true),         needsScan: false },
+                    { label: 'Sanctions Check',  icon: <Shield size={15}/>,      color: 'rose',    action: () => setShowSanctions(true),   needsScan: false },
+                    { label: 'Ocean Rates',      icon: <Anchor size={15}/>,      color: 'sky',     action: () => setShowOcean(true),       needsScan: false },
+                    { label: 'FTA Eligibility',  icon: <Leaf size={15}/>,        color: 'emerald', action: () => setShowFta(true),         needsScan: false },
                   ].map((t, i) => (
                     <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
                       className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all relative ${
@@ -1998,6 +2032,7 @@ export default function Dashboard() {
                             t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 active:bg-sky-500/20' :
                             t.color === 'amber'   ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 active:bg-amber-500/20' :
                             t.color === 'purple'  ? 'bg-purple-500/5 border-purple-500/20 text-purple-400 active:bg-purple-500/20' :
+                            t.color === 'violet'  ? 'bg-violet-500/5 border-violet-500/20 text-violet-400 active:bg-violet-500/20' :
                             'bg-white/5 border-white/10 text-slate-400 active:bg-white/10'
                       }`}>
                       {t.icon}
