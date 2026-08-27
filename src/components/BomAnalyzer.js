@@ -5,6 +5,84 @@ import { motion } from 'framer-motion'
 
 // ── Category risk profiles ──────────────────────────────────────────────────
 const CATEGORY_PROFILES = {
+  coatings: {
+    label: 'Paints / Coatings / Surface Treatment',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN-origin paints/coatings: Section 301 (25%). EU REACH VOC limits apply.',
+    primaryHub: 'Rhine-Ruhr, Germany / Ohio, USA (PPG, Sherwin-Williams)',
+    altHub: 'Malaysia / South Korea / Mexico (USMCA)',
+    hts: '3208.90',
+    mfnRate: '3.7%',
+    tariffNote: 'US-origin: no tariff. CN-origin: 3.7% MFN + 25% Sec 301. EU: REACH + Ecolabel.',
+    esg: 'VOC emissions regulation (EPA Method 24, EU Directive 2004/42/EC). PFAS-free formulations mandated in some jurisdictions.',
+    concentration: 'LOW-MEDIUM — global majors (PPG, Axalta, AkzoNobel, Sherwin-Williams) and many regional suppliers',
+    color: 'amber',
+  },
+  fasteners: {
+    label: 'Fasteners / Hardware / Stampings',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN steel fasteners: Sec 232 (25%) + anti-dumping duties. Major AD/CVD cases active.',
+    primaryHub: 'Jiaxing/Wenzhou, China / Illinois, USA / Hagen, Germany',
+    altHub: 'Taiwan / Vietnam / South Korea',
+    hts: '7318.15',
+    mfnRate: '6.2%',
+    tariffNote: 'CN-origin bolts/screws: 6.2% MFN + 25% Sec 232 + AD margins 50-300%. Taiwan: 6.2% MFN.',
+    esg: 'Zinc plating: hazardous waste management. Cadmium plating banned in EU (REACH Annex XVII).',
+    concentration: 'MEDIUM — China dominant for commodity fasteners; significant anti-dumping exposure',
+    color: 'amber',
+  },
+  electrical: {
+    label: 'Electrical / Wiring / Harness',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Wire harnesses from CN: 25% Sec 301. Copper wire: commodity price volatility.',
+    primaryHub: 'Juarez/Chihuahua, Mexico (USMCA) / Ukraine (disrupted) / Morocco',
+    altHub: 'Romania / Serbia / Philippines',
+    hts: '8544.30',
+    mfnRate: '2.6%',
+    tariffNote: 'MX harnesses (USMCA): 0%. CN-origin: 2.6% + 25% Sec 301. Monitor copper surcharges.',
+    esg: 'RoHS compliance mandatory (restricted lead, cadmium, Cr6+). Conflict mineral (3TG) disclosure for copper.',
+    concentration: 'HIGH — MX nearshore dominant post-Russia/Ukraine disruption; Ukraine was 20% of global harness supply',
+    color: 'rose',
+  },
+  foam: {
+    label: 'Foam / Seating / Acoustic Materials',
+    riskLevel: 'LOW',
+    tariffRisk: 'Low MFN duties. MDI/TDI isocyanate feedstock subject to market volatility.',
+    primaryHub: 'US Midwest / Picardy, France / Shandong, China',
+    altHub: 'Poland / Czech Republic / Mexico',
+    hts: '3921.19',
+    mfnRate: '4.2%',
+    tariffNote: 'CN-origin foam: 4.2% + possible 301. EU: REACH SVHC applies to isocyanate residues.',
+    esg: 'CFC/HFC blowing agents phased out under Montreal Protocol. Bio-based polyol content rising.',
+    concentration: 'LOW — regional manufacturing dominant; raw material (MDI) more concentrated',
+    color: 'emerald',
+  },
+  glass: {
+    label: 'Glass / Glazing',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN flat glass subject to anti-dumping duties. Windshields: FMVSS/ECE R43 certification.',
+    primaryHub: 'Ohio, USA (Pilkington/NSG) / Stolberg, Germany (AGC / Saint-Gobain)',
+    altHub: 'Rayong, Thailand / Changzhou, China',
+    hts: '7007.21',
+    mfnRate: '5.0%',
+    tariffNote: 'Safety glass MFN 5%. CN flat glass: AD duties 58-124% in some categories. EU: energy-intensive industry, carbon border adjustment.',
+    esg: 'Energy-intensive manufacturing. Float glass CO2 ~0.5 t/t. Recycled cullet use reduces emissions.',
+    concentration: 'MEDIUM — float glass oligopoly (NSG/Pilkington, AGC, Saint-Gobain, Guardian)',
+    color: 'amber',
+  },
+  castings: {
+    label: 'Metal Parts / Castings / Forgings',
+    riskLevel: 'HIGH',
+    tariffRisk: 'CN-origin castings: Section 232 (25%) steel/aluminum + AD/CVD on specific parts.',
+    primaryHub: 'Jiangsu/Zhejiang, China / Monterrey, Mexico / Pune, India',
+    altHub: 'Poland / Czech Republic / South Korea',
+    hts: '8484.10',
+    mfnRate: '3.7%',
+    tariffNote: 'CN steel/Al castings: 25% Sec 232 + MFN. MX (USMCA): 0% with RVC. India: MFN 3.7%.',
+    esg: 'Sand casting foundry emissions: silica dust (OSHA PEL), CO2. Die casting uses recycled Al.',
+    concentration: 'HIGH — China dominant for precision castings; nearshoring to Mexico growing',
+    color: 'rose',
+  },
   electronics: {
     label: 'Electronics / Semiconductors',
     riskLevel: 'HIGH',
@@ -153,18 +231,61 @@ const CATEGORY_PROFILES = {
 function categorize(item) {
   const q = item.toLowerCase()
   const match = (kws) => kws.some(kw => q.includes(kw))
-  if (match(['chip','semiconductor','pcb','wafer','display','oled','processor','memory','microchip','circuit','nand','dram','fpga','mcu','ic ','integrated circuit','mosfet','transistor','capacitor','resistor','inductor','connector','sensor ic'])) return 'electronics'
-  if (match(['magnet','neodymium','ndfeb','ferrite magnet','actuator','solenoid','bearing','fastener','o-ring','gear','sintered'])) return 'industrial'
-  if (match(['lithium','cobalt','titanium','tungsten','rare earth','steel coil','aluminum ingot','copper cathode','nickel','manganese','molybdenum','steel billet','aluminum sheet','copper wire'])) return 'metals'
-  if (match(['automotive','brake','visor','headliner','dashboard','bumper','chassis','powertrain','tier-1','car seat','auto seat','door trim','interior trim','airbag','windshield','tire','tyre','exhaust','transmission','wheel','engine part'])) return 'automotive'
-  if (match(['polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','peek','pom','polycarbonate','polyurethane','abs plastic','abs housing','abs resin','plastic part','plastic housing','plastic component','injection mold','injection-mold','injection molded','injection-molded','blow mold','rubber','silicone','gasket','fiberglass','composite','epoxy','plastic film','thermoplastic','elastomer','overmold','resin'])) return 'plastics'
-  if (match(['adhesive','glue','sealant','coating','paint','primer','varnish','lubricant','grease','solvent','chemical compound','surfactant','specialty chemical'])) return 'chemicals'
-  if (match(['beef','meat','wheat','soybean','food','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','agricultural','agri','crop'])) return 'agriculture'
-  if (match(['api ','pharmaceutical','drug','medical device','surgical','syringe','catheter','stent','implant','diagnostic','reagent','glove','mask','sterile','gmp','pharma'])) return 'medical'
-  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn','knit','woven'])) return 'textiles'
-  if (match(['box','packaging','carton','label','pouch','blister','clamshell','corrugated','bottle','jar','container packaging'])) return 'packaging'
-  if (match(['pump','valve','compressor','cnc','machine tool','robot','conveyor','heat exchanger','gearbox','servo','vfd','machinery','equipment','press','lathe'])) return 'machinery'
-  if (match(['steel','aluminum','copper','iron','zinc','mineral','mining','metal','alloy'])) return 'metals'
+
+  // Paints / Coatings / Surface Treatments (check before chemicals)
+  if (match(['paint','powder coat','powder-coat','e-coat','electrophoretic','primer coat','topcoat','basecoat','clearcoat','lacquer','varnish','anodiz','anodise','electroplat','zinc plat','chrome plat','galvaniz','galvanis','phosphat','conversion coat','pvd coating','surface treatment','surface finish','cathodic dip','epoxy coat','polyurethane coat','anti-corrosion coat','enamel coat','ceramic coat','thermal spray','hard anodize'])) return 'coatings'
+
+  // Fasteners / Hardware / Stampings (check before metals)
+  if (match(['bolt','screw','nut ','washer','rivet','clip','clamp','bracket','spring','hinge','latch','lock ','pin ','cotter','stud ','threaded rod','hex bolt','socket head','torx','self-tapping','wood screw','machine screw','sheet metal screw','stamping','stamped part','metal stamp','progressive die','blanking','punching','metal clip','retainer clip','wire form','snap ring','circlip','e-ring','c-ring'])) return 'fasteners'
+
+  // Electrical / Wiring / Harness (check before electronics)
+  if (match(['wire harness','wiring harness','cable assembly','wire assembly','loom','electrical cable','power cable','signal cable','coaxial cable','flat cable','ribbon cable','terminal block','wire terminal','crimp terminal','connector housing','relay','fuse','circuit breaker','switch assembly','bus bar','bus-bar','junction box','grommet','electrical','wiring'])) return 'electrical'
+
+  // Foam / Seating / Acoustic
+  if (match(['foam','polyurethane foam','pu foam','memory foam','seat cushion','seat pad','acoustic foam','acoustic panel','headliner foam','door pad','carpet underlay','batting','bun foam','rebonded','melamine foam','packaging foam','epe foam','xpe foam','eva foam'])) return 'foam'
+
+  // Glass / Glazing
+  if (match(['glass','glazing','windshield glass','rear glass','side glass','tempered glass','laminated glass','float glass','borosilicate','flat glass','glass panel','glass fiber batt','safety glass','automotive glass','architectural glass'])) return 'glass'
+
+  // Electronics / Semiconductors
+  if (match(['chip','semiconductor','pcb','printed circuit','wafer','display','oled','lcd panel','processor','memory module','microchip','circuit board','nand flash','dram','fpga','mcu','microcontroller','integrated circuit','mosfet','transistor','capacitor','resistor','inductor','sensor ic','led driver','power module','igbt','diode','op-amp','dsp','asic','soc ','gpu ','mems','accelerometer','gyroscope','radar module','lidar','camera module','bms','battery management'])) return 'electronics'
+
+  // Industrial / Magnetics
+  if (match(['magnet','neodymium','ndfeb','ferrite magnet','actuator','solenoid','bearing','o-ring','gear','sintered','permanent magnet','electromagnet','magnetic core','transformer core','motor lamination'])) return 'industrial'
+
+  // Metal castings / forgings / machined parts (check before raw metals)
+  if (match(['casting','cast iron','die cast','sand cast','investment cast','lost wax','forging','forged','machined part','cnc part','turned part','milled part','extruded part','extruded profile','drawn part','sheet metal part','metal fabrication','metal assembly','metal bracket','metal housing','metal enclosure','metal frame','metal structure','weldment','welded assembly','stamped metal','deep drawn','hydroformed','roll formed'])) return 'castings'
+
+  // Raw Metals / Minerals
+  if (match(['lithium','cobalt','titanium','tungsten','rare earth','steel coil','steel sheet','steel strip','steel bar','aluminum ingot','copper cathode','copper billet','nickel','manganese','molybdenum','steel billet','aluminum sheet','aluminum billet','copper wire rod','zinc ingot','tin ingot','magnesium ingot','chromium','vanadium','niobium','silicon metal','polysilicon','raw material ore','metal ingot','metal billet','scrap metal','pig iron','slab','bloom'])) return 'metals'
+
+  // Automotive Components
+  if (match(['automotive','brake pad','brake disc','brake rotor','brake caliper','visor','sun visor','headliner','dashboard','instrument panel','bumper','fender','chassis','powertrain','tier-1','tier 1','car seat','auto seat','door trim','interior trim','airbag','tire','tyre','exhaust','transmission','wheel rim','engine part','suspension','shock absorber','strut','cv joint','drive shaft','axle','catalytic converter','fuel pump','oil filter','air filter','spark plug','alternator','starter motor','radiator'])) return 'automotive'
+
+  // Plastics / Polymers / Rubber
+  if (match(['polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','peek','pom','polycarbonate','polyurethane','abs plastic','abs housing','abs resin','abs component','plastic part','plastic housing','plastic component','plastic cover','plastic trim','injection mold','injection-mold','injection molded','injection-molded','blow mold','blow-mold','blow molded','rubber','silicone','gasket','seal ','sealing','fiberglass','composite','epoxy resin','plastic film','thermoplastic','elastomer','tpe ','tpu ','overmold','resin','pellet','compound','masterbatch','polystyrene','acrylic','pmma','pet resin','polyester resin','vinyl','chloroprene','epdm','nbr ','sbr ','natural rubber','synthetic rubber','plastic injection','stretch film'])) return 'plastics'
+
+  // Chemicals / Adhesives / Lubricants
+  if (match(['adhesive','glue','sealant','lubricant','grease','cutting fluid','solvent','thinner','acetone','alcohol','surfactant','specialty chemical','fine chemical','industrial chemical','flux','cleaning agent','degreaser','rust inhibitor','coolant','hydraulic fluid','transmission fluid','brake fluid','thermal paste','thermal grease','thermal interface','potting compound','conformal coat','release agent','mold release'])) return 'chemicals'
+
+  // Agriculture / Food
+  if (match(['beef','meat','wheat','soybean','food','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','agricultural','agri','crop','soy','canola','sunflower','palm oil','starch','flour','glucose','dextrose','fertilizer','pesticide','herbicide','fungicide'])) return 'agriculture'
+
+  // Medical / Pharma
+  if (match(['api ','active pharmaceutical','pharmaceutical','drug substance','excipient','medical device','surgical','syringe','catheter','stent','implant','diagnostic kit','reagent','nitrile glove','latex glove','surgical mask','n95','sterile','gmp certified','iso 13485','medical grade','pharma grade','cleanroom'])) return 'medical'
+
+  // Textiles / Apparel
+  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn','knit','woven','polyester fabric','nylon fabric','spandex','lycra','fleece','felt','non-woven','canvas','webbing','strap','velcro','zipper','button'])) return 'textiles'
+
+  // Packaging
+  if (match(['corrugated box','cardboard box','shipping box','carton','blister pack','clamshell','pouch','stand-up pouch','shrink sleeve','label','pressure sensitive','glass bottle','glass jar','plastic bottle','plastic container','retail packaging','aseptic','foam insert','bubble wrap','pallet','strapping','shrink wrap'])) return 'packaging'
+
+  // Machinery / Equipment
+  if (match(['pump','valve','compressor','cnc machine','machine tool','robot','robotic arm','conveyor','heat exchanger','gearbox','servo drive','vfd','press machine','lathe','mill ','grinder','welding machine','laser cutter','injection molding machine','extruder','hydraulic press','pneumatic cylinder','industrial equipment','capital equipment','plant equipment'])) return 'machinery'
+
+  // Fallback generic metals
+  if (match(['steel','aluminum','aluminium','copper','iron','zinc','mineral','mining','metal','alloy','bronze','brass','stainless'])) return 'metals'
+
   return null
 }
 
