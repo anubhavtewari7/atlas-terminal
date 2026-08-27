@@ -247,8 +247,8 @@ function categorize(item) {
   // Glass / Glazing
   if (match(['glass','glazing','windshield glass','rear glass','side glass','tempered glass','laminated glass','float glass','borosilicate','flat glass','glass panel','glass fiber batt','safety glass','automotive glass','architectural glass'])) return 'glass'
 
-  // Electronics / Semiconductors
-  if (match(['chip','semiconductor','pcb','printed circuit','wafer','display','oled','lcd panel','processor','memory module','microchip','circuit board','nand flash','dram','fpga','mcu','microcontroller','integrated circuit','mosfet','transistor','capacitor','resistor','inductor','sensor ic','led driver','power module','igbt','diode','op-amp','dsp','asic','soc ','gpu ','mems','accelerometer','gyroscope','radar module','lidar','camera module','bms','battery management'])) return 'electronics'
+  // Electronics / Semiconductors / Battery Cells
+  if (match(['chip','semiconductor','pcb','printed circuit','wafer','display','oled','lcd panel','processor','memory module','microchip','circuit board','nand flash','dram','fpga','mcu','microcontroller','integrated circuit','mosfet','transistor','capacitor','resistor','inductor','sensor ic','led driver','power module','igbt','diode','op-amp','dsp','asic','soc ','gpu ','mems','accelerometer','gyroscope','radar module','lidar','camera module','bms','battery management','battery cell','battery pack','battery module','lifepo4','lfp battery','nmc battery','nca battery','lithium battery','lithium ion battery','prismatic cell','cylindrical cell','pouch cell','solid state battery','battery separator','li-ion','li-po'])) return 'electronics'
 
   // Industrial / Magnetics
   if (match(['magnet','neodymium','ndfeb','ferrite magnet','actuator','solenoid','bearing','o-ring','gear','sintered','permanent magnet','electromagnet','magnetic core','transformer core','motor lamination'])) return 'industrial'

@@ -47,9 +47,24 @@ function extractCountries(opportunities) {
 
 async function fetchNewsAPI(countries, query) {
   if (!NEWS_API_KEY) return []
-  // Build a query combining country names and trade keywords
-  const countryTerms = countries.slice(0, 3).join(' OR ')
-  const q = encodeURIComponent(`(${countryTerms}) AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions)`)
+  // Extract meaningful commodity keywords from the scan query (skip short/generic words)
+  const STOP = new Set(['and','the','for','with','from','into','that','this','are','have','trade','supply','chain','global'])
+  const commodityWords = query
+    .replace(/[^a-zA-Z0-9\s-]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !STOP.has(w.toLowerCase()))
+    .slice(0, 3)
+  const commodityTerms = commodityWords.length
+    ? `(${commodityWords.join(' OR ')})`
+    : ''
+  const countryTerms = countries.slice(0, 3).length
+    ? `(${countries.slice(0, 3).join(' OR ')})`
+    : ''
+  // Build targeted query: commodity keywords + trade context
+  const queryParts = [commodityTerms, countryTerms].filter(Boolean)
+  const baseQ = queryParts.join(' AND ')
+  const tradeContext = 'AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions OR sourcing OR manufacturing)'
+  const q = encodeURIComponent(`${baseQ} ${tradeContext}`)
   const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=8&apiKey=${NEWS_API_KEY}`
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
