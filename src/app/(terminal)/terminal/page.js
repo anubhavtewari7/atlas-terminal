@@ -1413,10 +1413,10 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ── STRATEGIC ADVISORY HUD ── */}
-            <div className="hidden lg:flex absolute bottom-4 left-4 right-4 z-10 items-end justify-between gap-3">
+            {/* ── STRATEGIC ADVISORY HUD (info panel only — no toolbar here) ── */}
+            <div className="hidden lg:flex absolute bottom-4 left-4 z-10" style={{right:'16px', maxWidth:'calc(100% - 32px)'}}>
 
-              <div className="bg-black/95 border border-white/10 p-6 flex-1 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0 border-t-sky-500/10" data-tour="directive">
+              <div className="bg-black/95 border border-white/10 p-6 w-full shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0 border-t-sky-500/10" data-tour="directive">
                 <div className="flex justify-between items-start mb-4">
                   <div className="text-[10px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
                     <Zap size={14} /> Strategic Advisory HUD
@@ -1593,75 +1593,54 @@ export default function Dashboard() {
                   </p>
                 )}
               </div>
-
-              {/* ── TOOLS TOOLBAR ── */}
-              <div className="flex flex-col gap-2 shrink-0" data-tour="tools">
-                {/* Row 1 */}
-                <div className="flex items-center gap-2 overflow-x-auto lg:flex-wrap lg:justify-end pb-0.5 no-scrollbar">
-                  {[
-                    { icon:<FileText size={12}/>,   label:'HS Code',    action:()=>setShowTariff(true),    color:'sky' },
-                    { icon:<History size={12}/>,    label:`Archive (${missionHistory.length})`, action:()=>setShowHistory(true), color:'emerald' },
-                    { icon:<BarChart3 size={12}/>,  label:'Compare',    action:()=>setShowComparison(true), color:'sky', disabled:opportunities.length < 2 },
-                    { icon:<DollarSign size={12}/>, label:'TLC Calc',   action:()=>setShowTLC(true),       color:'emerald', disabled:opportunities.length === 0 },
-                  ].map((t, i) => (
-                    <button key={i} onClick={t.action} disabled={t.disabled}
-                      className={`shrink-0 flex items-center gap-1.5 px-3 h-9 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all disabled:opacity-25
-                        ${t.color==='emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' : 'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
-                      {t.icon}{t.label}
-                    </button>
-                  ))}
-                </div>
-                {/* Row 2 */}
-                <div className="flex items-center gap-2 overflow-x-auto lg:flex-wrap lg:justify-end pb-0.5 no-scrollbar">
-                  {[
-                    { icon:<Scale size={12}/>,      label:'Incoterms',  action:()=>setShowIncoterms(true),  color:'purple' },
-                    { icon:<ShieldAlert size={12}/>, label:'Risk Score', action:()=>setShowRisk(true),       color:'rose' },
-                    { icon:<Anchor size={12}/>,     label:'Ports',      action:()=>setShowPorts(true),      color:'sky' },
-                    { icon:<Zap size={12}/>,        label:'Compliance', action:()=>setShowCompliance(true), color:'amber' },
-                  ].map((t, i) => (
-                    <button key={i} onClick={t.action}
-                      className={`shrink-0 flex items-center gap-1.5 px-3 h-9 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all
-                        ${t.color==='rose'   ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10' :
-                          t.color==='purple' ? 'border-purple-500/30 text-purple-400 hover:bg-purple-500/10' :
-                          t.color==='amber'  ? 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10' :
-                          'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
-                      {t.icon}{t.label}
-                    </button>
-                  ))}
-                </div>
-                {/* Row 3 — New Features */}
-                <div className="flex items-center gap-2 overflow-x-auto lg:flex-wrap lg:justify-end pb-0.5 no-scrollbar" data-tour="new-tools">
-                  {[
-                    { icon:<Factory size={12}/>,  label:'BOM Analyzer',   action:()=>setShowBom(true),       color:'violet' },
-                    { icon:<Shield size={12}/>,   label:'Sanctions',      action:()=>setShowSanctions(true), color:'rose' },
-                    { icon:<Ship size={12}/>,     label:'Ocean Rates',    action:()=>setShowOcean(true),     color:'sky' },
-                    { icon:<Leaf size={12}/>,     label:'FTA Check',      action:()=>setShowFta(true),       color:'emerald' },
-                  ].map((t, i) => (
-                    <button key={i} onClick={t.action}
-                      className={`shrink-0 flex items-center gap-1.5 px-3 h-9 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all
-                        ${t.color==='violet'  ? 'border-violet-500/30 text-violet-400 hover:bg-violet-500/10' :
-                          t.color==='rose'    ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10' :
-                          t.color==='emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' :
-                          'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
-                      {t.icon}{t.label}
-                    </button>
-                  ))}
-                </div>
-                {/* Primary CTAs */}
-                <div className="flex items-center gap-2 justify-end" data-tour="pdf">
-                  <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
-                    className="px-3 h-9 border border-white/20 text-white hover:bg-white/10 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 disabled:opacity-25">
-                    {isExportingPDF ? 'GENERATING...' : <><Download size={12} /> Export PDF</>}
-                  </button>
-                  <button onClick={() => setShowSearch(true)}
-                    className="px-5 h-9 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.25)] rounded-lg tracking-widest flex items-center gap-1.5 transition-all">
-                    New Mission <SearchCode size={12} />
-                  </button>
-                </div>
-              </div>
-
             </div>
           </div>
+
+          {/* ── TOOLS TOOLBAR — below the globe, no overlap ── */}
+          <div className="hidden lg:flex flex-col gap-1.5 shrink-0 bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3" data-tour="tools" data-tour-new="new-tools">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              {/* Row 1 + Row 2 merged into one flex-wrap row */}
+              <div className="flex items-center gap-2 flex-wrap flex-1">
+                {[
+                  { icon:<FileText size={12}/>,    label:'HS Code',    action:()=>setShowTariff(true),     color:'sky' },
+                  { icon:<History size={12}/>,     label:`Archive (${missionHistory.length})`, action:()=>setShowHistory(true), color:'emerald' },
+                  { icon:<BarChart3 size={12}/>,   label:'Compare',    action:()=>setShowComparison(true), color:'sky',    disabled:opportunities.length < 2 },
+                  { icon:<DollarSign size={12}/>,  label:'TLC Calc',   action:()=>setShowTLC(true),        color:'emerald',disabled:opportunities.length === 0 },
+                  { icon:<Scale size={12}/>,       label:'Incoterms',  action:()=>setShowIncoterms(true),  color:'purple' },
+                  { icon:<ShieldAlert size={12}/>, label:'Risk Score', action:()=>setShowRisk(true),       color:'rose' },
+                  { icon:<Anchor size={12}/>,      label:'Ports',      action:()=>setShowPorts(true),      color:'sky' },
+                  { icon:<Zap size={12}/>,         label:'Compliance', action:()=>setShowCompliance(true), color:'amber' },
+                  { icon:<Factory size={12}/>,     label:'BOM Analyzer', action:()=>setShowBom(true),      color:'violet' },
+                  { icon:<Shield size={12}/>,      label:'Sanctions',  action:()=>setShowSanctions(true),  color:'rose' },
+                  { icon:<Ship size={12}/>,        label:'Ocean Rates',action:()=>setShowOcean(true),      color:'sky' },
+                  { icon:<Leaf size={12}/>,        label:'FTA Check',  action:()=>setShowFta(true),        color:'emerald' },
+                ].map((t, i) => (
+                  <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
+                    className={`shrink-0 flex items-center gap-1.5 px-3 h-8 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all disabled:opacity-25
+                      ${t.color==='emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' :
+                        t.color==='rose'    ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10' :
+                        t.color==='purple'  ? 'border-purple-500/30 text-purple-400 hover:bg-purple-500/10' :
+                        t.color==='amber'   ? 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10' :
+                        t.color==='violet'  ? 'border-violet-500/30 text-violet-400 hover:bg-violet-500/10' :
+                        'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
+                    {t.icon}{t.label}
+                  </button>
+                ))}
+              </div>
+              {/* Primary CTAs — right-aligned */}
+              <div className="flex items-center gap-2 shrink-0 ml-auto" data-tour="pdf">
+                <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
+                  className="px-3 h-8 border border-white/20 text-white hover:bg-white/10 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 disabled:opacity-25">
+                  {isExportingPDF ? 'GENERATING...' : <><Download size={12} /> Export PDF</>}
+                </button>
+                <button onClick={() => setShowSearch(true)}
+                  className="px-5 h-8 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.25)] rounded-lg tracking-widest flex items-center gap-1.5 transition-all">
+                  New Mission <SearchCode size={12} />
+                </button>
+              </div>
+            </div>
+          </div>
+
         </main>
 
         {/* ════════════════════════════════════
