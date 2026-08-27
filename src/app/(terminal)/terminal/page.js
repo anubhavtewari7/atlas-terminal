@@ -1413,10 +1413,10 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* ── STRATEGIC ADVISORY HUD (info panel only — no toolbar here) ── */}
-            <div className="hidden lg:flex absolute bottom-4 left-4 z-10" style={{right:'16px', maxWidth:'calc(100% - 32px)'}}>
+            {/* ── STRATEGIC ADVISORY HUD ── */}
+            <div className="hidden lg:block absolute bottom-4 left-4 right-4 z-10">
 
-              <div className="bg-black/95 border border-white/10 p-6 w-full shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0 border-t-sky-500/10" data-tour="directive">
+              <div className="bg-black/95 border border-white/10 p-6 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0" data-tour="directive">
                 <div className="flex justify-between items-start mb-4">
                   <div className="text-[10px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
                     <Zap size={14} /> Strategic Advisory HUD
@@ -1596,52 +1596,62 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* ── TOOLS TOOLBAR — below the globe, no overlap ── */}
-          <div className="hidden lg:flex flex-col gap-1.5 shrink-0 bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3" data-tour="tools" data-tour-new="new-tools">
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              {/* Row 1 + Row 2 merged into one flex-wrap row */}
-              <div className="flex items-center gap-2 flex-wrap flex-1">
-                {[
-                  { icon:<FileText size={12}/>,    label:'HS Code',    action:()=>setShowTariff(true),     color:'sky' },
-                  { icon:<History size={12}/>,     label:`Archive (${missionHistory.length})`, action:()=>setShowHistory(true), color:'emerald' },
-                  { icon:<BarChart3 size={12}/>,   label:'Compare',    action:()=>setShowComparison(true), color:'sky',    disabled:opportunities.length < 2 },
-                  { icon:<DollarSign size={12}/>,  label:'TLC Calc',   action:()=>setShowTLC(true),        color:'emerald',disabled:opportunities.length === 0 },
-                  { icon:<Scale size={12}/>,       label:'Incoterms',  action:()=>setShowIncoterms(true),  color:'purple' },
-                  { icon:<ShieldAlert size={12}/>, label:'Risk Score', action:()=>setShowRisk(true),       color:'rose' },
-                  { icon:<Anchor size={12}/>,      label:'Ports',      action:()=>setShowPorts(true),      color:'sky' },
-                  { icon:<Zap size={12}/>,         label:'Compliance', action:()=>setShowCompliance(true), color:'amber' },
-                  { icon:<Factory size={12}/>,     label:'BOM Analyzer', action:()=>setShowBom(true),      color:'violet' },
-                  { icon:<Shield size={12}/>,      label:'Sanctions',  action:()=>setShowSanctions(true),  color:'rose' },
-                  { icon:<Ship size={12}/>,        label:'Ocean Rates',action:()=>setShowOcean(true),      color:'sky' },
-                  { icon:<Leaf size={12}/>,        label:'FTA Check',  action:()=>setShowFta(true),        color:'emerald' },
-                ].map((t, i) => (
-                  <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
-                    className={`shrink-0 flex items-center gap-1.5 px-3 h-8 border rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all disabled:opacity-25
-                      ${t.color==='emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' :
-                        t.color==='rose'    ? 'border-rose-500/30 text-rose-400 hover:bg-rose-500/10' :
-                        t.color==='purple'  ? 'border-purple-500/30 text-purple-400 hover:bg-purple-500/10' :
-                        t.color==='amber'   ? 'border-amber-500/30 text-amber-400 hover:bg-amber-500/10' :
-                        t.color==='violet'  ? 'border-violet-500/30 text-violet-400 hover:bg-violet-500/10' :
-                        'border-white/10 text-slate-400 hover:border-sky-500/30 hover:text-sky-400'}`}>
-                    {t.icon}{t.label}
-                  </button>
-                ))}
-              </div>
-              {/* Primary CTAs — right-aligned */}
-              <div className="flex items-center gap-2 shrink-0 ml-auto" data-tour="pdf">
-                <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
-                  className="px-3 h-8 border border-white/20 text-white hover:bg-white/10 rounded-lg text-[9px] font-bold uppercase tracking-widest transition-all flex items-center gap-1.5 disabled:opacity-25">
-                  {isExportingPDF ? 'GENERATING...' : <><Download size={12} /> Export PDF</>}
+        </main>
+
+        {/* ════════════════════════════════════
+            TOOLS COMMAND PANEL — vertical sidebar
+        ════════════════════════════════════ */}
+        <div className="hidden lg:flex flex-col w-40 shrink-0 gap-2" data-tour="tools">
+
+          {/* Tool buttons */}
+          <div className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden flex flex-col" data-tour="new-tools">
+            {/* Header */}
+            <div className="px-3 py-2.5 border-b border-white/5 shrink-0">
+              <span className="text-[8px] font-bold text-slate-600 uppercase tracking-[0.2em]">Tools</span>
+            </div>
+            {/* Buttons */}
+            <div className="flex-1 overflow-y-auto flex flex-col py-1">
+              {[
+                { icon:<FileText size={11}/>,    label:'HS Code',     action:()=>setShowTariff(true),     color:'sky' },
+                { icon:<History size={11}/>,     label:`Archive (${missionHistory.length})`, action:()=>setShowHistory(true), color:'emerald' },
+                { icon:<BarChart3 size={11}/>,   label:'Compare',     action:()=>setShowComparison(true), color:'sky',    disabled:opportunities.length < 2 },
+                { icon:<DollarSign size={11}/>,  label:'TLC Calc',    action:()=>setShowTLC(true),        color:'emerald' },
+                { icon:<Scale size={11}/>,       label:'Incoterms',   action:()=>setShowIncoterms(true),  color:'purple' },
+                { icon:<ShieldAlert size={11}/>, label:'Risk Score',  action:()=>setShowRisk(true),       color:'rose' },
+                { icon:<Anchor size={11}/>,      label:'Ports',       action:()=>setShowPorts(true),      color:'sky' },
+                { icon:<Zap size={11}/>,         label:'Compliance',  action:()=>setShowCompliance(true), color:'amber' },
+                { icon:<Factory size={11}/>,     label:'BOM Analyzer',action:()=>setShowBom(true),        color:'violet' },
+                { icon:<Shield size={11}/>,      label:'Sanctions',   action:()=>setShowSanctions(true),  color:'rose' },
+                { icon:<Ship size={11}/>,        label:'Ocean Rates', action:()=>setShowOcean(true),      color:'sky' },
+                { icon:<Leaf size={11}/>,        label:'FTA Check',   action:()=>setShowFta(true),        color:'emerald' },
+              ].map((t, i) => (
+                <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider transition-all text-left border-l-2 disabled:opacity-25
+                    ${t.color==='emerald' ? 'border-l-emerald-500/40 text-emerald-400 hover:bg-emerald-500/8 hover:border-l-emerald-400' :
+                      t.color==='rose'    ? 'border-l-rose-500/40 text-rose-400 hover:bg-rose-500/8 hover:border-l-rose-400' :
+                      t.color==='purple'  ? 'border-l-purple-500/40 text-purple-400 hover:bg-purple-500/8 hover:border-l-purple-400' :
+                      t.color==='amber'   ? 'border-l-amber-500/40 text-amber-400 hover:bg-amber-500/8 hover:border-l-amber-400' :
+                      t.color==='violet'  ? 'border-l-violet-500/40 text-violet-400 hover:bg-violet-500/8 hover:border-l-violet-400' :
+                      'border-l-sky-500/30 text-slate-400 hover:bg-sky-500/8 hover:text-sky-400 hover:border-l-sky-400'}`}>
+                  <span className="shrink-0 opacity-70">{t.icon}</span>
+                  <span className="truncate leading-none">{t.label}</span>
                 </button>
-                <button onClick={() => setShowSearch(true)}
-                  className="px-5 h-8 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.25)] rounded-lg tracking-widest flex items-center gap-1.5 transition-all">
-                  New Mission <SearchCode size={12} />
-                </button>
-              </div>
+              ))}
             </div>
           </div>
 
-        </main>
+          {/* Primary CTAs */}
+          <div className="flex flex-col gap-2 shrink-0" data-tour="pdf">
+            <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
+              className="w-full h-9 border border-white/15 text-white hover:bg-white/8 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 disabled:opacity-25">
+              <Download size={11} /> {isExportingPDF ? 'Generating' : 'Export PDF'}
+            </button>
+            <button onClick={() => setShowSearch(true)}
+              className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)] rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all">
+              <SearchCode size={12} /> Scan
+            </button>
+          </div>
+        </div>
 
         {/* ════════════════════════════════════
             MOBILE — TAB LAYOUT (lg:hidden)
