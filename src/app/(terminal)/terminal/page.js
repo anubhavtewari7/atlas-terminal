@@ -14,6 +14,9 @@ import BomAnalyzer from '@/components/BomAnalyzer'
 import SanctionsChecker from '@/components/SanctionsChecker'
 import OceanFreightRates from '@/components/OceanFreightRates'
 import FtaChecker from '@/components/FtaChecker'
+import TariffCalculator from '@/components/TariffCalculator'
+import CurrencyImpactCalc from '@/components/CurrencyImpactCalc'
+import DualUseChecker from '@/components/DualUseChecker'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
 import {
@@ -22,7 +25,7 @@ import {
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
-  AlertTriangle, CheckCircle, Info
+  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -403,6 +406,9 @@ export default function Dashboard() {
   const [showSanctions, setShowSanctions] = useState(false)
   const [showOcean, setShowOcean] = useState(false)
   const [showFta, setShowFta] = useState(false)
+  const [showTariffCalc, setShowTariffCalc] = useState(false)
+  const [showCurrencyCalc, setShowCurrencyCalc] = useState(false)
+  const [showDualUse, setShowDualUse] = useState(false)
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
@@ -981,6 +987,9 @@ export default function Dashboard() {
           {showSanctions && <SanctionsChecker onClose={() => setShowSanctions(false)} />}
           {showOcean     && <OceanFreightRates onClose={() => setShowOcean(false)} />}
           {showFta       && <FtaChecker onClose={() => setShowFta(false)} />}
+          {showTariffCalc  && <TariffCalculator onClose={() => setShowTariffCalc(false)} />}
+          {showCurrencyCalc && <CurrencyImpactCalc onClose={() => setShowCurrencyCalc(false)} />}
+          {showDualUse   && <DualUseChecker onClose={() => setShowDualUse(false)} />}
         </AnimatePresence>
 
         {/* ── GUIDED TOUR ── */}
@@ -1624,6 +1633,9 @@ export default function Dashboard() {
                 { icon:<Shield size={11}/>,      label:'Sanctions',   action:()=>setShowSanctions(true),  color:'rose' },
                 { icon:<Ship size={11}/>,        label:'Ocean Rates', action:()=>setShowOcean(true),      color:'sky' },
                 { icon:<Leaf size={11}/>,        label:'FTA Check',   action:()=>setShowFta(true),        color:'emerald' },
+                { icon:<Calculator size={11}/>,  label:'Tariff Calc', action:()=>setShowTariffCalc(true),  color:'sky' },
+                { icon:<TrendingUp size={11}/>,  label:'FX Impact',   action:()=>setShowCurrencyCalc(true),color:'emerald' },
+                { icon:<ShieldOff size={11}/>,   label:'Dual-Use',    action:()=>setShowDualUse(true),     color:'rose' },
               ].map((t, i) => (
                 <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
                   className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider transition-all text-left border-l-2 disabled:opacity-25
