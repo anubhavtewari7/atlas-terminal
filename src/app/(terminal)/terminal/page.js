@@ -983,7 +983,7 @@ export default function Dashboard() {
           {showPorts     && <PortStatus onClose={() => setShowPorts(false)} />}
           {showCompliance && <ComplianceChecklist onClose={() => setShowCompliance(false)} />}
           {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
-          {showBom       && <BomAnalyzer onClose={() => setShowBom(false)} />}
+          {showBom       && <BomAnalyzer onClose={() => setShowBom(false)} onScan={(q) => handleSearch(null, q)} />}
           {showSanctions && <SanctionsChecker onClose={() => setShowSanctions(false)} />}
           {showOcean     && <OceanFreightRates onClose={() => setShowOcean(false)} />}
           {showFta       && <FtaChecker onClose={() => setShowFta(false)} />}

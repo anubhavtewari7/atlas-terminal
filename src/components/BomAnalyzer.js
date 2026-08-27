@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import { X, List, AlertTriangle, CheckCircle, Info, ChevronDown, ChevronUp, Loader2 } from 'lucide-react'
+import { X, List, AlertTriangle, CheckCircle, Info, ChevronDown, ChevronUp, Loader2, Zap } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 // ── Category risk profiles ──────────────────────────────────────────────────
@@ -233,7 +233,7 @@ function categorize(item) {
   const match = (kws) => kws.some(kw => q.includes(kw))
 
   // Paints / Coatings / Surface Treatments (check before chemicals)
-  if (match(['paint','powder coat','powder-coat','e-coat','electrophoretic','primer coat','topcoat','basecoat','clearcoat','lacquer','varnish','anodiz','anodise','electroplat','zinc plat','chrome plat','galvaniz','galvanis','phosphat','conversion coat','pvd coating','surface treatment','surface finish','cathodic dip','epoxy coat','polyurethane coat','anti-corrosion coat','enamel coat','ceramic coat','thermal spray','hard anodize'])) return 'coatings'
+  if (match(['paint','powder coat','powder-coat','e-coat','electrophoretic','primer coat','topcoat','basecoat','clearcoat','lacquer','varnish','anodiz','anodise','electroplat','zinc plat','chrome plat','phosphat','conversion coat','pvd coating','conformal coat','conformal coating','surface treatment','surface finish','cathodic dip','epoxy coat','polyurethane coat','anti-corrosion coat','enamel coat','ceramic coat','thermal spray','hard anodize'])) return 'coatings'
 
   // Fasteners / Hardware / Stampings (check before metals)
   if (match(['bolt','screw','nut ','washer','rivet','clip','clamp','bracket','spring','hinge','latch','lock ','pin ','cotter','stud ','threaded rod','hex bolt','socket head','torx','self-tapping','wood screw','machine screw','sheet metal screw','stamping','stamped part','metal stamp','progressive die','blanking','punching','metal clip','retainer clip','wire form','snap ring','circlip','e-ring','c-ring'])) return 'fasteners'
@@ -295,10 +295,12 @@ const RISK_COLORS = {
   LOW: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', dot: 'bg-emerald-500' },
 }
 
-export default function BomAnalyzer({ onClose }) {
-  const [input, setInput]   = useState('')
+export default function BomAnalyzer({ onClose, onScan }) {
+  const [input, setInput]     = useState('')
   const [results, setResults] = useState(null)
   const [expanded, setExpanded] = useState({})
+  const [minimized, setMinimized] = useState(false)
+  const [lastScanned, setLastScanned] = useState(null)
 
   const analyzeBOM = () => {
     const lines = input.split(/[\n,;]/).map(l => l.trim()).filter(l => l.length > 1)
@@ -332,6 +334,45 @@ export default function BomAnalyzer({ onClose }) {
     low: results.filter(r => r.riskLevel === 'LOW').length,
     unknown: results.filter(r => r.riskLevel === 'UNKNOWN').length,
   } : null
+
+  // ── Minimized pill — shown while scanning a component ───────────────────
+  if (minimized && results) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.9 }}
+        className="fixed bottom-6 left-6 z-[250]"
+      >
+        <div
+          onClick={() => setMinimized(false)}
+          className="flex items-center gap-3 bg-[#0d0d0d] border border-violet-500/40 rounded-2xl px-4 py-3 cursor-pointer hover:border-violet-500/70 transition-all shadow-[0_0_30px_rgba(139,92,246,0.15)] group"
+        >
+          <div className="w-7 h-7 bg-violet-500/15 border border-violet-500/30 rounded-lg flex items-center justify-center shrink-0">
+            <List size={13} className="text-violet-400" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-[9px] font-bold text-violet-400 uppercase tracking-widest">BOM Analysis</div>
+            <div className="text-[8px] text-slate-500 mt-0.5 truncate max-w-[180px]">
+              {results.length} items · <span className="text-rose-400">{summary.high} HIGH</span> · <span className="text-amber-400">{summary.medium} MED</span>
+            </div>
+            {lastScanned && (
+              <div className="text-[7px] text-slate-600 mt-0.5 truncate max-w-[180px]">Scanning: {lastScanned}</div>
+            )}
+          </div>
+          <div className="flex items-center gap-1 ml-1">
+            <div className="text-[8px] text-violet-500 group-hover:text-violet-300 font-bold uppercase tracking-wider transition-colors">↑ Expand</div>
+            <button
+              onClick={(e) => { e.stopPropagation(); onClose() }}
+              className="ml-2 p-1 text-slate-600 hover:text-slate-300 transition-colors rounded"
+            >
+              <X size={11} />
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    )
+  }
 
   return (
     <motion.div
@@ -406,21 +447,35 @@ export default function BomAnalyzer({ onClose }) {
                   const open = expanded[r.id]
                   return (
                     <div key={r.id} className={`rounded-xl border ${rc.border} overflow-hidden`}>
-                      <button
+                      <div
                         onClick={() => setExpanded(e => ({ ...e, [r.id]: !e[r.id] }))}
-                        className={`w-full flex items-center justify-between px-4 py-3 ${rc.bg} hover:brightness-110 transition-all text-left`}
+                        className={`w-full flex items-center justify-between px-4 py-3 ${rc.bg} hover:brightness-110 transition-all cursor-pointer`}
                       >
                         <div className="flex items-center gap-3 min-w-0">
                           <div className={`w-2 h-2 rounded-full shrink-0 ${rc.dot}`} />
                           <span className="text-[12px] font-mono text-white truncate">{r.item}</span>
                           <span className="text-[9px] text-slate-500 shrink-0 hidden sm:block">{r.category}</span>
                         </div>
-                        <div className="flex items-center gap-3 shrink-0 ml-3">
+                        <div className="flex items-center gap-2 shrink-0 ml-3">
                           <span className={`text-[9px] font-bold uppercase tracking-widest ${rc.text}`}>{r.riskLevel}</span>
                           <span className="text-[10px] text-slate-600 font-mono hidden sm:block">HTS {r.hts}</span>
+                          {onScan && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setLastScanned(r.item); setMinimized(true); onScan(r.item) }}
+                              title="Deep-dive this component in Atlas"
+                              className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[8px] font-bold uppercase tracking-wider border transition-all
+                                ${r.riskLevel === 'HIGH'
+                                  ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 hover:bg-rose-500/35'
+                                  : r.riskLevel === 'MEDIUM'
+                                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20'
+                                  : 'bg-white/5 border-white/15 text-slate-400 hover:bg-white/10'}`}
+                            >
+                              <Zap size={8} /> Scan
+                            </button>
+                          )}
                           {open ? <ChevronUp size={13} className="text-slate-500" /> : <ChevronDown size={13} className="text-slate-500" />}
                         </div>
-                      </button>
+                      </div>
                       {open && (
                         <div className="px-4 py-4 bg-[#0d0d0d] border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {[
