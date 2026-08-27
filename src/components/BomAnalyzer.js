@@ -154,10 +154,10 @@ function categorize(item) {
   const q = item.toLowerCase()
   const match = (kws) => kws.some(kw => q.includes(kw))
   if (match(['chip','semiconductor','pcb','wafer','display','oled','processor','memory','microchip','circuit','nand','dram','fpga','mcu','ic ','integrated circuit','mosfet','transistor','capacitor','resistor','inductor','connector','sensor ic'])) return 'electronics'
-  if (match(['magnet','neodymium','ndfeb','ferrite magnet','actuator','solenoid','bearing','fastener','o-ring','gasket','gear','sintered'])) return 'industrial'
+  if (match(['magnet','neodymium','ndfeb','ferrite magnet','actuator','solenoid','bearing','fastener','o-ring','gear','sintered'])) return 'industrial'
   if (match(['lithium','cobalt','titanium','tungsten','rare earth','steel coil','aluminum ingot','copper cathode','nickel','manganese','molybdenum','steel billet','aluminum sheet','copper wire'])) return 'metals'
   if (match(['automotive','brake','visor','headliner','dashboard','bumper','chassis','powertrain','tier-1','car seat','auto seat','door trim','interior trim','airbag','windshield','tire','tyre','exhaust','transmission','wheel','engine part'])) return 'automotive'
-  if (match(['polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','peek','pom','polycarbonate','polyurethane','abs plastic','plastic part','injection mold','rubber','silicone','fiberglass','composite','epoxy','plastic film'])) return 'plastics'
+  if (match(['polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','peek','pom','polycarbonate','polyurethane','abs plastic','abs housing','abs resin','plastic part','plastic housing','plastic component','injection mold','injection-mold','injection molded','injection-molded','blow mold','rubber','silicone','gasket','fiberglass','composite','epoxy','plastic film','thermoplastic','elastomer','overmold','resin'])) return 'plastics'
   if (match(['adhesive','glue','sealant','coating','paint','primer','varnish','lubricant','grease','solvent','chemical compound','surfactant','specialty chemical'])) return 'chemicals'
   if (match(['beef','meat','wheat','soybean','food','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','agricultural','agri','crop'])) return 'agriculture'
   if (match(['api ','pharmaceutical','drug','medical device','surgical','syringe','catheter','stent','implant','diagnostic','reagent','glove','mask','sterile','gmp','pharma'])) return 'medical'
