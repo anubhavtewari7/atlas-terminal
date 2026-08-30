@@ -28,7 +28,7 @@ export async function GET() {
     console.error("FX error:", err);
     // Fallback static data if API is down
     return NextResponse.json({
-      base: 'USD', date: new Date().toISOString().split('T')[0],
+      base: 'USD', date: 'Rates may be outdated', stale: true,
       rates: {
         CNY: { rate: 7.24, country: 'China', flag: '🇨🇳', impact: 'Favorable for US imports' },
         EUR: { rate: 0.92, country: 'Eurozone', flag: '🇪🇺', impact: 'EUR weak — EU exports cheaper' },

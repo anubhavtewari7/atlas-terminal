@@ -32,8 +32,8 @@ export default function TradeRiskScore({ onClose }) {
   }
 
   const getRiskColor = (score) => {
-    if (score >= 70) return { bg: 'bg-rose-500', text: 'text-rose-400', border: 'border-rose-500/30', label: 'HIGH' }
-    if (score >= 40) return { bg: 'bg-amber-500', text: 'text-amber-400', border: 'border-amber-500/30', label: 'MEDIUM' }
+    if (score >= 65) return { bg: 'bg-rose-500', text: 'text-rose-400', border: 'border-rose-500/30', label: 'HIGH' }
+    if (score >= 35) return { bg: 'bg-amber-500', text: 'text-amber-400', border: 'border-amber-500/30', label: 'MEDIUM' }
     return { bg: 'bg-emerald-500', text: 'text-emerald-400', border: 'border-emerald-500/30', label: 'LOW' }
   }
 
@@ -44,7 +44,7 @@ export default function TradeRiskScore({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(239,68,68,0.08)] overflow-hidden"
+        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(239,68,68,0.08)] max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -56,11 +56,11 @@ export default function TradeRiskScore({ onClose }) {
               <p className="text-[10px] text-slate-600 mt-0.5">Composite risk index for any global trade corridor</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
-        <form onSubmit={handleAssess} className="p-6 border-b border-white/5 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleAssess} className="p-4 md:p-6 border-b border-white/5 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Origin Country / Port</label>
               <input autoFocus value={origin} onChange={e => setOrigin(e.target.value)} placeholder="e.g. Shanghai, China"
@@ -78,7 +78,7 @@ export default function TradeRiskScore({ onClose }) {
               className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-700" />
           </div>
           <button type="submit" disabled={loading || !origin || !destination}
-            className="w-full h-12 bg-rose-500 text-white font-bold text-[12px] uppercase tracking-widest hover:bg-rose-400 disabled:opacity-50 transition-all rounded-xl flex items-center justify-center gap-2">
+            className="w-full h-12 bg-rose-500 text-white font-bold text-[12px] uppercase tracking-widest hover:bg-rose-400 active:bg-rose-400 disabled:opacity-50 transition-all rounded-xl flex items-center justify-center gap-2">
             {loading ? <><Loader2 size={16} className="animate-spin" /> Analyzing Lane...</> : <><ShieldAlert size={16} /> Run Risk Assessment</>}
           </button>
         </form>
@@ -88,7 +88,7 @@ export default function TradeRiskScore({ onClose }) {
         {result && (() => {
           const overall = getRiskColor(result.overall_score)
           return (
-            <div className="p-6 space-y-5 max-h-[50vh] overflow-y-auto custom-scrollbar">
+            <div className="p-4 md:p-6 space-y-5">
               {/* Overall score */}
               <div className={`p-5 border ${overall.border} rounded-xl bg-[#0f0f0f]`}>
                 <div className="flex items-center justify-between mb-3">
@@ -129,7 +129,7 @@ export default function TradeRiskScore({ onClose }) {
               </div>
 
               {/* Key alert + alternative */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
                   <div className="text-[9px] text-rose-400 uppercase font-bold mb-1 tracking-widest">⚠️ Key Alert</div>
                   <p className="text-[11px] text-slate-300 leading-snug">{result.key_alert}</p>

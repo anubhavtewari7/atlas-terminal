@@ -49,7 +49,7 @@ export default function IncotermsCalc({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_80px_rgba(168,85,247,0.08)] overflow-hidden"
+        className="bg-[#080808] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_80px_rgba(168,85,247,0.08)] max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between p-6 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -61,22 +61,22 @@ export default function IncotermsCalc({ onClose }) {
               <p className="text-[10px] text-slate-600 mt-0.5">International Commercial Terms — Risk & Cost Allocation</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
-        <div className="p-6 grid grid-cols-2 gap-6">
+        <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {/* Left — selector */}
           <div className="space-y-4">
             <div>
               <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Select Incoterm</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 md:grid-cols-3 gap-2">
                 {Object.keys(INCOTERMS).map(key => (
                   <button
                     key={key}
                     onClick={() => setSelectedTerm(key)}
                     className={`py-2.5 text-[12px] font-bold rounded-lg border transition-all ${selectedTerm === key
                       ? 'bg-purple-500/20 border-purple-500/50 text-purple-300'
-                      : 'bg-[#111] border-white/5 text-slate-400 hover:border-white/10'}`}
+                      : 'bg-[#111] border-white/5 text-slate-400 hover:border-white/10 active:border-purple-500/30 active:text-purple-400'}`}
                   >
                     {key}
                   </button>

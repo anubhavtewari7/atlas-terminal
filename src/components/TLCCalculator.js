@@ -31,10 +31,15 @@ export default function TLCCalculator({ onClose, defaultDuty = 0, defaultFreight
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#090909] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_100px_rgba(56,189,248,0.1)] overflow-hidden flex"
+        className="bg-[#090909] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_100px_rgba(56,189,248,0.1)] overflow-y-auto max-h-[90vh] flex flex-col md:flex-row relative"
       >
+        {/* Mobile-only close button at top */}
+        <button onClick={onClose} className="md:hidden absolute top-4 right-4 p-2 text-slate-500 active:text-white transition-colors z-10">
+          <X size={20} />
+        </button>
+
         {/* Left Side - Inputs */}
-        <div className="w-1/2 p-8 border-r border-white/5">
+        <div className="w-full md:w-1/2 p-6 md:p-8 border-b md:border-b-0 md:border-r border-white/5">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center">
@@ -91,8 +96,8 @@ export default function TLCCalculator({ onClose, defaultDuty = 0, defaultFreight
         </div>
 
         {/* Right Side - Outputs */}
-        <div className="w-1/2 p-8 bg-[#050505] relative">
-          <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-all rounded-lg hover:bg-white/5">
+        <div className="w-full md:w-1/2 p-6 md:p-8 bg-[#050505] relative">
+          <button onClick={onClose} className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white active:text-white transition-all rounded-lg hover:bg-white/5 active:bg-white/5">
             <X size={22} />
           </button>
 

@@ -12,13 +12,13 @@ function Earth({ risks, opportunities, autoRotate }) {
 
   useFrame((state, delta) => {
     if (autoRotate && meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.08
+      meshRef.current.rotation.y += delta * 0.04
     }
   })
 
   return (
     <group>
-      <mesh ref={meshRef}>
+      <mesh ref={meshRef} rotation={[-0.25, 0, 0]}>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial map={texture} shininess={5} emissive="#ffffff" emissiveIntensity={0.1} />
         
@@ -113,7 +113,7 @@ export default function Globe({ risks = [], opportunities = [], autoRotate = tru
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
-        <PerspectiveCamera makeDefault position={[0, 0, 6]} />
+        <PerspectiveCamera makeDefault position={[0, 1.8, 5.8]} />
         <ambientLight intensity={2.5} />
         <pointLight position={[10, 10, 10]} intensity={4} color="#ffffff" />
         <pointLight position={[-10, 10, 5]} intensity={2} color="#38bdf8" />

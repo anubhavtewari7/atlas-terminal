@@ -1,0 +1,260 @@
+"use client"
+import React, { useState } from 'react'
+import { X, Shield, AlertTriangle, CheckCircle, Search, Loader2, ExternalLink, Info } from 'lucide-react'
+import { motion } from 'framer-motion'
+
+// ── Sanctioned & high-risk country database ────────────────────────────────
+const COUNTRY_RISK = {
+  // US OFAC Comprehensive Sanctions Programs
+  'iran': { ofac: 'BLOCKED', eu: 'BLOCKED', un: 'PARTIAL', level: 'PROHIBITED', program: 'Iran Sanctions (ITSR)', note: 'Comprehensive US sanctions. Almost all transactions prohibited. EU and UN also impose significant restrictions.' },
+  'north korea': { ofac: 'BLOCKED', eu: 'BLOCKED', un: 'BLOCKED', level: 'PROHIBITED', program: 'DPRK Sanctions', note: 'Total embargo. UN SC Resolution 2371+ prohibits virtually all trade. No exceptions for commercial transactions.' },
+  'cuba': { ofac: 'BLOCKED', eu: 'CLEAR', un: 'CLEAR', level: 'PROHIBITED', program: 'Cuba Embargo (CACR)', note: 'US OFAC comprehensive embargo. EU/UN have no restrictions. Some licensed exceptions for food/medicine.' },
+  'syria': { ofac: 'BLOCKED', eu: 'BLOCKED', un: 'PARTIAL', level: 'PROHIBITED', program: 'Syria Sanctions (SySR)', note: 'Comprehensive US and EU sanctions. SDF/Kurdish regions have some exemptions. Verify intended recipient.' },
+  // Sectoral / Significant Sanctions
+  'russia': { ofac: 'SECTORAL', eu: 'SECTORAL', un: 'CLEAR', level: 'HIGH RISK', program: 'Russia CAPTA / DETER sanctions', note: 'Broad sectoral sanctions post Feb 2022. Defence, energy, finance, luxury goods, technology sectors blocked. Verify each product/entity.' },
+  'belarus': { ofac: 'SECTORAL', eu: 'BLOCKED', un: 'CLEAR', level: 'HIGH RISK', program: 'Belarus Sanctions', note: 'Significant US and EU sectoral sanctions following 2020 election crisis. Key industries restricted.' },
+  'venezuela': { ofac: 'SECTORAL', eu: 'SECTORAL', un: 'CLEAR', level: 'HIGH RISK', program: 'Venezuela Sanctions (VZLA)', note: 'Government and state entities sanctioned. Oil sector heavily restricted. Private transactions may be possible with due diligence.' },
+  'myanmar': { ofac: 'SECTORAL', eu: 'SECTORAL', un: 'CLEAR', level: 'HIGH RISK', program: 'Burma/Myanmar Sanctions', note: 'Military-linked entities sanctioned post-2021 coup. Jade, gems, and military-linked businesses blocked.' },
+  'zimbabwe': { ofac: 'TARGETED', eu: 'TARGETED', un: 'CLEAR', level: 'ELEVATED', program: 'Zimbabwe Sanctions', note: 'Targeted sanctions on specific individuals/entities. General commerce possible with proper due diligence.' },
+  // Elevated Due Diligence
+  'china': { ofac: 'TARGETED', eu: 'TARGETED', un: 'CLEAR', level: 'ELEVATED', program: 'Entity List / OFAC SDN targeted designations', note: 'Specific entity restrictions (SMIC, Huawei, DJI on Entity List). Xinjiang cotton/product ban (UFLPA). Military-linked companies on OFAC SDN. Screen each supplier.' },
+  'afghanistan': { ofac: 'TARGETED', eu: 'TARGETED', un: 'TARGETED', level: 'ELEVATED', program: 'Taliban sanctions', note: 'Taliban government sanctioned. General humanitarian trade possible. Non-Taliban commercial entities need vetting.' },
+  'somalia': { ofac: 'TARGETED', eu: 'TARGETED', un: 'TARGETED', level: 'ELEVATED', program: 'Somalia Al-Shabaab related', note: 'Targeted sanctions. Al-Shabaab-linked entities blocked. General commercial activity possible with due diligence.' },
+  'sudan': { ofac: 'TARGETED', eu: 'TARGETED', un: 'TARGETED', level: 'ELEVATED', program: 'Sudan Sanctions (SSR)', note: 'Some OFAC restrictions lifted but targeted designations remain. Darfur arms embargo active. Screen counterparties.' },
+  'iraq': { ofac: 'TARGETED', eu: 'CLEAR', un: 'TARGETED', level: 'ELEVATED', program: 'Iraq Legacy Sanctions', note: 'Most sanctions lifted. ISIS/former regime officials on SDN. Conduct screening; general trade permitted.' },
+  'ethiopia': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'LOW', program: 'None (monitor)', note: 'No active sanctions programs. Monitor for conflict-related developments in Tigray region.' },
+  'india': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. Strong US trade partner. USMCA excludes India — standard MFN tariffs apply.' },
+  'germany': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No restrictions. EU member state. Standard trade applies.' },
+  'vietnam': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. Active CPTPP member. Growing FDI hub for supply chain diversification.' },
+  'mexico': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. USMCA zero-duty access to US. Strong nearshoring destination.' },
+  'taiwan': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. Key semiconductor hub. US CHIPS Act supports Taiwan-US semiconductor supply chain.' },
+  'south korea': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. KORUS FTA — zero duty on most goods.' },
+  'japan': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. US-Japan trade relations strong. CPTPP member.' },
+  'brazil': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. Key agricultural and industrial supply chain hub.' },
+  'united states': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'Domestic. No restrictions.' },
+  'usa': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'Domestic. No restrictions.' },
+  'uk': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. US-UK bilateral trade strong post-Brexit.' },
+  'united kingdom': { ofac: 'CLEAR', eu: 'CLEAR', un: 'CLEAR', level: 'CLEAR', program: 'None', note: 'No sanctions. US-UK bilateral trade strong post-Brexit.' },
+}
+
+// ── High-risk entity keywords (SDN heuristic) ──────────────────────────────
+const SDN_KEYWORDS = [
+  { keyword: 'revolutionary guard', list: 'OFAC SDN — IRGC', severity: 'BLOCKED', note: 'Islamic Revolutionary Guard Corps and affiliates are fully blocked by US OFAC.' },
+  { keyword: 'irgc', list: 'OFAC SDN — IRGC', severity: 'BLOCKED', note: 'IRGC-designated entity. All transactions prohibited under US law.' },
+  { keyword: 'hezbollah', list: 'OFAC SDN / EU / UN', severity: 'BLOCKED', note: 'Designated terrorist organization. Fully blocked by US, EU, and UN.' },
+  { keyword: 'hamas', list: 'OFAC SDN / EU', severity: 'BLOCKED', note: 'Designated terrorist organization. Fully blocked.' },
+  { keyword: 'smic', list: 'US Entity List', severity: 'RESTRICTED', note: 'Semiconductor Manufacturing International Corporation on US Entity List. Advanced semiconductor equipment requires license.' },
+  { keyword: 'huawei', list: 'US Entity List', severity: 'RESTRICTED', note: 'Huawei Technologies on US Entity List. US-origin technology/software requires export license.' },
+  { keyword: 'zte', list: 'US Entity List (historic)', severity: 'ELEVATED', note: 'ZTE on Entity List historically. Verify current status with BIS.' },
+  { keyword: 'hikvision', list: 'US Entity List / NDAA Section 889', severity: 'RESTRICTED', note: 'Prohibited from US government use under NDAA. On Entity List. Screen carefully.' },
+  { keyword: 'dahua', list: 'US Entity List / NDAA Section 889', severity: 'RESTRICTED', note: 'Prohibited from US government use. On Entity List. Screen carefully.' },
+  { keyword: 'dji', list: 'US DOD §1260H list', severity: 'ELEVATED', note: 'DJI on DOD China Military Company list. Potential restrictions for US government-related projects.' },
+  { keyword: 'rosoboronexport', list: 'OFAC SDN', severity: 'BLOCKED', note: 'Russian state defense exporter. Fully blocked under CAPTA.' },
+  { keyword: 'gazprom', list: 'OFAC/EU Sectoral', severity: 'RESTRICTED', note: 'Gazprom group entities under sectoral sanctions. Energy sector restrictions apply.' },
+  { keyword: 'sberbank', list: 'OFAC SDN', severity: 'BLOCKED', note: 'Sberbank PJSC on OFAC SDN. All US-person dealings prohibited.' },
+  { keyword: 'vtb', list: 'OFAC SDN', severity: 'BLOCKED', note: 'VTB Bank on OFAC SDN. Fully blocked.' },
+  { keyword: 'wagner', list: 'OFAC SDN / EU', severity: 'BLOCKED', note: 'Wagner Group (PMC) designated as terrorist organization by US and EU.' },
+  { keyword: 'xinjiang', list: 'UFLPA / OFAC Targeted', severity: 'RESTRICTED', note: 'Xinjiang-origin goods subject to UFLPA rebuttable presumption (assumed forced labor). Cotton, polysilicon, tomatoes, and others specifically banned.' },
+  { keyword: 'polysilicon', list: 'UFLPA', severity: 'ELEVATED', note: 'Chinese polysilicon (solar) subject to UFLPA forced labor scrutiny. Require full supply chain documentation.' },
+]
+
+const LEVEL_CONFIG = {
+  PROHIBITED: { bg: 'bg-rose-500/10', border: 'border-rose-500/40', text: 'text-rose-400', badge: 'bg-rose-500 text-white', icon: <AlertTriangle size={16} className="text-rose-400" /> },
+  'HIGH RISK': { bg: 'bg-rose-500/8', border: 'border-rose-500/30', text: 'text-rose-400', badge: 'bg-rose-800/80 text-rose-200', icon: <AlertTriangle size={16} className="text-rose-400" /> },
+  ELEVATED: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', badge: 'bg-amber-700/60 text-amber-200', icon: <Info size={16} className="text-amber-400" /> },
+  RESTRICTED: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', badge: 'bg-amber-700/60 text-amber-200', icon: <Info size={16} className="text-amber-400" /> },
+  CLEAR: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', badge: 'bg-emerald-700/60 text-emerald-200', icon: <CheckCircle size={16} className="text-emerald-400" /> },
+  LOW: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', badge: 'bg-emerald-700/60 text-emerald-200', icon: <CheckCircle size={16} className="text-emerald-400" /> },
+  UNKNOWN: { bg: 'bg-white/5', border: 'border-white/10', text: 'text-slate-400', badge: 'bg-slate-700 text-slate-300', icon: <Info size={16} className="text-slate-400" /> },
+}
+
+const STATUS_COLOR = {
+  BLOCKED: 'text-rose-400',
+  SECTORAL: 'text-amber-400',
+  TARGETED: 'text-amber-300',
+  PARTIAL: 'text-amber-300',
+  CLEAR: 'text-emerald-400',
+  RESTRICTED: 'text-amber-400',
+  ELEVATED: 'text-amber-300',
+}
+
+export default function SanctionsChecker({ onClose }) {
+  const [entity, setEntity] = useState('')
+  const [country, setCountry] = useState('')
+  const [result, setResult] = useState(null)
+  const [entityMatches, setEntityMatches] = useState([])
+  const [checked, setChecked] = useState(false)
+
+  const runCheck = () => {
+    const entityLower = entity.toLowerCase()
+    const countryLower = country.toLowerCase()
+
+    // Check country
+    let countryResult = null
+    for (const [key, data] of Object.entries(COUNTRY_RISK)) {
+      if (countryLower.includes(key) || key.includes(countryLower)) {
+        countryResult = { country: key, ...data }
+        break
+      }
+    }
+    if (!countryResult && countryLower) {
+      countryResult = { country: country, ofac: 'UNKNOWN', eu: 'UNKNOWN', un: 'UNKNOWN', level: 'UNKNOWN', program: 'No match in database', note: 'Manually verify against OFAC SDN list, EU Consolidated List, and UN Sanctions List. Country not found in Atlas database.' }
+    }
+
+    // Check entity name against SDN keywords
+    const matches = entityLower
+      ? SDN_KEYWORDS.filter(k => entityLower.includes(k.keyword))
+      : []
+
+    setResult(countryResult)
+    setEntityMatches(matches)
+    setChecked(true)
+  }
+
+  const cfg = result ? (LEVEL_CONFIG[result.level] || LEVEL_CONFIG.UNKNOWN) : null
+  const topMatch = entityMatches[0]
+  const entityCfg = topMatch
+    ? LEVEL_CONFIG[topMatch.severity] || LEVEL_CONFIG.ELEVATED
+    : entityMatches.length === 0 && checked && entity ? LEVEL_CONFIG.CLEAR : null
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[200] bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
+        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(239,68,68,0.08)] max-h-[90vh] overflow-y-auto"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-white/5">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-rose-500/10 border border-rose-500/20 rounded-lg flex items-center justify-center">
+              <Shield size={18} className="text-rose-400" />
+            </div>
+            <div>
+              <h2 className="text-[13px] font-bold text-rose-400 tracking-[0.2em] uppercase">Sanctions & Restricted Party Checker</h2>
+              <p className="text-[10px] text-slate-600 mt-0.5">OFAC SDN · EU Consolidated List · UN Security Council · UFLPA</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Inputs */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Entity / Supplier Name</label>
+              <input
+                autoFocus
+                value={entity}
+                onChange={e => setEntity(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && runCheck()}
+                placeholder="e.g. Huawei, Gazprom, SQM S.A."
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
+              />
+            </div>
+            <div>
+              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Country of Origin / Operation</label>
+              <input
+                value={country}
+                onChange={e => setCountry(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && runCheck()}
+                placeholder="e.g. China, Russia, Germany"
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={runCheck}
+            disabled={!entity.trim() && !country.trim()}
+            className="w-full h-11 bg-rose-500 text-white font-bold text-[11px] uppercase tracking-widest hover:bg-rose-400 transition-all disabled:opacity-30 rounded-xl flex items-center justify-center gap-2"
+          >
+            <Shield size={14} /> Run Sanctions Check
+          </button>
+
+          {/* Country result */}
+          {checked && result && (
+            <div className={`rounded-xl border p-4 ${cfg.bg} ${cfg.border}`}>
+              <div className="flex items-start justify-between mb-3">
+                <div className="flex items-center gap-2.5">
+                  {cfg.icon}
+                  <div>
+                    <div className="text-[10px] text-slate-500 uppercase tracking-widest">Country Risk — {result.country.toUpperCase()}</div>
+                    <div className={`text-[15px] font-bold uppercase mt-0.5 ${cfg.text}`}>{result.level}</div>
+                  </div>
+                </div>
+                <span className={`text-[9px] font-bold px-2 py-1 rounded-lg uppercase tracking-widest ${cfg.badge}`}>{result.program}</span>
+              </div>
+
+              {/* List statuses */}
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {[
+                  { label: '🇺🇸 OFAC/US', status: result.ofac },
+                  { label: '🇪🇺 EU List', status: result.eu },
+                  { label: '🌐 UN SC', status: result.un },
+                ].map((item, i) => (
+                  <div key={i} className="bg-black/20 rounded-lg p-2.5 text-center">
+                    <div className="text-[9px] text-slate-600 uppercase mb-1">{item.label}</div>
+                    <div className={`text-[11px] font-bold font-mono ${STATUS_COLOR[item.status] || 'text-slate-400'}`}>{item.status}</div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-[11px] text-slate-400 leading-relaxed">{result.note}</p>
+            </div>
+          )}
+
+          {/* Entity result */}
+          {checked && entity && (
+            <div className={`rounded-xl border p-4 ${entityMatches.length > 0 ? 'bg-rose-500/10 border-rose-500/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}>
+              <div className="flex items-center gap-2.5 mb-3">
+                {entityMatches.length > 0 ? <AlertTriangle size={16} className="text-rose-400" /> : <CheckCircle size={16} className="text-emerald-400" />}
+                <div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-widest">Entity Screening — {entity}</div>
+                  <div className={`text-[14px] font-bold mt-0.5 ${entityMatches.length > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
+                    {entityMatches.length > 0 ? `${entityMatches.length} MATCH${entityMatches.length > 1 ? 'ES' : ''} FOUND` : 'NO MATCHES IN DATABASE'}
+                  </div>
+                </div>
+              </div>
+              {entityMatches.length > 0 ? (
+                <div className="space-y-2">
+                  {entityMatches.map((m, i) => (
+                    <div key={i} className="bg-black/20 rounded-lg p-3">
+                      <div className="text-[9px] text-rose-400 font-bold uppercase tracking-widest mb-1">{m.list} — {m.severity}</div>
+                      <p className="text-[11px] text-slate-400 leading-snug">{m.note}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  No keyword matches against Atlas&apos; curated SDN/Entity List database. <strong className="text-amber-400">Always verify</strong> against the official OFAC SDN, EU Consolidated, and UN SC lists before transacting.
+                </p>
+              )}
+            </div>
+          )}
+
+          {/* Disclaimer + official links */}
+          <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
+            <div className="text-[9px] text-amber-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle size={11} /> Legal Disclaimer</div>
+            <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Atlas provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { label: 'OFAC SDN Search', url: 'https://sanctionssearch.ofac.treas.gov/' },
+                { label: 'EU Consolidated List', url: 'https://www.sanctionsmap.eu/' },
+                { label: 'UN SC Sanctions', url: 'https://www.un.org/securitycouncil/sanctions/information' },
+                { label: 'BIS Entity List', url: 'https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list' },
+              ].map((link, i) => (
+                <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[10px] text-slate-400 hover:text-sky-400 hover:border-sky-500/30 transition-all">
+                  {link.label} <ExternalLink size={9} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}

@@ -1,14 +1,13 @@
-import "./globals.css";
+import { Analytics } from '@vercel/analytics/next';
 
-export const metadata = {
-  title: "ATLAS | Strategic Intelligence HUD",
-  description: "Predictive Supply Chain Causality Radar",
-};
-
+// Root layout — minimal shell. Each route group applies its own CSS.
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

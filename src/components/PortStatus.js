@@ -26,6 +26,12 @@ const PORT_DATA = [
   { name: 'Port of Tanjung Pelepas', country: 'Malaysia 🇲🇾', rank: 18, congestion: 22, waitDays: 1.5, trend: 'stable', volume: '11.0M TEU', alert: null },
   { name: 'Port of Santos', country: 'Brazil 🇧🇷', rank: 19, congestion: 55, waitDays: 4.0, trend: 'up', volume: '4.8M TEU', alert: '⚠️ High congestion — South America trade impact' },
   { name: 'Port of New York / NJ', country: 'USA 🇺🇸', rank: 20, congestion: 30, waitDays: 2.0, trend: 'stable', volume: '9.5M TEU', alert: null },
+  { name: 'Port of Savannah', country: 'USA 🇺🇸', rank: 21, congestion: 25, waitDays: 1.0, trend: 'stable', volume: '5.9M TEU', alert: null },
+  { name: 'Port of Charleston', country: 'USA 🇺🇸', rank: 22, congestion: 28, waitDays: 1.5, trend: 'stable', volume: '3.0M TEU', alert: null },
+  { name: 'Port of Seattle / Tacoma', country: 'USA 🇺🇸', rank: 23, congestion: 35, waitDays: 2.5, trend: 'up', volume: '3.8M TEU', alert: null },
+  { name: 'Port of Manzanillo', country: 'Mexico 🇲🇽', rank: 24, congestion: 40, waitDays: 3.0, trend: 'stable', volume: '3.6M TEU', alert: null },
+  { name: 'Port of Lázaro Cárdenas', country: 'Mexico 🇲🇽', rank: 25, congestion: 52, waitDays: 4.0, trend: 'up', volume: '1.8M TEU', alert: '⚠️ Rail congestion on KCSM corridor — add buffer' },
+  { name: 'Port of Ensenada', country: 'Mexico 🇲🇽', rank: 26, congestion: 22, waitDays: 1.5, trend: 'stable', volume: '0.4M TEU', alert: null },
 ]
 
 function CongestionBar({ score }) {
@@ -40,12 +46,14 @@ function CongestionBar({ score }) {
 export default function PortStatus({ onClose }) {
   const [filter, setFilter] = useState('all')
 
-  const regions = { all: 'All Ports', asia: 'Asia Pacific', europe: 'Europe', usa: 'North America', mideast: 'Middle East / Others' }
+  const regions = { all: 'All Ports', westus: 'West Coast US', eastus: 'East Coast US', asia: 'Asia Pacific', mexico: 'West Mexico', europe: 'Europe', mideast: 'Middle East' }
   const filtered = PORT_DATA.filter(p => {
     if (filter === 'all') return true
+    if (filter === 'westus') return p.country.includes('🇺🇸') && (p.name.includes('Los Angeles') || p.name.includes('Long Beach') || p.name.includes('Seattle') || p.name.includes('Oakland'))
+    if (filter === 'eastus') return p.country.includes('🇺🇸') && (p.name.includes('New York') || p.name.includes('Savannah') || p.name.includes('Charleston') || p.name.includes('Baltimore'))
     if (filter === 'asia') return p.country.includes('🇨🇳') || p.country.includes('🇰🇷') || p.country.includes('🇸🇬') || p.country.includes('🇭🇰') || p.country.includes('🇲🇾') || p.country.includes('🇱🇰')
+    if (filter === 'mexico') return p.country.includes('🇲🇽')
     if (filter === 'europe') return p.country.includes('🇳🇱') || p.country.includes('🇧🇪') || p.country.includes('🇩🇪')
-    if (filter === 'usa') return p.country.includes('🇺🇸') || p.country.includes('🇧🇷')
     if (filter === 'mideast') return p.country.includes('🇦🇪')
     return true
   })
@@ -73,7 +81,7 @@ export default function PortStatus({ onClose }) {
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
+          <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
         </div>
 
         {/* Active alerts bar */}
@@ -89,10 +97,10 @@ export default function PortStatus({ onClose }) {
         )}
 
         {/* Filters */}
-        <div className="px-6 py-3 border-b border-white/5 flex items-center gap-2 shrink-0">
+        <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2 shrink-0 overflow-x-auto no-scrollbar">
           {Object.entries(regions).map(([key, label]) => (
             <button key={key} onClick={() => setFilter(key)}
-              className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${filter === key ? 'bg-sky-500/20 border border-sky-500/30 text-sky-400' : 'text-slate-500 hover:text-slate-300'}`}>
+              className={`shrink-0 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all ${filter === key ? 'bg-sky-500/20 border border-sky-500/30 text-sky-400' : 'text-slate-500 hover:text-slate-300 active:text-slate-300'}`}>
               {label}
             </button>
           ))}
@@ -100,7 +108,8 @@ export default function PortStatus({ onClose }) {
 
         {/* Port list */}
         <div className="overflow-y-auto flex-1 custom-scrollbar">
-          <table className="w-full">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[560px]">
             <thead className="sticky top-0 bg-[#080808] border-b border-white/5">
               <tr>
                 {['#', 'Port', 'Country', 'Congestion', 'Wait Time', 'Volume', 'Trend', 'Status'].map(h => (
@@ -142,6 +151,7 @@ export default function PortStatus({ onClose }) {
               })}
             </tbody>
           </table>
+          </div>
         </div>
       </motion.div>
     </motion.div>
