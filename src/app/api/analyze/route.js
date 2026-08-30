@@ -33,18 +33,21 @@ export async function POST(req) {
 
     // Build a sharp, category-aware summary
     const categoryLabels = {
-      industrial:  'industrial component',
-      automotive:  'automotive part',
-      electronics: 'electronic component',
-      agriculture: 'agricultural commodity',
-      food:        'food & beverage product',
-      metals:      'metal / mineral',
-      textiles:    'textile / apparel',
-      plastics:    'plastic / polymer',
-      chemicals:   'specialty chemical',
-      packaging:   'packaging material',
-      medical:     'medical / pharmaceutical',
-      machinery:   'industrial machinery'
+      industrial:     'industrial component',
+      automotive:     'automotive part',
+      electronics:    'electronic component',
+      agriculture:    'agricultural commodity',
+      food:           'food & beverage product',
+      metals:         'metal / mineral',
+      textiles:       'textile / apparel',
+      plastics:       'plastic / polymer',
+      chemicals:      'specialty chemical',
+      packaging:      'packaging material',
+      medical:        'medical / pharmaceutical',
+      machinery:      'industrial machinery',
+      wood_paper:     'wood / paper / pulp product',
+      construction:   'glass & construction material',
+      consumer_goods: 'consumer goods / personal care product'
     };
     const categoryLabel = categoryLabels[category] || 'commodity';
 

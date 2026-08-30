@@ -844,6 +844,152 @@ export const ATLAS_DB = {
       logistics: { port_wait_days: 2, freight_cost_estimate: '$3.6k/FEU' },
       industry_kpi: { label: 'CNC Market', value: 'Fanuc: ~65% global share' }
     }
+  ],
+
+  // ── WOOD, PAPER & PULP ───────────────────────────────────────
+  wood_paper: [
+    {
+      id: 'h_wp_1', lat: 61.5, lng: 25.7,
+      hub: 'HELSINKI/TAMPERE, FINLAND', title: 'Nordic Pulp & Paper Excellence Hub',
+      companies: [
+        { name: 'UPM-Kymmene', role: 'Global pulp, paper, and plywood producer', tier: 'Tier-1' },
+        { name: 'Stora Enso', role: 'Sustainable packaging, paperboard, and wood products', tier: 'Tier-1' },
+        { name: 'Metsä Group', role: 'Pulp, tissue, and fresh forest fiber products', tier: 'Tier-1' },
+        { name: 'Sappi Finland', role: 'Coated fine paper and dissolving pulp', tier: 'Tier-2' }
+      ],
+      desc: 'Finland and Sweden dominate global sustainable pulp and paper supply. PEFC/FSC certified supply chains, world-leading environmental standards, and advanced biomass utilization. Key grades: bleached kraft pulp (NBSK, BHKP), coated/uncoated paper, containerboard.',
+      customs: { hts_code: '4702.00.00', duty_rate: '0% (MFN — kraft pulp, chemical)', compliance_note: 'EU EUDR timber traceability requirements from 2025. PEFC/FSC chain of custody mandatory for major retailers. No export licenses required for standard grades.' },
+      esg: { carbon_footprint: 'Very Low', ethical_rating: 'A+', sustainability_note: 'Nordic mills operate on renewable energy (biomass, hydro). UPM and Stora Enso committed to science-based targets. FSC 100% certified fiber sourcing.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'NBSK Pulp Price', value: '~$1,200–$1,400/mt (2024)' }
+    },
+    {
+      id: 'h_wp_2', lat: 45.4, lng: -75.7,
+      hub: 'ONTARIO/QUEBEC, CANADA', title: 'North America Softwood Lumber Hub',
+      companies: [
+        { name: 'West Fraser Timber', role: 'Largest North American softwood lumber producer', tier: 'Tier-1' },
+        { name: 'Resolute Forest Products', role: 'Newsprint, pulp, and specialty papers', tier: 'Tier-1' },
+        { name: 'Canfor', role: 'SPF lumber and NBSK pulp', tier: 'Tier-1' },
+        { name: 'Domtar', role: 'Uncoated freesheet paper and pulp', tier: 'Tier-2' }
+      ],
+      desc: 'Canada is the world\'s largest softwood lumber exporter. SPF (spruce-pine-fir) and Douglas fir grades serve US construction and industrial markets. Province of BC and Ontario are key production centers. Subject to ongoing US softwood lumber duty disputes.',
+      customs: { hts_code: '4407.11.00', duty_rate: '8.05–17.9% CVD/AD (softwood lumber, US imports)', compliance_note: 'US Section 201 lumber duties and countervailing duties apply to most Canadian softwood. Hardwood grades (maple, oak) import at 0% MFN. USMCA applies for non-softwood grades. Lacey Act compliance for all wood imports.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'SFI-certified supply chains. Canadian boreal forest management under provincial regulations. FPIC (Free Prior Informed Consent) protocols with Indigenous communities.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$1.2k/FEU (truck to US border)' },
+      industry_kpi: { label: 'SPF Lumber', value: '~$450–$700/mbf (random length)' }
+    },
+    {
+      id: 'h_wp_3', lat: -15.8, lng: -47.9,
+      hub: 'SÃO PAULO/MINAS GERAIS, BRAZIL', title: 'Latin America Eucalyptus Pulp Hub',
+      companies: [
+        { name: 'Suzano', role: 'World\'s largest eucalyptus pulp producer', tier: 'Tier-1' },
+        { name: 'Eldorado Brasil', role: 'BEKP and tissue production', tier: 'Tier-1' },
+        { name: 'Klabin', role: 'Packaging paper and pulp', tier: 'Tier-2' }
+      ],
+      desc: 'Brazil\'s eucalyptus plantations yield the lowest-cost hardwood pulp (BEKP) globally with 7-year harvest cycles vs 25-40 years in Nordic countries. Suzano controls ~25% of global market pulp capacity. Key advantage: year-round harvesting and proximity to Atlantic shipping lanes.',
+      customs: { hts_code: '4703.21.00', duty_rate: '0% (MFN — bleached hardwood kraft pulp)', compliance_note: 'EUDR deforestation compliance required for EU-bound shipments from 2025 (GPS coordinates to plantation level). CERFLOR/FSC certification standard. Brazil\'s IBAMA export permits for native species.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'B+', sustainability_note: 'Suzano certified to FSC, CERFLOR. Water stewardship programs in Cerrado region. Deforestation-free pledges for plantation pulp, but native forest adjacency risk exists.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.1k/FEU to US East Coast' },
+      industry_kpi: { label: 'BEKP Pulp Price', value: '~$900–$1,100/mt (2024)' }
+    }
+  ],
+
+  // ── GLASS & CONSTRUCTION MATERIALS ───────────────────────────
+  construction: [
+    {
+      id: 'h_con_1', lat: 30.9, lng: 112.2,
+      hub: 'WUHAN/HUBEI, CHINA', title: 'Asia Pacific Flat Glass & Building Materials Hub',
+      companies: [
+        { name: 'CSG Holdings', role: 'Flat glass, coated glass, photovoltaic glass', tier: 'Tier-1' },
+        { name: 'Fuyao Glass', role: 'Architectural and automotive flat glass', tier: 'Tier-1' },
+        { name: 'CNBM (China National Building Material)', role: 'Cement, glass fiber, gypsum board', tier: 'Tier-1' },
+        { name: 'China Jushi', role: 'World\'s largest fiberglass manufacturer', tier: 'Tier-1' }
+      ],
+      desc: 'China produces ~60% of global flat glass and dominates glass fiber manufacturing. Hubei and Guangdong are the core flat glass production centers. Critical note: US/EU tariffs apply on most Chinese glass imports. Chinese glass fiber faces 25% Section 301 tariffs in the US.',
+      customs: { hts_code: '7005.10.00', duty_rate: '25% Section 301 (flat glass, US imports from China)', compliance_note: 'Section 301 List 3 tariffs apply to most flat glass and glass fiber. REACH compliance required for EU. UK Global Tariff at 5.4% for flat glass. Consider Vietnam or India re-sourcing for tariff mitigation.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'C', sustainability_note: 'Float glass production is energy-intensive. Chinese plants increasingly transitioning to natural gas from coal. CNBM has sustainability commitments but disclosure is limited.' },
+      logistics: { port_wait_days: 6, freight_cost_estimate: '$4.2k/FEU (hazardous/oversize handling premium)' },
+      industry_kpi: { label: 'Global Flat Glass', value: 'China: ~60% of world production' }
+    },
+    {
+      id: 'h_con_2', lat: 51.5, lng: 10.4,
+      hub: 'GERMANY / BENELUX', title: 'European Glass & Advanced Building Materials Hub',
+      companies: [
+        { name: 'Saint-Gobain', role: 'Flat glass, insulation, high-performance materials', tier: 'Tier-1' },
+        { name: 'Guardian Industries', role: 'Float glass and coated glass', tier: 'Tier-1' },
+        { name: 'AGC Glass Europe', role: 'Flat glass and specialty glass coatings', tier: 'Tier-1' },
+        { name: 'Knauf', role: 'Gypsum board, insulation, and construction systems', tier: 'Tier-2' }
+      ],
+      desc: 'Western Europe leads in high-performance architectural glass (low-e coatings, triple glazing, fire-resistant glass), gypsum board systems, and mineral wool insulation. Germany and Belgium are key production hubs for Saint-Gobain, AGC, and Guardian flat glass lines.',
+      customs: { hts_code: '7005.10.00', duty_rate: '3.7% MFN (flat glass to US)', compliance_note: 'EU CE marking required for construction products. EN 572 standard for flat glass. REACH compliance for chemical coatings. US imports from EU at MFN rates (3.7% for most flat glass). No anti-dumping duties.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Saint-Gobain committed to carbon neutrality by 2050. AGC and Guardian operating carbon reduction programs. European glass recycling rates >70% in most countries.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.8k/FEU (specialist glass freight)' },
+      industry_kpi: { label: 'Low-E Glass Premium', value: '+35–60% vs clear float glass' }
+    },
+    {
+      id: 'h_con_3', lat: 22.5, lng: 88.4,
+      hub: 'KOLKATA / INDIA', title: 'South Asia Cement & Construction Materials Hub',
+      companies: [
+        { name: 'UltraTech Cement', role: 'Largest cement producer in Asia ex-China', tier: 'Tier-1' },
+        { name: 'Ambuja Cements (Adani)', role: 'Blended cement and ready-mix concrete', tier: 'Tier-1' },
+        { name: 'ACC Limited', role: 'Ordinary Portland cement and specialty grades', tier: 'Tier-2' },
+        { name: 'Kajaria Ceramics', role: 'Leading ceramic and vitrified tile manufacturer', tier: 'Tier-2' }
+      ],
+      desc: 'India is the world\'s second-largest cement producer and a major ceramic tile exporter. Indian cement (OPC, PPC, PSC) and ceramic/porcelain tiles are competitively priced alternatives to Chinese sources with improving quality and logistics infrastructure.',
+      customs: { hts_code: '2523.21.00', duty_rate: '0% MFN (Portland cement)', compliance_note: 'US import duty on cement: free under most circumstances. BIS (Bureau of Indian Standards) certification required for most construction products. ISI marks on cement. Ceramic tiles from India: 0-3.4% US MFN duty vs China tiles with AD/CVD.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'UltraTech committed to reducing CO2 per ton of cement. Increasing use of fly ash and slag as clinker substitutes. India cement sector under National Cement Mission for emissions reduction.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$2.9k/FEU to US West Coast' },
+      industry_kpi: { label: 'India Cement Capacity', value: '~600 MT/yr (2nd globally)' }
+    }
+  ],
+
+  // ── CONSUMER GOODS & PERSONAL CARE ────────────────────────────
+  consumer_goods: [
+    {
+      id: 'h_cg_1', lat: 22.3, lng: 114.2,
+      hub: 'GUANGDONG, CHINA', title: 'Asia Pacific Consumer & Personal Care Hub',
+      companies: [
+        { name: 'Henkel (China Operations)', role: 'Laundry, hair care, and adhesive brands', tier: 'Tier-1' },
+        { name: 'Reckitt (China plants)', role: 'Hygiene, health, and home products', tier: 'Tier-1' },
+        { name: 'Nice Group', role: 'Detergent and personal care OEM/private label', tier: 'Tier-2' },
+        { name: 'Guangdong Marubi', role: 'Cosmetics and skin care contract manufacturing', tier: 'Tier-2' }
+      ],
+      desc: 'Guangdong is the world\'s largest hub for consumer goods and personal care contract manufacturing. Thousands of OEM/ODM factories produce detergents, shampoos, cosmetics, and household cleaners for global brands. Key advantage: scale, cost, and speed-to-market for private label.',
+      customs: { hts_code: '3305.10.00', duty_rate: '25% Section 301 (most personal care from China)', compliance_note: 'Section 301 tariffs on most personal care and household products. FDA OTC drug requirements for sunscreen, anti-dandruff products. CPSC labeling rules. EU Cosmetics Regulation (EC 1223/2009) for EU-bound goods. Consider Vietnam or India OEM to avoid tariffs.' },
+      esg: { carbon_footprint: 'Medium-High', ethical_rating: 'C+', sustainability_note: 'Major brands imposing supplier sustainability codes. RSPO certification for palm-derivative ingredients. Factory audit programs (SMETA, SEDEX) standard for tier-1 suppliers.' },
+      logistics: { port_wait_days: 7, freight_cost_estimate: '$3.9k/FEU' },
+      industry_kpi: { label: 'Personal Care OEM Market', value: '~$28B globally (2024)' }
+    },
+    {
+      id: 'h_cg_2', lat: 48.9, lng: 2.3,
+      hub: 'PARIS/ILE-DE-FRANCE, FRANCE', title: 'European Luxury Beauty & Fragrance Hub',
+      companies: [
+        { name: 'L\'Oréal', role: 'World\'s largest beauty company, HQ and R&D', tier: 'Tier-1' },
+        { name: 'LVMH Parfums', role: 'Prestige fragrance and luxury cosmetics', tier: 'Tier-1' },
+        { name: 'Givaudan', role: 'Global flavor and fragrance ingredient leader', tier: 'Tier-1' },
+        { name: 'Firmenich (now DSM-Firmenich)', role: 'Fragrance ingredients and finished compounds', tier: 'Tier-2' }
+      ],
+      desc: 'France is the global capital of luxury beauty, fragrance, and high-performance cosmetics. Paris and the Grasse region (Côte d\'Azur) produce premium fragrance ingredients and finished perfumes. L\'Oréal\'s R&D campus develops breakthrough formulations for mass and prestige segments.',
+      customs: { hts_code: '3303.00.20', duty_rate: '0% MFN (perfume/toilet water to US)', compliance_note: 'EU Cosmetics Regulation 1223/2009 compliance mandatory for EU production. US FDA cosmetics registration under MoCRA (2023). IFRA compliance for fragrance allergens. Country of Origin "Made in France" designation requires substantial transformation in France.' },
+      esg: { carbon_footprint: 'Low-Medium', ethical_rating: 'A', sustainability_note: 'L\'Oréal L\'Oréal for the Future program targeting carbon neutrality by 2025. LVMH LIFE 360 sustainability program. Givaudan committing to 100% sustainably sourced naturals by 2030.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.2k/FEU' },
+      industry_kpi: { label: 'French Cosmetics Exports', value: '€19B/yr (2nd global exporter)' }
+    },
+    {
+      id: 'h_cg_3', lat: 28.6, lng: 77.2,
+      hub: 'DELHI/UTTAR PRADESH, INDIA', title: 'South Asia Personal Care & Detergent Hub',
+      companies: [
+        { name: 'Hindustan Unilever', role: 'Personal care, home care OEM and brands', tier: 'Tier-1' },
+        { name: 'Procter & Gamble India', role: 'Detergent, hair care, and oral care manufacturing', tier: 'Tier-1' },
+        { name: 'Godrej Consumer Products', role: 'Hair color, soaps, and insecticides', tier: 'Tier-2' },
+        { name: 'Jyothy Labs', role: 'Fabric care and personal hygiene products', tier: 'Tier-2' }
+      ],
+      desc: 'India\'s consumer goods sector is the world\'s fastest-growing, driven by a 1.4B population and rising middle class. HUL, P&G, and homegrown brands operate large-scale manufacturing in Uttar Pradesh and Himachal Pradesh. India is an emerging export hub for halal-certified and Ayurvedic personal care products.',
+      customs: { hts_code: '3401.11.50', duty_rate: '0% MFN (soap and detergent bars to US)', compliance_note: 'US FDA cosmetics MoCRA registration for new importers. FSSAI (Food Safety) for ingested personal care items. BIS certification for some household products. EU REACH and Cosmetics Regulation for EU market access.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'HUL Compass sustainability goals. P&G India renewable energy commitments. Growing Ayurvedic/natural ingredients supply chain with ECOCERT certification.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$2.7k/FEU to US East Coast' },
+      industry_kpi: { label: 'India FMCG Market', value: '~$110B (2024), 10% YoY growth' }
+    }
   ]
 }
 
@@ -962,32 +1108,68 @@ export function categorizeQuery(query) {
     'hard candy', 'soft candy', 'lollipop', 'nougat', 'marzipan', 'fondant',
     'sugar confection', 'sugar coated', 'jelly bean', 'licorice',
     // Snacks & baked goods
-    'cookie', 'biscuit', 'cracker', 'pretzel', 'chip', 'potato chip',
+    'cookie', 'biscuit', 'cracker', 'pretzel', 'potato chip',
     'tortilla chip', 'popcorn', 'granola bar', 'protein bar', 'energy bar',
     'bread', 'bakery', 'pastry', 'croissant', 'muffin', 'donut', 'doughnut',
     'cake mix', 'baking mix', 'flour based', 'cereal', 'breakfast cereal',
     'wafer', 'waffle', 'pancake mix',
-    // Pasta, noodles, grains
+    'sourdough', 'tortilla', 'flatbread', 'pita', 'granola', 'oatmeal', 'porridge',
+    'gluten free', 'trail mix', 'dried fruit', 'fruit snack', 'nut snack',
+    'mixed nuts', 'roasted nuts', 'nuts and', 'seeds mix', 'sunflower seed', 'pumpkin seed',
+    // Pasta, noodles, grains (processed)
     'pasta', 'noodle', 'instant noodle', 'ramen', 'spaghetti', 'macaroni',
+    // Processed meats (all types)
+    'sausage', 'pepperoni', 'salami', 'chorizo', 'mortadella', 'bologna',
+    'pastrami', 'prosciutto', 'deli meat', 'hot dog', 'frankfurter',
+    'bacon', 'ham slice', 'smoked meat', 'cured meat', 'jerky', 'meat snack',
+    // Seafood (processed/packaged)
+    'smoked salmon', 'canned tuna', 'tuna can', 'sardine', 'anchovy',
+    'shrimp frozen', 'frozen shrimp', 'lobster tail', 'fish fillet',
+    'crab meat', 'canned fish', 'seafood product', 'seafood pack',
     // Sauces, condiments & flavoring
-    'ketchup', 'sauce', 'hot sauce', 'soy sauce', 'oyster sauce', 'fish sauce',
+    'ketchup', 'hot sauce', 'soy sauce', 'oyster sauce', 'fish sauce',
     'mayonnaise', 'mustard', 'salad dressing', 'vinegar', 'seasoning mix',
     'spice blend', 'flavor extract', 'food flavoring', 'food coloring',
     'gelatin', 'pectin', 'agar agar', 'food additive', 'preservative',
     'food ingredient', 'flavor compound',
+    'tomato paste', 'pizza sauce', 'bbq sauce', 'sriracha', 'teriyaki',
+    'hummus', 'salsa', 'peanut butter', 'almond butter',
+    'jam', 'jelly preserve', 'maple syrup', 'honey jar', 'honey pack',
+    // Oils & fats (edible)
+    'olive oil', 'vegetable oil', 'cooking oil', 'sunflower oil',
+    'coconut oil', 'sesame oil', 'canola oil', 'edible oil',
+    // Spices, seasonings & dry ingredients
+    'flour baking', 'baking flour', 'granulated sugar', 'table salt',
+    'spices', 'cinnamon', 'turmeric', 'dried herbs', 'garlic powder',
+    'onion powder', 'paprika', 'cumin', 'oregano', 'black pepper',
     // Beverages
-    'juice', 'fruit juice', 'soft drink', 'soda', 'energy drink', 'sports drink',
-    'bottled water', 'mineral water', 'tea blend', 'instant coffee', 'coffee pod',
-    'milk powder', 'formula', 'infant formula',
-    // Dairy & frozen
-    'cheese', 'yogurt', 'butter', 'cream', 'ice cream', 'frozen dessert',
-    'frozen food', 'ready meal', 'meal kit', 'instant meal',
+    'juice', 'fruit juice', 'soft drink', 'cola drink', 'lemonade',
+    'kombucha', 'carbonated water', 'sparkling water', 'iced tea',
+    'energy drink', 'sports drink', 'bottled water', 'mineral water',
+    'tea blend', 'instant coffee', 'coffee pod',
+    // Dairy, eggs & alternatives
+    'milk powder', 'baby formula', 'infant formula', 'powdered milk',
+    'cheese', 'mozzarella', 'cheddar', 'cream cheese', 'cottage cheese',
+    'yogurt', 'greek yogurt', 'kefir', 'butter', 'cream',
+    'ice cream', 'gelato', 'frozen dessert',
+    'egg product', 'liquid egg', 'dried egg',
+    // Plant-based & specialty
+    'tofu', 'tempeh', 'plant based meat', 'vegan burger', 'vegan protein',
+    'oat milk', 'almond milk', 'soy milk',
+    // Canned & frozen convenience foods
+    'canned soup', 'canned beans', 'canned vegetable', 'canned fruit',
+    'frozen pizza', 'frozen vegetable', 'frozen fries', 'french fries', 'frozen meal',
+    'microwave meal', 'ready meal', 'meal kit', 'instant meal',
+    // Nutrition & supplements (food-grade)
+    'whey protein', 'protein shake', 'meal replacement', 'baby food',
+    'infant cereal', 'sports supplement', 'nutrition bar',
     // Sweeteners & functional ingredients
     'sweetener', 'corn syrup', 'high fructose', 'sugar substitute', 'stevia',
     'sorbitol', 'maltitol', 'food grade',
     // CPG / packaged food general
     'packaged food', 'food manufacturing', 'food product', 'food brand',
-    'consumer food', 'snack food', 'private label food', 'co-manufacturing food'
+    'consumer food', 'snack food', 'private label food', 'co-manufacturing food',
+    'frozen food', 'sauce'
   ])) return 'food'
 
   // Priority 5b: Raw agriculture and commodities
@@ -1086,6 +1268,43 @@ export function categorizeQuery(query) {
     'transmission', 'exhaust', 'wheel', 'airbag',
     'windshield', 'auto part'
   ])) return 'automotive'
+
+  // Priority 16: Wood, paper & pulp
+  if (match([
+    'lumber', 'plywood', 'mdf', 'hardboard', 'particleboard', 'osb board',
+    'wood panel', 'wood plank', 'wood beam', 'wooden', 'timber',
+    'paper pulp', 'kraft paper', 'tissue paper', 'newsprint', 'paperboard',
+    'cardstock', 'copy paper', 'office paper', 'wood pulp',
+    'construction lumber', 'softwood', 'hardwood', 'veneer',
+    'engineered wood', 'cross laminated timber', 'glulam'
+  ])) return 'wood_paper'
+
+  // Priority 17: Glass & construction materials
+  if (match([
+    'flat glass', 'tempered glass', 'borosilicate', 'glass fiber', 'glass wool',
+    'float glass', 'architectural glass', 'safety glass', 'laminated glass',
+    'cement', 'ready mix concrete', 'concrete block', 'clay brick', 'masonry',
+    'ceramic tile', 'porcelain tile', 'floor tile', 'wall tile',
+    'roofing material', 'roof shingle', 'insulation board', 'foam insulation',
+    'drywall', 'gypsum board', 'plasterboard', 'wallboard',
+    'aggregate', 'gravel', 'sand quarry', 'stone tile', 'marble slab',
+    'granite countertop', 'construction material', 'building material'
+  ])) return 'construction'
+
+  // Priority 18: Consumer goods & personal care
+  if (match([
+    'shampoo', 'conditioner', 'body wash', 'shower gel', 'bar soap', 'hand soap',
+    'liquid soap', 'hand sanitizer', 'toothpaste', 'mouthwash', 'toothbrush',
+    'deodorant', 'antiperspirant', 'sunscreen', 'spf lotion',
+    'cosmetics', 'foundation', 'lipstick', 'mascara', 'eyeshadow',
+    'lip gloss', 'concealer', 'blush', 'makeup',
+    'perfume', 'fragrance', 'cologne', 'body spray',
+    'facial cleanser', 'moisturizer', 'serum skin', 'toner skin',
+    'hair dye', 'hair color', 'hair spray', 'hair gel', 'hair wax',
+    'liquid detergent', 'laundry detergent', 'fabric softener',
+    'dishwashing liquid', 'dish soap', 'household cleaner',
+    'personal care', 'beauty product', 'hygiene product', 'consumer goods'
+  ])) return 'consumer_goods'
 
   // Default: electronics (most common procurement category globally)
   return 'electronics'
@@ -1473,6 +1692,57 @@ export const CATEGORY_RISKS = {
       id: 'r_pla_4', title: 'Tooling & Mold Lead Time Risk', type: 'Risk', severity: 'MEDIUM',
       desc: 'Injection mold fabrication for complex parts takes 8-20 weeks and costs $15,000–$250,000+ per tool. A single mold failure, tool damage, or supplier exit can halt production with no quick recovery path.',
       mitigation: 'Own your tooling — ensure purchase orders specify tooling ownership with your company. Maintain mold drawings and CAD files. Qualify a secondary molder with duplicate or back-up tooling for critical production parts. Inspect tools annually.'
+    }
+  ],
+  wood_paper: [
+    {
+      id: 'r_wp_1', title: 'US Softwood Lumber Countervailing & Anti-Dumping Duties', type: 'Risk', severity: 'HIGH',
+      desc: 'Canadian softwood lumber faces combined CVD/AD duties averaging 8–18% in the US under a long-running trade dispute. Rates are reset periodically through Commerce Department administrative reviews, creating pricing uncertainty for US buyers sourcing Canadian lumber.',
+      mitigation: 'Source from US domestic producers (Weyerhaeuser, PotlatchDeltic) where possible. Use Canadian hardwood grades exempt from CVD/AD. Monitor USITC/Commerce Department annual review outcomes. Lock in 12-month pricing with Canadian mills before duty reset periods.'
+    },
+    {
+      id: 'r_wp_2', title: 'EU Deforestation Regulation (EUDR) Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'EU Deforestation Regulation (EUDR) requires operators to verify that wood, paper, and pulp products are not sourced from deforested land. Applies to all imports from Brazil, Indonesia, and other high-risk origins from 2025. Non-compliance blocks EU market entry.',
+      mitigation: 'Require GPS-level geo-location data from all suppliers for forest-of-origin mapping. Engage only PEFC or FSC chain-of-custody certified suppliers. Use Trase.earth and Global Forest Watch for deforestation risk monitoring. Conduct pre-shipment EUDR due diligence audits.'
+    },
+    {
+      id: 'r_wp_3', title: 'Pulp & Paper Price Cycle Volatility', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Global pulp prices (NBSK, BHKP, BEKP) move 30–50% between cycle peaks and troughs. 2022 saw record highs above $1,500/mt for NBSK; 2023-24 corrections brought prices back to $1,100–$1,200/mt. Newsprint and tissue demand declining structurally due to digital substitution.',
+      mitigation: 'Use index-linked pricing with price caps/floors in long-term supply agreements. Build 60-day pulp inventory during price troughs. Optimize paper grade mix toward growing grades (containerboard, kraft). Explore secondary fiber (recycled) alternatives where quality specs permit.'
+    }
+  ],
+  construction: [
+    {
+      id: 'r_con_1', title: 'Anti-Dumping & Countervailing Duties on Chinese Construction Products', type: 'Risk', severity: 'HIGH',
+      desc: 'US and EU maintain anti-dumping and countervailing duties on a wide range of Chinese construction materials: ceramic tiles (AD 73–265%), glass fiber (25% Section 301), flat glass (25% Section 301), and steel products (15–118%). Total landed cost from China can be double the ex-works price.',
+      mitigation: 'Source flat glass from EU (Saint-Gobain, AGC, Guardian) at MFN rates of ~3.7%. Source ceramic tiles from India or Mexico which face lower or no AD/CVD. Use US domestic cement and gypsum producers. Audit all construction products against current ITC AD/CVD order list before importing.'
+    },
+    {
+      id: 'r_con_2', title: 'Construction Market Cyclicality & Demand Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Glass, cement, and ceramic tile demand are highly correlated with construction activity, which follows sharp boom-bust cycles tied to interest rates. 2022–24 rate hike cycle caused residential construction to drop 20–30%, severely pressuring flat glass and tile producers.',
+      mitigation: 'Diversify customer base across residential, commercial, and infrastructure segments. Maintain lean inventory and flexible take-or-pay contracts during demand downturns. Monitor housing starts, commercial construction permits, and infrastructure spending data monthly.'
+    },
+    {
+      id: 'r_con_3', title: 'Carbon Intensity & EU Green Deal Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Cement and glass manufacturing are among the most carbon-intensive industries globally (~8% of global CO2). EU Carbon Border Adjustment Mechanism (CBAM) from 2026 will impose carbon costs on cement, glass, and steel imports into the EU, potentially adding €30–80/tonne CO2 equivalent.',
+      mitigation: 'Source from suppliers with documented carbon reduction roadmaps and verified emissions data. Qualify low-carbon cement alternatives (blended cements, geopolymers). Engage CBAM consultants early to prepare for 2026 reporting and payment obligations. Track clinker substitution rates (SCM) in cement supply.'
+    }
+  ],
+  consumer_goods: [
+    {
+      id: 'r_cg_1', title: 'Section 301 Tariffs & FDA MoCRA Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'Most personal care and household products sourced from China face 25% Section 301 tariffs. Additionally, the FDA Modernization of Cosmetics Regulation Act (MoCRA, 2023) now requires cosmetic facility registration, product listing, and adverse event reporting — creating new compliance costs for importers.',
+      mitigation: 'Qualify alternative manufacturing in Vietnam, India, or Mexico to reduce tariff exposure. Complete FDA cosmetic facility registration for all manufacturing sites. Implement adverse event tracking system. Engage regulatory counsel to assess full MoCRA compliance requirements before next import.'
+    },
+    {
+      id: 'r_cg_2', title: 'Restricted Ingredient & Banned Substance Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'EU Cosmetics Regulation bans or restricts 1,600+ substances; US regulations lag but state bans (California AB 496, PFAS bans) create multi-jurisdiction compliance complexity. Reformulation costs average $200k–$2M per SKU. Ingredient bans can create overnight market access blocks.',
+      mitigation: 'Conduct regular ingredient review against EU Annex II (banned) and Annex III (restricted) lists. Monitor California and other state cosmetics ban legislation. Use INCI-compliant formulations. Maintain reformulation contingency plans with contract manufacturers for top 20 SKUs by revenue.'
+    },
+    {
+      id: 'r_cg_3', title: 'Palm Oil Supply Chain & Deforestation Risk', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Palm oil and palm derivatives (sodium lauryl sulfate, palm kernel oil) are core ingredients in most personal care and home care products. Unsustainable palm sourcing from Indonesia and Malaysia creates reputational, regulatory (EUDR), and customer pressure risks.',
+      mitigation: 'Source 100% RSPO (Roundtable on Sustainable Palm Oil) Mass Balance or Segregated certified palm derivatives. Map all palm-derivative suppliers to plantation level. Disclose palm sourcing in sustainability reports. Explore alternative surfactants (methyl ester sulfonates, alkyl polyglucosides) for palm-free formulations.'
     }
   ],
   machinery: [
