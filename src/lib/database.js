@@ -189,20 +189,6 @@ export const ATLAS_DB = {
       esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'India+1 strategy hub. Improving standards under IATF adoption.' },
       logistics: { port_wait_days: 4, freight_cost_estimate: '$3.5k/Sea' },
       industry_kpi: { label: 'Cost vs Japan', value: '40-50% Savings' }
-    },
-    {
-      id: 'h_ind_7', lat: 41.2, lng: -81.9,
-      hub: 'OHIO, USA', title: 'Automotive & Architectural Glass Hub',
-      companies: [
-        { name: 'Vitro / Pilkington (NSG)', website: 'https://www.vitro.com/' },
-        { name: 'Guardian Glass', website: 'https://www.guardianglass.com/' },
-        { name: 'Fuyao Glass America', website: 'https://www.fuyaogroup.com/' }
-      ],
-      desc: 'Historic center of North American float glass production, covering automotive glazing, architectural glass, and general glassware manufacturing under FMVSS/ANSI safety certification.',
-      customs: { hts_code: '7007.21', duty_rate: '0% (Domestic)', compliance_note: 'FMVSS 205 / ANSI Z97.1 safety glazing certification required for automotive and architectural use.' },
-      esg: { carbon_footprint: 'High', ethical_rating: 'B+', sustainability_note: 'Energy-intensive float glass process. Recycled cullet content reduces emissions per ton produced.' },
-      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.4k/Rail' },
-      industry_kpi: { label: 'Safety Cert', value: 'FMVSS / ANSI Z97.1' }
     }
   ],
 
@@ -830,33 +816,8 @@ export function categorizeQuery(query) {
     'plastic film', 'packaging film', 'stretch film', 'shrink wrap',
     'plastic extrusion', 'extrusion profile', 'plastic tube',
     'masterbatch', 'color concentrate', 'flame retardant compound',
-    'engineering plastic', 'specialty polymer', 'bio-based plastic',
-    // Compound nylon-as-raw-material phrases only (not bare "nylon" or
-    // "nylon fabric"/"nylon fiber" — those correctly stay under textiles
-    // via the existing "fabric" keyword; adding bare "nylon" here would
-    // incorrectly steal that match since this block is checked first).
-    'nylon resin', 'nylon pellet', 'nylon polymer', 'nylon compound resin'
+    'engineering plastic', 'specialty polymer', 'bio-based plastic'
   ])) return 'plastics'
-
-  // Priority 1b: Food & confectionery — placed early and using specific
-  // compound terms (e.g. "potato chip" not bare "chip") so it doesn't get
-  // pre-empted by the electronics "chip" keyword checked later, and so it
-  // doesn't wait until the end of the chain to be reached (previously,
-  // almost every food item outside staple commodities like wheat/beef fell
-  // all the way through to the final "electronics" default).
-  if (match([
-    'marshmallow', 'candy', 'chocolate', 'gummy', 'confection',
-    'cereal', 'snack bar', 'granola', 'cookie', 'cracker', 'biscuit',
-    'potato chip', 'tortilla chip', 'corn chip', 'pretzel',
-    'canned food', 'canned good', 'canned soup', 'canned vegetable',
-    'frozen food', 'frozen meal', 'frozen pizza', 'frozen vegetable',
-    'ice cream', 'frozen dessert', 'dairy product',
-    'bottled water', 'beverage', 'soft drink', 'soda', 'juice concentrate',
-    'bakery', 'baked good', 'bread', 'pastry',
-    'condiment', 'sauce', 'seasoning blend', 'spice blend', 'spices',
-    'tea leaf', 'tea leaves', 'instant coffee', 'food additive',
-    'flavoring', 'flavouring', 'food coloring', 'preservative'
-  ])) return 'agriculture'
 
   // Priority 2: Specific industrial components (magnets, bearings, seals, etc.)
   // Must be before automotive to catch "magnets for cars/visors" → industrial category
@@ -868,14 +829,7 @@ export function categorizeQuery(query) {
     'industrial motor', 'servo motor', 'stepper motor',
     'spring component', 'disc spring', 'compression spring',
     'hydraulic fitting', 'pneumatic valve', 'precision machined',
-    'sintered', 'powder metallurgy',
-    // Glass as a raw/finished material (not a container — "glass bottle"
-    // is already handled separately, under packaging). No dedicated glass
-    // category exists; industrial is the closest fit (precision
-    // manufacturing, similar QA/certification regime).
-    'drinking glass', 'optical lens', 'mirror glass', 'glassware',
-    'crystal glass', 'flat glass', 'safety glass', 'tempered glass',
-    'laminated glass', 'glass sheet', 'glass panel material', 'glazing'
+    'sintered', 'powder metallurgy'
   ])) return 'industrial'
 
   // Priority 3: Specific metals and minerals (raw material level)
@@ -955,9 +909,7 @@ export function categorizeQuery(query) {
     'shirt', 'shoe', 'sneaker', 'cotton', 'leather',
     'apparel', 'textile', 'clothing', 'garment',
     'denim', 'wool', 'silk', 'polyester', 'fabric',
-    'yarn', 'knit', 'woven', 'fashion', 'footwear',
-    'suede', 'jacket', 'coat ', 'trousers', 'dress fabric',
-    'upholstery fabric', 'canvas fabric', 'linen', 'velvet'
+    'yarn', 'knit', 'woven', 'fashion', 'footwear'
   ])) return 'textiles'
 
   // Priority 11: Packaging — corrugated, glass, labels, flexible, protective
