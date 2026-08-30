@@ -89,12 +89,14 @@ export default function SanctionsChecker({ onClose }) {
     const entityLower = entity.toLowerCase()
     const countryLower = country.toLowerCase()
 
-    // Check country
+    // Check country (only if a country was provided)
     let countryResult = null
-    for (const [key, data] of Object.entries(COUNTRY_RISK)) {
-      if (countryLower.includes(key) || key.includes(countryLower)) {
-        countryResult = { country: key, ...data }
-        break
+    if (countryLower) {
+      for (const [key, data] of Object.entries(COUNTRY_RISK)) {
+        if (countryLower.includes(key) || key.includes(countryLower)) {
+          countryResult = { country: key, ...data }
+          break
+        }
       }
     }
     if (!countryResult && countryLower) {
