@@ -17,7 +17,7 @@ export async function POST(req) {
 
     const query = material.trim();
     const category = categorizeQuery(query);
-    const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.electronics;
+    const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.food || ATLAS_DB.electronics;
     const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
     // Surface the most relevant hub first in the browsable list too, so it
     // matches the "Primary recommendation" in the directive instead of
@@ -37,8 +37,14 @@ export async function POST(req) {
       automotive:  'automotive part',
       electronics: 'electronic component',
       agriculture: 'agricultural commodity',
+      food:        'food & beverage product',
       metals:      'metal / mineral',
-      textiles:    'textile / apparel'
+      textiles:    'textile / apparel',
+      plastics:    'plastic / polymer',
+      chemicals:   'specialty chemical',
+      packaging:   'packaging material',
+      medical:     'medical / pharmaceutical',
+      machinery:   'industrial machinery'
     };
     const categoryLabel = categoryLabels[category] || 'commodity';
 
@@ -59,7 +65,7 @@ export async function POST(req) {
       },
 
       // Properly structured risks — each has id, title, desc, severity, mitigation, type
-      risks: CATEGORY_RISKS[category] || CATEGORY_RISKS.electronics,
+      risks: CATEGORY_RISKS[category] || CATEGORY_RISKS.food || CATEGORY_RISKS.electronics,
 
       opportunities,
 

@@ -354,7 +354,88 @@ export const ATLAS_DB = {
     }
   ],
 
-  // 5. METALS & MINING (Lithium, Copper, Steel, Aluminum, Rare Earths)
+  // 5. FOOD & BEVERAGE / CPG (Confectionery, Snacks, Beverages, Packaged Food)
+  food: [
+    {
+      id: 'h_food_1', lat: 41.8, lng: -87.9,
+      hub: 'CHICAGO, USA', title: 'Global CPG & Confectionery Hub',
+      companies: [
+        { name: 'Mondelez International', website: 'https://www.mondelezinternational.com/', turnover: '>$1B' },
+        { name: 'Mars Inc.', website: 'https://www.mars.com/', turnover: '>$1B' },
+        { name: 'Kraft Heinz', website: 'https://www.kraftheinzcompany.com/', turnover: '>$1B' },
+        { name: 'Ingredion', website: 'https://www.ingredion.com/', turnover: '>$1B' },
+        { name: 'Tootsie Roll Industries', website: 'https://www.tootsie.com/', turnover: '$100M-$1B' },
+        { name: 'Ferrara Candy', website: 'https://www.ferrarausa.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'World capital of packaged food, confectionery, and CPG manufacturing. Home to candy, cookie, snack, condiment, and marshmallow production at scale. FSMA compliant, FDA-registered facilities.',
+      customs: { hts_code: '1704.90', duty_rate: '0% (Domestic)', compliance_note: 'FDA registration mandatory. FSMA Preventive Controls rule applies. No import duties for domestic supply.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Major brands publish Scope 1/2/3 reduction roadmaps. Packaging recyclability targets active.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.8k/Ground' },
+      industry_kpi: { label: 'Min Order', value: '500 kg MOQ' }
+    },
+    {
+      id: 'h_food_2', lat: 23.1, lng: 113.3,
+      hub: 'GUANGDONG, CHINA', title: 'Asia Pacific Food Manufacturing',
+      companies: [
+        { name: 'Want Want Group', website: 'https://www.wantWant.com/', turnover: '>$1B' },
+        { name: 'Nongfu Spring', website: 'https://www.nongfuspring.com/', turnover: '>$1B' },
+        { name: 'Haday Foods', website: 'https://www.haday.com/', turnover: '$100M-$1B' },
+        { name: 'Yida Group', website: 'https://www.yida.cc/', turnover: '$100M-$1B' }
+      ],
+      desc: 'High-volume, low-cost production for candies, snacks, instant noodles, sauces, and condiments. Dominant supplier for private-label food brands in North America and Europe. Subject to enhanced import inspection.',
+      customs: { hts_code: '1704.90', duty_rate: '25% (Sec 301)', compliance_note: 'FDA Prior Notice required. Enhanced allergen/contaminant screening at US ports. Section 301 tariffs apply.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Water usage and wastewater treatment audits recommended. Supplier labor audits required.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$4.2k/FEU' },
+      industry_kpi: { label: 'Scale', value: 'Unlimited Volume' }
+    },
+    {
+      id: 'h_food_3', lat: 52.1, lng: 5.3,
+      hub: 'ROTTERDAM, NETHERLANDS', title: 'European Food Innovation Hub',
+      companies: [
+        { name: 'Unilever', website: 'https://www.unilever.com/', turnover: '>$1B' },
+        { name: 'DSM-Firmenich', website: 'https://www.dsm-firmenich.com/', turnover: '>$1B' },
+        { name: 'FrieslandCampina', website: 'https://www.frieslandcampina.com/', turnover: '>$1B' },
+        { name: 'Royal Cosun', website: 'https://www.cosun.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Leading European hub for food ingredients, flavors, natural sweeteners, and branded CPG. Haribo, Lärabar, and premium confectionery supply cluster. Strict EU food law compliance.',
+      customs: { hts_code: '1704.90', duty_rate: '6.5% (MFN)', compliance_note: 'EU Regulation 178/2002 (General Food Law) applies. EFSA novel food approvals required for new ingredients. Full traceability mandatory.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'EU Farm to Fork strategy compliance. Palm oil traceability and RSPO certification required.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$3.2k/Sea' },
+      industry_kpi: { label: 'Certifications', value: 'BRC / IFS / SQF' }
+    },
+    {
+      id: 'h_food_4', lat: 20.7, lng: -103.4,
+      hub: 'GUADALAJARA, MEXICO', title: 'Latin America Food & Beverage Hub',
+      companies: [
+        { name: 'Grupo Bimbo', website: 'https://www.grupobimbo.com/', turnover: '>$1B' },
+        { name: 'FEMSA', website: 'https://www.femsa.com/', turnover: '>$1B' },
+        { name: 'Sigma Alimentos', website: 'https://www.sigma-alimentos.com/', turnover: '>$1B' },
+        { name: 'Lala Group', website: 'https://www.grupolala.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Largest bakery, dairy, and beverage production cluster in Latin America. Strong USMCA advantages for US imports. Competitive cost vs. US domestic for baked goods, dairy, and packaged snacks.',
+      customs: { hts_code: '1704.90', duty_rate: '0% (USMCA)', compliance_note: 'USMCA Rules of Origin apply. FDA Prior Notice required. Cold chain compliance mandatory for perishable goods.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Grupo Bimbo 100% renewable energy committed. Water stewardship programs active in water-stressed regions.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.2k/Ground' },
+      industry_kpi: { label: 'Lead Time', value: '3-7 Days to US' }
+    },
+    {
+      id: 'h_food_5', lat: 13.8, lng: 100.6,
+      hub: 'BANGKOK, THAILAND', title: 'Southeast Asia Food Export Hub',
+      companies: [
+        { name: 'Charoen Pokphand Foods', website: 'https://www.cpfworldwide.com/', turnover: '>$1B' },
+        { name: 'Thai Union Group', website: 'https://www.thaiunion.com/', turnover: '>$1B' },
+        { name: 'Osotspa', website: 'https://www.osotspa.com/', turnover: '$100M-$1B' },
+        { name: 'Malee Group', website: 'https://www.maleegroup.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Major APAC export hub for canned goods, ready meals, sauces, tropical fruit, seafood, and beverages. Competitive labor costs and strong ASEAN FTA network. World\'s largest tuna processing cluster.',
+      customs: { hts_code: '1604.20', duty_rate: '11.5% (MFN)', compliance_note: 'FDA Prior Notice required. Import Alert monitoring for Thai seafood. HACCP certification mandatory.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'IUU fishing monitoring required for seafood supply chains. MarinTrust and MSC certification preferred.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.8k/FEU' },
+      industry_kpi: { label: 'Export Reach', value: '150+ Countries' }
+    }
+  ],
+
+  // 6. METALS & MINING (Lithium, Copper, Steel, Aluminum, Rare Earths)
   metals: [
     {
       id: 'h_met_1', lat: -23.5, lng: -68.4,
@@ -873,13 +954,50 @@ export function categorizeQuery(query) {
     'circuit board', 'nand', 'dram', 'hbm'
   ])) return 'electronics'
 
-  // Priority 5: Agriculture and food
+  // Priority 5a: Processed food, confectionery, CPG, beverages — BEFORE raw agriculture
+  if (match([
+    // Confectionery & candy
+    'marshmallow', 'candy', 'confectionery', 'confection', 'gummy', 'gummies',
+    'chocolate', 'cocoa powder', 'praline', 'truffle', 'fudge', 'caramel',
+    'hard candy', 'soft candy', 'lollipop', 'nougat', 'marzipan', 'fondant',
+    'sugar confection', 'sugar coated', 'jelly bean', 'licorice',
+    // Snacks & baked goods
+    'cookie', 'biscuit', 'cracker', 'pretzel', 'chip', 'potato chip',
+    'tortilla chip', 'popcorn', 'granola bar', 'protein bar', 'energy bar',
+    'bread', 'bakery', 'pastry', 'croissant', 'muffin', 'donut', 'doughnut',
+    'cake mix', 'baking mix', 'flour based', 'cereal', 'breakfast cereal',
+    'wafer', 'waffle', 'pancake mix',
+    // Pasta, noodles, grains
+    'pasta', 'noodle', 'instant noodle', 'ramen', 'spaghetti', 'macaroni',
+    // Sauces, condiments & flavoring
+    'ketchup', 'sauce', 'hot sauce', 'soy sauce', 'oyster sauce', 'fish sauce',
+    'mayonnaise', 'mustard', 'salad dressing', 'vinegar', 'seasoning mix',
+    'spice blend', 'flavor extract', 'food flavoring', 'food coloring',
+    'gelatin', 'pectin', 'agar agar', 'food additive', 'preservative',
+    'food ingredient', 'flavor compound',
+    // Beverages
+    'juice', 'fruit juice', 'soft drink', 'soda', 'energy drink', 'sports drink',
+    'bottled water', 'mineral water', 'tea blend', 'instant coffee', 'coffee pod',
+    'milk powder', 'formula', 'infant formula',
+    // Dairy & frozen
+    'cheese', 'yogurt', 'butter', 'cream', 'ice cream', 'frozen dessert',
+    'frozen food', 'ready meal', 'meal kit', 'instant meal',
+    // Sweeteners & functional ingredients
+    'sweetener', 'corn syrup', 'high fructose', 'sugar substitute', 'stevia',
+    'sorbitol', 'maltitol', 'food grade',
+    // CPG / packaged food general
+    'packaged food', 'food manufacturing', 'food product', 'food brand',
+    'consumer food', 'snack food', 'private label food', 'co-manufacturing food'
+  ])) return 'food'
+
+  // Priority 5b: Raw agriculture and commodities
   if (match([
     'beef', 'meat', 'patty', 'wheat', 'soybean', 'soy',
-    'food ingredient', 'agri', 'corn', 'chicken', 'pork',
-    'grain', 'dairy', 'coffee bean', 'cocoa', 'sugar',
-    'rice', 'mcdonald', 'fast food supply', 'food processing',
-    'protein', 'feed ingredient', 'palm oil'
+    'agri', 'corn', 'chicken', 'pork',
+    'grain', 'dairy farm', 'coffee bean', 'cocoa bean', 'raw cocoa', 'sugar cane',
+    'rice', 'mcdonald', 'fast food supply', 'food processing plant',
+    'protein powder', 'feed ingredient', 'palm oil', 'crop',
+    'livestock', 'poultry', 'aquaculture', 'fishery', 'seafood'
   ])) return 'agriculture'
 
   // Priority 6: Chemicals — adhesives, coatings, lubricants, solvents, surfactants
@@ -1230,6 +1348,23 @@ export const CATEGORY_RISKS = {
       id: 'r_ag_3', title: 'EUDR Deforestation Compliance', type: 'Risk', severity: 'MEDIUM',
       desc: 'EU Deforestation Regulation (EUDR) requires full due diligence and geolocation data for beef, soy, palm oil, cocoa, coffee, wood, and rubber entering the EU from 2025. Brazil and SE Asia exposure is high.',
       mitigation: 'Map supply chain to farm-level GPS coordinates. Engage only deforestation-free certified suppliers. Use Trase.earth or Supply Chain Intelligence tools for deforestation monitoring.'
+    }
+  ],
+  food: [
+    {
+      id: 'r_food_1', title: 'Food Safety Recall & Liability Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'A single FDA or EFSA recall event can cost $10M–$500M+ in recall costs, litigation, and brand damage. Allergen mislabeling, pathogen contamination (Salmonella, Listeria), and foreign material incidents are the top triggers. Confectionery and snack products face specific scrutiny.',
+      mitigation: 'Implement FSMA Preventive Controls rule. Conduct HACCP/HARPC analysis for all production lines. Require SQF Level 2 or BRC Grade A certification from all co-manufacturers. Maintain product traceability to lot-level within 4 hours.'
+    },
+    {
+      id: 'r_food_2', title: 'Cold Chain Disruption & Perishability Risk', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Temperature excursions during transit can render perishable food products unsellable and create safety risks. Ocean freight for chilled/frozen products adds $1,500–$3,000/container premium and requires continuous monitoring. Port congestion can break cold chains.',
+      mitigation: 'Use reefer containers with IoT temperature loggers. Mandate 2°C–8°C (chilled) or −18°C (frozen) corridor contracts. Pre-qualify backup cold storage at destination ports. Cargo insurance with spoilage coverage.'
+    },
+    {
+      id: 'r_food_3', title: 'Commodity Input Price Volatility', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Key confectionery and food inputs — sugar, cocoa, gelatin, corn syrup, vegetable oils, wheat — trade as agricultural commodities with 20–60% annual price swings. 2024 cocoa prices rose 300%+ due to West Africa crop failures.',
+      mitigation: 'Hedge commodity inputs via CBOT/ICE futures contracts (12–24 month forward coverage). Use fixed-price annual contracts with key ingredient suppliers. Develop alternative formulations to allow ingredient substitution without consumer impact.'
     }
   ],
   metals: [
