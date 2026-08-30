@@ -11,9 +11,12 @@ export const ATLAS_DB = {
       id: 'h_auto_1', lat: 25.6, lng: -100.3,
       hub: 'MONTERREY, MEXICO', title: 'NAFTA Tier-1 Auto Cluster',
       companies: [
-        { name: 'Grupo Antolin', website: 'https://www.grupoantolin.com/' },
-        { name: 'Nemak', website: 'https://www.nemak.com/' },
-        { name: 'Metalsa', website: 'https://www.metalsa.com/' }
+        { name: 'Grupo Antolin', website: 'https://www.grupoantolin.com/', turnover: '>$1B' },
+        { name: 'Nemak', website: 'https://www.nemak.com/', turnover: '>$1B' },
+        { name: 'Metalsa', website: 'https://www.metalsa.com/', turnover: '>$1B' },
+        { name: 'Draxton Mexico', website: 'https://www.draxton.com/', turnover: '$100M-$1B' },
+        { name: 'Cimco Group', website: 'https://www.cimco.com.mx/', turnover: '$10M-$100M' },
+        { name: 'Arneses de México', website: 'https://www.sumitomo-sei.co.jp/', turnover: '$10M-$100M' }
       ],
       desc: 'Primary nearshoring hub for North American automotive OEMs. Specializes in interiors, chassis, headliners, and sun visor assemblies.',
       customs: { hts_code: '8708.29', duty_rate: '0% (USMCA)', compliance_note: 'USMCA Rules of Origin apply. Regional Value Content (RVC) ≥ 75% required.' },
@@ -25,9 +28,9 @@ export const ATLAS_DB = {
       id: 'h_auto_2', lat: 31.2, lng: 121.4,
       hub: 'SHANGHAI, CHINA', title: 'East China Auto Zone',
       companies: [
-        { name: 'Yanfeng Automotive', website: 'https://www.yfai.com/' },
-        { name: 'Huayu Auto', website: 'https://www.hasco-group.com/' },
-        { name: 'Fuyao Glass', website: 'https://www.fuyaogroup.com/' }
+        { name: 'Yanfeng Automotive', website: 'https://www.yfai.com/', turnover: '>$1B' },
+        { name: 'Huayu Auto', website: 'https://www.hasco-group.com/', turnover: '>$1B' },
+        { name: 'Fuyao Glass', website: 'https://www.fuyaogroup.com/', turnover: '>$1B' }
       ],
       desc: 'Massive scale production for automotive plastics, electronics, glass, and interior systems. Competitive cost base.',
       customs: { hts_code: '8708.29', duty_rate: '25% (Sec 301)', compliance_note: 'Subject to Section 301 tariffs. Check entity list restrictions.' },
@@ -39,9 +42,12 @@ export const ATLAS_DB = {
       id: 'h_auto_3', lat: 48.1, lng: 11.5,
       hub: 'BAVARIA, GERMANY', title: 'EU Premium Parts Hub',
       companies: [
-        { name: 'Continental AG', website: 'https://www.continental.com/' },
-        { name: 'Bosch', website: 'https://www.bosch.com/' },
-        { name: 'Brose Group', website: 'https://www.brose.com/' }
+        { name: 'Continental AG', website: 'https://www.continental.com/', turnover: '>$1B' },
+        { name: 'Bosch', website: 'https://www.bosch.com/', turnover: '>$1B' },
+        { name: 'Brose Group', website: 'https://www.brose.com/', turnover: '>$1B' },
+        { name: 'Grammer AG', website: 'https://www.grammer.com/', turnover: '$100M-$1B' },
+        { name: 'Kiekert AG', website: 'https://www.kiekert.com/', turnover: '$100M-$1B' },
+        { name: 'Polytec Group', website: 'https://www.polytec-group.com/', turnover: '$100M-$1B' }
       ],
       desc: 'High-precision engineering and premium trim components for luxury OEMs (BMW, Mercedes, Audi). CE-certified.',
       customs: { hts_code: '8708.29', duty_rate: '2.5% (Non-EU)', compliance_note: 'CE Marking required. REACH compliance mandatory.' },
@@ -53,9 +59,9 @@ export const ATLAS_DB = {
       id: 'h_auto_4', lat: 35.1, lng: 136.9,
       hub: 'AICHI, JAPAN', title: 'J-OEM Sourcing Cluster',
       companies: [
-        { name: 'Toyota Boshoku', website: 'https://www.toyota-boshoku.com/' },
-        { name: 'Denso', website: 'https://www.denso.com/' },
-        { name: 'Aisin', website: 'https://www.aisin.com/' }
+        { name: 'Toyota Boshoku', website: 'https://www.toyota-boshoku.com/', turnover: '>$1B' },
+        { name: 'Denso', website: 'https://www.denso.com/', turnover: '>$1B' },
+        { name: 'Aisin', website: 'https://www.aisin.com/', turnover: '>$1B' }
       ],
       desc: 'Just-in-time manufacturing excellence for Japanese OEMs. World benchmark for quality systems and lean processes.',
       customs: { hts_code: '8708.29', duty_rate: '0% (CPTPP)', compliance_note: 'Strict J-Quality standards apply. CPTPP origin rules.' },
@@ -67,9 +73,13 @@ export const ATLAS_DB = {
       id: 'h_auto_5', lat: 42.3, lng: -83.0,
       hub: 'DETROIT, USA', title: 'Great Lakes Auto Cluster',
       companies: [
-        { name: 'Lear Corp', website: 'https://www.lear.com/' },
-        { name: 'Magna International', website: 'https://www.magna.com/' },
-        { name: 'IAC Group', website: 'https://www.iacgroup.com/' }
+        { name: 'Lear Corp', website: 'https://www.lear.com/', turnover: '>$1B' },
+        { name: 'Magna International', website: 'https://www.magna.com/', turnover: '>$1B' },
+        { name: 'IAC Group', website: 'https://www.iacgroup.com/', turnover: '$100M-$1B' },
+        { name: 'Shape Corp', website: 'https://www.shapecorp.com/', turnover: '$100M-$1B' },
+        { name: 'Lacks Enterprises', website: 'https://www.lacks.net/', turnover: '$100M-$1B' },
+        { name: 'Gentex Corp', website: 'https://www.gentex.com/', turnover: '$100M-$1B' },
+        { name: 'Tower International', website: 'https://www.towerint.com/', turnover: '$10M-$100M' }
       ],
       desc: 'Legacy US automotive engineering and final assembly hub. Domestic sourcing for Ford, GM, Stellantis supply chains.',
       customs: { hts_code: '8708.29', duty_rate: '0% (Domestic)', compliance_note: 'Domestic supply. Buy America Act eligible.' },
@@ -179,6 +189,20 @@ export const ATLAS_DB = {
       esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'India+1 strategy hub. Improving standards under IATF adoption.' },
       logistics: { port_wait_days: 4, freight_cost_estimate: '$3.5k/Sea' },
       industry_kpi: { label: 'Cost vs Japan', value: '40-50% Savings' }
+    },
+    {
+      id: 'h_ind_7', lat: 41.2, lng: -81.9,
+      hub: 'OHIO, USA', title: 'Automotive & Architectural Glass Hub',
+      companies: [
+        { name: 'Vitro / Pilkington (NSG)', website: 'https://www.vitro.com/' },
+        { name: 'Guardian Glass', website: 'https://www.guardianglass.com/' },
+        { name: 'Fuyao Glass America', website: 'https://www.fuyaogroup.com/' }
+      ],
+      desc: 'Historic center of North American float glass production, covering automotive glazing, architectural glass, and general glassware manufacturing under FMVSS/ANSI safety certification.',
+      customs: { hts_code: '7007.21', duty_rate: '0% (Domestic)', compliance_note: 'FMVSS 205 / ANSI Z97.1 safety glazing certification required for automotive and architectural use.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B+', sustainability_note: 'Energy-intensive float glass process. Recycled cullet content reduces emissions per ton produced.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.4k/Rail' },
+      industry_kpi: { label: 'Safety Cert', value: 'FMVSS / ANSI Z97.1' }
     }
   ],
 
@@ -476,6 +500,283 @@ export const ATLAS_DB = {
       logistics: { port_wait_days: 5, freight_cost_estimate: '$3.5k/FEU' },
       industry_kpi: { label: 'Integration', value: 'Full Vertical' }
     }
+  ],
+
+// 7. PLASTICS, POLYMERS & ELASTOMERS
+// Covers: TPE, ABS, PP, PVC, nylon, PEEK, polycarbonate, polyurethane,
+//         silicone rubber, composites, injection/blow/roto molding,
+//         epoxy resins, carbon fiber, fiberglass, packaging film
+  plastics: [
+    {
+      id: 'h_pla_1', lat: 22.5, lng: 114.1,
+      hub: 'GUANGDONG, CHINA', title: 'Global Injection Molding & Polymer Hub',
+      companies: [
+        { name: 'Kingfa Sci & Tech', website: 'https://www.kingfa.com/' },
+        { name: 'Sinopec (polymer resins)', website: 'https://www.sinopec.com/' },
+        { name: 'Hi-Tech Mold & Engineering', website: 'https://www.hitechmold.com/' }
+      ],
+      desc: 'World\'s largest plastic parts manufacturing cluster. Unmatched capacity for high-volume injection molding, blow molding, and overmolding across automotive, consumer, and industrial applications. Key hub for TPE, ABS, and PP compound production.',
+      customs: { hts_code: '3926.90.99', duty_rate: '5.3% + 25% (Sec 301)', compliance_note: 'Section 301 List 3 tariffs apply to most finished plastic articles. Verify REACH and RoHS compliance for EU re-export.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'C+', sustainability_note: 'High energy intensity from molding presses. Plastics recycling mandates increasing under China\'s EPR regulations.' },
+      logistics: { port_wait_days: 14, freight_cost_estimate: '$3.2k/FEU' },
+      industry_kpi: { label: 'Capacity', value: 'World\'s Largest' }
+    },
+    {
+      id: 'h_pla_2', lat: 49.4, lng: 8.7,
+      hub: 'RHINE VALLEY, GERMANY', title: 'European Specialty Polymer Hub',
+      companies: [
+        { name: 'BASF SE', website: 'https://www.basf.com/' },
+        { name: 'Covestro', website: 'https://www.covestro.com/' },
+        { name: 'Lanxess', website: 'https://www.lanxess.com/' }
+      ],
+      desc: 'Global center for engineering thermoplastics, specialty resins, and polyurethane systems. BASF and Covestro supply automotive OEMs worldwide with IATF-grade nylon, PBT, and polycarbonate. Preferred source for high-performance, REACH-compliant polymers.',
+      customs: { hts_code: '3908.10.00', duty_rate: '0% (EU–US MFN for polyamides)', compliance_note: 'REACH registration mandatory for EU-origin imports into EU. No Section 301. Preferred source for sustainability-focused supply chains.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'BASF committed to carbon-neutral operations by 2050. Circular economy portfolio (ChemCycling). High ESG transparency.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'Grade', value: 'Specialty / Engineering' }
+    },
+    {
+      id: 'h_pla_3', lat: 29.7, lng: -95.0,
+      hub: 'HOUSTON / BAYTOWN, USA', title: 'North American Polyolefin Hub',
+      companies: [
+        { name: 'ExxonMobil Chemical', website: 'https://www.exxonmobilchemical.com/' },
+        { name: 'LyondellBasell', website: 'https://www.lyondellbasell.com/' },
+        { name: 'Braskem America', website: 'https://www.braskem.com.br/' }
+      ],
+      desc: 'World\'s largest concentration of polyolefin (PP, PE, LLDPE) production. Domestic US supply with zero tariff exposure, short lead times, and full traceability. Preferred for USMCA-origin compliance and reshoring supply chains.',
+      customs: { hts_code: '3902.10.00', duty_rate: '0% (domestic)', compliance_note: 'No import duties for domestic supply. USMCA-compliant for Canada/Mexico export. FDA food-contact grades available.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Significant bio-based PP investments underway. Domestic production reduces shipping emissions substantially.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$0.8k/Truck' },
+      industry_kpi: { label: 'Origin', value: '100% US Domestic' }
+    },
+    {
+      id: 'h_pla_4', lat: 22.3, lng: 73.1,
+      hub: 'VADODARA / SURAT, INDIA', title: 'Asia Polymer & Compounding Hub',
+      companies: [
+        { name: 'Reliance Industries (polymers)', website: 'https://www.ril.com/' },
+        { name: 'Supreme Industries', website: 'https://www.supreme.co.in/' },
+        { name: 'Atul Ltd', website: 'https://www.atulltd.com/' }
+      ],
+      desc: 'Reliance Industries operates the world\'s largest single-site refinery-petrochemical complex. Growing hub for polymer compounding, masterbatch, and specialty plastic components. Competitive cost base with improving quality standards.',
+      customs: { hts_code: '3901.20.00', duty_rate: '0% (GSP suspended; MFN 6.5%)', compliance_note: 'India GSP benefits suspended for US importers. MFN rate applies. Strong cost advantage for commodity grades.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Reliance investing in green H2 and circular economy. Compounders increasingly using recycled feedstock.' },
+      logistics: { port_wait_days: 8, freight_cost_estimate: '$3.0k/FEU' },
+      industry_kpi: { label: 'Scale', value: 'Largest Asia Refinery' }
+    },
+    {
+      id: 'h_pla_5', lat: 35.5, lng: 129.4,
+      hub: 'ULSAN, SOUTH KOREA', title: 'Specialty Elastomer & Engineering Polymer Hub',
+      companies: [
+        { name: 'LG Chem', website: 'https://www.lgchem.com/' },
+        { name: 'Lotte Chemical', website: 'https://www.lottechem.com/' },
+        { name: 'SK Geo Centric', website: 'https://www.skgeocentric.com/' }
+      ],
+      desc: 'Global leader in specialty elastomers, ABS, and engineering plastics. LG Chem supplies automotive-grade ABS and SAN to Hyundai, GM, and Ford. KORUS FTA eliminates import duties for US buyers. Strong quality and traceability standards.',
+      customs: { hts_code: '4002.59.00', duty_rate: '0% (KORUS FTA)', compliance_note: 'KORUS FTA duty elimination on synthetic rubber and most polymer grades. Korean origin documentation required.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'LG Chem target: 100% renewable energy by 2050. Bio-circular ABS available for automotive OEMs.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$2.6k/FEU' },
+      industry_kpi: { label: 'Tariff', value: '0% KORUS FTA' }
+    },
+    {
+      id: 'h_pla_6', lat: 1.3, lng: 103.7,
+      hub: 'JURONG ISLAND, SINGAPORE', title: 'SE Asia Chemical & Polymer Gateway',
+      companies: [
+        { name: 'Shell Chemicals Asia', website: 'https://www.shell.com/' },
+        { name: 'ExxonMobil Chemical Asia', website: 'https://www.exxonmobilchemical.com/' },
+        { name: 'Mitsui Chemicals Asia', website: 'https://www.mitsuichemicals.com/' }
+      ],
+      desc: 'Jurong Island hosts 100+ chemical and petrochemical companies on a single industrial island. Key trading and production hub for polyolefins, PVC, and specialty chemicals for the ASEAN region. Excellent logistics, zero political supply risk.',
+      customs: { hts_code: '3904.10.00', duty_rate: '6.5% (MFN PVC)', compliance_note: 'Singapore Free Trade Agreements with US (USSFTA) provide 0% duty on most goods. Favorable duty treatment.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Singapore EDB sustainability mandates. Carbon tax on industrial emitters. High environmental compliance standards.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.4k/FEU' },
+      industry_kpi: { label: 'FTA Duty', value: '0% (USSFTA)' }
+    }
+  ],
+  chemicals: [
+    {
+      id: 'h_che_1', lat: 51.5, lng: 6.8,
+      hub: 'RHINE-RUHR, GERMANY', title: 'European Specialty Chemicals & Coatings Hub',
+      companies: [
+        { name: 'BASF', website: 'https://www.basf.com/' },
+        { name: 'Evonik Industries', website: 'https://www.evonik.com/' },
+        { name: 'Covestro', website: 'https://www.covestro.com/' },
+        { name: 'Lanxess', website: 'https://www.lanxess.com/' }
+      ],
+      desc: 'BASF Ludwigshafen — largest integrated chemical complex in the world. Evonik and Lanxess adjacent. Covers adhesives, coatings, lubricants, surfactants, specialty polymers, and industrial gases. EU REACH compliance built-in.',
+      customs: { hts_code: '3814.00.10', duty_rate: '3.7% (MFN solvents)', compliance_note: 'EU REACH registration required for >1 tonne/year. Dangerous Goods shipping (IMDG/ADR). SDS mandatory for all chemical imports.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'A-', sustainability_note: 'BASF Verbund system optimizes energy reuse. Scope 3 emissions reporting in place. Carbon neutrality target 2050.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.2k/FEU' },
+      industry_kpi: { label: 'Complex Scale', value: 'Largest globally' }
+    },
+    {
+      id: 'h_che_2', lat: 29.7, lng: -95.3,
+      hub: 'HOUSTON, USA', title: 'US Gulf Coast Petrochemicals & Lubricants Hub',
+      companies: [
+        { name: 'Dow Chemical', website: 'https://www.dow.com/' },
+        { name: 'Huntsman Corporation', website: 'https://www.huntsman.com/' },
+        { name: 'LyondellBasell', website: 'https://www.lyondellbasell.com/' },
+        { name: 'Celanese', website: 'https://www.celanese.com/' }
+      ],
+      desc: 'Texas Gulf Coast hosts 40% of US chemical production. Ethylene crackers, polyurethane systems, adhesives, epoxies, specialty lubricants, and industrial solvents. Proximity to Permian Basin feedstocks drives cost advantage.',
+      customs: { hts_code: '2710.19.11', duty_rate: '0.1¢/barrel (lubricants)', compliance_note: 'EPA TSCA compliance required. Hazmat shipping regulations (49 CFR). California Prop 65 labeling for CA sales.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B+', sustainability_note: 'Industry-leading carbon capture investment. ACC Responsible Care program. Circular economy initiatives in solvents.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$1.8k/FEU domestic' },
+      industry_kpi: { label: 'US Output', value: '40% of national' }
+    },
+    {
+      id: 'h_che_3', lat: 1.3, lng: 103.7,
+      hub: 'JURONG ISLAND, SINGAPORE', title: 'Asia Pacific Adhesives & Coating Chemicals Hub',
+      companies: [
+        { name: 'Henkel Asia-Pacific', website: 'https://www.henkel-adhesives.com/' },
+        { name: 'H.B. Fuller', website: 'https://www.hbfuller.com/' },
+        { name: 'Momentive Performance Materials', website: 'https://www.momentive.com/' }
+      ],
+      desc: 'Jurong Island Singapore: premier APAC hub for adhesives, sealants, and specialty coatings serving electronics, automotive, and construction. Excellent bonded-warehouse infrastructure and ASEAN trade hub status.',
+      customs: { hts_code: '3506.10.00', duty_rate: '0% (Singapore FTA)', compliance_note: 'REACH-equivalent Singapore Chemical Control Order. Hazmat IMDG compliance for export. APAC regulatory mapping service available.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Singapore EHS standards. Low-VOC formulations mandated. ISO 14001 site certification.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.1k/FEU' },
+      industry_kpi: { label: 'ASEAN Access', value: '650M consumers' }
+    }
+  ],
+  packaging: [
+    {
+      id: 'h_pkg_1', lat: 39.9, lng: 116.4,
+      hub: 'BEIJING/TIANJIN, CHINA', title: 'Global Corrugated & Rigid Packaging Hub',
+      companies: [
+        { name: 'Nine Dragons Paper', website: 'https://www.ndpaper.com/' },
+        { name: 'Lee & Man Paper', website: 'https://www.leemanpaper.com/' },
+        { name: 'Greatview Aseptic', website: 'https://www.greatviewpack.com/' }
+      ],
+      desc: 'China produces 55% of global corrugated packaging and leads in rigid plastic containers, aseptic cartons, and flexible pouches. Nine Dragons alone runs 40+ paper mills. Major sourcing hub for boxes, clamshells, blister packs, and shrink film.',
+      customs: { hts_code: '4819.10.00', duty_rate: '25% (Section 301 + 14.6% MFN)', compliance_note: 'FSC certification recommended for paper products. FDCA compliance for food-contact packaging. California AB 2287 recycled content rules.' },
+      esg: { carbon_footprint: 'Medium-High', ethical_rating: 'B', sustainability_note: 'Nine Dragons runs recycled fiber operations. Improving energy intensity. Audit required for labor practices at tier 2 mills.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$2.9k/FEU' },
+      industry_kpi: { label: 'Global Share', value: '55% corrugated' }
+    },
+    {
+      id: 'h_pkg_2', lat: 48.8, lng: 2.3,
+      hub: 'FRANCE / BENELUX', title: 'European Glass & Premium Packaging Hub',
+      companies: [
+        { name: 'Verallia', website: 'https://www.verallia.com/' },
+        { name: 'Ardagh Group', website: 'https://www.ardaghgroup.com/' },
+        { name: 'Smurfit Kappa', website: 'https://www.smurfitkappa.com/' },
+        { name: 'DS Smith', website: 'https://www.dssmith.com/' }
+      ],
+      desc: 'France and Benelux are the center of European glass bottle, luxury packaging, and sustainable paperboard production. Verallia and Ardagh lead glass container output. Smurfit Kappa and DS Smith supply corrugated and circular packaging across EU.',
+      customs: { hts_code: '7010.90.10', duty_rate: '5% (MFN glass containers)', compliance_note: 'EU Packaging and Packaging Waste Directive (PPWD) compliance. Extended Producer Responsibility (EPR) registration required in EU markets.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Glass is infinitely recyclable. EU EPR mandates minimum recycled content. Smurfit Kappa 100% chain of custody certified.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'Recyclability', value: 'Glass: infinite' }
+    },
+    {
+      id: 'h_pkg_3', lat: 33.7, lng: -84.4,
+      hub: 'ATLANTA, USA', title: 'North American Labels & Flexible Packaging Hub',
+      companies: [
+        { name: 'Avery Dennison', website: 'https://www.averydennison.com/' },
+        { name: 'CCL Industries', website: 'https://www.cclind.com/' },
+        { name: 'Sealed Air', website: 'https://www.sealedair.com/' },
+        { name: 'Berry Global', website: 'https://www.berryglobal.com/' }
+      ],
+      desc: 'US Southeast hub for pressure-sensitive labels, shrink sleeves, flexible pouches, and protective packaging. Avery Dennison and CCL dominate labels. Sealed Air and Berry Global lead flexible and protective packaging.',
+      customs: { hts_code: '4821.10.20', duty_rate: '0% (most labels, domestic)', compliance_note: 'FDA 21 CFR for food-contact. FTC Green Guides for recyclability claims. California SB 54 plastic packaging recycled content law.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Industry transition to mono-material recyclable films. Avery Dennison CleanFlake technology. Recycled content mandates increasing in all major states.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$1.5k/FEU domestic' },
+      industry_kpi: { label: 'Label Market', value: '$45B+ annually' }
+    }
+  ],
+  medical: [
+    {
+      id: 'h_med_1', lat: 22.3, lng: 114.2,
+      hub: 'HONG KONG / SHENZHEN', title: 'Asia Pacific Medical Device Manufacturing Hub',
+      companies: [
+        { name: 'Mindray Medical', website: 'https://www.mindray.com/' },
+        { name: 'Medtronic China', website: 'https://www.medtronic.com/' },
+        { name: 'Lepu Medical', website: 'https://www.lepumedical.com/' },
+        { name: 'Microport Scientific', website: 'https://www.microport.com/' }
+      ],
+      desc: 'Shenzhen–Hong Kong corridor is the leading APAC hub for medical device manufacturing: diagnostics equipment, imaging, surgical tools, patient monitoring, and consumables. Lower-tier devices increasingly exported globally. Class II/III manufacturing under NMPA oversight.',
+      customs: { hts_code: '9018.90.60', duty_rate: '0% (MFN surgical instruments)', compliance_note: 'FDA 510(k) or PMA required for US market entry. CE marking for EU. NMPA registration in China. Quality System Regulation (QSR) 21 CFR Part 820.' },
+      esg: { carbon_footprint: 'Low-Medium', ethical_rating: 'B+', sustainability_note: 'ISO 13485 quality systems standard. Growing GreenHealth sustainability programs. Medical waste disposal regulations strictly enforced.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'Device Output', value: 'Largest APAC hub' }
+    },
+    {
+      id: 'h_med_2', lat: 47.6, lng: 9.5,
+      hub: 'LAKE CONSTANCE, GERMANY/SWITZERLAND', title: 'European Pharma API & MedTech Cluster',
+      companies: [
+        { name: 'Novartis', website: 'https://www.novartis.com/' },
+        { name: 'Roche', website: 'https://www.roche.com/' },
+        { name: 'B. Braun', website: 'https://www.bbraun.com/' },
+        { name: 'Siemens Healthineers', website: 'https://www.siemens-healthineers.com/' }
+      ],
+      desc: 'Basel–Lake Constance triangle hosts the world\'s highest concentration of pharmaceutical API producers and high-end MedTech. Roche and Novartis dominate APIs. B. Braun leads infusion and surgical systems. Siemens Healthineers anchors imaging and diagnostics.',
+      customs: { hts_code: '2941.10.00', duty_rate: '0% (MFN antibiotics/APIs)', compliance_note: 'EMA GMP certification required. US FDA import alert risk on non-compliant API manufacturers. ICH Q7 Good Manufacturing Practice for APIs. Swiss-EU bilateral regulatory alignment.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Roche net-zero operations commitment. Novartis environmental health and safety excellence program. High ethical audit standards.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$3.5k/FEU' },
+      industry_kpi: { label: 'API Concentration', value: 'Highest globally' }
+    },
+    {
+      id: 'h_med_3', lat: 17.4, lng: 78.5,
+      hub: 'HYDERABAD, INDIA', title: 'Global Generic Pharma API & Formulations Hub',
+      companies: [
+        { name: 'Dr. Reddy\'s Laboratories', website: 'https://www.drreddys.com/' },
+        { name: 'Aurobindo Pharma', website: 'https://www.aurobindo.com/' },
+        { name: 'Hetero Drugs', website: 'https://www.heterodrugs.com/' },
+        { name: 'Divi\'s Laboratories', website: 'https://www.divislaboratories.com/' }
+      ],
+      desc: 'Hyderabad is the pharmacy capital of India — and arguably the world for generics. India supplies 40% of generic drugs consumed in the US and 25% globally. API manufacturing cost advantage of 30–50% vs. Western producers.',
+      customs: { hts_code: '2941.90.00', duty_rate: '0% (generics MFN)', compliance_note: 'FDA import alerts active on select manufacturers (check FDA database). WHO GMP and US FDA 21 CFR cGMP compliance required. Drug Master File (DMF) registration for US market.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Improving post-CPCB effluent discharge enforcement. Zero liquid discharge mandates at major facilities. EHS audits recommended.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.1k/FEU' },
+      industry_kpi: { label: 'US Generic Supply', value: '40% market share' }
+    }
+  ],
+  machinery: [
+    {
+      id: 'h_mac_1', lat: 48.1, lng: 11.6,
+      hub: 'BAVARIA, GERMANY', title: 'Precision Machinery & Industrial Equipment Hub',
+      companies: [
+        { name: 'Siemens AG', website: 'https://www.siemens.com/' },
+        { name: 'MAN Energy Solutions', website: 'https://www.man-es.com/' },
+        { name: 'KSB Group', website: 'https://www.ksb.com/' },
+        { name: 'Trumpf', website: 'https://www.trumpf.com/' }
+      ],
+      desc: 'Bavaria and Baden-Württemberg are the global center for Mittelstand precision machinery: CNC machining centers, industrial pumps, compressors, valves, hydraulics, and laser cutting systems. "Made in Germany" machinery commands 20–40% premium and 10–15 year asset life.',
+      customs: { hts_code: '8413.70.20', duty_rate: '0% (industrial pumps, EU origin)', compliance_note: 'CE machinery directive 2006/42/EC. ATEX certification for explosive atmospheres. Pressure Equipment Directive (PED) for pressure vessels. Export control EAR/ITAR for dual-use equipment.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Germany\'s Energiewende drives energy-efficient machinery design. ISO 50001 energy management certifications common. Circular design for 20+ year service life.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.5k/FEU (heavy lift surcharge may apply)' },
+      industry_kpi: { label: 'Asset Life', value: '10–15 years' }
+    },
+    {
+      id: 'h_mac_2', lat: 31.2, lng: 121.5,
+      hub: 'YANGTZE DELTA, CHINA', title: 'High-Volume Industrial Machinery & CNC Hub',
+      companies: [
+        { name: 'Haas Automation China', website: 'https://www.haascnc.com/' },
+        { name: 'SANY Group', website: 'https://www.sanygroup.com/' },
+        { name: 'Zoomlion', website: 'https://www.zoomlion.com/' },
+        { name: 'DMG Mori China', website: 'https://www.dmgmori.com/' }
+      ],
+      desc: 'Shanghai–Suzhou–Hangzhou triangle leads global output of CNC machine tools, injection molding machines, industrial robots, compressors, pumps, and heavy construction equipment. 70% of world\'s machine tool production. Quality range from OEM-grade to budget.',
+      customs: { hts_code: '8457.10.00', duty_rate: '25% (Section 301 CNC machining centers)', compliance_note: 'Section 301 tariffs apply to most Chinese machinery. CE/UL certification may be absent — verify for US/EU market entry. Import scrutiny on strategic manufacturing equipment.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Energy efficiency improving under Made in China 2025. Variable quality in ESG compliance. Factory audit and pre-shipment inspection strongly recommended.' },
+      logistics: { port_wait_days: 6, freight_cost_estimate: '$3.8k/FEU (OOG cargo extra)' },
+      industry_kpi: { label: 'Machine Tool Output', value: '70% of world production' }
+    },
+    {
+      id: 'h_mac_3', lat: 34.7, lng: 135.5,
+      hub: 'OSAKA / NAGOYA, JAPAN', title: 'Japan Precision Pumps, Valves & Automation Hub',
+      companies: [
+        { name: 'Ebara Corporation', website: 'https://www.ebara.co.jp/' },
+        { name: 'Nidec', website: 'https://www.nidec.com/' },
+        { name: 'Fanuc', website: 'https://www.fanuc.co.jp/' },
+        { name: 'Keyence', website: 'https://www.keyence.com/' }
+      ],
+      desc: 'Osaka–Nagoya corridor specializes in ultra-precision industrial automation: servo motors, CNC controllers (Fanuc dominates globally), centrifugal and vacuum pumps (Ebara), and precision measurement (Keyence). Highest reliability and lowest defect rates in the industry.',
+      customs: { hts_code: '8413.60.00', duty_rate: '0% (centrifugal pumps, MFN)', compliance_note: 'Japan-US Trade Agreement duty relief on most machinery. JIS certification for domestic use. Export controls on high-precision CNC (Wassenaar Arrangement). Lead times 16–24 weeks for precision units.' },
+      esg: { carbon_footprint: 'Low-Medium', ethical_rating: 'A+', sustainability_note: 'Fanuc zero-waste factory operations. Ebara ISO 14001 certified. Japan\'s monozukuri culture emphasizes longevity and repairability.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.6k/FEU' },
+      industry_kpi: { label: 'CNC Market', value: 'Fanuc: ~65% global share' }
+    }
   ]
 }
 
@@ -509,7 +810,55 @@ export function categorizeQuery(query) {
   const q = query.toLowerCase()
   const match = (keywords) => keywords.some(kw => q.includes(kw))
 
-  // Priority 1: Specific industrial components (magnets, bearings, seals, etc.)
+  // Priority 1: Plastics, polymers, elastomers, rubber, composites
+  // Must be first — "injection mold" would otherwise fall to electronics default
+  if (match([
+    'tpe', 'thermoplastic elastomer', 'thermoplastic', 'thermoset',
+    'polymer', 'polymers', 'resin compound', 'plastic resin',
+    'abs plastic', 'abs compound', 'polypropylene', 'polyethylene',
+    'hdpe', 'ldpe', 'lldpe', 'pvc pipe', 'pvc compound',
+    'nylon compound', 'nylon part', 'peek', 'pom resin', 'delrin', 'acetal',
+    'polycarbonate', 'polyurethane', 'pu foam', 'foam molding',
+    'injection mold', 'injection mould', 'injection molded', 'injection moulded',
+    'blow mold', 'blow mould', 'roto mold', 'roto mould',
+    'plastic part', 'plastic component', 'plastic housing', 'plastic enclosure',
+    'molded part', 'moulded part', 'overmold', 'overmould', 'insert mold',
+    'elastomer', 'epdm', 'nbr rubber', 'silicone rubber', 'silicone part',
+    'rubber compound', 'synthetic rubber', 'natural rubber',
+    'carbon fiber', 'carbon fibre', 'fiberglass', 'fibreglass',
+    'composite part', 'epoxy resin', 'epoxy compound',
+    'plastic film', 'packaging film', 'stretch film', 'shrink wrap',
+    'plastic extrusion', 'extrusion profile', 'plastic tube',
+    'masterbatch', 'color concentrate', 'flame retardant compound',
+    'engineering plastic', 'specialty polymer', 'bio-based plastic',
+    // Compound nylon-as-raw-material phrases only (not bare "nylon" or
+    // "nylon fabric"/"nylon fiber" — those correctly stay under textiles
+    // via the existing "fabric" keyword; adding bare "nylon" here would
+    // incorrectly steal that match since this block is checked first).
+    'nylon resin', 'nylon pellet', 'nylon polymer', 'nylon compound resin'
+  ])) return 'plastics'
+
+  // Priority 1b: Food & confectionery — placed early and using specific
+  // compound terms (e.g. "potato chip" not bare "chip") so it doesn't get
+  // pre-empted by the electronics "chip" keyword checked later, and so it
+  // doesn't wait until the end of the chain to be reached (previously,
+  // almost every food item outside staple commodities like wheat/beef fell
+  // all the way through to the final "electronics" default).
+  if (match([
+    'marshmallow', 'candy', 'chocolate', 'gummy', 'confection',
+    'cereal', 'snack bar', 'granola', 'cookie', 'cracker', 'biscuit',
+    'potato chip', 'tortilla chip', 'corn chip', 'pretzel',
+    'canned food', 'canned good', 'canned soup', 'canned vegetable',
+    'frozen food', 'frozen meal', 'frozen pizza', 'frozen vegetable',
+    'ice cream', 'frozen dessert', 'dairy product',
+    'bottled water', 'beverage', 'soft drink', 'soda', 'juice concentrate',
+    'bakery', 'baked good', 'bread', 'pastry',
+    'condiment', 'sauce', 'seasoning blend', 'spice blend', 'spices',
+    'tea leaf', 'tea leaves', 'instant coffee', 'food additive',
+    'flavoring', 'flavouring', 'food coloring', 'preservative'
+  ])) return 'agriculture'
+
+  // Priority 2: Specific industrial components (magnets, bearings, seals, etc.)
   // Must be before automotive to catch "magnets for cars/visors" → industrial category
   if (match([
     'magnet', 'neodymium', 'ndfeb', 'ferrite magnet', 'permanent magnet',
@@ -519,10 +868,17 @@ export function categorizeQuery(query) {
     'industrial motor', 'servo motor', 'stepper motor',
     'spring component', 'disc spring', 'compression spring',
     'hydraulic fitting', 'pneumatic valve', 'precision machined',
-    'sintered', 'powder metallurgy'
+    'sintered', 'powder metallurgy',
+    // Glass as a raw/finished material (not a container — "glass bottle"
+    // is already handled separately, under packaging). No dedicated glass
+    // category exists; industrial is the closest fit (precision
+    // manufacturing, similar QA/certification regime).
+    'drinking glass', 'optical lens', 'mirror glass', 'glassware',
+    'crystal glass', 'flat glass', 'safety glass', 'tempered glass',
+    'laminated glass', 'glass sheet', 'glass panel material', 'glazing'
   ])) return 'industrial'
 
-  // Priority 2: Specific metals and minerals (raw material level)
+  // Priority 3: Specific metals and minerals (raw material level)
   if (match([
     'lithium', 'cobalt', 'neodymium oxide', 'rare earth mineral',
     'titanium sponge', 'tungsten', 'molybdenum', 'platinum',
@@ -546,7 +902,11 @@ export function categorizeQuery(query) {
     // the generic "car" keyword, which is checked much later).
     'car seat', 'car seats', 'auto seat', 'vehicle seat', 'seat cover',
     'seat trim', 'auto upholstery', 'vehicle upholstery', 'car interior',
-    'car door', 'car body', 'auto body panel', 'car wiring', 'wire harness'
+    'car door', 'car body', 'auto body panel', 'car wiring', 'wire harness',
+    'trim', 'interior trim', 'plated trim', 'door trim', 'plastic trim',
+    'cargo shade', 'cargo cover', 'shade cover', 'window shade', 'sunshade',
+    'cargo liner', 'boot liner', 'parcel shelf', 'tonneau', 'boot cover',
+    'interior accessory', 'interior component'
   ])) return 'automotive'
 
   // Priority 4: Electronics and semiconductors
@@ -568,7 +928,21 @@ export function categorizeQuery(query) {
     'protein', 'feed ingredient', 'palm oil'
   ])) return 'agriculture'
 
-  // Priority 6: Metals (broader terms)
+  // Priority 6: Chemicals — adhesives, coatings, lubricants, solvents, surfactants
+  // Before metals so "epoxy coating for metal" → chemicals, not metals
+  if (match([
+    'adhesive', 'glue', 'sealant', 'bonding agent', 'epoxy adhesive',
+    'coating', 'paint', 'primer', 'varnish', 'lacquer', 'powder coat',
+    'lubricant', 'grease', 'cutting fluid', 'hydraulic fluid', 'coolant fluid',
+    'solvent', 'thinner', 'acetone', 'mek', 'ipa ', 'isopropanol',
+    'surfactant', 'detergent intermediate', 'emulsifier',
+    'resin system', 'hardener', 'curing agent', 'catalyst',
+    'ink formulation', 'pigment dispersion', 'colorant chemical',
+    'chemical compound', 'specialty chemical', 'fine chemical',
+    'industrial chemical', 'process chemical', 'chemical raw material'
+  ])) return 'chemicals'
+
+  // Priority 7: Metals (broader terms)
   if (match([
     'steel', 'aluminum', 'aluminium', 'copper', 'iron',
     'zinc', 'tin', 'gold', 'silver', 'mineral', 'mining',
@@ -576,22 +950,67 @@ export function categorizeQuery(query) {
     'rare earth', 'critical mineral'
   ])) return 'metals'
 
-  // Priority 7: Textiles and apparel
+  // Priority 8: Textiles and apparel
   if (match([
     'shirt', 'shoe', 'sneaker', 'cotton', 'leather',
     'apparel', 'textile', 'clothing', 'garment',
     'denim', 'wool', 'silk', 'polyester', 'fabric',
-    'yarn', 'knit', 'woven', 'fashion', 'footwear'
+    'yarn', 'knit', 'woven', 'fashion', 'footwear',
+    'suede', 'jacket', 'coat ', 'trousers', 'dress fabric',
+    'upholstery fabric', 'canvas fabric', 'linen', 'velvet'
   ])) return 'textiles'
 
-  // Priority 8: Broader electronics/tech (lower confidence terms)
+  // Priority 11: Packaging — corrugated, glass, labels, flexible, protective
+  if (match([
+    'corrugated box', 'corrugated carton', 'cardboard box', 'shipping box',
+    'glass bottle', 'glass jar', 'glass container', 'glass vial',
+    'label', 'pressure sensitive label', 'shrink sleeve', 'rfid label',
+    'blister pack', 'clamshell pack', 'thermoformed tray',
+    'flexible pouch', 'stand-up pouch', 'retort pouch', 'sachet',
+    'packaging material', 'packaging film', 'barrier film',
+    'bubble wrap', 'foam packaging', 'void fill',
+    'pallet wrap', 'stretch wrap', 'strapping',
+    'folding carton', 'paperboard carton', 'aseptic carton',
+    'packaging', 'container packaging', 'retail packaging'
+  ])) return 'packaging'
+
+  // Priority 12: Medical / pharma — APIs, devices, consumables
+  if (match([
+    'api ', 'active pharmaceutical', 'drug substance', 'excipient',
+    'generic drug', 'pharmaceutical', 'pharma ingredient', 'synthesis api',
+    'medical device', 'surgical instrument', 'disposable medical',
+    'iv bag', 'syringe', 'catheter', 'stent', 'implant',
+    'diagnostic kit', 'reagent', 'assay kit', 'lateral flow',
+    'ppe', 'nitrile glove', 'surgical glove', 'surgical mask', 'n95',
+    'hospital supply', 'clinical supply', 'sterile packaging',
+    'fda approved', 'gmp certified', 'iso 13485', 'ce marked device'
+  ])) return 'medical'
+
+  // Priority 13: Machinery — pumps, valves, compressors, CNC, industrial equipment
+  if (match([
+    'pump', 'centrifugal pump', 'vacuum pump', 'gear pump', 'peristaltic pump',
+    'valve', 'ball valve', 'gate valve', 'check valve', 'control valve',
+    'compressor', 'air compressor', 'screw compressor', 'piston compressor',
+    'cnc machine', 'cnc machining center', 'cnc lathe', 'cnc mill',
+    'machine tool', 'grinding machine', 'turning center', 'machining center',
+    'industrial robot', 'robotic arm', 'automation equipment',
+    'conveyor', 'conveyor belt', 'material handling equipment',
+    'heat exchanger', 'pressure vessel', 'reactor vessel',
+    'industrial fan', 'blower', 'dust collector',
+    'welding equipment', 'plasma cutter', 'laser cutter',
+    'crane', 'forklift', 'lifting equipment',
+    'gearbox', 'reducer', 'servo drive', 'vfd', 'variable frequency drive',
+    'machinery', 'industrial equipment', 'capital equipment', 'plant equipment'
+  ])) return 'machinery'
+
+  // Priority 14: Broader electronics/tech (lower confidence terms)
   if (match([
     'phone', 'computer', 'laptop', 'tablet', 'electronics',
     'sensor', 'battery cell', 'ev battery', 'battery pack',
     'cable', 'connector', 'power supply', 'charger'
   ])) return 'electronics'
 
-  // Priority 9: Broader automotive (lower confidence terms)
+  // Priority 15: Broader automotive (lower confidence terms)
   if (match([
     'car ', 'cars', 'engine part', 'brake', 'tire', 'tyre',
     'transmission', 'exhaust', 'wheel', 'airbag',
@@ -663,7 +1082,8 @@ export function lookupTariff(query) {
     electronics: { hts: '8542.31.00', duty: '0% (ITA)',    notes: 'Electronic integrated circuits. Information Technology Agreement duty-free.' },
     agriculture: { hts: '2106.90.99', duty: '6.4%',        notes: 'Food preparations. Actual rate varies by product and origin.' },
     metals:      { hts: '7204.49.00', duty: '1.5%',        notes: 'Ferrous waste and scrap. Specific tariffs may apply.' },
-    textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' }
+    textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' },
+    plastics:    { hts: '3926.90.99', duty: '5.3% + 25% (China Sec 301)', notes: 'Other plastic articles. Duty-free from Korea (KORUS), Singapore (USSFTA), Germany (MFN). Section 301 applies to China-origin.' }
   }
   const fb = fallbacks[cat] || fallbacks.electronics
   return { ...fb, matched: false }
@@ -892,6 +1312,97 @@ export const CATEGORY_RISKS = {
       id: 'r_tex_3', title: 'Lead Time vs. Fashion Cycle Mismatch', type: 'Risk', severity: 'MEDIUM',
       desc: 'Standard Asia ocean freight adds 25-40 days to lead time. Fast fashion and responsive retail cycles require 4-8 week total lead time, creating inventory overstock risk when sales miss forecasts.',
       mitigation: 'Near-shore to Turkey, Morocco, or Mexico for speed-to-market collections. Reserve Bangladesh/Vietnam for core basics with predictable demand. Implement demand-sensing analytics to improve forecast accuracy.'
+    }
+  ],
+
+  chemicals: [
+    {
+      id: 'r_che_1', title: 'REACH & Dangerous Goods Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'EU REACH requires registration of all chemical substances >1 tonne/year. Importers must also comply with CLP labeling, ADR/IMDG dangerous goods transport rules, and maintain up-to-date Safety Data Sheets (SDS). Non-compliance leads to customs holds and market bans.',
+      mitigation: 'Require REACH pre-registration confirmation from all EU-bound suppliers. Maintain current SDS for all products. Use a licensed dangerous goods freight forwarder. Conduct annual compliance audits against ECHA SVHC candidate list updates.'
+    },
+    {
+      id: 'r_che_2', title: 'Feedstock & Crude Oil Price Volatility', type: 'Risk', severity: 'HIGH',
+      desc: 'Specialty chemical input costs (petrochemical feedstocks, natural gas, rare mineral salts) can swing 20–40% annually. Adhesive and coating raw material costs closely track crude oil and benzene/toluene benchmarks.',
+      mitigation: 'Include feedstock price-adjustment clauses (oil index linkage) in supply agreements. Dual-source critical inputs. Maintain 60-90 day safety stock on high-turnover chemicals. Hedge with commodity financial instruments where volumes justify.'
+    },
+    {
+      id: 'r_che_3', title: 'Section 301 Tariffs on Chinese Chemicals', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Many specialty chemicals, adhesives, and coatings sourced from China face 7.5–25% Section 301 tariffs under List 1-4A. Fine chemicals used in formulations may also be affected, raising BoM costs significantly.',
+      mitigation: 'Audit import classification against active Section 301 lists. Source from European (BASF, Evonik) or US Gulf Coast alternatives. File for exclusions on specialized inputs with no US/non-China alternatives. Explore duty drawback programs.'
+    }
+  ],
+  packaging: [
+    {
+      id: 'r_pkg_1', title: 'Section 301 & Anti-Dumping on Chinese Packaging', type: 'Risk', severity: 'HIGH',
+      desc: 'Corrugated boxes, paperboard, and plastic packaging from China face 25% Section 301 tariffs plus additional anti-dumping duties on specific items (e.g., coated paper, PET containers). Total landed cost impact can be 30–40%.',
+      mitigation: 'Qualify regional packaging suppliers (US, Mexico, ASEAN). Explore domestic corrugated partners (International Paper, WestRock). Compare total landed cost including duties before committing to China-origin packaging.'
+    },
+    {
+      id: 'r_pkg_2', title: 'EU EPR & Recycled Content Regulations', type: 'Risk', severity: 'HIGH',
+      desc: 'EU Packaging and Packaging Waste Directive (PPWD) mandates minimum recycled content, recyclability requirements, and Extended Producer Responsibility (EPR) registration in each EU member state by 2025–2030. Non-compliance blocks market entry.',
+      mitigation: 'Audit all EU-bound packaging for PPWD compliance. Register with national EPR schemes (e.g., Der Grüne Punkt in Germany). Switch to mono-material, recyclable formats. Engage packaging compliance consultants for multi-country EU registration.'
+    },
+    {
+      id: 'r_pkg_3', title: 'Pulp & Paper Price Volatility', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Containerboard and pulp prices are highly cyclical, moving 25–50% between cycle peaks and troughs. Post-COVID inventory corrections caused sharp price declines in 2023, but capacity tightness can reverse this quickly.',
+      mitigation: 'Use index-linked pricing in paper packaging LTAs with price caps. Build 45–60 day corrugated inventory during low-price periods. Optimize box dimensions to reduce material usage (right-sizing programs). Explore fiber-substitution where applicable.'
+    }
+  ],
+  medical: [
+    {
+      id: 'r_med_1', title: 'FDA Import Alert & cGMP Compliance Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'FDA maintains Import Alerts on dozens of Indian and Chinese API and device manufacturers for cGMP failures. A single import alert can halt all shipments from a facility, creating critical supply disruptions for pharmaceutical customers.',
+      mitigation: 'Check FDA Import Alert database before qualifying any API or device supplier. Require recent FDA inspection outcomes and 483 observation history. Conduct independent GMP audits. Maintain 6-month API safety stock for critical materials.'
+    },
+    {
+      id: 'r_med_2', title: 'Regulatory Approval Lead Time Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Switching pharmaceutical API suppliers requires FDA Drug Master File (DMF) update and can take 18–36 months for approval. Medical device supplier changes trigger design change notifications and re-validation. Regulatory lock-in creates single-source dependency.',
+      mitigation: 'Qualify secondary API suppliers in parallel with primary. Include regulatory change notification clauses in supply agreements. Maintain 12+ month supply agreements with lead-time guarantees. Engage regulatory affairs consultants for change management.'
+    },
+    {
+      id: 'r_med_3', title: 'Cold Chain & Serialization Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Biopharmaceuticals and temperature-sensitive APIs require validated cold chain logistics (2–8°C or -20°C). Drug serialization requirements (DSCSA in US, FMD in EU) mandate end-to-end track-and-trace, with non-compliance resulting in product destruction.',
+      mitigation: 'Use GDP-certified cold chain logistics providers only. Validate all cold chain lanes with temperature mapping studies. Implement serialization at point of manufacture. Deploy electronic batch records with full chain of custody documentation.'
+    }
+  ],
+  plastics: [
+    {
+      id: 'r_pla_1', title: 'China Section 301 Tariff on Plastic Articles', type: 'Risk', severity: 'HIGH',
+      desc: 'Most finished plastic parts sourced from China face 25% Section 301 tariffs on top of MFN rates, adding 25–30% to landed cost. Applies to injection-molded parts, extrusions, and assembled plastic components under HTS Chapter 39.',
+      mitigation: 'Qualify alternative tooling in South Korea (0% KORUS), Germany (MFN ~0-5%), or domestic US compounders. Nearshore injection molding capacity to Mexico under USMCA. Request First Sale valuation ruling from CBP to reduce dutiable value.'
+    },
+    {
+      id: 'r_pla_2', title: 'Crude Oil Price Correlation', type: 'Risk', severity: 'HIGH',
+      desc: 'Polymer feedstock prices (naphtha, ethylene, propylene) are directly tied to crude oil. A 20% crude spike typically raises polymer costs 12-18% within 60-90 days, compressing margins and triggering supplier price escalation clauses.',
+      mitigation: 'Include feedstock index price adjustment clauses (CPI/PPI linked) in LTAs. Source from US Gulf Coast suppliers with domestic natural gas-based feedstock, which is structurally cheaper and less oil-correlated. Hedge with financial instruments if volume justifies.'
+    },
+    {
+      id: 'r_pla_3', title: 'REACH / RoHS Restricted Substance Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'EU REACH regulations cover 240+ substances of very high concern (SVHCs) commonly used in polymer additives, plasticizers, and flame retardants (e.g., PFAS, phthalates, BPA, halogenated FRs). Non-compliant products face customs seizure and market bans.',
+      mitigation: 'Require full material declaration (FMD) and RoHS/REACH compliance certificate from all polymer suppliers. Use IEC 62474 declarable substance database as the reference. Conduct annual chemical compliance audits. Specify SVHC-free grade variants in purchase specs.'
+    },
+    {
+      id: 'r_pla_4', title: 'Tooling & Mold Lead Time Risk', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Injection mold fabrication for complex parts takes 8-20 weeks and costs $15,000–$250,000+ per tool. A single mold failure, tool damage, or supplier exit can halt production with no quick recovery path.',
+      mitigation: 'Own your tooling — ensure purchase orders specify tooling ownership with your company. Maintain mold drawings and CAD files. Qualify a secondary molder with duplicate or back-up tooling for critical production parts. Inspect tools annually.'
+    }
+  ],
+  machinery: [
+    {
+      id: 'r_mac_1', title: 'Section 301 Tariffs on Chinese Machinery', type: 'Risk', severity: 'HIGH',
+      desc: 'Most industrial machinery, CNC machine tools, and capital equipment sourced from China face 25% Section 301 tariffs (List 3/4A). On high-value capital equipment ($500k+), this creates enormous landed cost increases and disrupts capex budgets.',
+      mitigation: 'Source precision machinery from Germany, Japan, or South Korea where duty rates are 0–5% under FTAs. For budget machinery, quantify total tariff cost in capex planning. File for Section 301 exclusions on specialized equipment with no viable non-China source.'
+    },
+    {
+      id: 'r_mac_2', title: 'Long Lead Times & Single-Source Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Precision pumps, valves, and CNC equipment from Germany and Japan carry 16–52 week lead times. Single-sourcing critical production equipment means any supply disruption directly halts manufacturing. Spare parts availability in remote locations is often limited.',
+      mitigation: 'Place capital equipment orders 12+ months in advance. Maintain on-site critical spare parts inventory (bearings, seals, control boards). Qualify local service providers for maintenance. Negotiate spare parts stocking agreements with OEM at time of purchase.'
+    },
+    {
+      id: 'r_mac_3', title: 'Export Control & Dual-Use Restrictions', type: 'Risk', severity: 'MEDIUM',
+      desc: 'High-precision CNC machine tools (>4-axis, tight tolerances), certain pumps, and compressors are subject to Wassenaar Arrangement dual-use export controls. Resale or transfer to embargoed countries or restricted end-users can trigger severe US/EU penalties.',
+      mitigation: 'Conduct end-user screening against BIS Entity List, OFAC SDN list, and Wassenaar control lists before purchase and at time of any resale or transfer. Obtain Export Control Classification Numbers (ECCNs) for all capital equipment. Maintain records for 5+ years.'
     }
   ]
 }
