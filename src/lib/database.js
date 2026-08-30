@@ -432,6 +432,81 @@ export const ATLAS_DB = {
       esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'IUU fishing monitoring required for seafood supply chains. MarinTrust and MSC certification preferred.' },
       logistics: { port_wait_days: 4, freight_cost_estimate: '$3.8k/FEU' },
       industry_kpi: { label: 'Export Reach', value: '150+ Countries' }
+    },
+    {
+      id: 'h_food_6', lat: 41.6, lng: -93.6,
+      hub: 'IOWA / MIDWEST, USA', title: 'North America Processed Meats & Protein Hub',
+      companies: [
+        { name: 'Smithfield Foods', website: 'https://www.smithfieldfoods.com/', turnover: '>$1B' },
+        { name: 'Tyson Foods', website: 'https://www.tysonfoods.com/', turnover: '>$1B' },
+        { name: 'Hormel Foods', website: 'https://www.hormelfoods.com/', turnover: '>$1B' },
+        { name: 'Oscar Mayer (Kraft Heinz)', website: 'https://www.kraftheinzcompany.com/', turnover: '>$1B' }
+      ],
+      desc: 'The US Midwest is the global epicenter of processed meat manufacturing — bacon, sausage, hot dogs, ham, deli meat, and lunch meat. Iowa, Illinois, and Minnesota host the largest pork and poultry processing complexes. Smithfield is the world\'s largest pork processor; Tyson and Hormel produce pepperoni, sausage, and bacon at scale.',
+      customs: { hts_code: '1601.00.20', duty_rate: '0% (domestic)', compliance_note: 'USDA FSIS inspection mandatory for all processed meats. HACCP plans required. Country of Origin Labeling (COOL) rules apply. Export requires USDA export certificate.' },
+      esg: { carbon_footprint: 'Medium-High', ethical_rating: 'B', sustainability_note: 'Smithfield sustainability commitments include 25% GHG reduction. Tyson aims for net-zero by 2050. Animal welfare audits (PVP/PAACO) required by major retail customers.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.4k/FEU (domestic trucking)' },
+      industry_kpi: { label: 'US Pork Processing', value: 'Smithfield: ~27% US market share' }
+    },
+    {
+      id: 'h_food_7', lat: 44.6, lng: 11.3,
+      hub: 'EMILIA-ROMAGNA, ITALY', title: 'European Charcuterie & Cured Meats Hub',
+      companies: [
+        { name: 'Fratelli Beretta', website: 'https://www.fratelliберетта.it/', turnover: '$100M-$1B' },
+        { name: 'Inalca (Cremonini Group)', website: 'https://www.inalca.it/', turnover: '>$1B' },
+        { name: 'Negroni Salumi', website: 'https://www.negroni.com/', turnover: '$100M-$1B' },
+        { name: 'Salumificio Riva', website: 'https://www.rivagroup.it/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Emilia-Romagna is the birthplace and PDO (Protected Designation of Origin) heartland for Italian cured meats: prosciutto di Parma, mortadella Bologna, salami Milano, coppa, bresaola, and pancetta. Pepperoni (a US-Italian hybrid) and salami are produced here for global food service supply chains including pizza toppings.',
+      customs: { hts_code: '1602.49.40', duty_rate: '6.4% MFN (prepared pig meat, EU origin to US)', compliance_note: 'EU-US SPS agreement covers most cured meats. USDA FSIS import inspection required. PDO products require EU geographical indication documentation. Cold chain 0–4°C mandatory.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Consorzio del Prosciutto di Parma sustainability program. Italian salumi sector under EU Farm-to-Fork strategy. Animal welfare standards higher than US equivalents.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.1k/FEU (refrigerated)' },
+      industry_kpi: { label: 'Prosciutto di Parma', value: '11M+ hams/yr certified PDO' }
+    },
+    {
+      id: 'h_food_8', lat: 60.4, lng: 5.3,
+      hub: 'BERGEN / ÅLESUND, NORWAY', title: 'Atlantic Seafood & Aquaculture Hub',
+      companies: [
+        { name: 'Mowi (Marine Harvest)', website: 'https://mowi.com/', turnover: '>$1B' },
+        { name: 'SalMar', website: 'https://www.salmar.no/', turnover: '>$1B' },
+        { name: 'Lerøy Seafood Group', website: 'https://www.leroyseafood.com/', turnover: '>$1B' },
+        { name: 'Cermaq', website: 'https://www.cermaq.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Norway is the world\'s largest producer of farmed Atlantic salmon and a top-5 seafood exporter. Bergen and Ålesund are the operational hubs for salmon farming, cod, herring, mackerel, and shrimp processing. Norwegian salmon (smoked salmon, fresh fillets, frozen portions) commands the highest global quality premiums.',
+      customs: { hts_code: '0302.11.00', duty_rate: '0% MFN (fresh Atlantic salmon to US)', compliance_note: 'FDA Prior Notice mandatory. MSC/ASC certification standard for retail accounts. EU IUU fishing regulation compliance required for EU re-exports. Cold chain –18°C for frozen, 0–2°C for fresh.' },
+      esg: { carbon_footprint: 'Low-Medium', ethical_rating: 'A', sustainability_note: 'Mowi and SalMar MSC/ASC certified. Norwegian aquaculture under strict environmental standards (traffic light system). Sea lice and escapes reporting mandatory.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$4.2k/FEU (reefer premium)' },
+      industry_kpi: { label: 'Norway Salmon Export', value: '~1.5M tonnes/yr, $12B export value' }
+    },
+    {
+      id: 'h_food_9', lat: 43.1, lng: -89.4,
+      hub: 'WISCONSIN / NEW ZEALAND', title: 'Global Dairy & Cheese Sourcing Hub',
+      companies: [
+        { name: 'Leprino Foods', website: 'https://www.leprinofoods.com/', turnover: '>$1B' },
+        { name: 'Dairy Farmers of America (DFA)', website: 'https://www.dfamilk.com/', turnover: '>$1B' },
+        { name: 'Fonterra Co-operative', website: 'https://www.fonterra.com/', turnover: '>$1B' },
+        { name: 'Saputo Inc.', website: 'https://www.saputo.com/', turnover: '>$1B' }
+      ],
+      desc: 'Wisconsin (the "Dairy State") and New Zealand (Fonterra) are the world\'s premium sources for mozzarella, cheddar, cream cheese, whey protein, milk powder, butter, and yogurt cultures. Leprino is the world\'s largest mozzarella producer supplying Pizza Hut, Domino\'s, and Papa John\'s. Fonterra supplies 1-in-3 dairy products globally by volume.',
+      customs: { hts_code: '0406.10.28', duty_rate: '10% (fresh cheese, MFN to US)', compliance_note: 'FDA PMO (Pasteurized Milk Ordinance) compliance mandatory. USDA Dairy Import License required for over-quota imports. EU dairy exports to US require USDA-EU equivalence agreement compliance. New Zealand under US-NZ FTA negotiation.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Fonterra committed to carbon neutrality by 2050. DFA sustainability program. Leprino zero-waste manufacturing programs. New Zealand GHG emissions pricing under ETS.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.1k/FEU (Wisconsin domestic); $4.8k/FEU (NZ)' },
+      industry_kpi: { label: 'Global Mozzarella', value: 'Leprino: >40% US pizza cheese market' }
+    },
+    {
+      id: 'h_food_10', lat: 33.7, lng: -84.4,
+      hub: 'ATLANTA, USA / LEUVEN, BELGIUM', title: 'Global Beverages Manufacturing Hub',
+      companies: [
+        { name: 'The Coca-Cola Company', website: 'https://www.coca-colacompany.com/', turnover: '>$1B' },
+        { name: 'PepsiCo', website: 'https://www.pepsico.com/', turnover: '>$1B' },
+        { name: 'AB InBev', website: 'https://www.ab-inbev.com/', turnover: '>$1B' },
+        { name: 'Monster Beverage Corp.', website: 'https://www.monsterbevcorp.com/', turnover: '>$1B' }
+      ],
+      desc: 'Atlanta is the HQ of Coca-Cola, the world\'s most distributed beverage. Leuven (Belgium) hosts AB InBev\'s global HQ. Together these hubs represent the soft drink, energy drink, sports drink, beer, and sparkling water supply chain. Concentrate manufacturing, syrup supply, and beverage ingredient sourcing all flow through these centers.',
+      customs: { hts_code: '2202.10.00', duty_rate: '0% (domestic)', compliance_note: 'FDA GRAS status required for all beverage ingredients. TTB approval for alcoholic beverages. Nutrition Facts labeling mandatory per 21 CFR. Sugar tax compliance in applicable jurisdictions (UK, Mexico).' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Coca-Cola World Without Waste program (100% recyclable packaging by 2025). PepsiCo pep+ sustainability agenda. AB InBev 100% renewable electricity target.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.1k/FEU (domestic concentrate shipment)' },
+      industry_kpi: { label: 'Coca-Cola Distribution', value: '200+ countries, 2B servings/day' }
     }
   ],
 
@@ -1092,9 +1167,10 @@ export function categorizeQuery(query) {
 
   // Priority 4: Electronics and semiconductors
   if (match([
-    'chip', 'semiconductor', 'wafer', 'pcb', 'printed circuit',
+    'semiconductor', 'wafer', 'pcb', 'printed circuit',
     'display panel', 'lcd', 'oled', 'processor', 'memory chip',
     'microchip', 'microcontroller', 'fpga', 'asic',
+    'ic chip', 'logic chip', 'chip component', 'chip package', 'bare chip',
     'glass panel', 'cover glass', 'camera module',
     'iphone', 'samsung phone', 'tsmc', 'apple supply',
     'circuit board', 'nand', 'dram', 'hbm'
@@ -1120,12 +1196,19 @@ export function categorizeQuery(query) {
     'pasta', 'noodle', 'instant noodle', 'ramen', 'spaghetti', 'macaroni',
     // Processed meats (all types)
     'sausage', 'pepperoni', 'salami', 'chorizo', 'mortadella', 'bologna',
-    'pastrami', 'prosciutto', 'deli meat', 'hot dog', 'frankfurter',
-    'bacon', 'ham slice', 'smoked meat', 'cured meat', 'jerky', 'meat snack',
+    'pastrami', 'prosciutto', 'deli meat', 'lunch meat', 'luncheon meat',
+    'hot dog', 'frankfurter', 'wiener',
+    'bratwurst', 'brat ', 'kielbasa', 'andouille', 'merguez', 'liverwurst',
+    'summer sausage', 'breakfast sausage', 'italian sausage', 'pork sausage',
+    'bacon', 'ham slice', 'cured ham', 'smoked ham', 'smoked meat', 'cured meat',
+    'jerky', 'meat snack', 'charcuterie',
     // Seafood (processed/packaged)
-    'smoked salmon', 'canned tuna', 'tuna can', 'sardine', 'anchovy',
-    'shrimp frozen', 'frozen shrimp', 'lobster tail', 'fish fillet',
-    'crab meat', 'canned fish', 'seafood product', 'seafood pack',
+    'smoked salmon', 'salmon fillet', 'salmon steak', 'salmon portion',
+    'canned tuna', 'tuna can', 'tuna steak', 'sardine', 'anchovy',
+    'cod fillet', 'cod fish', 'tilapia', 'halibut', 'haddock', 'pollock',
+    'mahi mahi', 'sea bass', 'trout fillet', 'catfish fillet',
+    'shrimp frozen', 'frozen shrimp', 'lobster tail', 'lobster meat', 'fish fillet',
+    'crab meat', 'crab leg', 'canned fish', 'seafood product', 'seafood pack',
     // Sauces, condiments & flavoring
     'ketchup', 'hot sauce', 'soy sauce', 'oyster sauce', 'fish sauce',
     'mayonnaise', 'mustard', 'salad dressing', 'vinegar', 'seasoning mix',
@@ -1199,7 +1282,8 @@ export function categorizeQuery(query) {
   // Priority 7: Metals (broader terms)
   if (match([
     'steel', 'aluminum', 'aluminium', 'copper', 'iron',
-    'zinc', 'tin', 'gold', 'silver', 'mineral', 'mining',
+    'zinc', 'tin ore', 'tinplate', 'tin metal', 'tin alloy',
+    'gold', 'silver', 'mineral', 'mining',
     'metal', 'alloy', 'casting', 'forging', 'smelting',
     'rare earth', 'critical mineral'
   ])) return 'metals'
@@ -1271,12 +1355,30 @@ export function categorizeQuery(query) {
 
   // Priority 16: Wood, paper & pulp
   if (match([
+    // Lumber & structural wood
     'lumber', 'plywood', 'mdf', 'hardboard', 'particleboard', 'osb board',
     'wood panel', 'wood plank', 'wood beam', 'wooden', 'timber',
-    'paper pulp', 'kraft paper', 'tissue paper', 'newsprint', 'paperboard',
-    'cardstock', 'copy paper', 'office paper', 'wood pulp',
     'construction lumber', 'softwood', 'hardwood', 'veneer',
-    'engineered wood', 'cross laminated timber', 'glulam'
+    'engineered wood', 'cross laminated timber', 'glulam', 'chipboard',
+    // Bare 'wood' and 'lumber' natural language
+    'wood', 'raw wood', 'wood product', 'wood supply', 'wood material',
+    'wooden pallet', 'wood frame', 'wood flooring', 'hardwood floor',
+    'oak plank', 'pine board', 'cedar plank', 'birch', 'maple wood',
+    // Furniture & wood-based products
+    'wooden furniture', 'wood furniture', 'flat-pack', 'particle board',
+    // Paper, pulp & cellulose
+    'paper pulp', 'wood pulp', 'kraft paper', 'tissue paper', 'newsprint', 'paperboard',
+    'cardstock', 'copy paper', 'office paper', 'printing paper', 'copier paper',
+    'writing paper', 'coated paper', 'uncoated paper', 'fine paper',
+    'toilet paper', 'paper towel', 'facial tissue', 'paper roll',
+    'cardboard', 'corrugated paper', 'cardboard sheet', 'boxboard',
+    // Publishing & educational
+    'notebook', 'notepad', 'textbook', 'book printing', 'magazine paper',
+    'newspaper print', 'stationery', 'paper products',
+    // Pulp
+    'pulp', 'wood pulp', 'paper pulp', 'cellulose',
+    // Bare words (last resort — wide but important for UX)
+    'paper'
   ])) return 'wood_paper'
 
   // Priority 17: Glass & construction materials
