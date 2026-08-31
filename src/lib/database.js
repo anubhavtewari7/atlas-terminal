@@ -1141,7 +1141,9 @@ export function categorizeQuery(query) {
     'glass wool insulation', 'glass fiber fabric', 'woven roving glass',
     'ready mix concrete', 'ready-mix concrete', 'rmc concrete',
     'concrete pump', 'cement mix', 'concrete block masonry',
-    'iron aggregate', 'gravel aggregate'
+    'iron aggregate', 'gravel aggregate',
+    // Basalt must be here — P13 construction fires AFTER food P5a which catches 'salt' inside 'basalt'
+    'basalt', 'basalt fiber', 'basalt rock', 'basalt stone', 'basalt wool'
   ])) return 'construction'
 
   // Pre-D: Medical compound terms (before metals 'metal' or packaging 'packaging' intercept)
@@ -1163,13 +1165,28 @@ export function categorizeQuery(query) {
     'private label cosmetic', 'private label personal care', 'oem cosmetic',
     'oem shampoo', 'oem skincare', 'contract cosmetic',
     'aluminum-free deodorant', 'aluminum free deodorant', 'aluminum-free',
+    'ammonia-free', 'paraben-free', 'sulfate-free',
+    'hair dye kit', 'hair dye pack', 'hair dye brand',
+    // cotton swab/pad — must be here before textiles P8 catches 'cotton'
+    'cotton swab', 'cotton ball', 'cotton pad', 'cotton round',
     'hair dye cream', 'hair color cream', 'face cream', 'body cream',
     'moisturizer cream', 'day cream', 'night cream', 'hand cream',
     'shampoo label', 'conditioner label', 'cosmetic label',
-    'private label beauty', 'white label cosmetic'
+    'private label beauty', 'white label cosmetic',
+    'sheet mask', 'clay mask', 'face mask pack', 'peel mask', 'sleep mask',
+    'mud mask', 'charcoal mask', 'gel mask', 'eye mask beauty', 'face mask beauty',
+    'hair dye', 'hair color', 'ammonia-free hair'
   ])) return 'consumer_goods'
 
-  // Pre-F: Processed food terms that collide with agriculture raw keywords
+  // Pre-F: Agriculture terms that would be caught by food's broad keywords
+  //   'fish feed' contains 'fish', 'sunflower seed crop' contains 'sunflower seed'
+  if (match([
+    'fish feed', 'fish meal', 'fish oil crude', 'fish oil agri',
+    'sunflower seed crop', 'sunflower crop', 'seed corn', 'seed wheat',
+    'seed potato', 'seed soybean', 'cover crop seed'
+  ])) return 'agriculture'
+
+  // Pre-F2: Processed food terms that collide with agriculture raw keywords
   if (match([
     'wheat flour', 'bread flour', 'all purpose flour', 'whole wheat flour',
     'steak cut', 'ribeye steak', 'strip steak', 'sirloin steak', 'beef steak',
@@ -1212,7 +1229,17 @@ export function categorizeQuery(query) {
     'plastic film', 'packaging film', 'stretch film', 'shrink wrap',
     'plastic extrusion', 'extrusion profile', 'plastic tube',
     'masterbatch', 'color concentrate', 'flame retardant compound',
-    'engineering plastic', 'specialty polymer', 'bio-based plastic'
+    'engineering plastic', 'specialty polymer', 'bio-based plastic',
+    'rubber', 'foam', 'latex', 'vinyl', 'resin',
+    'natural rubber sheet', 'latex foam', 'latex sheet', 'latex material',
+    'vinyl sheet', 'vinyl film', 'vinyl material', 'pvc vinyl',
+    'pet resin', 'petg', 'petg sheet', 'pet bottle resin',
+    'neoprene', 'neoprene rubber', 'neoprene sheet', 'neoprene foam',
+    'butyl rubber', 'butyl', 'iir rubber', 'chlorobutyl',
+    'polystyrene', 'eps', 'expandable polystyrene', 'hips plastic',
+    'acrylic sheet', 'acrylic resin', 'acrylic glass', 'pmma sheet',
+    'polycarbonate sheet', 'polycarbonate resin', 'pc sheet',
+    'pu rubber', 'foam sheet', 'foam block', 'foam roll', 'foam slab'
   ])) return 'plastics'
 
   // Priority 2: Specific industrial components (magnets, bearings, seals, etc.)
@@ -1225,8 +1252,26 @@ export function categorizeQuery(query) {
     'actuator', 'solenoid', 'precision gear', 'worm gear', 'helical gear',
     'industrial motor', 'servo motor', 'stepper motor',
     'spring component', 'disc spring', 'compression spring',
+    'coil spring', 'torsion spring', 'leaf spring', 'helical spring',
+    'extension spring', 'spring steel wire', 'spring washer',
     'hydraulic fitting', 'pneumatic valve', 'precision machined',
-    'sintered', 'powder metallurgy'
+    'sintered', 'powder metallurgy',
+    'screw', 'machine screw', 'wood screw', 'self-tapping screw', 'hex screw',
+    'bolt', 'hex bolt', 'carriage bolt', 'anchor bolt', 'stud bolt', 'eye bolt',
+    'nut', 'hex nut', 'lock nut', 'wing nut', 'coupling nut', 'flange nut',
+    'washer', 'flat washer', 'lock washer', 'spring washer', 'tab washer',
+    'rivet', 'blind rivet', 'pop rivet', 'solid rivet', 'tubular rivet',
+    'hinge', 'door hinge', 'piano hinge', 'butt hinge', 'concealed hinge',
+    'bracket', 'angle bracket', 'corner bracket', 'mounting bracket', 'shelf bracket',
+    'flange', 'pipe flange', 'weld neck flange', 'slip-on flange', 'blind flange',
+    'coupling', 'shaft coupling', 'flexible coupling', 'rigid coupling', 'hose coupling',
+    'bushing', 'sleeve bushing', 'flanged bushing', 'bronze bushing',
+    'needle', 'industrial needle', 'knitting needle', 'sewing machine needle',
+    'pipe', 'steel pipe', 'seamless pipe', 'welded pipe', 'pipe fitting',
+    'elbow fitting', 'tee fitting', 'reducer fitting', 'pipe nipple',
+    'dowel pin', 'cotter pin', 'clevis pin', 'split pin', 'roll pin',
+    'key stock', 'keyway', 'woodruff key',
+    'chain', 'roller chain', 'conveyor chain', 'drive chain', 'link chain'
   ])) return 'industrial'
 
   // Priority 3: Specific metals and minerals (raw material level)
@@ -1273,6 +1318,22 @@ export function categorizeQuery(query) {
     'iphone', 'samsung phone', 'tsmc', 'apple supply',
     'circuit board', 'nand', 'dram', 'hbm'
   ])) return 'electronics'
+
+  // Pre-G0: Packaging containers that contain food substrings
+  //   'drum' contains 'rum', so must be caught before food P5a fires
+  if (match([
+    'drum', 'steel drum', 'plastic drum', 'fiber drum', 'ibc drum',
+    'chemical drum', 'drum packaging', 'open head drum', 'closed head drum',
+    'wooden barrel', 'oak barrel', 'wine barrel', 'barrel drum'
+  ])) return 'packaging'
+
+  // Pre-G: Wood species & industrial fibers that contain food substrings
+  //   'teak' contains 'tea', 'twine' contains 'wine' → protect before food P5a
+  if (match([
+    'teak', 'teak wood', 'teak plank', 'teak timber', 'teak furniture', 'teak deck',
+    'mahogany', 'rosewood', 'ebony wood', 'balsa wood', 'balsawood',
+    'twine', 'baling twine', 'sisal twine', 'jute twine', 'hemp twine', 'garden twine'
+  ])) return 'wood_paper'
 
   // Priority 5a: Processed food, confectionery, CPG, beverages — BEFORE raw agriculture
   if (match([
@@ -1358,7 +1419,88 @@ export function categorizeQuery(query) {
     // CPG / packaged food general
     'packaged food', 'food manufacturing', 'food product', 'food brand',
     'consumer food', 'snack food', 'private label food', 'co-manufacturing food',
-    'frozen food', 'sauce'
+    'frozen food', 'sauce',
+    // ── Staple grains & starches ──
+    'rice', 'white rice', 'brown rice', 'jasmine rice', 'basmati rice', 'arborio rice',
+    'wild rice', 'instant rice', 'parboiled rice', 'rice flour',
+    'wheat', 'durum wheat', 'hard wheat', 'soft wheat', 'wheat berry', 'wheat kernel',
+    'corn', 'corn starch', 'corn syrup grain', 'corn kernel', 'corn meal',
+    'barley', 'pearl barley', 'barley malt', 'barley flour', 'malted barley',
+    'rye', 'rye flour', 'rye bread', 'rye grain',
+    'millet', 'sorghum grain', 'teff', 'amaranth grain', 'quinoa',
+    'buckwheat', 'spelt', 'emmer wheat',
+    'flour', 'plain flour', 'self-raising flour', 'corn flour',
+    // ── Meat, poultry & seafood (raw/fresh/bulk) ──
+    'beef', 'beef cut', 'ground beef', 'minced beef', 'beef loin', 'beef chuck',
+    'beef rib', 'beef round', 'beef brisket', 'beef sirloin', 'beef tenderloin',
+    'veal', 'wagyu', 'angus beef', 'grass-fed beef',
+    'pork', 'pork chop', 'pork loin', 'pork ribs', 'pork shoulder', 'pork tenderloin',
+    'pork rind', 'suckling pig', 'piglet',
+    'chicken', 'chicken breast', 'chicken thigh', 'chicken leg', 'chicken wing',
+    'chicken drumstick', 'whole chicken', 'broiler chicken', 'free-range chicken',
+    'lamb', 'lamb chop', 'lamb leg', 'lamb rack', 'lamb shoulder', 'mutton',
+    'turkey', 'turkey breast', 'turkey leg', 'whole turkey',
+    'duck', 'duck breast', 'duck leg', 'goose',
+    'fish', 'fresh fish', 'whole fish', 'fish portion', 'frozen fish',
+    'shrimp', 'raw shrimp', 'fresh shrimp', 'prawn', 'king prawn', 'tiger prawn',
+    'salmon', 'fresh salmon', 'atlantic salmon', 'pacific salmon', 'salmon roe',
+    'tuna', 'fresh tuna', 'bluefin tuna', 'yellowfin tuna', 'skipjack tuna',
+    'squid', 'octopus', 'clam', 'mussel', 'oyster', 'scallop', 'abalone',
+    // ── Dairy & eggs ──
+    'milk', 'fresh milk', 'whole milk', 'skim milk', 'low-fat milk',
+    'uhp milk', 'uht milk', 'organic milk',
+    'egg', 'eggs', 'fresh egg', 'free-range egg', 'egg white', 'egg yolk',
+    // ── Produce (fresh) ──
+    'tomato', 'cherry tomato', 'roma tomato', 'beef tomato', 'tomato fresh',
+    'potato', 'sweet potato', 'russet potato', 'red potato', 'gold potato',
+    'onion', 'red onion', 'yellow onion', 'white onion', 'spring onion',
+    'garlic', 'garlic fresh', 'garlic bulb', 'garlic clove', 'garlic head',
+    'ginger', 'fresh ginger', 'ginger root', 'baby ginger',
+    'pepper', 'bell pepper', 'red pepper', 'green pepper', 'yellow pepper',
+    'chili pepper', 'chilli pepper', 'jalapeño', 'habanero', 'cayenne pepper',
+    'carrot', 'baby carrot', 'carrot fresh', 'carrot juice',
+    'spinach', 'baby spinach', 'spinach fresh', 'spinach leaf',
+    'avocado', 'fresh avocado', 'avocado oil', 'hass avocado',
+    'mango', 'fresh mango', 'mango fresh', 'mango slice',
+    'banana', 'fresh banana', 'cavendish banana', 'plantain',
+    'apple', 'fresh apple', 'granny smith', 'fuji apple', 'gala apple',
+    'orange', 'fresh orange', 'navel orange', 'blood orange',
+    'lemon', 'fresh lemon', 'lime', 'key lime', 'lemon fresh',
+    'strawberry', 'blueberry', 'raspberry', 'blackberry', 'cranberry',
+    'grape', 'kiwi', 'pineapple', 'watermelon', 'cantaloupe', 'honeydew',
+    'peach', 'plum', 'cherry', 'fig', 'date fruit', 'pomegranate',
+    'pear', 'papaya', 'guava', 'passion fruit', 'dragon fruit', 'lychee',
+    'asparagus', 'broccoli', 'cauliflower', 'cabbage', 'kale', 'lettuce',
+    'celery', 'leek', 'fennel', 'artichoke', 'brussels sprout',
+    'mushroom', 'shiitake', 'oyster mushroom', 'porcini', 'truffle mushroom',
+    'corn fresh', 'sweet corn', 'corn on the cob', 'corn cobette',
+    'wheat fresh', 'wheat product',
+    // ── Beverages (bare) ──
+    'tea', 'green tea', 'black tea', 'white tea', 'oolong tea', 'herbal tea',
+    'chamomile tea', 'peppermint tea', 'matcha', 'chai', 'loose leaf tea', 'tea bag',
+    'coffee', 'ground coffee', 'whole bean coffee', 'arabica', 'robusta', 'espresso',
+    'filter coffee', 'decaf coffee', 'cold brew coffee',
+    'wine', 'red wine', 'white wine', 'rose wine', 'sparkling wine',
+    'champagne', 'prosecco', 'cava wine',
+    'beer', 'craft beer', 'lager', 'ale', 'stout', 'pilsner', 'ipa beer',
+    'spirits', 'distilled spirits', 'whiskey', 'whisky', 'bourbon',
+    'scotch whisky', 'irish whiskey', 'single malt',
+    'vodka', 'rum', 'dark rum', 'white rum', 'spiced rum',
+    'tequila', 'mezcal', 'brandy', 'cognac', 'liqueur',
+    'cider', 'hard cider', 'mead', 'sake', 'baijiu',
+    'drink', 'beverage', 'refreshment drink',
+    'spring water', 'still water', 'alkaline water', 'flavored water',
+    // ── Pantry & basics ──
+    'broth', 'stock', 'chicken broth', 'beef broth', 'vegetable broth',
+    'soup', 'instant soup', 'noodle soup', 'cream soup',
+    'snack', 'bar snack', 'savory snack', 'healthy snack',
+    'oat', 'oats', 'rolled oats', 'steel cut oats', 'oat bran', 'oat flour',
+    'lentil', 'red lentil', 'green lentil', 'lentil soup',
+    'chickpea', 'garbanzo', 'split pea', 'black bean', 'kidney bean', 'navy bean',
+    'nut', 'almond', 'walnut', 'cashew', 'pistachio', 'hazelnut', 'pecan',
+    'macadamia', 'pine nut', 'brazil nut',
+    'seed', 'chia seed', 'flax seed', 'sesame seed', 'hemp seed', 'poppy seed',
+    'dried mango', 'dried cranberry', 'dried apricot', 'dried blueberry'
   ])) return 'food'
 
   // Priority 5b: Raw agriculture and commodities
@@ -1372,7 +1514,20 @@ export function categorizeQuery(query) {
     'sugar cane', 'raw rice', 'paddy rice',
     'fast food supply', 'food processing plant',
     'protein powder', 'palm oil crude', 'crude palm', 'crop',
-    'livestock', 'poultry farm', 'aquaculture', 'fishery', 'seafood raw'
+    'livestock', 'poultry farm', 'aquaculture', 'fishery', 'seafood raw',
+    'fertilizer', 'fertiliser', 'npk fertilizer', 'nitrogen fertilizer',
+    'potassium fertilizer', 'phosphate fertilizer', 'organic fertilizer',
+    'urea fertilizer', 'ammonium nitrate fertilizer', 'dap fertilizer',
+    'hay', 'baled hay', 'alfalfa hay', 'timothy hay', 'straw bale',
+    'silage', 'corn silage', 'grass silage', 'haylage',
+    'seed corn', 'seed wheat', 'seed potato', 'soybean seed', 'rapeseed', 'canola seed',
+    'sunflower seed crop', 'cotton seed', 'flax seed crop',
+    'irrigation', 'drip irrigation', 'sprinkler irrigation', 'pivot irrigation',
+    'compost', 'organic compost', 'vermicompost', 'compost tea agri',
+    'aquafeed', 'fish feed', 'shrimp feed', 'salmon feed', 'tilapia feed',
+    'poultry feed', 'layer feed', 'broiler feed', 'swine feed', 'cattle feed',
+    'pesticide agri', 'herbicide agri', 'fungicide agri', 'insecticide agri',
+    'crop protection', 'plant protection', 'agrochemical'
   ])) return 'agriculture'
 
   // Priority 6: Chemicals — adhesives, coatings, lubricants, solvents, surfactants
@@ -1384,9 +1539,22 @@ export function categorizeQuery(query) {
     'solvent', 'thinner', 'acetone', 'mek', 'ipa ', 'isopropanol',
     'surfactant', 'detergent intermediate', 'emulsifier',
     'resin system', 'hardener', 'curing agent', 'catalyst',
-    'ink formulation', 'pigment dispersion', 'colorant chemical',
+    'ink formulation', 'printing ink', 'offset ink', 'uv ink', 'flexo ink',
+    'gravure ink', 'inkjet ink', 'screen printing ink', 'digital ink', 'ink pigment',
+    'pigment dispersion', 'pigment concentrate', 'pigment', 'colorant chemical',
+    'textile dye', 'reactive dye', 'disperse dye', 'acid dye', 'vat dye',
+    'direct dye', 'fiber reactive dye', 'dye powder', 'dye chemical',
     'chemical compound', 'specialty chemical', 'fine chemical',
-    'industrial chemical', 'process chemical', 'chemical raw material'
+    'industrial chemical', 'process chemical', 'chemical raw material',
+    'acid', 'sulfuric acid', 'hydrochloric acid', 'nitric acid', 'phosphoric acid',
+    'citric acid', 'acetic acid', 'lactic acid', 'formic acid', 'tartaric acid',
+    'bleach', 'sodium hypochlorite', 'chlorine', 'chlorine gas', 'chlor-alkali',
+    'ammonia', 'ammonium hydroxide', 'ammonia solution',
+    'wax', 'carnauba wax', 'beeswax', 'synthetic wax', 'wax emulsion',
+    'ethanol', 'ethyl alcohol', 'industrial ethanol', 'denatured ethanol',
+    'methanol', 'methyl alcohol', 'isopropanol ipa',
+    'pesticide', 'herbicide', 'insecticide', 'fungicide', 'biocide', 'rodenticide',
+    'chemical intermediate', 'monomer', 'polymer chemical'
   ])) return 'chemicals'
 
   // Priority 7: Metals (broader terms)
@@ -1395,7 +1563,23 @@ export function categorizeQuery(query) {
     'zinc', 'tin ore', 'tinplate', 'tin metal', 'tin alloy',
     'gold', 'silver', 'mineral', 'mining',
     'metal', 'alloy', 'casting', 'forging', 'smelting',
-    'rare earth', 'critical mineral'
+    'rare earth', 'critical mineral',
+    'nickel', 'nickel alloy', 'nickel plate', 'nickel sheet',
+    'titanium', 'titanium alloy', 'titanium sheet', 'titanium bar',
+    'brass', 'brass rod', 'brass sheet', 'brass tube', 'brass fitting',
+    'bronze', 'bronze alloy', 'phosphor bronze', 'bronze bushing',
+    'chromium', 'chromium oxide', 'chrome plate', 'chromium plating',
+    'rebar', 'deformed bar', 'reinforcement bar', 'steel rebar',
+    'wire rod', 'steel wire rod', 'copper wire rod',
+    'magnesium', 'magnesium alloy', 'magnesium ingot',
+    'manganese', 'manganese steel', 'manganese ore',
+    'lead', 'lead ingot', 'lead alloy', 'lead plate', 'lead sheet',
+    'pewter', 'bismuth', 'antimony', 'vanadium',
+    'silicon metal', 'silicon ingot', 'metallurgical silicon',
+    'stainless steel', 'carbon steel', 'tool steel', 'spring steel',
+    'galvanized steel', 'cold rolled steel', 'hot rolled steel',
+    'aluminum sheet', 'aluminum coil', 'aluminum profile', 'aluminum extrusion',
+    'copper tube', 'copper wire', 'copper sheet', 'copper rod'
   ])) return 'metals'
 
   // Priority 8: Textiles and apparel
@@ -1403,7 +1587,27 @@ export function categorizeQuery(query) {
     'shirt', 'shoe', 'sneaker', 'cotton', 'leather',
     'apparel', 'textile', 'clothing', 'garment',
     'denim', 'wool', 'silk', 'polyester', 'fabric',
-    'yarn', 'knit', 'woven', 'fashion', 'footwear'
+    'yarn', 'knit', 'woven', 'fashion', 'footwear',
+    'linen', 'linen fabric', 'linen yarn', 'belgian linen',
+    'cashmere', 'cashmere yarn', 'cashmere wool',
+    'viscose', 'viscose fabric', 'viscose yarn', 'viscose rayon',
+    'rayon', 'modal fabric', 'lyocell', 'tencel', 'cupro',
+    'spandex', 'elastane', 'lycra', 'spandex fiber',
+    'fleece', 'polar fleece', 'micro fleece', 'fleece fabric',
+    'velvet', 'velvet fabric', 'crushed velvet', 'velour',
+    'canvas', 'canvas fabric', 'canvas material', 'duck canvas',
+    'tweed', 'tweed fabric', 'harris tweed',
+    'flannel', 'flannel fabric', 'flannel shirt material',
+    'chiffon', 'organza', 'tulle', 'voile fabric',
+    'thread', 'sewing thread', 'embroidery thread', 'stitching thread',
+    'embroidery', 'embroidery fabric', 'embroidered fabric',
+    'zipper', 'zip fastener', 'coil zipper', 'metal zipper', 'plastic zipper',
+    'button', 'snap button', 'press stud', 'toggle button', 'shank button',
+    'ribbon', 'satin ribbon', 'grosgrain ribbon', 'velvet ribbon',
+    'lace', 'lace fabric', 'needle lace', 'guipure lace',
+    'interfacing', 'interlining', 'fusible', 'lining fabric',
+    'batting', 'wadding', 'quilt batting', 'upholstery fabric',
+    'jacquard', 'brocade', 'damask', 'twill fabric', 'poplin'
   ])) return 'textiles'
 
   // Priority 11: Medical / pharma — APIs, devices, consumables
@@ -1415,11 +1619,18 @@ export function categorizeQuery(query) {
     'medical device', 'surgical instrument', 'disposable medical',
     'iv bag', 'syringe', 'catheter', 'stent', 'implant',
     'diagnostic kit', 'reagent', 'assay kit', 'lateral flow',
-    'ppe', 'nitrile glove', 'nitrile', 'surgical glove', 'surgical mask', 'n95',
+    'ppe kit', 'ppe equipment', 'ppe supply', 'ppe protective', 'personal protective equipment',
+    'nitrile glove', 'latex glove', 'nitrile', 'surgical glove', 'surgical mask', 'n95',
+    'glove', 'bandage', 'gauze', 'wound dressing', 'medical tape', 'plaster bandage',
+    'drug', 'vitamin', 'antibiotic', 'vaccine', 'capsule', 'tablet capsule',
+    'vial', 'ampoule', 'blister tablet',
     'hospital supply', 'clinical supply', 'sterile packaging',
     'fda approved', 'gmp certified', 'iso 13485', 'ce marked device',
     'hpmc', 'excipient grade', 'usp standard', 'ep standard',
-    'microfluidic', 'point of care test', 'rapid test kit', 'elisa kit'
+    'microfluidic', 'point of care test', 'rapid test kit', 'elisa kit',
+    'mask', 'surgical mask', 'dust mask', 'face mask medical', 'mask n95', 'mask surgical',
+    'mask ffp2', 'mask ffp3', 'respirator mask', 'medical mask',
+    'protective mask', 'disposable mask'
   ])) return 'medical'
 
   // Priority 12: Consumer goods & personal care
@@ -1439,7 +1650,25 @@ export function categorizeQuery(query) {
     'skin care', 'skincare product', 'oem beauty', 'private label cosmetic',
     'vaseline', 'lip balm', 'chapstick', 'hand lotion', 'body lotion',
     'baby lotion', 'baby oil', 'baby powder', 'baby shampoo', 'baby wash',
-    'wet wipe', 'baby wipe', 'facial wipe', 'cleansing wipe'
+    'wet wipe', 'baby wipe', 'facial wipe', 'cleansing wipe',
+    'diaper', 'nappy', 'adult diaper', 'training pants', 'incontinence pad',
+    'razor', 'razor blade', 'shaving razor', 'disposable razor', 'electric razor',
+    'shaving cream', 'shaving gel', 'shaving foam', 'aftershave',
+    'nail polish', 'nail varnish', 'nail gel', 'nail lacquer', 'nail care',
+    'nail file', 'nail clipper', 'nail buffer',
+    'lotion', 'hand lotion', 'body cream lotion',
+    'floss', 'dental floss', 'floss pick', 'interdental brush',
+    'hair comb', 'wide tooth comb', 'detangling comb', 'fine tooth comb',
+    'hair brush', 'hair clip', 'bobby pin', 'hair tie', 'scrunchie',
+    'cotton swab', 'cotton ball', 'cotton pad', 'q-tip',
+    'feminine hygiene', 'sanitary pad', 'tampon', 'menstrual cup', 'panty liner',
+    'condom', 'contraceptive',
+    'dental care', 'electric toothbrush', 'water flosser', 'tongue scraper',
+    'whitening strip', 'teeth whitening',
+    'hair removal', 'wax strip', 'depilatory cream', 'epilator',
+    'face wash', 'micellar water', 'cleansing balm', 'toner pad',
+    'eye cream', 'under eye patch', 'collagen mask',
+    'foot cream', 'foot scrub', 'heel balm', 'hand sanitizer gel'
   ])) return 'consumer_goods'
 
   // Priority 13: Construction materials
@@ -1453,7 +1682,23 @@ export function categorizeQuery(query) {
     'drywall', 'gypsum board', 'plasterboard', 'wallboard',
     'aggregate', 'gravel', 'sand quarry', 'stone tile', 'marble slab',
     'granite countertop', 'basalt fiber', 'basalt rock', 'basalt stone', 'basalt',
-    'construction material', 'building material'
+    'construction material', 'building material',
+    'concrete', 'concrete mix', 'concrete slab', 'precast concrete', 'reinforced concrete',
+    'brick', 'clay brick', 'fire brick', 'face brick', 'engineering brick', 'brick paver',
+    'tile', 'floor tile', 'wall tile', 'porcelain tile', 'ceramic tile', 'mosaic tile',
+    'roof tile', 'paving tile', 'terracotta tile',
+    'window', 'window frame', 'double glazed window', 'aluminium window', 'upvc window',
+    'glass', 'glazing', 'double glazing', 'triple glazing', 'glass pane',
+    'insulation', 'thermal insulation', 'mineral wool', 'rock wool', 'glass wool',
+    'acoustic insulation', 'pipe insulation', 'rigid insulation',
+    'mortar', 'mortar mix', 'refractory mortar', 'tile mortar', 'grout',
+    'asphalt', 'bituminous', 'asphalt concrete', 'hot mix asphalt',
+    'bitumen', 'modified bitumen', 'bitumen membrane', 'bitumen felt',
+    'conduit', 'electrical conduit', 'rigid conduit', 'flexible conduit', 'pvc conduit',
+    'scaffolding', 'formwork', 'shuttering', 'shoring',
+    'steel structure', 'structural steel', 'steel beam', 'steel column',
+    'roofing', 'metal roofing', 'membrane roofing', 'green roof system',
+    'waterproofing', 'waterproof membrane', 'tanking system'
   ])) return 'construction'
 
   // Priority 14: Packaging — corrugated, glass containers, labels, flexible, protective
@@ -1473,7 +1718,22 @@ export function categorizeQuery(query) {
     'bubble wrap', 'foam packaging', 'void fill',
     'pallet wrap', 'stretch wrap', 'strapping',
     'folding carton', 'paperboard carton', 'aseptic carton',
-    'packaging', 'container packaging', 'retail packaging'
+    'packaging', 'container packaging', 'retail packaging',
+    'bottle', 'plastic bottle', 'pet bottle', 'glass bottle', 'bottle cap', 'bottle closure',
+    'box', 'cardboard box', 'product box', 'gift box', 'flat box', 'subscription box',
+    'pallet', 'wooden pallet', 'plastic pallet', 'export pallet', 'euro pallet',
+    'foil', 'aluminum foil', 'aluminium foil', 'foil pouch', 'foil wrap', 'foil liner',
+    'tape', 'sealing tape', 'packing tape', 'adhesive tape', 'masking tape', 'duct tape',
+    'lid', 'metal lid', 'plastic lid', 'snap lid', 'screw cap', 'tamper evident lid',
+    'tin can', 'steel can', 'aluminum can', 'beverage can', 'food can', 'aerosol can',
+    'drum', 'steel drum', 'plastic drum', 'fiber drum', 'ibc drum', 'chemical drum',
+    'wrap', 'stretch wrap pallet', 'cling wrap', 'plastic wrap',
+    'tray', 'blister tray', 'plastic tray', 'pulp tray', 'foam tray',
+    'tube', 'squeeze tube', 'laminate tube', 'aluminium tube',
+    'bag', 'zip bag', 'stand up bag', 'kraft bag', 'polybag', 'poly bag', 'mailer bag',
+    'jar', 'glass jar', 'plastic jar', 'wide mouth jar',
+    'case', 'display case', 'master case', 'shipping case',
+    'insert', 'cardboard insert', 'foam insert', 'paper insert'
   ])) return 'packaging'
 
   // Priority 15: Machinery — pumps, valves, compressors, CNC, industrial equipment
@@ -1490,14 +1750,54 @@ export function categorizeQuery(query) {
     'welding equipment', 'plasma cutter', 'laser cutter',
     'crane', 'forklift', 'lifting equipment',
     'gearbox', 'reducer', 'servo drive', 'vfd', 'variable frequency drive',
-    'machinery', 'industrial equipment', 'capital equipment', 'plant equipment'
+    'machinery', 'industrial equipment', 'capital equipment', 'plant equipment',
+    'generator', 'diesel generator', 'gas generator', 'standby generator',
+    'tractor', 'farm tractor', 'utility tractor', 'compact tractor',
+    'turbine', 'steam turbine', 'gas turbine', 'wind turbine', 'hydro turbine',
+    'motor', 'electric motor', 'induction motor', 'ac motor', 'dc motor',
+    'engine', 'diesel engine', 'gasoline engine', 'combustion engine',
+    'drill', 'drilling machine', 'drill press', 'rock drill', 'core drill',
+    'lathe', 'turning lathe', 'cnc lathe', 'metal lathe',
+    'press', 'hydraulic press', 'punch press', 'stamping press', 'press brake',
+    'forging press', 'power press', 'forming press',
+    'extruder', 'plastic extruder', 'screw extruder', 'twin screw extruder',
+    'mixer', 'industrial mixer', 'ribbon mixer', 'planetary mixer',
+    'agitator', 'tank agitator', 'mixing agitator',
+    'centrifuge', 'industrial centrifuge', 'decanter centrifuge',
+    'filter press', 'membrane filter', 'belt filter',
+    'dryer', 'spray dryer', 'fluid bed dryer', 'rotary dryer',
+    'oven', 'industrial oven', 'curing oven', 'conveyor oven',
+    'boiler', 'steam boiler', 'hot water boiler', 'fire tube boiler',
+    'chiller', 'industrial chiller', 'process chiller', 'water chiller',
+    'cooling tower', 'air handler', 'hvac unit', 'air conditioning unit',
+    'combine harvester', 'grain harvester', 'forage harvester', 'sugarcane harvester',
+    'excavator', 'bulldozer', 'loader', 'backhoe', 'skid steer', 'grader',
+    'paving machine', 'road roller', 'asphalt paver'
   ])) return 'machinery'
 
   // Priority 16: Broader electronics/tech (lower confidence terms)
   if (match([
     'phone', 'computer', 'laptop', 'tablet', 'electronics',
     'sensor', 'battery cell', 'ev battery', 'battery pack',
-    'cable', 'connector', 'power supply', 'charger'
+    'cable', 'connector', 'power supply', 'charger',
+    'battery', 'lithium battery', 'alkaline battery', 'rechargeable battery',
+    'led light', 'led strip', 'led module', 'led lamp', 'led bulb', 'led driver',
+    'led display', 'led panel', 'led chip', 'smd led', 'high power led',
+    'resistor', 'smd resistor', 'through-hole resistor', 'resistor array',
+    'capacitor', 'electrolytic capacitor', 'ceramic capacitor', 'film capacitor',
+    'diode', 'zener diode', 'schottky diode', 'rectifier diode',
+    'transistor', 'mosfet', 'bjt transistor', 'igbt transistor',
+    'inductor', 'coil inductor', 'power inductor', 'ferrite core',
+    'wire', 'copper wire', 'aluminum wire', 'electrical wire', 'magnet wire',
+    'switch', 'toggle switch', 'push switch', 'rocker switch', 'dip switch',
+    'relay', 'electromagnetic relay', 'solid state relay', 'relay module',
+    'antenna', 'pcb antenna', 'wifi antenna', 'lte antenna', 'gps antenna',
+    'transformer', 'power transformer', 'toroidal transformer', 'auto transformer',
+    'fuse', 'blade fuse', 'glass fuse', 'smd fuse', 'fuse holder',
+    'heat sink', 'aluminum heat sink', 'cpu heat sink', 'thermal pad',
+    'pcba', 'pcb assembly', 'smt assembly', 'smd assembly',
+    'oscillator', 'crystal oscillator', 'quartz crystal',
+    'rfid', 'rfid tag', 'nfc chip', 'bluetooth module', 'wifi module'
   ])) return 'electronics'
 
   // Priority 17: Broader automotive (lower confidence terms)
