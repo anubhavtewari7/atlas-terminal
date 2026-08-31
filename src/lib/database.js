@@ -1127,7 +1127,9 @@ export function categorizeQuery(query) {
     'water-based varnish', 'wood finish varnish', 'floor varnish',
     'alkyd varnish', 'acrylic varnish', 'lacquer finish',
     'lithium grease', 'lithium complex grease', 'lithium complex', 'lithium soap grease',
-    'nlgi grade', 'nlgi 2', 'nlgi 3', 'nlgi 00'
+    'nlgi grade', 'nlgi 2', 'nlgi 3', 'nlgi 00',
+    'petroleum jelly', 'petrolatum', 'white mineral oil', 'white oil', 'paraffin wax',
+    'mineral oil', 'technical vaseline', 'vaseline industrial'
   ])) return 'chemicals'
 
   // Pre-C: Construction glass & fiber terms (before textiles 'woven' / metals 'iron')
@@ -1218,7 +1220,8 @@ export function categorizeQuery(query) {
   if (match([
     'magnet', 'neodymium', 'ndfeb', 'ferrite magnet', 'permanent magnet',
     'bearing', 'roller bearing', 'ball bearing', 'needle bearing',
-    'fastener', 'o-ring', 'gasket', 'seal ring', 'lip seal',
+    'fastener', 'paper clip', 'paperclip', 'paper clips', 'paperclips', 'binder clip', 'binder clips', 'staple', 'stapler', 'office clip',
+    'o-ring', 'gasket', 'seal ring', 'lip seal',
     'actuator', 'solenoid', 'precision gear', 'worm gear', 'helical gear',
     'industrial motor', 'servo motor', 'stepper motor',
     'spring component', 'disc spring', 'compression spring',
@@ -1254,7 +1257,9 @@ export function categorizeQuery(query) {
     'trim', 'interior trim', 'plated trim', 'door trim', 'plastic trim',
     'cargo shade', 'cargo cover', 'shade cover', 'window shade', 'sunshade',
     'cargo liner', 'boot liner', 'parcel shelf', 'tonneau', 'boot cover',
-    'interior accessory', 'interior component'
+    'interior accessory', 'interior component',
+    'lumbar support automotive', 'lumbar support seat', 'lumbar cushion car',
+    'lumbar support', 'lumbar pillow', 'lumbar pad', 'lumbar cushion'
   ])) return 'automotive'
 
   // Priority 4: Electronics and semiconductors
@@ -1310,7 +1315,8 @@ export function categorizeQuery(query) {
     'food ingredient', 'flavor compound',
     'tomato paste', 'pizza sauce', 'bbq sauce', 'sriracha', 'teriyaki',
     'hummus', 'salsa', 'peanut butter', 'almond butter',
-    'jam', 'jelly preserve', 'maple syrup', 'honey jar', 'honey pack',
+    'jam', 'jelly', 'jelly preserve', 'maple syrup', 'honey jar', 'honey pack',
+    'royal jelly', 'fruit jelly', 'jello',
     // Oils & fats (edible)
     'olive oil', 'vegetable oil', 'cooking oil', 'sunflower oil',
     'coconut oil', 'sesame oil', 'canola oil', 'edible oil',
@@ -1403,6 +1409,7 @@ export function categorizeQuery(query) {
   // Priority 11: Medical / pharma — APIs, devices, consumables
   // PROMOTED above packaging to prevent 'sterile packaging'/'stent'/'metal' misfires
   if (match([
+    'lumbar implant', 'lumbar support brace', 'lumbar support medical', 'lumbar spine', 'lumbar',
     'api ', 'active pharmaceutical', 'drug substance', 'excipient',
     'generic drug', 'pharmaceutical', 'pharma ingredient', 'synthesis api',
     'medical device', 'surgical instrument', 'disposable medical',
@@ -1429,7 +1436,10 @@ export function categorizeQuery(query) {
     'liquid detergent', 'laundry detergent', 'fabric softener', 'fabric conditioner',
     'dishwashing liquid', 'dish soap', 'household cleaner', 'bathroom cleaner',
     'personal care', 'beauty product', 'hygiene product', 'consumer goods',
-    'skin care', 'skincare product', 'oem beauty', 'private label cosmetic'
+    'skin care', 'skincare product', 'oem beauty', 'private label cosmetic',
+    'vaseline', 'lip balm', 'chapstick', 'hand lotion', 'body lotion',
+    'baby lotion', 'baby oil', 'baby powder', 'baby shampoo', 'baby wash',
+    'wet wipe', 'baby wipe', 'facial wipe', 'cleansing wipe'
   ])) return 'consumer_goods'
 
   // Priority 13: Construction materials
@@ -1448,6 +1458,10 @@ export function categorizeQuery(query) {
 
   // Priority 14: Packaging — corrugated, glass containers, labels, flexible, protective
   if (match([
+    'paper cup', 'paper cups', 'paper plate', 'paper plates', 'paper bowl', 'paper bowls',
+    'paper bag', 'paper bags', 'paper packaging', 'paper tray', 'paper trays',
+    'disposable cup', 'plastic cup', 'foam cup', 'coffee cup', 'drinking cup', 'cups',
+    'disposable plate', 'plastic plate', 'foam plate',
     'corrugated box', 'corrugated carton', 'cardboard box', 'shipping box',
     'glass bottle', 'glass jar', 'glass container', 'glass vial',
     'product label', 'shipping label', 'adhesive label', 'barcode label',
