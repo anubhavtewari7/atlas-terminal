@@ -1098,6 +1098,95 @@ export function categorizeQuery(query) {
   const q = query.toLowerCase()
   const match = (keywords) => keywords.some(kw => q.includes(kw))
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // PRE-CHECKS: High-specificity compound terms that would be misrouted by
+  // later broad-keyword checks. These fire before any category P1–P18.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // Pre-A: Automotive compound parts (before plastics P1 catches injection mold
+  //        or metals P7 catches iron/alloy/casting/forging)
+  if (match([
+    'brake caliper', 'brake disc', 'brake rotor', 'brake drum',
+    'exhaust manifold', 'exhaust pipe', 'exhaust system',
+    'wheel rim', 'wheel hub', 'alloy wheel', 'mag wheel',
+    'transmission shaft', 'propshaft', 'driveshaft', 'crankshaft', 'camshaft',
+    'steering knuckle', 'control arm', 'suspension arm', 'sway bar',
+    'bumper fascia', 'bumper cover', 'fender liner',
+    'catalytic converter', 'turbocharger', 'intercooler auto',
+    'abs sensor', 'auto sensor', 'oxygen sensor auto', 'map sensor auto',
+    'cv joint', 'cv axle', 'tie rod', 'ball joint', 'strut assembly',
+    'piston automotive', 'connecting rod auto', 'valve cover auto'
+  ])) return 'automotive'
+
+  // Pre-B: Chemical applications of PU/coatings (before plastics P1 catches polyurethane)
+  if (match([
+    'polyurethane coating', 'polyurethane sealant', 'polyurethane varnish',
+    'polyurethane adhesive', 'polyurethane paint', 'polyurethane finish',
+    'pu coating', 'pu sealant', 'pu varnish', 'pu adhesive', 'pu paint',
+    '2k pu', '1k pu', '2-component pu', 'solvent-borne coating',
+    'water-based varnish', 'wood finish varnish', 'floor varnish',
+    'alkyd varnish', 'acrylic varnish', 'lacquer finish',
+    'lithium grease', 'lithium complex grease', 'lithium complex', 'lithium soap grease',
+    'nlgi grade', 'nlgi 2', 'nlgi 3', 'nlgi 00'
+  ])) return 'chemicals'
+
+  // Pre-C: Construction glass & fiber terms (before textiles 'woven' / metals 'iron')
+  if (match([
+    'flat glass', 'float glass', 'architectural glass', 'low-e glass',
+    'low iron glass', 'low-iron glass', 'extra clear glass',
+    'glass fiber roving', 'glass fiber woven', 'glass fiber mat',
+    'e-glass fiber', 'e-glass woven', 's-glass', 'ecr glass',
+    'glass wool insulation', 'glass fiber fabric', 'woven roving glass',
+    'ready mix concrete', 'ready-mix concrete', 'rmc concrete',
+    'concrete pump', 'cement mix', 'concrete block masonry',
+    'iron aggregate', 'gravel aggregate'
+  ])) return 'construction'
+
+  // Pre-D: Medical compound terms (before metals 'metal' or packaging 'packaging' intercept)
+  if (match([
+    'coronary stent', 'vascular stent', 'drug eluting stent', 'bare metal stent',
+    'stent delivery', 'stent coronary', 'stent vascular', 'stent implant',
+    'tyvek pouch', 'medical tyvek', 'sterile pouch',
+    'sterile wrap', 'sterile barrier', 'medical device packaging',
+    'nitrile examination', 'nitrile exam glove', 'exam glove', 'medical glove',
+    'orthopedic implant', 'spinal implant', 'hip implant', 'dental implant',
+    'nitrile medical', 'hospital grade', 'surgical grade',
+    'gmp grade', 'usp grade', 'ep grade', 'bp grade pharmaceutical'
+  ])) return 'medical'
+
+  // Pre-E: Consumer goods compound terms (before packaging 'label', textiles 'fabric',
+  //         metals 'aluminum', food 'cream' intercept)
+  if (match([
+    'fabric softener', 'fabric conditioner', 'laundry softener',
+    'private label cosmetic', 'private label personal care', 'oem cosmetic',
+    'oem shampoo', 'oem skincare', 'contract cosmetic',
+    'aluminum-free deodorant', 'aluminum free deodorant', 'aluminum-free',
+    'hair dye cream', 'hair color cream', 'face cream', 'body cream',
+    'moisturizer cream', 'day cream', 'night cream', 'hand cream',
+    'shampoo label', 'conditioner label', 'cosmetic label',
+    'private label beauty', 'white label cosmetic'
+  ])) return 'consumer_goods'
+
+  // Pre-F: Processed food terms that collide with agriculture raw keywords
+  if (match([
+    'wheat flour', 'bread flour', 'all purpose flour', 'whole wheat flour',
+    'steak cut', 'ribeye steak', 'strip steak', 'sirloin steak', 'beef steak',
+    'burger bun', 'hamburger bun', 'brioche bun', 'slider bun',
+    'beef patty', 'frozen patty', 'beef burger', 'plant burger',
+    'chicken nugget', 'chicken strip', 'chicken tender', 'breaded chicken',
+    'pork belly sliced', 'pulled pork', 'corned beef', 'roast beef',
+    'canned black bean', 'canned kidney bean', 'canned chickpea', 'canned lentil',
+    'canned corn', 'canned tomato', 'diced tomato canned',
+    'grain bar', 'whole grain cereal', 'multigrain bread',
+    'rice cake', 'rice noodle', 'rice cracker', 'puffed rice',
+    'corn tortilla', 'corn chip', 'corn flour', 'cornmeal', 'polenta',
+    'soy protein', 'soy flour', 'textured soy'
+  ])) return 'food'
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // MAIN PRIORITY CHECKS
+  // ─────────────────────────────────────────────────────────────────────────
+
   // Priority 1: Plastics, polymers, elastomers, rubber, composites
   // Must be first — "injection mold" would otherwise fall to electronics default
   if (match([
@@ -1105,8 +1194,11 @@ export function categorizeQuery(query) {
     'polymer', 'polymers', 'resin compound', 'plastic resin',
     'abs plastic', 'abs compound', 'polypropylene', 'polyethylene',
     'hdpe', 'ldpe', 'lldpe', 'pvc pipe', 'pvc compound',
-    'nylon compound', 'nylon part', 'peek', 'pom resin', 'delrin', 'acetal',
-    'polycarbonate', 'polyurethane', 'pu foam', 'foam molding',
+    'nylon compound', 'nylon part', 'nylon 6 ', 'nylon 66', 'nylon 12',
+    'pa66', 'pa6 ', 'pa12', 'pa11',
+    'peek', 'pom resin', 'delrin', 'acetal',
+    'polycarbonate', 'polyurethane resin', 'polyurethane elastomer',
+    'polyurethane part', 'polyurethane compound', 'pu foam', 'foam molding',
     'injection mold', 'injection mould', 'injection molded', 'injection moulded',
     'blow mold', 'blow mould', 'roto mold', 'roto mould',
     'plastic part', 'plastic component', 'plastic housing', 'plastic enclosure',
@@ -1169,7 +1261,8 @@ export function categorizeQuery(query) {
   if (match([
     'semiconductor', 'wafer', 'pcb', 'printed circuit',
     'display panel', 'lcd', 'oled', 'processor', 'memory chip',
-    'microchip', 'microcontroller', 'fpga', 'asic',
+    'microchip', 'microcontroller', 'fpga',
+    'asic chip', 'asic design', 'custom asic',
     'ic chip', 'logic chip', 'chip component', 'chip package', 'bare chip',
     'glass panel', 'cover glass', 'camera module',
     'iphone', 'samsung phone', 'tsmc', 'apple supply',
@@ -1189,7 +1282,7 @@ export function categorizeQuery(query) {
     'bread', 'bakery', 'pastry', 'croissant', 'muffin', 'donut', 'doughnut',
     'cake mix', 'baking mix', 'flour based', 'cereal', 'breakfast cereal',
     'wafer', 'waffle', 'pancake mix',
-    'sourdough', 'tortilla', 'flatbread', 'pita', 'granola', 'oatmeal', 'porridge',
+    'sourdough', 'tortilla', 'flatbread', 'pita bread', 'pita wrap', 'pita pocket', 'granola', 'oatmeal', 'porridge',
     'gluten free', 'trail mix', 'dried fruit', 'fruit snack', 'nut snack',
     'mixed nuts', 'roasted nuts', 'nuts and', 'seeds mix', 'sunflower seed', 'pumpkin seed',
     // Pasta, noodles, grains (processed)
@@ -1233,7 +1326,8 @@ export function categorizeQuery(query) {
     // Dairy, eggs & alternatives
     'milk powder', 'baby formula', 'infant formula', 'powdered milk',
     'cheese', 'mozzarella', 'cheddar', 'cream cheese', 'cottage cheese',
-    'yogurt', 'greek yogurt', 'kefir', 'butter', 'cream',
+    'yogurt', 'greek yogurt', 'kefir', 'butter',
+    'heavy cream', 'whipping cream', 'sour cream', 'cooking cream', 'double cream',
     'ice cream', 'gelato', 'frozen dessert',
     'egg product', 'liquid egg', 'dried egg',
     // Plant-based & specialty
@@ -1248,7 +1342,7 @@ export function categorizeQuery(query) {
     'infant cereal', 'sports supplement', 'nutrition bar',
     // Sweeteners & functional ingredients
     'sweetener', 'corn syrup', 'high fructose', 'sugar substitute', 'stevia',
-    'sorbitol', 'maltitol', 'food grade',
+    'sorbitol food', 'maltitol food', 'xylitol food', 'erythritol',
     // CPG / packaged food general
     'packaged food', 'food manufacturing', 'food product', 'food brand',
     'consumer food', 'snack food', 'private label food', 'co-manufacturing food',
@@ -1257,12 +1351,16 @@ export function categorizeQuery(query) {
 
   // Priority 5b: Raw agriculture and commodities
   if (match([
-    'beef', 'meat', 'patty', 'wheat', 'soybean', 'soy',
-    'agri', 'corn', 'chicken', 'pork',
-    'grain', 'dairy farm', 'coffee bean', 'cocoa bean', 'raw cocoa', 'sugar cane',
-    'rice', 'mcdonald', 'fast food supply', 'food processing plant',
-    'protein powder', 'feed ingredient', 'palm oil', 'crop',
-    'livestock', 'poultry', 'aquaculture', 'fishery', 'seafood'
+    'raw beef', 'beef cattle', 'beef carcass', 'raw meat', 'meat packing',
+    'raw chicken', 'raw pork', 'pork belly raw', 'pork loin raw',
+    'raw wheat', 'wheat grain', 'wheat harvest', 'raw soybean', 'soybean crop',
+    'soy crop', 'agri', 'raw corn', 'corn crop', 'grain crop', 'grain harvest',
+    'grain storage', 'feed grain', 'animal feed', 'feed ingredient',
+    'dairy farm', 'raw milk', 'coffee bean', 'cocoa bean', 'raw cocoa',
+    'sugar cane', 'raw rice', 'paddy rice',
+    'fast food supply', 'food processing plant',
+    'protein powder', 'palm oil crude', 'crude palm', 'crop',
+    'livestock', 'poultry farm', 'aquaculture', 'fishery', 'seafood raw'
   ])) return 'agriculture'
 
   // Priority 6: Chemicals — adhesives, coatings, lubricants, solvents, surfactants
@@ -1296,13 +1394,60 @@ export function categorizeQuery(query) {
     'yarn', 'knit', 'woven', 'fashion', 'footwear'
   ])) return 'textiles'
 
-  // Priority 11: Packaging — corrugated, glass, labels, flexible, protective
+  // Priority 11: Medical / pharma — APIs, devices, consumables
+  // PROMOTED above packaging to prevent 'sterile packaging'/'stent'/'metal' misfires
+  if (match([
+    'api ', 'active pharmaceutical', 'drug substance', 'excipient',
+    'generic drug', 'pharmaceutical', 'pharma ingredient', 'synthesis api',
+    'medical device', 'surgical instrument', 'disposable medical',
+    'iv bag', 'syringe', 'catheter', 'stent', 'implant',
+    'diagnostic kit', 'reagent', 'assay kit', 'lateral flow',
+    'ppe', 'nitrile glove', 'nitrile', 'surgical glove', 'surgical mask', 'n95',
+    'hospital supply', 'clinical supply', 'sterile packaging',
+    'fda approved', 'gmp certified', 'iso 13485', 'ce marked device',
+    'hpmc', 'excipient grade', 'usp standard', 'ep standard',
+    'microfluidic', 'point of care test', 'rapid test kit', 'elisa kit'
+  ])) return 'medical'
+
+  // Priority 12: Consumer goods & personal care
+  // PROMOTED above textiles and packaging to prevent 'fabric'/'label'/'cream'/'aluminum' misfires
+  if (match([
+    'shampoo', 'conditioner', 'body wash', 'shower gel', 'bar soap', 'hand soap',
+    'liquid soap', 'hand sanitizer', 'toothpaste', 'mouthwash', 'toothbrush',
+    'deodorant', 'antiperspirant', 'sunscreen', 'spf lotion', 'sunblock',
+    'cosmetics', 'foundation', 'lipstick', 'mascara', 'eyeshadow',
+    'lip gloss', 'concealer', 'blush', 'makeup', 'eye liner', 'bb cream',
+    'perfume', 'fragrance', 'cologne', 'body spray', 'eau de parfum',
+    'facial cleanser', 'moisturizer', 'face serum', 'toner skincare',
+    'hair dye', 'hair color', 'hair spray', 'hair gel', 'hair wax', 'hair mask',
+    'liquid detergent', 'laundry detergent', 'fabric softener', 'fabric conditioner',
+    'dishwashing liquid', 'dish soap', 'household cleaner', 'bathroom cleaner',
+    'personal care', 'beauty product', 'hygiene product', 'consumer goods',
+    'skin care', 'skincare product', 'oem beauty', 'private label cosmetic'
+  ])) return 'consumer_goods'
+
+  // Priority 13: Construction materials
+  // PROMOTED above packaging and machinery to prevent 'pump'/'packaging' misfires
+  if (match([
+    'flat glass pane', 'tempered glass', 'borosilicate', 'glass fiber', 'glass wool',
+    'float glass', 'architectural glass', 'safety glass', 'laminated glass',
+    'cement', 'concrete block', 'clay brick', 'masonry',
+    'ceramic tile', 'porcelain tile', 'floor tile', 'wall tile',
+    'roofing material', 'roof shingle', 'insulation board', 'foam insulation',
+    'drywall', 'gypsum board', 'plasterboard', 'wallboard',
+    'aggregate', 'gravel', 'sand quarry', 'stone tile', 'marble slab',
+    'granite countertop', 'construction material', 'building material'
+  ])) return 'construction'
+
+  // Priority 14: Packaging — corrugated, glass containers, labels, flexible, protective
   if (match([
     'corrugated box', 'corrugated carton', 'cardboard box', 'shipping box',
     'glass bottle', 'glass jar', 'glass container', 'glass vial',
-    'label', 'pressure sensitive label', 'shrink sleeve', 'rfid label',
+    'product label', 'shipping label', 'adhesive label', 'barcode label',
+    'peel label', 'pressure sensitive label', 'shrink sleeve', 'rfid label',
     'blister pack', 'clamshell pack', 'thermoformed tray',
     'flexible pouch', 'stand-up pouch', 'retort pouch', 'sachet',
+    'stretch hood', 'hood film', 'stretch film', 'shrink film',
     'packaging material', 'packaging film', 'barrier film',
     'bubble wrap', 'foam packaging', 'void fill',
     'pallet wrap', 'stretch wrap', 'strapping',
@@ -1310,19 +1455,7 @@ export function categorizeQuery(query) {
     'packaging', 'container packaging', 'retail packaging'
   ])) return 'packaging'
 
-  // Priority 12: Medical / pharma — APIs, devices, consumables
-  if (match([
-    'api ', 'active pharmaceutical', 'drug substance', 'excipient',
-    'generic drug', 'pharmaceutical', 'pharma ingredient', 'synthesis api',
-    'medical device', 'surgical instrument', 'disposable medical',
-    'iv bag', 'syringe', 'catheter', 'stent', 'implant',
-    'diagnostic kit', 'reagent', 'assay kit', 'lateral flow',
-    'ppe', 'nitrile glove', 'surgical glove', 'surgical mask', 'n95',
-    'hospital supply', 'clinical supply', 'sterile packaging',
-    'fda approved', 'gmp certified', 'iso 13485', 'ce marked device'
-  ])) return 'medical'
-
-  // Priority 13: Machinery — pumps, valves, compressors, CNC, industrial equipment
+  // Priority 15: Machinery — pumps, valves, compressors, CNC, industrial equipment
   if (match([
     'pump', 'centrifugal pump', 'vacuum pump', 'gear pump', 'peristaltic pump',
     'valve', 'ball valve', 'gate valve', 'check valve', 'control valve',
@@ -1339,14 +1472,14 @@ export function categorizeQuery(query) {
     'machinery', 'industrial equipment', 'capital equipment', 'plant equipment'
   ])) return 'machinery'
 
-  // Priority 14: Broader electronics/tech (lower confidence terms)
+  // Priority 16: Broader electronics/tech (lower confidence terms)
   if (match([
     'phone', 'computer', 'laptop', 'tablet', 'electronics',
     'sensor', 'battery cell', 'ev battery', 'battery pack',
     'cable', 'connector', 'power supply', 'charger'
   ])) return 'electronics'
 
-  // Priority 15: Broader automotive (lower confidence terms)
+  // Priority 17: Broader automotive (lower confidence terms)
   if (match([
     'car ', 'cars', 'engine part', 'brake', 'tire', 'tyre',
     'transmission', 'exhaust', 'wheel', 'airbag',
@@ -1380,33 +1513,6 @@ export function categorizeQuery(query) {
     // Bare words (last resort — wide but important for UX)
     'paper'
   ])) return 'wood_paper'
-
-  // Priority 17: Glass & construction materials
-  if (match([
-    'flat glass', 'tempered glass', 'borosilicate', 'glass fiber', 'glass wool',
-    'float glass', 'architectural glass', 'safety glass', 'laminated glass',
-    'cement', 'ready mix concrete', 'concrete block', 'clay brick', 'masonry',
-    'ceramic tile', 'porcelain tile', 'floor tile', 'wall tile',
-    'roofing material', 'roof shingle', 'insulation board', 'foam insulation',
-    'drywall', 'gypsum board', 'plasterboard', 'wallboard',
-    'aggregate', 'gravel', 'sand quarry', 'stone tile', 'marble slab',
-    'granite countertop', 'construction material', 'building material'
-  ])) return 'construction'
-
-  // Priority 18: Consumer goods & personal care
-  if (match([
-    'shampoo', 'conditioner', 'body wash', 'shower gel', 'bar soap', 'hand soap',
-    'liquid soap', 'hand sanitizer', 'toothpaste', 'mouthwash', 'toothbrush',
-    'deodorant', 'antiperspirant', 'sunscreen', 'spf lotion',
-    'cosmetics', 'foundation', 'lipstick', 'mascara', 'eyeshadow',
-    'lip gloss', 'concealer', 'blush', 'makeup',
-    'perfume', 'fragrance', 'cologne', 'body spray',
-    'facial cleanser', 'moisturizer', 'serum skin', 'toner skin',
-    'hair dye', 'hair color', 'hair spray', 'hair gel', 'hair wax',
-    'liquid detergent', 'laundry detergent', 'fabric softener',
-    'dishwashing liquid', 'dish soap', 'household cleaner',
-    'personal care', 'beauty product', 'hygiene product', 'consumer goods'
-  ])) return 'consumer_goods'
 
   // Default: electronics (most common procurement category globally)
   return 'electronics'
