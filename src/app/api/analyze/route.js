@@ -17,6 +17,17 @@ export async function POST(req) {
 
     const query = material.trim();
     const category = categorizeQuery(query);
+
+    // Detect low-confidence matches (fell through to the electronics default).
+    // We flag this so the UI can show a soft "best-match" disclaimer rather
+    // than implying we found an exact category match.
+    const ELECTRONICS_KEYWORDS = ['semiconductor','wafer','pcb','lcd','oled','chip','circuit','nand','dram',
+      'monitor','screen','television','display','battery','resistor','capacitor','diode','transistor',
+      'phone','computer','laptop','tablet','sensor','cable','connector','power supply','charger',
+      'electronics','router','ssd','keyboard','mouse','headphone','speaker','printer','camera']
+    const qLow = query.toLowerCase()
+    const isLowConfidence = category === 'electronics' && !ELECTRONICS_KEYWORDS.some(kw => qLow.includes(kw))
+
     const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.food || ATLAS_DB.electronics;
     const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
     // Surface the most relevant hub first in the browsable list too, so it
@@ -53,6 +64,7 @@ export async function POST(req) {
 
     const data = {
       category,
+      low_confidence: isLowConfidence,
       directive: {
         best_region:  selectedHub.hub,
         best_partner: selectedHub.companies[0]?.name || 'Strategic Partner',
@@ -60,7 +72,9 @@ export async function POST(req) {
                         ? 'Domestic Ground / Rail Transport'
                         : `Ocean / Air — ${selectedHub.logistics?.port_wait_days} day avg lead time`,
         summary:
-          `Strategic scan complete for "${query}" (${categoryLabel}). ` +
+          (isLowConfidence
+            ? `⚠️ No exact category match for "${query}" — showing closest global sourcing hubs. Refine your search (e.g. add material type, application, or industry) for a precise match. `
+            : `Strategic scan complete for "${query}" (${categoryLabel}). `) +
           `Identified ${opportunities.length} global sourcing hub${opportunities.length > 1 ? 's' : ''}. ` +
           `Primary recommendation: ${selectedHub.hub} — ${selectedHub.desc.split('.')[0]}.`,
         tariff_alert:

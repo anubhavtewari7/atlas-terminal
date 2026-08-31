@@ -1316,7 +1316,22 @@ export function categorizeQuery(query) {
     'ic chip', 'logic chip', 'chip component', 'chip package', 'bare chip',
     'glass panel', 'cover glass', 'camera module',
     'iphone', 'samsung phone', 'tsmc', 'apple supply',
-    'circuit board', 'nand', 'dram', 'hbm'
+    'circuit board', 'nand', 'dram', 'hbm',
+    'monitor', 'computer monitor', 'display monitor', 'curved monitor',
+    'gaming monitor', 'monitor screen', '4k monitor', '1080p monitor',
+    'screen', 'flat screen', 'touch screen', 'touchscreen', 'led screen',
+    'television', 'smart tv', 'led tv', 'oled tv', 'qled tv', '4k tv', 'tv screen',
+    'tv panel', 'flat panel tv', 'streaming device',
+    'projector', 'laser projector', 'dlp projector', 'home projector',
+    'printer', 'inkjet printer', 'laser printer', '3d printer',
+    'keyboard', 'mechanical keyboard', 'wireless keyboard', 'computer keyboard',
+    'mouse', 'computer mouse', 'wireless mouse', 'gaming mouse',
+    'headphone', 'earphone', 'earbuds', 'wireless headphone', 'noise cancelling',
+    'speaker', 'bluetooth speaker', 'portable speaker', 'smart speaker',
+    'webcam', 'usb camera', 'security camera', 'ip camera', 'cctv camera',
+    'router', 'wifi router', 'network switch', 'modem', 'access point',
+    'hard drive', 'ssd', 'solid state drive', 'hdd', 'nvme',
+    'ram', 'memory module', 'ddr4', 'ddr5', 'dimm'
   ])) return 'electronics'
 
   // Pre-G0: Packaging containers that contain food substrings
@@ -1797,7 +1812,13 @@ export function categorizeQuery(query) {
     'heat sink', 'aluminum heat sink', 'cpu heat sink', 'thermal pad',
     'pcba', 'pcb assembly', 'smt assembly', 'smd assembly',
     'oscillator', 'crystal oscillator', 'quartz crystal',
-    'rfid', 'rfid tag', 'nfc chip', 'bluetooth module', 'wifi module'
+    'rfid', 'rfid tag', 'nfc chip', 'bluetooth module', 'wifi module',
+    'display', 'lcd display', 'display panel', 'tft display', 'e-ink display',
+    'controller', 'microcontroller', 'development board', 'arduino', 'raspberry pi',
+    'charger', 'usb charger', 'wireless charger', 'power bank', 'adapter',
+    'cable assembly', 'coaxial cable', 'ribbon cable', 'flat cable',
+    'smartwatch', 'wearable', 'fitness tracker', 'smart band',
+    'drone', 'drone component', 'esc', 'flight controller'
   ])) return 'electronics'
 
   // Priority 17: Broader automotive (lower confidence terms)

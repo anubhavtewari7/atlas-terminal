@@ -29,24 +29,60 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// ── Client-side fallback categorizer (mirrors database.js, no server needed) ──
+// ── Client-side fallback categorizer (mirrors database.js — keep in sync) ──
 function clientCategorize(query) {
   const q = query.toLowerCase()
   const match = (kws) => kws.some(kw => q.includes(kw))
-  if (match(['tpe','thermoplastic elastomer','thermoplastic','thermoset','polymer','polymers','resin compound','plastic resin','abs plastic','abs compound','polypropylene','polyethylene','hdpe','ldpe','pvc pipe','pvc compound','nylon compound','nylon part','peek','pom resin','delrin','acetal','polycarbonate','polyurethane','pu foam','injection mold','injection mould','injection molded','injection moulded','blow mold','plastic part','plastic component','plastic housing','molded part','moulded part','overmold','elastomer','epdm','nbr rubber','silicone rubber','silicone part','rubber compound','synthetic rubber','natural rubber','carbon fiber','carbon fibre','fiberglass','fibreglass','composite part','epoxy resin','plastic film','packaging film','stretch film','plastic extrusion','extrusion profile','masterbatch','engineering plastic','specialty polymer'])) return 'plastics'
-  if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','fastener','o-ring','gasket','actuator','solenoid','precision gear','industrial motor','sintered'])) return 'industrial'
-  if (match(['lithium','cobalt','titanium','tungsten','neodymium oxide','rare earth mineral','steel coil','aluminum ingot','copper cathode'])) return 'metals'
-  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','powertrain','tier-1','ford','gm ','toyota','honda','bmw','mercedes','stellantis','car seat','car seats','auto seat','vehicle seat','seat cover','seat trim','auto upholstery','vehicle upholstery','car interior','car door','car body','trim','interior trim','plated trim','door trim','plastic trim','cargo shade','cargo cover','shade cover','window shade','sunshade','cargo liner','boot liner','parcel shelf','tonneau','boot cover','interior accessory','interior component'])) return 'automotive'
-  if (match(['chip','semiconductor','wafer','pcb','display panel','oled','processor','memory chip','microchip','tsmc','circuit board','nand','dram'])) return 'electronics'
-  if (match(['beef','meat','patty','wheat','soybean','food','agri','corn','chicken','grain','dairy','coffee','cocoa','sugar','rice','mcdonald'])) return 'agriculture'
-  if (match(['adhesive','glue','sealant','bonding agent','coating','paint','primer','varnish','lacquer','powder coat','lubricant','grease','cutting fluid','solvent','thinner','acetone','surfactant','specialty chemical','fine chemical','industrial chemical','chemical compound'])) return 'chemicals'
-  if (match(['corrugated box','cardboard box','shipping box','glass bottle','glass jar','glass container','label','pressure sensitive label','shrink sleeve','blister pack','clamshell','flexible pouch','stand-up pouch','packaging material','folding carton','aseptic carton','retail packaging','container packaging'])) return 'packaging'
-  if (match(['api ','active pharmaceutical','drug substance','excipient','generic drug','pharmaceutical','medical device','surgical instrument','syringe','catheter','stent','implant','diagnostic kit','reagent','nitrile glove','surgical glove','surgical mask','n95','hospital supply','sterile','gmp certified','iso 13485'])) return 'medical'
-  if (match(['pump','centrifugal pump','vacuum pump','gear pump','valve','ball valve','gate valve','check valve','compressor','air compressor','cnc machine','cnc machining','machine tool','grinding machine','machining center','industrial robot','robotic arm','conveyor','heat exchanger','pressure vessel','welding equipment','laser cutter','gearbox','servo drive','vfd','machinery','capital equipment','plant equipment'])) return 'machinery'
-  if (match(['steel','aluminum','copper','iron','zinc','mineral','mining','metal','alloy','rare earth'])) return 'metals'
-  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn'])) return 'textiles'
-  if (match(['car ','cars','engine part','brake','tire','tyre','transmission','exhaust','wheel','airbag','windshield'])) return 'automotive'
-  return 'automotive'
+
+  // Pre-checks — high-specificity compound terms (same order as database.js)
+  if (match(['brake caliper','exhaust manifold','wheel rim','driveshaft','crankshaft','bumper fascia','abs sensor','cv joint','tie rod','ball joint','strut assembly'])) return 'automotive'
+  if (match(['polyurethane coating','pu coating','lithium grease','lithium complex','nlgi 2','nlgi 3','petroleum jelly','petrolatum','white mineral oil','paraffin wax','mineral oil'])) return 'chemicals'
+  if (match(['flat glass','float glass','glass fiber roving','glass fiber woven','ready mix concrete','concrete pump','basalt','basalt fiber','basalt rock'])) return 'construction'
+  if (match(['coronary stent','bare metal stent','stent coronary','tyvek pouch','nitrile exam glove','exam glove','medical glove','orthopedic implant','hospital grade','gmp grade','usp grade'])) return 'medical'
+  if (match(['fabric softener','private label cosmetic','oem cosmetic','aluminum-free','ammonia-free','hair dye cream','face cream','body cream','moisturizer cream','cotton swab','cotton ball','sheet mask','clay mask'])) return 'consumer_goods'
+  if (match(['fish feed','fish meal','sunflower seed crop'])) return 'agriculture'
+  if (match(['wheat flour','burger bun','beef patty','chicken nugget','corn tortilla','soy protein','canned black bean'])) return 'food'
+  if (match(['drum','steel drum','plastic drum','ibc drum'])) return 'packaging'
+  if (match(['teak','mahogany','twine','baling twine'])) return 'wood_paper'
+
+  // P1 Plastics
+  if (match(['thermoplastic','thermoset','polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','pa66','peek','polycarbonate','pu foam','injection mold','injection mould','blow mold','plastic part','plastic component','elastomer','epdm','silicone rubber','rubber compound','natural rubber','synthetic rubber','carbon fiber','fiberglass','composite part','epoxy resin','plastic film','masterbatch','engineering plastic','rubber','foam','latex','vinyl','resin','neoprene','butyl rubber','polystyrene','acrylic sheet'])) return 'plastics'
+  // P2 Industrial
+  if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','ball bearing','fastener','paper clip','paperclip','binder clip','o-ring','gasket','actuator','solenoid','precision gear','servo motor','stepper motor','disc spring','compression spring','hydraulic fitting','pneumatic valve','sintered','screw','bolt','hinge','bracket','flange','coupling','bushing','rivet','needle','pipe','washer','chain'])) return 'industrial'
+  // P3 Metals spec
+  if (match(['lithium','cobalt','neodymium oxide','rare earth mineral','titanium sponge','tungsten','molybdenum','platinum','palladium','nickel ore','iron ore','copper ore','steel coil','steel sheet','aluminum ingot','copper cathode','zinc ingot'])) return 'metals'
+  // P3b Automotive
+  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','suspension','brake pad','powertrain','motor vehicle','tier-1','ford','toyota','honda','bmw','mercedes','car seat','wire harness','trim','lumbar support','lumbar cushion'])) return 'automotive'
+  // P4 Electronics
+  if (match(['semiconductor','wafer','pcb','lcd','oled','processor','memory chip','microchip','microcontroller','fpga','asic chip','circuit board','nand','dram','monitor','screen','television','tv panel','display','projector','printer','keyboard','mouse','headphone','speaker','router','ssd','hard drive','battery','resistor','capacitor','diode','transistor','wire','switch','relay','antenna','transformer','fuse','heat sink','pcba'])) return 'electronics'
+  // P5a Food
+  if (match(['marshmallow','candy','chocolate','cookie','biscuit','bread','pasta','noodle','sausage','pepperoni','salami','salmon','tuna','shrimp','prawn','ketchup','sauce','vinegar','mayonnaise','olive oil','salt','sugar','rice','wheat','corn','beef','pork','chicken','lamb','turkey','fish','milk','egg','flour','tea','coffee','wine','beer','spirits','whiskey','vodka','rum','soup','broth','snack','tomato','potato','onion','garlic','ginger','pepper','carrot','avocado','mango','banana','apple','orange','food','packaged food'])) return 'food'
+  // P5b Agriculture
+  if (match(['raw beef','beef cattle','raw wheat','wheat grain','soybean crop','agri','raw corn','corn crop','grain crop','livestock','poultry farm','aquaculture','fishery','fertilizer','hay','silage','irrigation','aquafeed'])) return 'agriculture'
+  // P6 Chemicals
+  if (match(['adhesive','glue','sealant','coating','paint','primer','varnish','lacquer','lubricant','grease','cutting fluid','solvent','thinner','acetone','surfactant','specialty chemical','industrial chemical','acid','bleach','chlorine','ammonia','wax','pigment','pesticide','herbicide','insecticide','fungicide','ethanol','methanol','printing ink'])) return 'chemicals'
+  // P7 Metals
+  if (match(['steel','aluminum','aluminium','copper','iron','zinc','tin ore','tinplate','gold','silver','mineral','mining','metal','alloy','casting','forging','nickel','titanium','brass','bronze','chromium','rebar','wire rod','magnesium','manganese','lead','silicon metal'])) return 'metals'
+  // P8 Textiles
+  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','silk','polyester','fabric','yarn','linen','cashmere','viscose','rayon','spandex','fleece','velvet','canvas','thread','embroidery','zipper','button','ribbon','lace'])) return 'textiles'
+  // P11 Medical
+  if (match(['pharmaceutical','medical device','surgical instrument','syringe','catheter','stent','implant','diagnostic kit','nitrile glove','glove','surgical mask','n95','mask','hospital supply','gmp certified','drug','vitamin','antibiotic','vaccine','capsule','vial','bandage','gauze','ppe kit','personal protective equipment'])) return 'medical'
+  // P12 Consumer goods
+  if (match(['shampoo','conditioner','body wash','toothpaste','deodorant','sunscreen','lipstick','mascara','perfume','hair dye','vaseline','lip balm','moisturizer','personal care','beauty product','consumer goods','skin care','baby lotion','baby wipe','wet wipe','diaper','nappy','razor','nail polish','lotion','floss'])) return 'consumer_goods'
+  // P13 Construction
+  if (match(['tempered glass','cement','ceramic tile','drywall','gypsum board','roofing','insulation board','aggregate','gravel','construction material','building material','concrete','brick','tile','window','insulation','mortar','asphalt','bitumen','conduit'])) return 'construction'
+  // P14 Packaging
+  if (match(['corrugated box','glass bottle','glass jar','label','blister pack','flexible pouch','packaging material','packaging','bottle','box','pallet','foil','tape','lid','tin can','wrap','bag','tray','tube'])) return 'packaging'
+  // P15 Machinery
+  if (match(['pump','valve','compressor','cnc machine','machine tool','industrial robot','robotic arm','conveyor','heat exchanger','gearbox','machinery','industrial equipment','generator','tractor','turbine','motor','engine','drill','lathe','press','extruder'])) return 'machinery'
+  // P16 Broader electronics
+  if (match(['phone','computer','laptop','tablet','electronics','sensor','cable','connector','power supply','charger'])) return 'electronics'
+  // P17 Broader automotive
+  if (match(['car ','cars','brake','tire','tyre','transmission','exhaust','wheel','airbag','windshield'])) return 'automotive'
+  // P18 Wood/paper
+  if (match(['lumber','plywood','mdf','timber','wood','kraft paper','tissue paper','newsprint','copy paper','toilet paper','cardboard','notebook','pulp','paper'])) return 'wood_paper'
+
+  return 'electronics'
 }
 
 // ── Lightweight client-side hub data for offline fallback ──
