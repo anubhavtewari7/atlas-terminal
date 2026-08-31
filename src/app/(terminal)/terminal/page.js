@@ -1634,7 +1634,7 @@ export default function Dashboard() {
                 {/* ── EMPTY STATE ── */}
                 {!selectedNode && (
                   <p className="text-[12px] text-slate-600 italic">
-                    Select a sourcing hub or risk factor to populate intelligence modules. Run a new mission to begin.
+                    {opportunities.length > 0 ? 'Click a threat or sourcing hub in the left panel to inspect intelligence details.' : 'Run a scan above to identify global sourcing hubs and active risk factors.'}
                   </p>
                 )}
               </div>
