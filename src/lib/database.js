@@ -1315,7 +1315,13 @@ export function categorizeQuery(query) {
     'olive oil', 'vegetable oil', 'cooking oil', 'sunflower oil',
     'coconut oil', 'sesame oil', 'canola oil', 'edible oil',
     // Spices, seasonings & dry ingredients
-    'flour baking', 'baking flour', 'granulated sugar', 'table salt',
+    'flour baking', 'baking flour',
+    'granulated sugar', 'table salt', 'sea salt', 'kosher salt', 'rock salt',
+    'pink salt', 'himalayan salt', 'iodized salt', 'curing salt', 'pickling salt',
+    'salt flakes', 'sea salt flakes', 'fleur de sel', 'salt',
+    'brown sugar', 'cane sugar', 'powdered sugar', 'icing sugar', 'raw sugar',
+    'demerara sugar', 'sugar crystals', 'sugar',
+    'sodium chloride', 'food grade salt',
     'spices', 'cinnamon', 'turmeric', 'dried herbs', 'garlic powder',
     'onion powder', 'paprika', 'cumin', 'oregano', 'black pepper',
     // Beverages
@@ -1436,7 +1442,8 @@ export function categorizeQuery(query) {
     'roofing material', 'roof shingle', 'insulation board', 'foam insulation',
     'drywall', 'gypsum board', 'plasterboard', 'wallboard',
     'aggregate', 'gravel', 'sand quarry', 'stone tile', 'marble slab',
-    'granite countertop', 'construction material', 'building material'
+    'granite countertop', 'basalt fiber', 'basalt rock', 'basalt stone', 'basalt',
+    'construction material', 'building material'
   ])) return 'construction'
 
   // Priority 14: Packaging — corrugated, glass containers, labels, flexible, protective
