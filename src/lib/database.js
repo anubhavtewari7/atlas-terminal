@@ -1065,7 +1065,1316 @@ export const ATLAS_DB = {
       logistics: { port_wait_days: 5, freight_cost_estimate: '$2.7k/FEU to US East Coast' },
       industry_kpi: { label: 'India FMCG Market', value: '~$110B (2024), 10% YoY growth' }
     }
+  ],
+
+  // ══════════════════════════════════════════════════════════════════════
+  // EXPANSION SET — categories 16-40
+  // ══════════════════════════════════════════════════════════════════════
+  // 16. AEROSPACE & DEFENCE STRUCTURES
+  aerospace: [
+    {
+      id: 'h_aero_1', lat: 47.9, lng: -122.2,
+      hub: 'EVERETT / SEATTLE, USA', title: 'Boeing Commercial Airframe Cluster',
+      companies: [
+        { name: 'Boeing Commercial Airplanes', website: 'https://www.boeing.com/', turnover: '>$1B' },
+        { name: 'Spirit AeroSystems', website: 'https://www.spiritaero.com/', turnover: '>$1B' },
+        { name: 'Toray Composite Materials America', website: 'https://www.toraycma.com/', turnover: '$100M-$1B' },
+        { name: 'Electroimpact', website: 'https://www.electroimpact.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Primary North American widebody airframe and composite structures cluster. Fuselage sections, wing boxes, and CFRP prepreg conversion. The AS9100 / NADCAP special-process ecosystem here is the deepest in the world.',
+      customs: { hts_code: '8803.30', duty_rate: '0% (WTO Civil Aircraft Agreement)', compliance_note: 'Civil aircraft parts are largely duty-free under the WTO Agreement on Trade in Civil Aircraft. ITAR (22 CFR 120-130) applies to any defence derivative; deemed-export rules cover foreign nationals on site.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Autoclave cure is highly energy intensive. CFRP scrap has no scaled recycling route; expect landfill-diversion questions in customer ESG audits.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$2.6k/Ground (oversize permit)' },
+      industry_kpi: { label: 'Qualification Lead', value: '18-24 Months (AS9100 + FAI)' }
+    },
+    {
+      id: 'h_aero_2', lat: 43.6, lng: 1.44,
+      hub: 'TOULOUSE, FRANCE', title: 'Airbus European Final Assembly Hub',
+      companies: [
+        { name: 'Airbus SE', website: 'https://www.airbus.com/', turnover: '>$1B' },
+        { name: 'Safran', website: 'https://www.safran-group.com/', turnover: '>$1B' },
+        { name: 'Liebherr-Aerospace Toulouse', website: 'https://www.liebherr.com/', turnover: '$100M-$1B' },
+        { name: 'Latecoere', website: 'https://www.latecoere.aero/', turnover: '$100M-$1B' }
+      ],
+      desc: 'European final assembly line for the A320 and A350 families, plus a dense Occitanie supplier base in actuation, landing gear, avionics racks, and interiors. EASA Part 21 design and production approvals are concentrated here.',
+      customs: { hts_code: '8803.30', duty_rate: '0% (Civil Aircraft) / MFN on non-civil', compliance_note: 'EASA Part 21G production approval and EASA Form 1 release required. EU dual-use Regulation 2021/821 applies to defence-adjacent items. Post-Brexit UK content needs separate CAA airworthiness paperwork.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'ReFuelEU SAF mandates are pushing supplier-level CO2 reporting. REACH authorisation pressure on hexavalent chromate aerospace primers is a live reformulation risk.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$4.1k/Sea + Beluga for major sections' },
+      industry_kpi: { label: 'Rate Ramp', value: 'A320 family ~75/month target' }
+    },
+    {
+      id: 'h_aero_3', lat: 45.5, lng: -73.6,
+      hub: 'MONTREAL, CANADA', title: 'Quebec Aerostructures & Engines Cluster',
+      companies: [
+        { name: 'Bombardier', website: 'https://www.bombardier.com/', turnover: '>$1B' },
+        { name: 'Pratt & Whitney Canada', website: 'https://www.prattwhitney.com/', turnover: '>$1B' },
+        { name: 'Heroux-Devtek', website: 'https://www.herouxdevtek.com/', turnover: '$100M-$1B' },
+        { name: 'CAE Inc.', website: 'https://www.cae.com/', turnover: '>$1B' }
+      ],
+      desc: 'Third-largest aerospace cluster globally by employment. Landing gear, turboprop and small turbofan engines, business jets, and flight simulation. A USMCA-qualified alternative to US-only sourcing at lower labour cost.',
+      customs: { hts_code: '8411.12', duty_rate: '0% (USMCA / Civil Aircraft)', compliance_note: 'USMCA origin plus the Transport Canada / FAA bilateral aviation safety agreement (BASA) simplifies certificate transfer. Canadian Controlled Goods Program registration needed for defence work.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'The Quebec hydro grid gives one of the lowest embodied-carbon machining footprints in aerospace. Stable unionised labour agreements.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$1.9k/Truck to US Midwest' },
+      industry_kpi: { label: 'Grid Carbon', value: '~30 gCO2/kWh (hydro)' }
+    },
+    {
+      id: 'h_aero_4', lat: 27.9, lng: -110.9,
+      hub: 'GUAYMAS / EMPALME, MEXICO', title: 'Sonora Aerospace Machining Corridor',
+      companies: [
+        { name: 'Daher Mexico', website: 'https://www.daher.com/', turnover: '$100M-$1B' },
+        { name: 'Incora Mexico', website: 'https://www.incora.com/', turnover: '$100M-$1B' },
+        { name: 'The Offshore Group (aerospace park operator)', website: 'https://www.offshoregroup.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Low-cost AS9100 machining and sheet-metal detail-part corridor serving US primes. Best fit for build-to-print brackets, ribs, clips, and harness assembly rather than design-responsible work.',
+      customs: { hts_code: '8803.30', duty_rate: '0% (USMCA)', compliance_note: 'IMMEX maquila programme defers duty on imported raw stock. ITAR technical-data transfer to Mexican nationals requires a DDTC licence or exemption - the single most common compliance failure in this corridor.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Water stress in Sonora is a live constraint for anodising and chemical-processing lines. Verify wastewater permits before qualifying any special-process source.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.3k/Truck to Arizona' },
+      industry_kpi: { label: 'Labour Delta', value: '~25% of US machinist cost' }
+    }
+  ],
+
+  // 17. ENERGY, OIL & GAS
+  energy_oil_gas: [
+    {
+      id: 'h_oil_1', lat: 29.76, lng: -95.36,
+      hub: 'HOUSTON, USA', title: 'Global Upstream Equipment & OFS Capital',
+      companies: [
+        { name: 'SLB (Schlumberger)', website: 'https://www.slb.com/', turnover: '>$1B' },
+        { name: 'Halliburton', website: 'https://www.halliburton.com/', turnover: '>$1B' },
+        { name: 'Baker Hughes', website: 'https://www.bakerhughes.com/', turnover: '>$1B' },
+        { name: 'NOV Inc.', website: 'https://www.nov.com/', turnover: '>$1B' },
+        { name: 'Weir Oil & Gas', website: 'https://www.global.weir/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Global centre of gravity for oilfield services, drilling equipment, subsea trees, wellheads, and API 6A/6D pressure control. Deepest engineering bench for high-pressure/high-temperature (HPHT) qualification.',
+      customs: { hts_code: '8431.43', duty_rate: '0% (Domestic) / 2.5% MFN', compliance_note: 'API monogram licensing (API 6A, 16A, 20E) is the real gate, not tariff. OFAC sanctions screening is mandatory for any Russia, Iran, or Venezuela nexus in the end-use chain.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Scope 3 methane accounting under OGMP 2.0 now flows down to equipment suppliers. The EPA Waste Emissions Charge raises the lifetime cost of leak-prone components.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.4k/FEU ex-Houston' },
+      industry_kpi: { label: 'API Qual Lead', value: '6-9 Months' }
+    },
+    {
+      id: 'h_oil_2', lat: 25.36, lng: 51.18,
+      hub: 'DOHA / RAS LAFFAN, QATAR', title: 'LNG Megaproject Supply Base',
+      companies: [
+        { name: 'QatarEnergy LNG', website: 'https://www.qatarenergy.qa/', turnover: '>$1B' },
+        { name: 'Chiyoda Corporation', website: 'https://www.chiyodacorp.com/', turnover: '>$1B' },
+        { name: 'McDermott International', website: 'https://www.mcdermott.com/', turnover: '>$1B' }
+      ],
+      desc: 'Anchor for LNG train EPC, cryogenic piping, and large rotating equipment demand through the North Field expansion. Effectively sets global lead times for cryogenic valves, compressors, and 9% nickel steel.',
+      customs: { hts_code: '8419.60', duty_rate: '5% (GCC Common Tariff)', compliance_note: 'GCC common external tariff of 5%. In-country value (Tawteen / ICV) scoring materially affects award decisions - local content is a commercial gate, not just an ESG line item.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'C+', sustainability_note: 'Migrant labour practices remain the dominant social-audit finding. Require ILO-aligned, recruitment-fee-free hiring clauses in every subcontract.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.9k/FEU' },
+      industry_kpi: { label: 'Cryo Valve Lead', value: '52-78 Weeks' }
+    },
+    {
+      id: 'h_oil_3', lat: 58.97, lng: 5.73,
+      hub: 'STAVANGER, NORWAY', title: 'North Sea Subsea & Offshore Cluster',
+      companies: [
+        { name: 'Aker Solutions', website: 'https://www.akersolutions.com/', turnover: '>$1B' },
+        { name: 'Subsea7', website: 'https://www.subsea7.com/', turnover: '>$1B' },
+        { name: 'TechnipFMC Norway', website: 'https://www.technipfmc.com/', turnover: '>$1B' }
+      ],
+      desc: 'Premium subsea production systems, flexible risers, and offshore installation engineering. The strictest HSE regime in the industry; NORSOK is the de-facto quality benchmark for harsh-environment hardware.',
+      customs: { hts_code: '8430.49', duty_rate: '0% (EEA/EFTA)', compliance_note: 'NORSOK M-630/M-650 material qualification required for offshore Norway. EEA membership gives tariff-free EU access, but Norway sits outside the EU customs union so origin proofs are still required.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Platform electrification from shore is mandated on new Norwegian Continental Shelf developments; suppliers face hard power-consumption targets in bid evaluation.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.1k/Sea' },
+      industry_kpi: { label: 'HSE Standard', value: 'NORSOK / PSA Norway' }
+    },
+    {
+      id: 'h_oil_4', lat: 1.29, lng: 103.85,
+      hub: 'SINGAPORE / JURONG', title: 'Asian Refining, Bunkering & Fabrication Hub',
+      companies: [
+        { name: 'Seatrium', website: 'https://www.seatrium.com/', turnover: '>$1B' },
+        { name: 'Rotary Engineering', website: 'https://www.rotaryeng.com.sg/', turnover: '$100M-$1B' },
+        { name: 'Shell Energy and Chemicals Park', website: 'https://www.shell.com.sg/', turnover: '>$1B' }
+      ],
+      desc: 'Largest bunkering port worldwide plus heavy module fabrication yards. Strong for skid-mounted process packages, storage tanks, and refinery turnaround materials with fast ASEAN distribution.',
+      customs: { hts_code: '7311.00', duty_rate: '0% (US-Singapore FTA)', compliance_note: 'USSFTA gives 0% into the US on most fabricated equipment. The Singapore Strategic Goods Control Act governs dual-use process technology exports.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'IMO 2020 sulphur cap and the 2050 net-zero trajectory are shifting bunker demand toward LNG, methanol, and ammonia - retrofit hardware is the growth vector.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.2k/FEU' },
+      industry_kpi: { label: 'Bunker Volume', value: '~55M tonnes/year' }
+    }
+  ],
+
+  // 18. EV BATTERY & CELL SUPPLY CHAIN
+  ev_battery: [
+    {
+      id: 'h_evb_1', lat: 26.66, lng: 119.55,
+      hub: 'NINGDE / FUJIAN, CHINA', title: 'World Cell Manufacturing Anchor (CATL)',
+      companies: [
+        { name: 'CATL', website: 'https://www.catl.com/', turnover: '>$1B' },
+        { name: 'BYD FinDreams Battery', website: 'https://www.byd.com/', turnover: '>$1B' },
+        { name: 'EVE Energy', website: 'https://www.evebattery.com/', turnover: '>$1B' },
+        { name: 'Gotion High-Tech', website: 'https://www.gotion.com.cn/', turnover: '>$1B' }
+      ],
+      desc: 'Single largest concentration of LFP and NMC cell capacity globally. Sets world pricing for prismatic and cell-to-pack formats. Cost leader by a wide margin, but the highest policy-risk origin for US-bound programmes.',
+      customs: { hts_code: '8507.60', duty_rate: '3.4% MFN + 25% (Sec 301)', compliance_note: 'IRA Foreign Entity of Concern (FEOC) rules disqualify China-linked cells from the 30D consumer credit. UN38.3 transport testing and IATA DGR Class 9 packing are mandatory for every cell chemistry change.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B-', sustainability_note: 'Grid intensity drives a roughly 60-80 kgCO2e/kWh cell footprint versus 35-45 in renewables-powered Europe. EU Battery Regulation carbon-footprint declarations will expose that gap from 2026.' },
+      logistics: { port_wait_days: 6, freight_cost_estimate: '$5.8k/FEU (DG surcharge)' },
+      industry_kpi: { label: 'Cell Cost', value: '~$55-70/kWh LFP' }
+    },
+    {
+      id: 'h_evb_2', lat: 36.35, lng: 127.38,
+      hub: 'CHUNGCHEONG, SOUTH KOREA', title: 'Korean High-Nickel Cell & Cathode Belt',
+      companies: [
+        { name: 'LG Energy Solution', website: 'https://www.lgensol.com/', turnover: '>$1B' },
+        { name: 'Samsung SDI', website: 'https://www.samsungsdi.com/', turnover: '>$1B' },
+        { name: 'SK On', website: 'https://www.sk-on.com/', turnover: '>$1B' },
+        { name: 'EcoPro BM', website: 'https://www.ecopro.co.kr/', turnover: '>$1B' },
+        { name: 'POSCO Future M', website: 'https://www.poscofuturem.com/', turnover: '>$1B' }
+      ],
+      desc: 'Technology leader in high-nickel NCM/NCA cathode active material and pouch cells. The default IRA-compliant route for US OEMs, with large joint-venture plants already running in Georgia, Ohio, and Tennessee.',
+      customs: { hts_code: '8507.60', duty_rate: '0% (KORUS FTA)', compliance_note: 'KORUS gives duty-free entry. Korean-processed CAM counts toward IRA critical-mineral value thresholds via the FTA-partner rule - keep supplier value-add declarations on file for IRS substantiation.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Cobalt traceability back to DRC artisanal sources remains the key audit item. Require RMI/CMRT plus Cobalt Refiner Due Diligence Standard conformance.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.9k/FEU (DG surcharge)' },
+      industry_kpi: { label: 'Energy Density', value: '270-300 Wh/kg (NCM9)' }
+    },
+    {
+      id: 'h_evb_3', lat: 34.75, lng: -84.95,
+      hub: 'US BATTERY BELT (TN / GA / KY)', title: 'IRA-Qualified North American Cell Corridor',
+      companies: [
+        { name: 'Ultium Cells (GM/LG JV)', website: 'https://www.ultiumcells.com/', turnover: '>$1B' },
+        { name: 'SK Battery America', website: 'https://www.skbatteryamerica.com/', turnover: '>$1B' },
+        { name: 'Piedmont Lithium', website: 'https://piedmontlithium.com/', turnover: '$100M-$1B' },
+        { name: 'Novonix', website: 'https://novonixgroup.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Fast-growing IRA-anchored corridor for cell assembly, module and pack lines, and anode graphite. The primary route to 45X production credits and 30D consumer-credit eligibility for North American vehicle programmes.',
+      customs: { hts_code: '8507.60', duty_rate: '0% (Domestic)', compliance_note: 'IRC 45X yields $35/kWh cell plus $10/kWh module credits. FEOC screening on every upstream tier is mandatory - one China-controlled precursor supplier can void 30D eligibility for an entire vehicle line.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Domestic production cuts logistics emissions and dangerous-goods exposure. Anode-grade synthetic graphite is the weakest domestic link - most is still China-processed.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.7k/Truck' },
+      industry_kpi: { label: '45X Credit', value: '$45/kWh (cell + module)' }
+    },
+    {
+      id: 'h_evb_4', lat: 51.11, lng: 17.04,
+      hub: 'CENTRAL EUROPE (PL / HU / DE)', title: 'European Gigafactory Corridor',
+      companies: [
+        { name: 'LG Energy Solution Wroclaw', website: 'https://www.lgensol.com/', turnover: '>$1B' },
+        { name: 'Samsung SDI Goed', website: 'https://www.samsungsdi.com/', turnover: '>$1B' },
+        { name: 'PowerCo (Volkswagen)', website: 'https://www.powerco.de/', turnover: '>$1B' },
+        { name: 'Verkor', website: 'https://verkor.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Cell and pack capacity co-located with European OEM assembly. Poland and Hungary carry most installed capacity today; Germany and France are scaling next-generation unified-cell lines.',
+      customs: { hts_code: '8507.60', duty_rate: '0% (Intra-EU) / 2.7% MFN', compliance_note: 'EU Battery Regulation 2023/1542 phases in carbon-footprint declaration, then recycled-content minimums and the digital battery passport from February 2027. Non-declaring cells lose EU market access.' },
+      esg: { carbon_footprint: 'Low-Medium', ethical_rating: 'A', sustainability_note: 'Renewable PPAs are standard, giving the lowest cell carbon footprint of any major region. Recycled Li/Ni/Co targets begin in 2031 and require closed-loop offtake agreements to be signed now.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$1.6k/Truck intra-EU' },
+      industry_kpi: { label: 'Battery Passport', value: 'Mandatory Feb 2027' }
+    }
+  ],
+
+  // 19. SEMICONDUCTOR MANUFACTURING & MATERIALS
+  semiconductor: [
+    {
+      id: 'h_semi_1', lat: 24.78, lng: 120.99,
+      hub: 'HSINCHU, TAIWAN', title: 'Advanced Logic Foundry Core',
+      companies: [
+        { name: 'TSMC', website: 'https://www.tsmc.com/', turnover: '>$1B' },
+        { name: 'UMC', website: 'https://www.umc.com/', turnover: '>$1B' },
+        { name: 'MediaTek', website: 'https://www.mediatek.com/', turnover: '>$1B' },
+        { name: 'ASE Technology (OSAT)', website: 'https://www.aseglobal.com/', turnover: '>$1B' }
+      ],
+      desc: 'Produces the overwhelming majority of sub-7nm logic worldwide plus leading-edge advanced packaging (CoWoS). No substitutable capacity exists for the leading node inside a 24-month horizon.',
+      customs: { hts_code: '8542.31', duty_rate: '0% (ITA)', compliance_note: 'ITA duty-free. US BIS rules including the Foreign Direct Product Rule restrict transfer of advanced-node output to listed Chinese entities regardless of fab location - screen every end user and consignee.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'A-', sustainability_note: 'Leading-edge fabs consume over 150,000 tonnes of ultrapure water per day; Taiwan drought cycles are a genuine production risk. PFAS use in photoresist and etch chemistry is under regulatory review.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$9.2k/Air (high-value)' },
+      industry_kpi: { label: 'Leading Node', value: '3nm ramp / 2nm 2025-26' }
+    },
+    {
+      id: 'h_semi_2', lat: 35.18, lng: 136.91,
+      hub: 'JAPAN (NAGOYA / TOHOKU)', title: 'Semiconductor Materials & Equipment Base',
+      companies: [
+        { name: 'Shin-Etsu Chemical', website: 'https://www.shinetsu.co.jp/', turnover: '>$1B' },
+        { name: 'SUMCO', website: 'https://www.sumcosi.com/', turnover: '>$1B' },
+        { name: 'JSR Corporation', website: 'https://www.jsr.co.jp/', turnover: '>$1B' },
+        { name: 'Tokyo Electron', website: 'https://www.tel.com/', turnover: '>$1B' },
+        { name: 'Shinko Electric Industries', website: 'https://www.shinko.co.jp/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Controls the upstream materials layer: silicon wafers, photoresist, CMP slurry, high-purity gases, and ABF substrate. A far tighter chokepoint than fabs themselves - a handful of suppliers cover most global photoresist demand.',
+      customs: { hts_code: '3707.90', duty_rate: '0% (CPTPP) / ~3% MFN', compliance_note: 'Japan METI export-licence regime covers advanced resist and deposition equipment bound for China. Chemical shipments need TSCA/REACH equivalents plus high-purity handling and shelf-life documentation.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A+', sustainability_note: 'Proposed EU REACH PFAS restrictions threaten several fluorinated resist and etch chemistries with no drop-in replacement identified. Track the ECHA restriction dossier quarterly.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$6.4k/Air temp-controlled' },
+      industry_kpi: { label: 'Wafer Share', value: '~55% of global 300mm' }
+    },
+    {
+      id: 'h_semi_3', lat: 33.45, lng: -112.07,
+      hub: 'PHOENIX, USA', title: 'CHIPS Act Domestic Fab Cluster',
+      companies: [
+        { name: 'TSMC Arizona', website: 'https://www.tsmc.com/', turnover: '>$1B' },
+        { name: 'Intel Foundry (Ocotillo)', website: 'https://www.intel.com/', turnover: '>$1B' },
+        { name: 'Amkor Technology', website: 'https://www.amkor.com/', turnover: '>$1B' },
+        { name: 'Applied Materials', website: 'https://www.appliedmaterials.com/', turnover: '>$1B' }
+      ],
+      desc: 'CHIPS-and-Science-funded domestic capacity for leading and mature logic plus a new advanced-packaging footprint. The de-risking route for defence, automotive, and critical-infrastructure programmes.',
+      customs: { hts_code: '8542.31', duty_rate: '0% (Domestic)', compliance_note: 'CHIPS 25% advanced manufacturing investment credit applies to qualifying capex. Recipients accept guardrails barring material capacity expansion in China for ten years - check flow-down clauses in supply agreements.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Arizona water strategy depends on reclaim rates above 90%; verify each fab water balance before assuming supply continuity. Grid decarbonisation lags Taiwan and Japan.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.9k/Ground' },
+      industry_kpi: { label: 'CHIPS Credit', value: '25% of qualifying capex' }
+    },
+    {
+      id: 'h_semi_4', lat: 51.44, lng: 5.48,
+      hub: 'EINDHOVEN, NETHERLANDS', title: 'Lithography Equipment Chokepoint',
+      companies: [
+        { name: 'ASML', website: 'https://www.asml.com/', turnover: '>$1B' },
+        { name: 'ASM International', website: 'https://www.asm.com/', turnover: '>$1B' },
+        { name: 'NXP Semiconductors', website: 'https://www.nxp.com/', turnover: '>$1B' },
+        { name: 'VDL Groep', website: 'https://www.vdlgroep.com/', turnover: '>$1B' }
+      ],
+      desc: 'Sole global source of EUV lithography and a dominant DUV supplier. The Brainport supplier network provides precision optomechanics and vacuum subsystems that have no qualified second source.',
+      customs: { hts_code: '8486.20', duty_rate: '0% (ITA)', compliance_note: 'Dutch national export-control licences now cover advanced DUV immersion tools bound for China, aligned with US BIS. Service visits and spare-parts shipments are separately licensable - budget lead time for licence issue.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'AA', sustainability_note: 'ASML runs on 100% renewable electricity and targets net-zero scope 3 by 2040, cascading energy-reporting requirements down its supplier tiers.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$45k+/Charter (EUV module)' },
+      industry_kpi: { label: 'EUV Lead Time', value: '12-18 Months' }
+    }
+  ],
+
+  // 20. MINING & EXTRACTIVES
+  mining: [
+    {
+      id: 'h_min_1', lat: -22.2, lng: 118.6,
+      hub: 'PILBARA, AUSTRALIA', title: 'Global Iron Ore & Spodumene Core',
+      companies: [
+        { name: 'BHP', website: 'https://www.bhp.com/', turnover: '>$1B' },
+        { name: 'Rio Tinto', website: 'https://www.riotinto.com/', turnover: '>$1B' },
+        { name: 'Fortescue', website: 'https://www.fmgl.com.au/', turnover: '>$1B' },
+        { name: 'Pilbara Minerals', website: 'https://www.pilbaraminerals.com.au/', turnover: '>$1B' }
+      ],
+      desc: 'World benchmark for seaborne iron ore plus the largest hard-rock spodumene concentrate output. A politically stable FTA-partner origin that satisfies IRA critical-mineral sourcing tests.',
+      customs: { hts_code: '2601.11', duty_rate: '0% (AUSFTA)', compliance_note: 'AUSFTA duty-free into the US and a qualifying IRA free-trade-partner origin for critical minerals. Australian foreign-investment screening applies to some downstream processing agreements.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B+', sustainability_note: 'Post-Juukan Gorge, Aboriginal heritage due diligence is a board-level requirement and native-title agreements must be evidenced. Cyclone season (Nov-Apr) disrupts rail and ship loading.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '~$18/tonne Capesize to Asia' },
+      industry_kpi: { label: 'Fe Grade', value: '58-62% typical' }
+    },
+    {
+      id: 'h_min_2', lat: -23.65, lng: -70.4,
+      hub: 'ANTOFAGASTA, CHILE', title: 'Copper & Lithium Brine Belt',
+      companies: [
+        { name: 'Codelco', website: 'https://www.codelco.com/', turnover: '>$1B' },
+        { name: 'Antofagasta Minerals', website: 'https://www.antofagasta.co.uk/', turnover: '>$1B' },
+        { name: 'SQM', website: 'https://www.sqm.com/', turnover: '>$1B' },
+        { name: 'Albemarle Chile', website: 'https://www.albemarle.com/', turnover: '>$1B' }
+      ],
+      desc: 'Largest copper-producing region on earth plus Atacama brine lithium. Structural grade decline at legacy mines is pushing unit costs up and making desalination capex a condition of new permits.',
+      customs: { hts_code: '7403.11', duty_rate: '0% (US-Chile FTA)', compliance_note: 'US-Chile FTA duty-free and IRA FTA-partner qualifying. Chile national lithium strategy requires state participation (Codelco/ENAMI) in new lithium projects - factor this into long-term offtake structuring.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B', sustainability_note: 'Water rights conflicts with indigenous Atacameno communities are the primary social-licence risk. New copper projects are increasingly required to run on desalinated seawater.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.6k/FEU ex-Mejillones' },
+      industry_kpi: { label: 'Global Cu Share', value: '~24% of world mine supply' }
+    },
+    {
+      id: 'h_min_3', lat: -10.7, lng: 25.5,
+      hub: 'KATANGA COPPERBELT, DR CONGO', title: 'Cobalt Supply Chokepoint',
+      companies: [
+        { name: 'Glencore (KCC / Mutanda)', website: 'https://www.glencore.com/', turnover: '>$1B' },
+        { name: 'CMOC (Tenke Fungurume)', website: 'https://www.cmoc.com/', turnover: '>$1B' },
+        { name: 'ERG Africa', website: 'https://www.eurasianresources.lu/', turnover: '>$1B' }
+      ],
+      desc: 'Supplies roughly 70% of world cobalt. Unavoidable for high-nickel cathode chemistries, and the single highest human-rights-risk node in the entire battery and electronics supply chain.',
+      customs: { hts_code: '8105.20', duty_rate: '1.5% MFN', compliance_note: 'Dodd-Frank 1502 conflict-minerals reporting plus EU Conflict Minerals Regulation 2017/821. UFLPA exposure arises where DRC material is refined in Xinjiang - trace the refiner, not just the mine.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'D+', sustainability_note: 'Artisanal mining involves documented child labour. Source only through RMI-conformant refiners with mine-level chain of custody; on-the-ground third-party verification is essential, desk audits are not sufficient.' },
+      logistics: { port_wait_days: 14, freight_cost_estimate: '$7.5k/FEU via Durban or Dar es Salaam' },
+      industry_kpi: { label: 'World Co Share', value: '~70%' }
+    },
+    {
+      id: 'h_min_4', lat: 52.13, lng: -106.67,
+      hub: 'SASKATCHEWAN, CANADA', title: 'Potash, Uranium & Critical Minerals Base',
+      companies: [
+        { name: 'Nutrien', website: 'https://www.nutrien.com/', turnover: '>$1B' },
+        { name: 'Cameco', website: 'https://www.cameco.com/', turnover: '>$1B' },
+        { name: 'Teck Resources', website: 'https://www.teck.com/', turnover: '>$1B' }
+      ],
+      desc: 'Largest potash reserves worldwide and the highest-grade uranium deposits (Athabasca Basin). The preferred non-Russian, non-Belarusian source for fertiliser and nuclear fuel feedstock.',
+      customs: { hts_code: '3104.20', duty_rate: '0% (USMCA)', compliance_note: 'USMCA duty-free. Uranium exports require Canadian Nuclear Safety Commission licensing plus bilateral nuclear cooperation agreement coverage for the destination country.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Strong indigenous partnership frameworks in Saskatchewan. Tailings management is under heightened scrutiny post-Mount Polley; require GISTM conformance.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$2.4k/Rail to US Midwest' },
+      industry_kpi: { label: 'Potash Share', value: '~30% of world supply' }
+    }
+  ],
+
+  // 21. LUXURY GOODS & LEATHER ACCESSORIES
+  luxury_goods: [
+    {
+      id: 'h_lux_1', lat: 43.77, lng: 11.25,
+      hub: 'FLORENCE / TUSCANY, ITALY', title: 'Global Leather Goods Atelier Belt',
+      companies: [
+        { name: 'Gucci (Kering) ArtLab', website: 'https://www.gucci.com/', turnover: '>$1B' },
+        { name: 'Manifattura Ferrarese', website: 'https://www.manifatturaferrarese.it/', turnover: '$10M-$100M' },
+        { name: 'Conceria Superior', website: 'https://www.conceriasuperior.it/', turnover: '$10M-$100M' },
+        { name: 'Prada Group Tuscan facilities', website: 'https://www.pradagroup.com/', turnover: '>$1B' }
+      ],
+      desc: 'Scandicci and Santa Croce sull Arno form the world reference cluster for handbag and small-leather-goods manufacture plus vegetable-tanned calfskin. Almost every European maison sources or owns capacity here.',
+      customs: { hts_code: '4202.21', duty_rate: '9% MFN (US) / 0% Intra-EU', compliance_note: 'Made in Italy origin claims require substantial transformation in Italy - Italian customs actively audit this. CITES permits required for exotic skins (crocodile, python, alligator) on every single unit crossing a border.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Chrome-tanning effluent is the key environmental exposure; prefer Leather Working Group Gold-rated tanneries. Subcontracted small workshops are a recurring labour-audit weak point.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$6.5k/Air (high-value, insured)' },
+      industry_kpi: { label: 'Artisan Lead', value: '12-20 Weeks per style' }
+    },
+    {
+      id: 'h_lux_2', lat: 47.0, lng: 6.83,
+      hub: 'JURA ARC, SWITZERLAND', title: 'Swiss Watchmaking Valley',
+      companies: [
+        { name: 'Swatch Group / ETA', website: 'https://www.swatchgroup.com/', turnover: '>$1B' },
+        { name: 'Richemont Manufactures', website: 'https://www.richemont.com/', turnover: '>$1B' },
+        { name: 'Sellita Watch Co.', website: 'https://www.sellita.ch/', turnover: '$100M-$1B' },
+        { name: 'Nivarox-FAR', website: 'https://www.swatchgroup.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Biel/Bienne to Geneva corridor holds effectively all mechanical movement, hairspring, and escapement capability. Nivarox is a near-monopoly on hairsprings, making it one of the tightest chokepoints in luxury manufacturing.',
+      customs: { hts_code: '9102.21', duty_rate: '0-4.6% (varies by movement type)', compliance_note: 'Swiss Made ordinance requires at least 60% of manufacturing cost and technical development in Switzerland. Precious-metal cases need hallmarking and Kimberley Process documentation for any diamond content.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Responsible Jewellery Council certification is now table stakes for gold and diamond content. Swiss environmental regulation on galvanic plating baths is among the strictest anywhere.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$8.9k/Air secure courier' },
+      industry_kpi: { label: 'Movement Lead', value: '26-52 Weeks (ETA/Sellita)' }
+    },
+    {
+      id: 'h_lux_3', lat: 22.28, lng: 114.16,
+      hub: 'HONG KONG / SHENZHEN', title: 'Asian Fine Jewellery & Hard Luxury Hub',
+      companies: [
+        { name: 'Chow Tai Fook', website: 'https://www.ctfjewellerygroup.com/', turnover: '>$1B' },
+        { name: 'Luk Fook Holdings', website: 'https://www.lukfook.com/', turnover: '>$1B' },
+        { name: 'Man Shing Jewellery', website: 'https://www.manshing.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Largest fine-jewellery manufacturing and trading base in Asia, with deep diamond setting, casting, and gold-chain capability. Serves both Western brands and the domestic Chinese luxury market.',
+      customs: { hts_code: '7113.19', duty_rate: '5.5% MFN (US) / 0% HK entrepot', compliance_note: 'Kimberley Process certification mandatory for rough diamonds. US bans Russian-origin diamonds (including substantially transformed stones) - require G7 traceability declarations from the polisher, not just the setter.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'B', sustainability_note: 'Artisanal gold sourcing is the main due-diligence gap. Require LBMA Good Delivery refiners or Fairmined-certified gold for any brand with an ESG commitment.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$7.2k/Air secure courier' },
+      industry_kpi: { label: 'Gold Loss Rate', value: '<1.5% target in casting' }
+    }
+  ],
+
+  // 22. COSMETICS & PERSONAL CARE FORMULATION
+  cosmetics: [
+    {
+      id: 'h_cos_1', lat: 37.26, lng: 127.03,
+      hub: 'GYEONGGI, SOUTH KOREA', title: 'K-Beauty ODM Powerhouse',
+      companies: [
+        { name: 'Cosmax', website: 'https://www.cosmax.com/', turnover: '>$1B' },
+        { name: 'Kolmar Korea', website: 'https://www.kolmar.co.kr/', turnover: '>$1B' },
+        { name: 'Cosmecca Korea', website: 'https://www.cosmecca.com/', turnover: '$100M-$1B' },
+        { name: 'Yonwoo (packaging)', website: 'https://www.yonwoo.co.kr/', turnover: '$100M-$1B' }
+      ],
+      desc: 'The world fastest formulation-to-shelf ecosystem. Cosmax and Kolmar between them manufacture for a large share of global indie and prestige skincare brands, with 8-12 week concept-to-launch cycles.',
+      customs: { hts_code: '3304.99', duty_rate: '0% (KORUS FTA)', compliance_note: 'KORUS duty-free into the US. FDA MoCRA facility registration and product listing now required for any facility shipping cosmetics to the US, including foreign ODMs. EU imports need a Responsible Person and a CPNP notification.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A-', sustainability_note: 'Korea bans animal testing for cosmetics, aligning with the EU. Microbead bans and rising demand for refillable primary packaging are reshaping component specs.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$3.4k/FEU' },
+      industry_kpi: { label: 'Concept to Shelf', value: '8-12 Weeks' }
+    },
+    {
+      id: 'h_cos_2', lat: 43.7, lng: 7.26,
+      hub: 'COSMETIC VALLEY / GRASSE, FRANCE', title: 'European Prestige & Fragrance Cluster',
+      companies: [
+        { name: 'Givaudan', website: 'https://www.givaudan.com/', turnover: '>$1B' },
+        { name: 'Firmenich (dsm-firmenich)', website: 'https://www.dsm-firmenich.com/', turnover: '>$1B' },
+        { name: 'Robertet', website: 'https://www.robertet.com/', turnover: '$100M-$1B' },
+        { name: 'Laboratoires Expanscience', website: 'https://www.expanscience.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Grasse and the Chartres Cosmetic Valley hold the global centre of fragrance creation plus prestige skincare formulation. Essential for anything where a Made in France claim carries pricing power.',
+      customs: { hts_code: '3303.00', duty_rate: '0% MFN (US, perfumes) / 0% Intra-EU', compliance_note: 'EU Cosmetics Regulation 1223/2009: CPNP notification, an EU-based Responsible Person, and a Product Information File are mandatory. IFRA standards restrict many fragrance allergens by concentration.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'Natural extract sourcing carries Nagoya Protocol access-and-benefit-sharing obligations. Sandalwood, vetiver, and patchouli face wild-harvest sustainability constraints.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$4.2k/Air (flammables restricted)' },
+      industry_kpi: { label: 'Fragrance Dev', value: '6-18 Months per brief' }
+    },
+    {
+      id: 'h_cos_3', lat: 40.72, lng: -74.17,
+      hub: 'NEW JERSEY, USA', title: 'North American Contract Manufacturing Base',
+      companies: [
+        { name: 'Kolmar Laboratories', website: 'https://www.kolmar.com/', turnover: '$100M-$1B' },
+        { name: 'Mana Products', website: 'https://www.manaproducts.com/', turnover: '$100M-$1B' },
+        { name: 'Ashland Specialty Ingredients', website: 'https://www.ashland.com/', turnover: '>$1B' },
+        { name: 'Croda Inc.', website: 'https://www.croda.com/', turnover: '>$1B' }
+      ],
+      desc: 'Dense cluster of colour cosmetics and skincare contract manufacturers plus specialty-ingredient houses, all inside the US regulatory perimeter. The lowest-friction route to MoCRA compliance.',
+      customs: { hts_code: '3304.99', duty_rate: '0% (Domestic)', compliance_note: 'FDA MoCRA: facility registration, product listing, safety substantiation, and adverse-event reporting. State-level bans (California AB 2771 PFAS, AB 496) increasingly drive national reformulation.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'PFAS elimination is the dominant reformulation driver for colour cosmetics. RSPO-certified palm derivatives expected by most retail buyers.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.4k/Truck' },
+      industry_kpi: { label: 'MOQ Flexibility', value: '5k-25k units typical' }
+    }
+  ],
+
+  // 23. COLD CHAIN & TEMPERATURE-CONTROLLED LOGISTICS
+  cold_chain: [
+    {
+      id: 'h_cc_1', lat: 51.92, lng: 4.48,
+      hub: 'ROTTERDAM / VENLO, NETHERLANDS', title: 'European Reefer & Perishables Gateway',
+      companies: [
+        { name: 'Kloosterboer (Lineage)', website: 'https://www.lineagelogistics.com/', turnover: '>$1B' },
+        { name: 'Kuehne+Nagel Perishables', website: 'https://www.kuehne-nagel.com/', turnover: '>$1B' },
+        { name: 'Thermo King Europe', website: 'https://www.thermoking.com/', turnover: '>$1B' },
+        { name: 'NewCold', website: 'https://www.newcold.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Largest European entry point for reefer containers plus automated deep-freeze warehousing. Venlo and the Rotterdam Cool Port together handle most EU-bound fresh produce, seafood, and frozen protein.',
+      customs: { hts_code: '8418.69', duty_rate: '0% (Intra-EU) / 2.2% MFN', compliance_note: 'EU HACCP and EC 852/2004 hygiene rules apply to every storage node. Border Control Post veterinary clearance (CHED-P) required for animal products. F-gas Regulation is phasing down high-GWP refrigerants.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'F-gas phase-down forces migration from R-404A to CO2 transcritical or ammonia systems; retrofit capex is significant but avoids future refrigerant-supply cliffs.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$5.4k/Reefer FEU' },
+      industry_kpi: { label: 'Temp Excursion', value: '<0.5% of shipments' }
+    },
+    {
+      id: 'h_cc_2', lat: 33.75, lng: -84.39,
+      hub: 'ATLANTA / SOUTHEAST, USA', title: 'US Cold Storage & Pharma Distribution Core',
+      companies: [
+        { name: 'Americold', website: 'https://www.americold.com/', turnover: '>$1B' },
+        { name: 'Lineage Logistics', website: 'https://www.lineagelogistics.com/', turnover: '>$1B' },
+        { name: 'UPS Healthcare', website: 'https://www.ups.com/healthcare', turnover: '>$1B' },
+        { name: 'Carrier Transicold', website: 'https://www.carrier.com/', turnover: '>$1B' }
+      ],
+      desc: 'Highest concentration of US refrigerated warehousing and validated GDP pharma distribution, anchored by the world busiest air hub. Best-fit for national frozen, chilled, and 2-8C pharmaceutical distribution.',
+      customs: { hts_code: '8418.69', duty_rate: '0% (Domestic)', compliance_note: 'FSMA Sanitary Transportation Rule (21 CFR 1.900) governs temperature control in transit. DSCSA serialization applies to pharma nodes. USDA/FSIS registration needed for meat and poultry storage.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Cold storage is 3-5x more energy intensive per square foot than ambient. Ammonia refrigeration requires PSM compliance under OSHA 1910.119 - a common audit finding.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$2.3k/Reefer truckload' },
+      industry_kpi: { label: 'GDP Validation', value: '2-8C lanes mapped annually' }
+    },
+    {
+      id: 'h_cc_3', lat: 1.36, lng: 103.99,
+      hub: 'SINGAPORE CHANGI', title: 'Asian Pharma & Perishables Air Cold Chain',
+      companies: [
+        { name: 'SATS Coolport', website: 'https://www.sats.com.sg/', turnover: '$100M-$1B' },
+        { name: 'DHL Supply Chain Life Sciences', website: 'https://www.dhl.com/', turnover: '>$1B' },
+        { name: 'Envirotainer (regional network)', website: 'https://www.envirotainer.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Premier Asian airside cold chain for clinical trial material, biologics, vaccines, and high-value perishables. IATA CEIV Pharma certified end to end, which materially reduces excursion risk on Asia-Europe lanes.',
+      customs: { hts_code: '3002.20', duty_rate: '0% (Singapore FTA)', compliance_note: 'IATA CEIV Pharma certification is the practical prerequisite for biologics lanes. HSA import licences required for therapeutic products; dry ice shipments fall under IATA DGR as UN1845.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'A', sustainability_note: 'Air freight dominates emissions for this lane type. Reusable active containers (Envirotainer, CSafe) beat single-use passive boxes on both cost and footprint above roughly 200 kg.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$12k+/Active container Asia-EU' },
+      industry_kpi: { label: 'CEIV Pharma', value: 'Certified airport-wide' }
+    }
+  ],
+
+  // 24. RENEWABLE ENERGY EQUIPMENT
+  renewable_energy: [
+    {
+      id: 'h_ren_1', lat: 37.9, lng: 102.6,
+      hub: 'JIANGSU / XINJIANG, CHINA', title: 'Global Solar PV Manufacturing Monopoly',
+      companies: [
+        { name: 'LONGi Green Energy', website: 'https://www.longi.com/', turnover: '>$1B' },
+        { name: 'JinkoSolar', website: 'https://www.jinkosolar.com/', turnover: '>$1B' },
+        { name: 'Trina Solar', website: 'https://www.trinasolar.com/', turnover: '>$1B' },
+        { name: 'JA Solar', website: 'https://www.jasolar.com/', turnover: '>$1B' }
+      ],
+      desc: 'China holds roughly 80-95% of every step in the PV chain - polysilicon, ingot, wafer, cell, module. Cost leadership is structural and no other region can match module pricing today.',
+      customs: { hts_code: '8541.43', duty_rate: 'AD/CVD + Sec 201 + UFLPA hold risk', compliance_note: 'UFLPA rebuttable presumption applies to Xinjiang polysilicon and has caused thousands of detained module shipments. AD/CVD circumvention findings cover Cambodia, Malaysia, Thailand, and Vietnam assembly. Full polysilicon-to-module traceability documentation is mandatory before shipping.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'C', sustainability_note: 'Xinjiang polysilicon carries the highest forced-labour risk in the energy transition. Coal-heavy grid gives modules a much higher embodied carbon than EU or US production.' },
+      logistics: { port_wait_days: 6, freight_cost_estimate: '$4.1k/FEU + detention risk' },
+      industry_kpi: { label: 'Module Price', value: '~$0.11-0.15/W' }
+    },
+    {
+      id: 'h_ren_2', lat: 56.16, lng: 8.62,
+      hub: 'JUTLAND, DENMARK', title: 'Wind Turbine Technology Core',
+      companies: [
+        { name: 'Vestas Wind Systems', website: 'https://www.vestas.com/', turnover: '>$1B' },
+        { name: 'Siemens Gamesa', website: 'https://www.siemensgamesa.com/', turnover: '>$1B' },
+        { name: 'LM Wind Power (GE Vernova)', website: 'https://www.lmwindpower.com/', turnover: '>$1B' },
+        { name: 'Bladt Industries', website: 'https://www.bladt.dk/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Design authority and nacelle assembly for the majority of Western offshore and onshore wind capacity. Blade moulds, monopile fabrication, and installation vessel engineering cluster here.',
+      customs: { hts_code: '8502.31', duty_rate: '0% (Intra-EU) / 2.5% MFN', compliance_note: 'IEC 61400 design certification through DNV or TUV is the market gate. US projects need Jones Act-compliant installation vessels for offshore, which is a genuine capacity constraint through 2027.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Blade end-of-life is the unsolved problem - thermoset epoxy composites are largely unrecyclable. Vestas and Siemens Gamesa are commercialising recyclable resin systems.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$85k+/blade set (project cargo)' },
+      industry_kpi: { label: 'Blade Length', value: 'Up to 115m offshore' }
+    },
+    {
+      id: 'h_ren_3', lat: 32.78, lng: -96.8,
+      hub: 'TEXAS / SOUTHEAST USA', title: 'IRA-Backed Domestic Clean Energy Build-Out',
+      companies: [
+        { name: 'First Solar', website: 'https://www.firstsolar.com/', turnover: '>$1B' },
+        { name: 'Qcells (Hanwha) Georgia', website: 'https://www.qcells.com/', turnover: '>$1B' },
+        { name: 'GE Vernova', website: 'https://www.gevernova.com/', turnover: '>$1B' },
+        { name: 'Fluence Energy', website: 'https://www.fluenceenergy.com/', turnover: '>$1B' }
+      ],
+      desc: 'The fastest-growing non-China PV and storage manufacturing base, driven by 45X credits. First Solar CdTe thin film is the only at-scale US module technology with no Chinese polysilicon exposure.',
+      customs: { hts_code: '8541.43', duty_rate: '0% (Domestic)', compliance_note: 'IRC 45X credits: 7 cents/W module, 4 cents/W cell. The 10% domestic content ITC adder requires 40%+ US manufactured product cost, rising over time - track the Treasury safe-harbour cost tables.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'First Solar operates a genuine module take-back and recycling programme. Domestic manufacture removes UFLPA detention exposure entirely, which is worth real money in project schedule certainty.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.8k/Truck' },
+      industry_kpi: { label: '45X Module Credit', value: '$0.07/W' }
+    },
+    {
+      id: 'h_ren_4', lat: 23.02, lng: 72.57,
+      hub: 'GUJARAT, INDIA', title: 'PLI-Backed Solar & Electrolyser Hub',
+      companies: [
+        { name: 'Adani Solar', website: 'https://www.adanisolar.com/', turnover: '>$1B' },
+        { name: 'Waaree Energies', website: 'https://www.waaree.com/', turnover: '>$1B' },
+        { name: 'Vikram Solar', website: 'https://www.vikramsolar.com/', turnover: '$100M-$1B' },
+        { name: 'Reliance New Energy', website: 'https://www.ril.com/', turnover: '>$1B' }
+      ],
+      desc: 'The leading China-alternative for module and increasingly cell manufacture, backed by production-linked incentives and the ALMM approved-list regime. Also the emerging centre for green hydrogen electrolyser capacity.',
+      customs: { hts_code: '8541.43', duty_rate: '0% MFN (US) - no AD/CVD order', compliance_note: 'No US AD/CVD order currently covers Indian modules, which is the key commercial advantage. India applies 40% basic customs duty on imported modules to protect domestic production. Verify wafer origin - Indian assembly of Chinese wafers still carries UFLPA questions.' },
+      esg: { carbon_footprint: 'Medium-High', ethical_rating: 'B', sustainability_note: 'Coal-heavy grid keeps embodied carbon high, though below Xinjiang levels. Labour standards are materially better documented than the Chinese upstream.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.3k/FEU ex-Mundra' },
+      industry_kpi: { label: 'Cell Capacity', value: 'Scaling past 25 GW' }
+    }
+  ],
+
+  // 25. TELECOM & NETWORK INFRASTRUCTURE
+  telecom: [
+    {
+      id: 'h_tel_1', lat: 60.17, lng: 24.94,
+      hub: 'HELSINKI / STOCKHOLM, NORDICS', title: 'Trusted-Vendor RAN Equipment Core',
+      companies: [
+        { name: 'Nokia', website: 'https://www.nokia.com/', turnover: '>$1B' },
+        { name: 'Ericsson', website: 'https://www.ericsson.com/', turnover: '>$1B' },
+        { name: 'Telia Carrier / Arelion', website: 'https://arelion.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'The two Western RAN vendors that satisfy US, UK, and EU trusted-supplier rules. Essential for any operator subject to rip-and-replace mandates or national security screening on 5G infrastructure.',
+      customs: { hts_code: '8517.62', duty_rate: '0% (ITA)', compliance_note: 'ITA duty-free. US Secure and Trusted Communications Networks Act bars Huawei and ZTE from FCC-funded networks. EU 5G Toolbox drives high-risk-vendor exclusion in most member states.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Nordic renewable grids plus mature product take-back schemes. Both vendors publish full scope 3 accounting, which simplifies operator ESG reporting.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.6k/Air' },
+      industry_kpi: { label: 'Trusted Vendor', value: 'US/UK/EU approved' }
+    },
+    {
+      id: 'h_tel_2', lat: 24.15, lng: 120.67,
+      hub: 'TAIWAN (TAICHUNG / TAIPEI)', title: 'Networking Hardware & ODM Base',
+      companies: [
+        { name: 'Accton Technology', website: 'https://www.accton.com/', turnover: '>$1B' },
+        { name: 'Quanta Cloud Technology', website: 'https://www.qct.io/', turnover: '>$1B' },
+        { name: 'Delta Electronics', website: 'https://www.deltaww.com/', turnover: '>$1B' },
+        { name: 'Wistron NeWeb', website: 'https://www.wnc.com.tw/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Builds most of the world white-box switches, routers, and hyperscale networking gear. The default ODM route for open-networking and disaggregated RAN hardware programmes.',
+      customs: { hts_code: '8517.62', duty_rate: '0% (ITA)', compliance_note: 'ITA duty-free. Final assembly is frequently moved to Vietnam or Mexico for Section 301 mitigation - confirm substantial transformation actually occurs, as CBP has challenged screwdriver assembly claims.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'RBA (Responsible Business Alliance) audits are standard across this tier. Taiwan grid decarbonisation is slow, keeping scope 2 higher than Nordic equivalents.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.5k/Air' },
+      industry_kpi: { label: 'White-box Share', value: 'Majority of hyperscale switching' }
+    },
+    {
+      id: 'h_tel_3', lat: 35.06, lng: 136.0,
+      hub: 'JAPAN / KOREA OPTICAL BELT', title: 'Optical Fibre & Photonics Supply',
+      companies: [
+        { name: 'Sumitomo Electric', website: 'https://sumitomoelectric.com/', turnover: '>$1B' },
+        { name: 'Fujikura', website: 'https://www.fujikura.co.jp/', turnover: '>$1B' },
+        { name: 'Furukawa Electric / OFS', website: 'https://www.furukawa.co.jp/', turnover: '>$1B' },
+        { name: 'Corning Optical (regional)', website: 'https://www.corning.com/', turnover: '>$1B' }
+      ],
+      desc: 'Core supply of single-mode fibre, submarine cable, fusion splicers, and optical transceivers. Preform capacity is the hard constraint - it cannot be expanded quickly when data-centre demand spikes.',
+      customs: { hts_code: '8544.70', duty_rate: '0% (CPTPP) / 6.7% MFN', compliance_note: 'US AD/CVD orders exist on some Chinese optical fibre - Japanese and Korean origin avoids that exposure. Submarine cable projects require landing permits and increasingly face national security review.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Preform drawing is energy intensive. Helium supply for fibre draw is a recurring constraint tied to global helium shortages.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$3.8k/FEU' },
+      industry_kpi: { label: 'Fibre Lead Time', value: '20-40 Weeks in tight cycles' }
+    }
+  ],
+
+  // 26. FURNITURE & INTERIOR FITTINGS
+  furniture: [
+    {
+      id: 'h_fur_1', lat: 22.82, lng: 108.32,
+      hub: 'GUANGDONG / GUANGXI, CHINA', title: 'Global Volume Furniture Manufacturing',
+      companies: [
+        { name: 'Man Wah Holdings', website: 'https://www.manwahholdings.com/', turnover: '>$1B' },
+        { name: 'Kuka Home', website: 'https://www.kukahome.com/', turnover: '>$1B' },
+        { name: 'Markor International', website: 'https://www.markor.com/', turnover: '$100M-$1B' },
+        { name: 'Oppein Home Group', website: 'https://www.oppein.com/', turnover: '>$1B' }
+      ],
+      desc: 'Foshan and Shunde remain the largest furniture manufacturing concentration worldwide, covering upholstery, case goods, and kitchen cabinetry at any volume. Heavily exposed to US trade remedies.',
+      customs: { hts_code: '9403.60', duty_rate: '0% MFN + 25% Sec 301 + AD/CVD', compliance_note: 'Active US AD/CVD orders on wooden bedroom furniture, wooden cabinets and vanities, and upholstered seating from China, with rates that can exceed 250%. Lacey Act declarations required on all wood species. CARB/TSCA Title VI formaldehyde certification mandatory for composite wood.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B', sustainability_note: 'Illegal timber risk in tropical hardwood inputs. Require FSC or PEFC chain of custody plus species-and-origin declarations for Lacey Act compliance.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$4.6k/FEU (low density, cubes out)' },
+      industry_kpi: { label: 'Container Fill', value: 'Cubes out before weight' }
+    },
+    {
+      id: 'h_fur_2', lat: 21.03, lng: 105.85,
+      hub: 'VIETNAM (BINH DUONG / HANOI)', title: 'Primary China+1 Furniture Alternative',
+      companies: [
+        { name: 'Truong Thanh Furniture', website: 'https://truongthanh.com/', turnover: '$100M-$1B' },
+        { name: 'AA Corporation', website: 'https://www.aacorporation.com/', turnover: '$100M-$1B' },
+        { name: 'Phu Tai Group', website: 'https://phutai.com.vn/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Now the largest furniture exporter to the US. Strong in solid wood, outdoor furniture, and hospitality fit-out. The default relocation destination for buyers exiting Chinese AD/CVD exposure.',
+      customs: { hts_code: '9403.60', duty_rate: '0% MFN (US)', compliance_note: 'No blanket AD/CVD on Vietnamese furniture, but Commerce has run circumvention inquiries where Chinese components are merely assembled in Vietnam - keep bills of materials showing genuine Vietnamese transformation. Lacey Act and EUDR both apply to timber origin.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'EUDR compliance from 2025 requires plot-level geolocation for timber entering the EU. Vietnamese acacia and rubberwood plantations are generally well documented; imported Laotian and Cambodian logs are not.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$4.2k/FEU ex-Cat Lai' },
+      industry_kpi: { label: 'US Import Rank', value: '#1 furniture exporter to US' }
+    },
+    {
+      id: 'h_fur_3', lat: 45.64, lng: 12.25,
+      hub: 'NORTHEAST ITALY / POLAND', title: 'European Design & Contract Furniture',
+      companies: [
+        { name: 'Molteni&C', website: 'https://www.molteni.it/', turnover: '$100M-$1B' },
+        { name: 'Poltrona Frau Group', website: 'https://www.poltronafrau.com/', turnover: '$100M-$1B' },
+        { name: 'Nowy Styl', website: 'https://nowystyl.com/', turnover: '$100M-$1B' },
+        { name: 'Fameg', website: 'https://www.fameg.pl/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Italy leads design-led residential and contract furniture; Poland is Europe volume workhorse for office and flat-pack. Together they cover speed-to-market for EU projects that cannot wait on Asian sea freight.',
+      customs: { hts_code: '9401.61', duty_rate: '0% (Intra-EU) / 0% MFN to US', compliance_note: 'EN 1335 (office chairs) and BS 5852 / CAL TB 117-2013 flammability standards govern contract seating. EUTR/EUDR timber due diligence applies to all wood inputs.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'Strong FSC penetration and low-VOC finish requirements. EU Ecodesign for furniture is under development and will add repairability and recycled-content criteria.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$1.9k/Truck intra-EU' },
+      industry_kpi: { label: 'Lead Time', value: '4-8 Weeks vs 12+ from Asia' }
+    }
+  ],
+
+  // 27. SPORTS & OUTDOOR EQUIPMENT
+  sports_outdoor: [
+    {
+      id: 'h_spo_1', lat: 10.82, lng: 106.63,
+      hub: 'VIETNAM (BINH DUONG / DONG NAI)', title: 'Global Athletic Footwear & Apparel Base',
+      companies: [
+        { name: 'Pou Chen Group', website: 'https://www.pouchen.com/', turnover: '>$1B' },
+        { name: 'Feng Tay Enterprises', website: 'https://www.fengtay.com/', turnover: '>$1B' },
+        { name: 'Changshin Vietnam', website: 'https://www.changshin.co.kr/', turnover: '$100M-$1B' },
+        { name: 'Eclat Textile Vietnam', website: 'https://www.eclat.com.tw/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Manufactures a large share of world athletic footwear for Nike, adidas, and Under Armour. Deep capability in injection-phylon midsoles, knit uppers, and performance apparel.',
+      customs: { hts_code: '6404.11', duty_rate: '20% MFN (US athletic footwear)', compliance_note: 'Footwear carries some of the highest surviving US MFN duties - correct HTS classification by upper material and sole construction is worth several points of margin. First-sale valuation is commonly used here to reduce dutiable value.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Solvent-based cementing is being displaced by water-based adhesives on brand mandate. Factory audits under FLA and the brands own codes are routine; wage-and-hours findings are the most common issue.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.9k/FEU' },
+      industry_kpi: { label: 'Dev Cycle', value: '12-18 Months concept to retail' }
+    },
+    {
+      id: 'h_spo_2', lat: 24.15, lng: 120.68,
+      hub: 'TAICHUNG, TAIWAN', title: 'High-End Bicycle & Composite Sports Hub',
+      companies: [
+        { name: 'Giant Manufacturing', website: 'https://www.giant-bicycles.com/', turnover: '>$1B' },
+        { name: 'Merida Industry', website: 'https://www.merida.com/', turnover: '>$1B' },
+        { name: 'Shimano Taiwan', website: 'https://www.shimano.com/', turnover: '>$1B' },
+        { name: 'Topkey Corporation', website: 'https://www.topkey.com.tw/', turnover: '$100M-$1B' }
+      ],
+      desc: 'The world reference for carbon-fibre bicycle frames, wheels, and premium sporting composites. Drivetrain supply is dominated by Shimano, creating a genuine single-source dependency across the whole industry.',
+      customs: { hts_code: '8712.00', duty_rate: '5.5-11% MFN (US bicycles)', compliance_note: 'E-bikes classify under 8711.60 with different duty treatment and require UN38.3 plus UL 2849 for the battery system. CPSC 16 CFR 1512 applies to bicycles sold in the US.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Carbon-fibre layup is labour-intensive with significant prepreg scrap and no viable recycling path. Frame repair and reuse programmes are the current best mitigation.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.4k/FEU' },
+      industry_kpi: { label: 'Drivetrain Lead', value: 'Shimano 40-100 weeks in peak' }
+    },
+    {
+      id: 'h_spo_3', lat: 47.26, lng: 11.4,
+      hub: 'ALPINE EUROPE (AT / IT / DE)', title: 'Snow, Climbing & Technical Outdoor Cluster',
+      companies: [
+        { name: 'Atomic Austria (Amer Sports)', website: 'https://www.atomic.com/', turnover: '$100M-$1B' },
+        { name: 'Fischer Sports', website: 'https://www.fischersports.com/', turnover: '$100M-$1B' },
+        { name: 'Salewa / Oberalp Group', website: 'https://www.oberalp.com/', turnover: '$100M-$1B' },
+        { name: 'Edelrid', website: 'https://www.edelrid.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Centre for skis, bindings, mountaineering hardware, and PPE-certified climbing equipment. Life-safety certification is the barrier to entry, not cost.',
+      customs: { hts_code: '9506.11', duty_rate: '0% (Intra-EU) / 2.6% MFN to US', compliance_note: 'Climbing and fall-arrest equipment is PPE Category III under EU Regulation 2016/425 - it requires notified-body type examination plus ongoing production surveillance. Ski bindings need ISO 11088 / DIN certification.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'PFAS-free DWR treatments are now effectively mandatory for the EU outdoor market. Bluesign and OEKO-TEX certification are standard buyer requirements.' },
+      logistics: { port_wait_days: 1, freight_cost_estimate: '$2.1k/Truck intra-EU' },
+      industry_kpi: { label: 'PPE Cert', value: 'EU 2016/425 Cat III' }
+    }
+  ],
+
+  // 28. TOYS & GAMES
+  toys_games: [
+    {
+      id: 'h_toy_1', lat: 23.02, lng: 113.75,
+      hub: 'DONGGUAN / SHANTOU, CHINA', title: 'World Toy Manufacturing Centre',
+      companies: [
+        { name: 'Dongguan Yongtai (Mattel supplier)', website: 'https://www.mattel.com/', turnover: '$100M-$1B' },
+        { name: 'Wah Shing Toys', website: 'https://www.wahshingtoys.com/', turnover: '$10M-$100M' },
+        { name: 'Alpha Group', website: 'https://www.auldeytoys.com/', turnover: '$100M-$1B' },
+        { name: 'Early Light International', website: 'https://www.earlylight.com/', turnover: '>$1B' }
+      ],
+      desc: 'Produces the large majority of world toys. Chenghai district in Shantou alone covers a huge share of plastic toy output. Tooling, decoration, and electronics integration all available in one cluster.',
+      customs: { hts_code: '9503.00', duty_rate: '0% MFN + Sec 301 exposure', compliance_note: 'Toys are largely MFN duty-free but exposed to Section 301. CPSIA testing by a CPSC-accepted lab is mandatory: lead content, phthalates, ASTM F963 mechanical and flammability. EU requires EN 71 parts 1-3 plus CE marking and a Declaration of Conformity.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B', sustainability_note: 'ICTI Ethical Toy Program certification is the industry audit standard and is expected by every major brand. Seasonal overtime peaks before Q4 are the most common audit failure.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$4.3k/FEU (cubes out)' },
+      industry_kpi: { label: 'Tooling Lead', value: '10-16 Weeks + 4 weeks testing' }
+    },
+    {
+      id: 'h_toy_2', lat: 55.68, lng: 9.12,
+      hub: 'BILLUND, DENMARK / HUNGARY', title: 'European Premium Toy Production',
+      companies: [
+        { name: 'LEGO Group', website: 'https://www.lego.com/', turnover: '>$1B' },
+        { name: 'Playmobil (Brandstaetter)', website: 'https://www.playmobil.com/', turnover: '$100M-$1B' },
+        { name: 'Ravensburger', website: 'https://www.ravensburger.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Vertically integrated, highly automated European moulding for premium brands. Nyiregyhaza in Hungary and Kladno in Czechia provide lower-cost EU capacity within the customs union.',
+      customs: { hts_code: '9503.00', duty_rate: '0% (Intra-EU) / 0% MFN to US', compliance_note: 'EN 71 and the EU Toy Safety Directive 2009/48/EC apply, with the directive being revised into a regulation that adds a digital product passport. REACH restricts specific plasticisers and heavy metals in toy materials.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'LEGO is pursuing bio-based and recycled polymer feedstock with published targets. EU packaging rules push toward plastic-free retail packs.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.2k/Truck intra-EU' },
+      industry_kpi: { label: 'Mould Tolerance', value: '±0.005 mm (LEGO standard)' }
+    },
+    {
+      id: 'h_toy_3', lat: 22.4, lng: 114.1,
+      hub: 'HONG KONG (DESIGN & TRADING)', title: 'Toy Sourcing, Licensing & QA Hub',
+      companies: [
+        { name: 'VTech Holdings', website: 'https://www.vtech.com/', turnover: '>$1B' },
+        { name: 'Herotoys / trading houses', website: 'https://www.hktdc.com/', turnover: '$10M-$100M' },
+        { name: 'Intertek Hong Kong (testing)', website: 'https://www.intertek.com/', turnover: '>$1B' }
+      ],
+      desc: 'Commercial and QA layer above the Guangdong factories: licensing management, product safety testing, and pre-shipment inspection. VTech is the dominant electronic learning-toy manufacturer.',
+      customs: { hts_code: '9503.00', duty_rate: '0% MFN (HK origin)', compliance_note: 'Hong Kong origin does not shield goods physically manufactured in mainland China from Section 301 - CBP looks at the country of manufacture, not the invoicing entity. Get a binding ruling if origin is genuinely mixed.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A-', sustainability_note: 'HK-based QA houses provide the practical mechanism for enforcing ICTI and chemical-compliance requirements on mainland subcontractors.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$4.0k/FEU' },
+      industry_kpi: { label: 'AQL Standard', value: 'ANSI/ASQ Z1.4 Level II' }
+    }
+  ],
+
+  // 29. PET & ANIMAL PRODUCTS
+  pet_animal: [
+    {
+      id: 'h_pet_1', lat: 38.63, lng: -90.2,
+      hub: 'US MIDWEST (MO / KS / IA)', title: 'North American Pet Food Manufacturing Core',
+      companies: [
+        { name: 'Nestle Purina PetCare', website: 'https://www.purina.com/', turnover: '>$1B' },
+        { name: 'Hill\'s Pet Nutrition', website: 'https://www.hillspet.com/', turnover: '>$1B' },
+        { name: 'Simmons Pet Food', website: 'https://www.simmonspetfood.com/', turnover: '>$1B' },
+        { name: 'C.J. Foods', website: 'https://www.cjfoodsinc.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'The global centre of extruded dry pet food and wet-canning capacity, co-located with grain, rendering, and protein supply. Contract manufacturing capacity here is the constraint, not raw material.',
+      customs: { hts_code: '2309.10', duty_rate: '0% (Domestic) / 0% MFN', compliance_note: 'FDA FSMA Preventive Controls for Animal Food (21 CFR 507) applies to all facilities. AAFCO nutrient profiles and state feed registrations govern label claims; every state requires separate registration.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Rendered animal by-products carry traceability and species-verification requirements. Insect-protein and alternative-protein formulations are moving from novelty to shelf.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.6k/Truckload' },
+      industry_kpi: { label: 'Co-man Capacity', value: 'Persistently tight since 2021' }
+    },
+    {
+      id: 'h_pet_2', lat: 13.75, lng: 100.5,
+      hub: 'THAILAND (BANGKOK / SAMUT SAKHON)', title: 'Global Wet Pet Food & Pouch Hub',
+      companies: [
+        { name: 'Thai Union Group', website: 'https://www.thaiunion.com/', turnover: '>$1B' },
+        { name: 'Charoen Pokphand Foods', website: 'https://www.cpfworldwide.com/', turnover: '>$1B' },
+        { name: 'Asian Alliance International', website: 'https://www.aai.co.th/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Dominant source of wet cat and dog food in pouches and cans, built on the tuna-processing base. Cost and quality leader for premium wet formats sold in the US and EU.',
+      customs: { hts_code: '2309.10', duty_rate: '0% MFN (US)', compliance_note: 'FDA prior notice and facility registration required for US import. EU requires an approved third-country establishment listing under Regulation 1069/2009 for animal by-products plus a veterinary health certificate per consignment.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B', sustainability_note: 'Forced labour in the Thai fishing fleet has been the subject of CBP withhold-release orders. Require MSC or equivalent chain of custody and vessel-level labour verification, not just processor audits.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: '$3.7k/FEU ex-Laem Chabang' },
+      industry_kpi: { label: 'Pouch Capacity', value: 'Largest globally' }
+    },
+    {
+      id: 'h_pet_3', lat: 52.09, lng: 5.12,
+      hub: 'NETHERLANDS / DENMARK', title: 'European Animal Health & Feed Additives',
+      companies: [
+        { name: 'Trouw Nutrition (Nutreco)', website: 'https://www.trouwnutrition.com/', turnover: '>$1B' },
+        { name: 'dsm-firmenich Animal Nutrition', website: 'https://www.dsm-firmenich.com/', turnover: '>$1B' },
+        { name: 'Chr. Hansen Animal Health', website: 'https://www.chr-hansen.com/', turnover: '>$1B' },
+        { name: 'MSD Animal Health Boxmeer', website: 'https://www.msd-animal-health.com/', turnover: '>$1B' }
+      ],
+      desc: 'Concentration of veterinary vaccines, feed additives, probiotics, and enzyme technology. The regulatory reference point for antibiotic-free animal production.',
+      customs: { hts_code: '2309.90', duty_rate: '0% (Intra-EU) / 1.4% MFN', compliance_note: 'EU Regulation 2019/6 bans routine prophylactic antibiotic use in feed and restricts imports of animal products raised with growth-promoting antimicrobials. Feed additive authorisation under Regulation 1831/2003 takes years - do not assume substitutability.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'Methane-reducing feed additives (3-NOP) are a genuine scope 3 lever for dairy supply chains. Soy-free formulation demand is rising with EUDR.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.6k/FEU' },
+      industry_kpi: { label: 'Additive Approval', value: '3-5 Years EU authorisation' }
+    }
+  ],
+
+  // 30. PRINTING, PUBLISHING & MEDIA PRODUCTION
+  printing_media: [
+    {
+      id: 'h_pri_1', lat: 22.54, lng: 114.06,
+      hub: 'SHENZHEN / DONGGUAN, CHINA', title: 'Global Book & Premium Print Hub',
+      companies: [
+        { name: 'C&C Offset Printing', website: 'https://www.candcoffset.com/', turnover: '$100M-$1B' },
+        { name: 'Toppan Leefung', website: 'https://www.toppanleefung.com/', turnover: '$100M-$1B' },
+        { name: 'Shenzhen Artron Art Group', website: 'https://www.artron.com.cn/', turnover: '$100M-$1B' }
+      ],
+      desc: 'The world source for illustrated books, board books, cased-in hardcovers, and complex paper engineering. Nothing in North America or Europe matches the cost or craft on four-colour children and art books.',
+      customs: { hts_code: '4901.99', duty_rate: '0% MFN (books duty-free)', compliance_note: 'Printed books are duty-free under HTS 4901 and were largely excluded from Section 301 - but children books with toy components can reclassify into Chapter 95 and pull in CPSIA testing. Check the classification of any book-plus-object format.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'FSC-certified paper is standard for Western publishers. Soy and vegetable-based inks are widely available and often specified by default.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$4.8k/FEU (heavy, weights out)' },
+      industry_kpi: { label: 'Print Lead', value: '10-14 Weeks incl. sea freight' }
+    },
+    {
+      id: 'h_pri_2', lat: 51.34, lng: 12.37,
+      hub: 'GERMANY (HEIDELBERG / LEIPZIG)', title: 'Press Technology & European Print',
+      companies: [
+        { name: 'Heidelberger Druckmaschinen', website: 'https://www.heidelberg.com/', turnover: '>$1B' },
+        { name: 'Koenig & Bauer', website: 'https://www.koenig-bauer.com/', turnover: '>$1B' },
+        { name: 'Bertelsmann Printing Group', website: 'https://www.bertelsmann-printing-group.com/', turnover: '>$1B' },
+        { name: 'Flint Group (inks)', website: 'https://www.flintgrp.com/', turnover: '>$1B' }
+      ],
+      desc: 'Supplies the press equipment the entire industry runs on, plus high-quality European print capacity for short lead times. Koenig & Bauer is also the dominant banknote-press supplier worldwide.',
+      customs: { hts_code: '8443.13', duty_rate: '0% (Intra-EU) / 0-2.2% MFN', compliance_note: 'CE machinery directive applies to presses. Security-printing equipment is subject to national export controls and end-user verification - expect long approval cycles for banknote and passport lines.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'EU pushes low-migration inks for food packaging and mineral-oil-free formulations. Energy cost is the dominant operating variable for European printers post-2022.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.4k/Truck intra-EU' },
+      industry_kpi: { label: 'Press Lead Time', value: '9-15 Months new equipment' }
+    },
+    {
+      id: 'h_pri_3', lat: 41.88, lng: -87.63,
+      hub: 'US MIDWEST (CHICAGO / OHIO)', title: 'North American Commercial & Label Print',
+      companies: [
+        { name: 'RR Donnelley', website: 'https://www.rrd.com/', turnover: '>$1B' },
+        { name: 'Quad/Graphics', website: 'https://www.quad.com/', turnover: '>$1B' },
+        { name: 'Lakeside Book Company', website: 'https://www.lakesidebook.com/', turnover: '$100M-$1B' },
+        { name: 'Multi-Color Corporation', website: 'https://www.mcclabel.com/', turnover: '>$1B' }
+      ],
+      desc: 'Domestic capacity for direct mail, catalogues, mono book printing, and pressure-sensitive labels. The right choice when speed to market or reprint responsiveness outweighs unit cost.',
+      customs: { hts_code: '4911.10', duty_rate: '0% (Domestic)', compliance_note: 'No tariff exposure. FTC Green Guides constrain recyclability and recycled-content claims on printed packaging. FDA 21 CFR 175 applies to inks in food-contact applications.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Structural print-volume decline has left consolidated but efficient capacity. SFI and FSC certified stock widely available domestically.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.3k/Truckload' },
+      industry_kpi: { label: 'Reprint Speed', value: '2-4 Weeks domestic' }
+    }
+  ],
+
+  // 31. HVAC & BUILDING SYSTEMS
+  hvac: [
+    {
+      id: 'h_hvac_1', lat: 34.69, lng: 135.5,
+      hub: 'OSAKA, JAPAN', title: 'Global HVAC Technology Leader',
+      companies: [
+        { name: 'Daikin Industries', website: 'https://www.daikin.com/', turnover: '>$1B' },
+        { name: 'Mitsubishi Electric', website: 'https://www.mitsubishielectric.com/', turnover: '>$1B' },
+        { name: 'Panasonic Air Conditioning', website: 'https://www.panasonic.com/', turnover: '>$1B' },
+        { name: 'Fujitsu General', website: 'https://www.fujitsu-general.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Daikin is the largest air-conditioning company worldwide and holds the key inverter and refrigerant patents. Japan leads on VRF systems, heat pumps, and low-GWP refrigerant transition.',
+      customs: { hts_code: '8415.10', duty_rate: '0% (CPTPP) / 1-2.2% MFN', compliance_note: 'US EPA SNAP and the AIM Act phase down HFCs on a fixed schedule; R-410A equipment is being displaced by R-32 and R-454B. New refrigerants classified A2L (mildly flammable) require updated UL 60335-2-40 certification and installer training.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Refrigerant GWP is the dominant lifecycle issue - R-32 cuts GWP roughly 68% versus R-410A. Daikin has opened key R-32 patents to accelerate industry transition.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.1k/FEU' },
+      industry_kpi: { label: 'Refrigerant Shift', value: 'R-410A to R-32 / R-454B' }
+    },
+    {
+      id: 'h_hvac_2', lat: 32.78, lng: -96.8,
+      hub: 'TEXAS / SOUTHEAST USA', title: 'North American HVAC Manufacturing Base',
+      companies: [
+        { name: 'Trane Technologies', website: 'https://www.tranetechnologies.com/', turnover: '>$1B' },
+        { name: 'Carrier Global', website: 'https://www.carrier.com/', turnover: '>$1B' },
+        { name: 'Lennox International', website: 'https://www.lennox.com/', turnover: '>$1B' },
+        { name: 'Goodman (Daikin Texas Technology Park)', website: 'https://www.goodmanmfg.com/', turnover: '>$1B' }
+      ],
+      desc: 'Domestic residential and light-commercial unitary equipment manufacture. Buy American and IRA 25C/25D incentives make US-built heat pumps commercially advantaged for retrofit programmes.',
+      customs: { hts_code: '8415.10', duty_rate: '0% (Domestic)', compliance_note: 'DOE minimum efficiency standards changed in 2023 to SEER2/HSPF2 with regional variation across North, Southeast, and Southwest. IRA 25C gives up to $2,000 for qualifying heat pumps - equipment must appear on the CEE qualifying list.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Heat-pump electrification is the primary building decarbonisation lever. Cold-climate heat pump performance at -15C is now the key product differentiator.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.7k/Truck' },
+      industry_kpi: { label: 'Efficiency Std', value: 'SEER2 / HSPF2 (2023+)' }
+    },
+    {
+      id: 'h_hvac_3', lat: 31.23, lng: 121.47,
+      hub: 'YANGTZE DELTA, CHINA', title: 'Volume HVAC Components & Compressors',
+      companies: [
+        { name: 'Gree Electric Appliances', website: 'https://www.gree.com/', turnover: '>$1B' },
+        { name: 'Midea Group', website: 'https://www.midea.com/', turnover: '>$1B' },
+        { name: 'GMCC (Meizhi Compressor)', website: 'https://www.gmcc.com/', turnover: '>$1B' },
+        { name: 'Sanhua Intelligent Controls', website: 'https://www.sanhuagroup.com/', turnover: '>$1B' }
+      ],
+      desc: 'Supplies most of the world rotary and scroll compressors, heat exchanger coils, and expansion valves - including to Western brands. The upstream dependency persists even when final assembly is Western.',
+      customs: { hts_code: '8414.30', duty_rate: '0-2.5% MFN + 25% Sec 301', compliance_note: 'Section 301 applies to compressors and most HVAC subassemblies. AHRI certification and UL/ETL listing are required for US market entry regardless of origin - verify the listing covers the exact model, not a similar SKU.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B', sustainability_note: 'Copper and aluminium intensity is high; coil material substitution to all-aluminium is common and affects field serviceability. Verify refrigerant charge and leak-test records.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.9k/FEU' },
+      industry_kpi: { label: 'Compressor Share', value: 'Majority of world output' }
+    }
+  ],
+
+  // 32. WATER TREATMENT & FLUID PURIFICATION
+  water_treatment: [
+    {
+      id: 'h_wat_1', lat: 33.13, lng: -117.16,
+      hub: 'CALIFORNIA / US SOUTHWEST', title: 'Membrane & Desalination Technology Base',
+      companies: [
+        { name: 'DuPont Water Solutions (FilmTec)', website: 'https://www.dupont.com/water.html', turnover: '>$1B' },
+        { name: 'Hydranautics (Nitto)', website: 'https://membranes.com/', turnover: '$100M-$1B' },
+        { name: 'Energy Recovery Inc.', website: 'https://www.energyrecovery.com/', turnover: '$100M-$1B' },
+        { name: 'Xylem Inc.', website: 'https://www.xylem.com/', turnover: '>$1B' }
+      ],
+      desc: 'Core supply of reverse-osmosis membrane elements and energy-recovery devices for seawater desalination. Long-term water scarcity in the Southwest is driving both demand and local capability.',
+      customs: { hts_code: '8421.21', duty_rate: '0% (Domestic) / 0% MFN', compliance_note: 'NSF/ANSI 61 and 372 certification required for drinking-water contact materials. EPA lead-free requirements apply to all wetted components. AWWA standards govern municipal specifications.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Brine discharge management is the main permitting obstacle for desalination projects. Energy-recovery devices cut SWRO specific energy by roughly 60% and are effectively standard now.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.9k/Truck' },
+      industry_kpi: { label: 'SWRO Energy', value: '~3.0-4.0 kWh/m3' }
+    },
+    {
+      id: 'h_wat_2', lat: 32.08, lng: 34.78,
+      hub: 'ISRAEL (TEL AVIV / ASHKELON)', title: 'Desalination & Smart Water Engineering',
+      companies: [
+        { name: 'IDE Technologies', website: 'https://www.ide-tech.com/', turnover: '$100M-$1B' },
+        { name: 'Netafim', website: 'https://www.netafim.com/', turnover: '>$1B' },
+        { name: 'Amiad Water Systems', website: 'https://amiad.com/', turnover: '$100M-$1B' },
+        { name: 'TaKaDu', website: 'https://takadu.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'World reference for large-scale SWRO plant delivery, precision irrigation, and non-revenue-water analytics. Israel recycles a very high share of its wastewater, which is the operating proof point.',
+      customs: { hts_code: '8421.21', duty_rate: '0% (US-Israel FTA)', compliance_note: 'US-Israel FTA duty-free. Water infrastructure projects in many markets require local partner structures and face national-security review for SCADA and control-system content.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A-', sustainability_note: 'Treated-effluent reuse for agriculture is the highest-leverage water strategy globally. Regional political risk affects delivery timelines on export projects.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$3.2k/FEU ex-Haifa' },
+      industry_kpi: { label: 'Wastewater Reuse', value: '~85-90% nationally' }
+    },
+    {
+      id: 'h_wat_3', lat: 51.52, lng: 7.47,
+      hub: 'GERMANY / NORDICS', title: 'European Municipal Water & Process Filtration',
+      companies: [
+        { name: 'Veolia Water Technologies', website: 'https://www.veoliawatertechnologies.com/', turnover: '>$1B' },
+        { name: 'Grundfos', website: 'https://www.grundfos.com/', turnover: '>$1B' },
+        { name: 'Wilo SE', website: 'https://wilo.com/', turnover: '>$1B' },
+        { name: 'Alfa Laval', website: 'https://www.alfalaval.com/', turnover: '>$1B' }
+      ],
+      desc: 'Municipal treatment plant technology, high-efficiency pumps, and process filtration for pharma and food. EU regulation is the strictest globally and drives the technology roadmap.',
+      customs: { hts_code: '8413.70', duty_rate: '0% (Intra-EU) / 0-2.5% MFN', compliance_note: 'EU Drinking Water Directive 2020/2184 sets material and PFAS limits. The recast Urban Wastewater Treatment Directive adds quaternary treatment for micropollutants and extended producer responsibility for pharma and cosmetics - a major new capex driver.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Ecodesign minimum efficiency (MEI) requirements on water pumps are the strictest anywhere. PFAS removal is the fastest-growing treatment segment in Europe.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.5k/FEU' },
+      industry_kpi: { label: 'UWWTD Upgrade', value: 'Quaternary treatment by 2045' }
+    }
+  ],
+
+  // 33. DEFENCE & MILITARY SYSTEMS
+  defense_military: [
+    {
+      id: 'h_def_1', lat: 38.88, lng: -77.1,
+      hub: 'WASHINGTON DC / VIRGINIA CORRIDOR', title: 'US Prime Contractor Base',
+      companies: [
+        { name: 'Lockheed Martin', website: 'https://www.lockheedmartin.com/', turnover: '>$1B' },
+        { name: 'RTX (Raytheon)', website: 'https://www.rtx.com/', turnover: '>$1B' },
+        { name: 'Northrop Grumman', website: 'https://www.northropgrumman.com/', turnover: '>$1B' },
+        { name: 'General Dynamics', website: 'https://www.gd.com/', turnover: '>$1B' },
+        { name: 'BAE Systems Inc.', website: 'https://www.baesystems.com/', turnover: '>$1B' }
+      ],
+      desc: 'Programme management and systems integration centre for US defence procurement. Any supplier entering this chain inherits ITAR, DFARS, and CMMC obligations that dwarf normal commercial compliance.',
+      customs: { hts_code: '9301.90', duty_rate: 'N/A - licence-controlled', compliance_note: 'ITAR (22 CFR 120-130) registration with DDTC required for anyone manufacturing USML items, even without exporting. DFARS 252.225-7014 specialty metals clause restricts steel, titanium, and tungsten origin. CMMC Level 2 certification is now a contract-award gate for CUI handling.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'ESG-screened investors increasingly exclude the sector, affecting supplier financing costs. PFAS in AFFF firefighting foam is a large legacy remediation liability.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$2.8k/Ground (secure transport)' },
+      industry_kpi: { label: 'Compliance Gate', value: 'ITAR + DFARS + CMMC L2' }
+    },
+    {
+      id: 'h_def_2', lat: 51.45, lng: -2.59,
+      hub: 'UK (BRISTOL / BARROW)', title: 'European Defence Engineering Cluster',
+      companies: [
+        { name: 'BAE Systems', website: 'https://www.baesystems.com/', turnover: '>$1B' },
+        { name: 'Babcock International', website: 'https://www.babcockinternational.com/', turnover: '>$1B' },
+        { name: 'Leonardo UK', website: 'https://uk.leonardo.com/', turnover: '>$1B' },
+        { name: 'Thales UK', website: 'https://www.thalesgroup.com/', turnover: '>$1B' }
+      ],
+      desc: 'Submarine construction, combat aircraft, and naval systems engineering. Central to AUKUS Pillar 1 and GCAP, which are reshaping allied defence industrial flows.',
+      customs: { hts_code: '8906.10', duty_rate: 'N/A - licence-controlled', compliance_note: 'UK Export Control Act licensing via ECJU. AUKUS licence-free environment (from 2024) removes most ITAR barriers between US, UK, and Australia for eligible entities - but only for listed, enrolled companies. Verify enrolment before assuming exemption.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Skilled-labour shortage in nuclear-qualified welding and systems engineering is the binding constraint on UK naval throughput, not materials.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.4k/Sea (controlled cargo)' },
+      industry_kpi: { label: 'AUKUS Status', value: 'Licence-free for enrolled entities' }
+    },
+    {
+      id: 'h_def_3', lat: 37.57, lng: 126.98,
+      hub: 'SOUTH KOREA (CHANGWON / SEOUL)', title: 'Fast-Delivery Land Systems & Munitions',
+      companies: [
+        { name: 'Hanwha Aerospace', website: 'https://www.hanwhaaerospace.com/', turnover: '>$1B' },
+        { name: 'Hyundai Rotem', website: 'https://www.hyundai-rotem.co.kr/', turnover: '>$1B' },
+        { name: 'LIG Nex1', website: 'https://www.lignex1.com/', turnover: '>$1B' },
+        { name: 'Poongsan Corporation', website: 'https://www.poongsan.co.kr/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Emerged as the fastest-delivering allied source for artillery, armour, and ammunition. Poland major orders demonstrated delivery timelines that Western European primes could not match.',
+      customs: { hts_code: '9306.30', duty_rate: 'N/A - licence-controlled', compliance_note: 'Korean DTCC export approval required. US-origin content in Korean systems still triggers ITAR re-export licensing - map the US content percentage early, as it is the usual cause of late-stage deal collapse.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B+', sustainability_note: 'Energetic materials manufacture carries significant site safety and environmental burden. Korean producers hold large standing capacity, which is unusual post-Cold-War.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$5.2k/Sea (Class 1 explosives)' },
+      industry_kpi: { label: 'Delivery Speed', value: 'Months vs years for peers' }
+    }
+  ],
+
+  // 34. MARITIME & SHIPBUILDING
+  maritime: [
+    {
+      id: 'h_mar_1', lat: 35.54, lng: 129.31,
+      hub: 'ULSAN / GEOJE, SOUTH KOREA', title: 'High-Value Shipbuilding Core',
+      companies: [
+        { name: 'HD Hyundai Heavy Industries', website: 'https://www.hd.com/', turnover: '>$1B' },
+        { name: 'Hanwha Ocean', website: 'https://www.hanwhaocean.com/', turnover: '>$1B' },
+        { name: 'Samsung Heavy Industries', website: 'https://www.samsungshi.com/', turnover: '>$1B' },
+        { name: 'HSD Engine', website: 'https://www.hsdengine.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Dominant builder of LNG carriers, large containerships, and dual-fuel tonnage. Effectively the only yards with proven membrane-tank LNG capability at scale, and berths are booked years out.',
+      customs: { hts_code: '8901.20', duty_rate: '0% (vessels) / Jones Act bars US trade', compliance_note: 'Newbuild vessels are not tariffed conventionally, but the Jones Act bars foreign-built ships from US domestic trades. IMO Tier III NOx and EEXI/CII compliance shape specification. USTR Section 301 action on Chinese-built vessels raises the value of Korean berths.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B+', sustainability_note: 'IMO 2050 net-zero trajectory is driving methanol and ammonia dual-fuel newbuilds. Yard subcontractor labour conditions, including migrant workers, are the main social-audit area.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: 'Vessel delivery ex-yard' },
+      industry_kpi: { label: 'Berth Availability', value: 'Booked into 2028-29' }
+    },
+    {
+      id: 'h_mar_2', lat: 31.35, lng: 121.63,
+      hub: 'SHANGHAI / JIANGSU, CHINA', title: 'Volume Shipbuilding & Container Equipment',
+      companies: [
+        { name: 'China State Shipbuilding (CSSC)', website: 'https://www.cssc.net.cn/', turnover: '>$1B' },
+        { name: 'Yangzijiang Shipbuilding', website: 'https://www.yzjship.com/', turnover: '>$1B' },
+        { name: 'CIMC (containers)', website: 'https://www.cimc.com/', turnover: '>$1B' },
+        { name: 'ZPMC (port cranes)', website: 'https://www.zpmc.com/', turnover: '>$1B' }
+      ],
+      desc: 'Holds over half of global newbuild orderbook plus near-total dominance of shipping container and ship-to-shore crane manufacture. The concentration in port cranes has become a national-security issue in the US.',
+      customs: { hts_code: '8609.00', duty_rate: '0% MFN + 25% Sec 301 (containers)', compliance_note: 'USTR Section 301 action targets Chinese-built vessels, cranes, and containers with port-entry fees and tariffs. ZPMC crane cybersecurity concerns have prompted US port operators to require inspection and network isolation.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B-', sustainability_note: 'Steel-intensive with a coal-heavy grid. Ship recycling at end of life remains largely in South Asian beaching yards - require Hong Kong Convention compliant recycling clauses in vessel contracts.' },
+      logistics: { port_wait_days: 4, freight_cost_estimate: 'Project cargo / vessel delivery' },
+      industry_kpi: { label: 'Orderbook Share', value: '>50% of global newbuilds' }
+    },
+    {
+      id: 'h_mar_3', lat: 55.68, lng: 12.57,
+      hub: 'DENMARK / NORTHERN EUROPE', title: 'Marine Propulsion & Ship Systems',
+      companies: [
+        { name: 'MAN Energy Solutions', website: 'https://www.man-es.com/', turnover: '>$1B' },
+        { name: 'Wartsila', website: 'https://www.wartsila.com/', turnover: '>$1B' },
+        { name: 'Alfa Laval Marine', website: 'https://www.alfalaval.com/', turnover: '>$1B' },
+        { name: 'Kongsberg Maritime', website: 'https://www.kongsberg.com/', turnover: '>$1B' }
+      ],
+      desc: 'Design authority for large two-stroke marine engines and the systems layer of modern ships - scrubbers, ballast water treatment, dynamic positioning. Licences designs to Asian yards for local build.',
+      customs: { hts_code: '8408.10', duty_rate: '0% (Intra-EU) / 0-2.5% MFN', compliance_note: 'IMO ballast water management convention and Tier III NOx compliance drive equipment selection. EU ETS now covers maritime emissions, making fuel-efficiency documentation commercially material for charterers.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Methanol and ammonia dual-fuel engine development is concentrated here. Retrofit demand for EU ETS compliance is a growing revenue stream.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$28k+/engine module (project cargo)' },
+      industry_kpi: { label: 'Two-stroke Design', value: 'MAN B&W ~80% of licensed builds' }
+    }
+  ],
+
+  // 35. RAILWAY & RAIL TRANSIT
+  railway: [
+    {
+      id: 'h_rail_1', lat: 43.85, lng: 125.32,
+      hub: 'CHANGCHUN / QINGDAO, CHINA', title: 'World Largest Rolling Stock Manufacturer',
+      companies: [
+        { name: 'CRRC Corporation', website: 'https://www.crrcgc.cc/', turnover: '>$1B' },
+        { name: 'CRRC Sifang', website: 'https://www.crrcgc.cc/sf', turnover: '>$1B' },
+        { name: 'CRRC Zhuzhou (traction)', website: 'https://www.crrcgc.cc/zzcy', turnover: '>$1B' }
+      ],
+      desc: 'CRRC builds more rolling stock than the rest of the world combined, spanning high-speed trainsets, metro cars, and locomotives. Effectively excluded from the US market by statute.',
+      customs: { hts_code: '8603.10', duty_rate: 'Excluded from US federal-funded transit', compliance_note: 'Section 7613 of the FY2020 NDAA bars federal transit funding for rolling stock from Chinese state-owned or state-controlled manufacturers. FRA and Buy America (70% domestic content plus US final assembly) apply to all FTA-funded procurement.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'B', sustainability_note: 'Rail itself is the lowest-carbon land mode. Manufacturing carbon is dominated by steel and aluminium inputs on a coal-heavy grid.' },
+      logistics: { port_wait_days: 6, freight_cost_estimate: 'Project cargo / breakbulk' },
+      industry_kpi: { label: 'Global Share', value: 'Larger than all peers combined' }
+    },
+    {
+      id: 'h_rail_2', lat: 48.14, lng: 11.58,
+      hub: 'GERMANY / FRANCE / SWITZERLAND', title: 'European Rail Systems & Signalling',
+      companies: [
+        { name: 'Siemens Mobility', website: 'https://www.mobility.siemens.com/', turnover: '>$1B' },
+        { name: 'Alstom', website: 'https://www.alstom.com/', turnover: '>$1B' },
+        { name: 'Stadler Rail', website: 'https://www.stadlerrail.com/', turnover: '>$1B' },
+        { name: 'Knorr-Bremse Rail', website: 'https://www.knorr-bremse.com/', turnover: '>$1B' }
+      ],
+      desc: 'Technology leadership in high-speed trainsets, ETCS signalling, and braking systems. Knorr-Bremse and Wabtec between them hold most of world rail braking - a genuine duopoly chokepoint.',
+      customs: { hts_code: '8607.21', duty_rate: '0% (Intra-EU) / 2.5-3.7% MFN', compliance_note: 'EU TSI (Technical Specifications for Interoperability) conformity plus ERA authorisation are required for network access. ETCS Level 2 deployment is mandatory on TEN-T corridors, creating a long retrofit pipeline.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Hydrogen and battery-electric regional trainsets are displacing diesel on non-electrified lines. Strong circular-economy commitments on vehicle end of life.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$4.8k/Rail-borne module' },
+      industry_kpi: { label: 'Vehicle Life', value: '30-40 Years design life' }
+    },
+    {
+      id: 'h_rail_3', lat: 40.44, lng: -79.99,
+      hub: 'PITTSBURGH / US MIDWEST', title: 'North American Freight Rail Base',
+      companies: [
+        { name: 'Wabtec Corporation', website: 'https://www.wabteccorp.com/', turnover: '>$1B' },
+        { name: 'Progress Rail (Caterpillar)', website: 'https://www.progressrail.com/', turnover: '>$1B' },
+        { name: 'Greenbrier Companies', website: 'https://www.gbrx.com/', turnover: '>$1B' },
+        { name: 'Trinity Industries', website: 'https://www.trin.net/', turnover: '>$1B' }
+      ],
+      desc: 'Heavy-haul freight locomotives, freight cars, and Positive Train Control systems. Buy America compliant and the only practical route for FTA- or FRA-funded procurement.',
+      customs: { hts_code: '8602.10', duty_rate: '0% (Domestic)', compliance_note: 'Buy America requires 70% domestic content and US final assembly for FTA-funded rolling stock. AAR interchange rules govern freight car design and certification; FRA regulations cover safety appliances and brake systems.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'Battery-electric and hydrogen line-haul locomotives are in pilot deployment. Rail moves freight at roughly a quarter of the emissions per tonne-mile of trucking.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$3.1k/Rail move' },
+      industry_kpi: { label: 'Buy America', value: '70% domestic content' }
+    }
+  ],
+
+  // 36. ROBOTICS & INDUSTRIAL AUTOMATION
+  robotics_automation: [
+    {
+      id: 'h_rob_1', lat: 35.55, lng: 138.8,
+      hub: 'JAPAN (YAMANASHI / AICHI)', title: 'Global Industrial Robot Core',
+      companies: [
+        { name: 'FANUC Corporation', website: 'https://www.fanuc.co.jp/', turnover: '>$1B' },
+        { name: 'Yaskawa Electric', website: 'https://www.yaskawa.co.jp/', turnover: '>$1B' },
+        { name: 'Kawasaki Robotics', website: 'https://kawasakirobotics.com/', turnover: '>$1B' },
+        { name: 'Harmonic Drive Systems', website: 'https://www.hds.co.jp/', turnover: '$100M-$1B' },
+        { name: 'Nabtesco', website: 'https://www.nabtesco.com/', turnover: '>$1B' }
+      ],
+      desc: 'Japan supplies roughly half of world industrial robots and, more critically, almost all precision cycloidal and strain-wave gearboxes. Nabtesco and Harmonic Drive are the real chokepoint - not the robot brands.',
+      customs: { hts_code: '8479.50', duty_rate: '0% (CPTPP) / 0-2.5% MFN', compliance_note: 'ISO 10218 and ISO/TS 15066 (collaborative robots) govern safety certification. Japanese METI export controls cover high-precision multi-axis machines that fall under Wassenaar dual-use thresholds.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A+', sustainability_note: 'Long service life and rebuild programmes make robots one of the more circular categories of capital equipment. Energy consumption is modest relative to displaced processes.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.3k/FEU' },
+      industry_kpi: { label: 'Reducer Lead', value: '30-52 Weeks in tight cycles' }
+    },
+    {
+      id: 'h_rob_2', lat: 48.79, lng: 9.18,
+      hub: 'GERMANY (STUTTGART / AUGSBURG)', title: 'European Automation & Systems Integration',
+      companies: [
+        { name: 'KUKA AG', website: 'https://www.kuka.com/', turnover: '>$1B' },
+        { name: 'Siemens Digital Industries', website: 'https://www.siemens.com/', turnover: '>$1B' },
+        { name: 'Festo', website: 'https://www.festo.com/', turnover: '>$1B' },
+        { name: 'SICK AG', website: 'https://www.sick.com/', turnover: '>$1B' },
+        { name: 'Beckhoff Automation', website: 'https://www.beckhoff.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Deepest bench for line integration, safety PLCs, industrial sensing, and pneumatics. The default choice where functional safety certification and OEM line qualification matter more than unit price.',
+      customs: { hts_code: '8537.10', duty_rate: '0% (Intra-EU) / 2.7% MFN', compliance_note: 'EU Machinery Regulation 2023/1230 replaces the Machinery Directive from 2027 and adds explicit cybersecurity and AI-related requirements. CE marking with a notified body is required for safety components.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Energy-efficiency optimisation is a core selling point. Note that KUKA is Midea-owned, which triggers foreign-ownership review in some defence and critical-infrastructure procurements.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.7k/Truck intra-EU' },
+      industry_kpi: { label: 'Safety Standard', value: 'ISO 13849 PLd / SIL2' }
+    },
+    {
+      id: 'h_rob_3', lat: 37.39, lng: -121.98,
+      hub: 'SILICON VALLEY / BOSTON, USA', title: 'Autonomous Mobile Robots & AI Robotics',
+      companies: [
+        { name: 'Boston Dynamics', website: 'https://www.bostondynamics.com/', turnover: '$100M-$1B' },
+        { name: 'Symbotic', website: 'https://www.symbotic.com/', turnover: '>$1B' },
+        { name: 'Zebra Technologies / Fetch', website: 'https://www.zebra.com/', turnover: '>$1B' },
+        { name: 'Locus Robotics', website: 'https://locusrobotics.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Leadership in warehouse AMRs, perception software, and general-purpose robotics. Hardware is typically Asia-manufactured; the value and the IP sit in the US software and systems layer.',
+      customs: { hts_code: '8428.90', duty_rate: '0% (Domestic) / component tariffs apply', compliance_note: 'ANSI/RIA R15.08 governs industrial mobile robot safety. Note that most AMR subassemblies - motors, LiDAR, batteries - remain China-origin and carry Section 301 exposure even when final assembly is domestic.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'Labour-displacement scrutiny is the main social consideration; workforce transition commitments increasingly appear in large deployment contracts.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$2.2k/Ground' },
+      industry_kpi: { label: 'AMR Safety', value: 'ANSI/RIA R15.08' }
+    }
+  ],
+
+  // 37. SCIENTIFIC INSTRUMENTS & METROLOGY
+  instruments_scientific: [
+    {
+      id: 'h_ins_1', lat: 42.36, lng: -71.06,
+      hub: 'BOSTON / NEW ENGLAND, USA', title: 'Life Science Instrumentation Cluster',
+      companies: [
+        { name: 'Thermo Fisher Scientific', website: 'https://www.thermofisher.com/', turnover: '>$1B' },
+        { name: 'Waters Corporation', website: 'https://www.waters.com/', turnover: '>$1B' },
+        { name: 'Bruker Corporation', website: 'https://www.bruker.com/', turnover: '>$1B' },
+        { name: '908 Devices', website: 'https://908devices.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'World centre for mass spectrometry, chromatography, and life-science analytics, sitting next to the largest concentration of biotech end users. Consumables and columns are the recurring-revenue lock-in.',
+      customs: { hts_code: '9027.80', duty_rate: '0% (Domestic) / 0-1.7% MFN', compliance_note: 'Instruments used in GxP environments require IQ/OQ/PQ qualification documentation. Some high-resolution mass spectrometers and analytical equipment fall under EAR dual-use controls for chemical and biological detection capability.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A', sustainability_note: 'Helium dependence for GC carrier gas and NMR cryogens is a genuine supply risk - qualify hydrogen carrier alternatives where the method allows.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$3.4k/Air (sensitive instrument)' },
+      industry_kpi: { label: 'Instrument Lead', value: '16-30 Weeks' }
+    },
+    {
+      id: 'h_ins_2', lat: 48.14, lng: 11.58,
+      hub: 'GERMANY (JENA / OBERKOCHEN)', title: 'Optics & Precision Metrology Base',
+      companies: [
+        { name: 'Carl Zeiss', website: 'https://www.zeiss.com/', turnover: '>$1B' },
+        { name: 'Bruker Nano (Berlin)', website: 'https://www.bruker.com/', turnover: '>$1B' },
+        { name: 'Jenoptik', website: 'https://www.jenoptik.com/', turnover: '$100M-$1B' },
+        { name: 'SCHOTT AG', website: 'https://www.schott.com/', turnover: '>$1B' }
+      ],
+      desc: 'The world reference for precision optics, coordinate measuring machines, and electron microscopy. Zeiss SMT optics for EUV lithography are the single most irreplaceable component in semiconductor manufacturing.',
+      customs: { hts_code: '9031.49', duty_rate: '0% (Intra-EU) / 1.7-3.5% MFN', compliance_note: 'High-precision CMMs above defined accuracy thresholds are Wassenaar dual-use controlled (ECCN 2B006). EU dual-use Regulation 2021/821 licensing applies; expect scrutiny on China-bound metrology equipment.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Rare-earth-doped optical glass has upstream China exposure. Zeiss and SCHOTT both operate long-life service and refurbishment programmes.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$5.6k/Air (vibration-controlled)' },
+      industry_kpi: { label: 'CMM Accuracy', value: 'Sub-micron, controlled export' }
+    },
+    {
+      id: 'h_ins_3', lat: 35.63, lng: 139.73,
+      hub: 'JAPAN (TOKYO / KYOTO)', title: 'Analytical & Electron Optics Instruments',
+      companies: [
+        { name: 'Shimadzu Corporation', website: 'https://www.shimadzu.com/', turnover: '>$1B' },
+        { name: 'JEOL Ltd.', website: 'https://www.jeol.com/', turnover: '$100M-$1B' },
+        { name: 'Horiba', website: 'https://www.horiba.com/', turnover: '>$1B' },
+        { name: 'Hitachi High-Tech', website: 'https://www.hitachi-hightech.com/', turnover: '>$1B' }
+      ],
+      desc: 'Strong across analytical instruments, electron microscopy, and semiconductor metrology. Horiba holds a dominant position in mass flow controllers, a component with no easy substitution in fab tools.',
+      customs: { hts_code: '9027.30', duty_rate: '0% (CPTPP) / 0-1.7% MFN', compliance_note: 'METI export licensing applies to electron microscopes and semiconductor metrology above specified resolution thresholds. End-use statements required for China-bound analytical equipment.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'A+', sustainability_note: 'Long product lifecycles with strong refurbishment markets. Instrument service networks in emerging markets are the practical constraint on total cost of ownership.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$5.1k/Air' },
+      industry_kpi: { label: 'MFC Share', value: 'Horiba ~50%+ of fab MFCs' }
+    }
+  ],
+
+  // 38. GLASS & TECHNICAL CERAMICS
+  glass_ceramics: [
+    {
+      id: 'h_gc_1', lat: 42.14, lng: -77.05,
+      hub: 'CORNING, NEW YORK, USA', title: 'Specialty Glass Technology Core',
+      companies: [
+        { name: 'Corning Incorporated', website: 'https://www.corning.com/', turnover: '>$1B' },
+        { name: 'CoorsTek', website: 'https://www.coorstek.com/', turnover: '>$1B' },
+        { name: 'Ferro / Vibrantz', website: 'https://www.vibrantz.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Corning holds the core IP in cover glass (Gorilla), optical fibre preform, pharmaceutical glass, and ceramic substrates for catalytic converters. Few of these have any qualified alternate source.',
+      customs: { hts_code: '7007.19', duty_rate: '0% (Domestic) / 4.9-5.0% MFN', compliance_note: 'Pharmaceutical primary packaging glass must meet USP <660> Type I borosilicate requirements and undergo extractables/leachables studies - supplier changes here trigger regulatory filings, not just PPAP.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'A-', sustainability_note: 'Glass melting is among the most energy-intensive industrial processes. Electric and hydrogen-fired furnace pilots are underway but capex per furnace is very large.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$2.1k/Truck (fragile packing)' },
+      industry_kpi: { label: 'Furnace Campaign', value: '10-15 Years between rebuilds' }
+    },
+    {
+      id: 'h_gc_2', lat: 48.86, lng: 2.35,
+      hub: 'FRANCE / GERMANY GLASS BELT', title: 'European Flat & Container Glass',
+      companies: [
+        { name: 'Saint-Gobain', website: 'https://www.saint-gobain.com/', turnover: '>$1B' },
+        { name: 'SCHOTT AG', website: 'https://www.schott.com/', turnover: '>$1B' },
+        { name: 'Verallia', website: 'https://www.verallia.com/', turnover: '>$1B' },
+        { name: 'Gerresheimer', website: 'https://www.gerresheimer.com/', turnover: '>$1B' }
+      ],
+      desc: 'Float glass, pharmaceutical vials and syringes, and premium container glass. Gerresheimer and SCHOTT together supply most of world injectable-drug primary packaging.',
+      customs: { hts_code: '7010.90', duty_rate: '0% (Intra-EU) / 5% MFN', compliance_note: 'CBAM will price embedded carbon on glass imports into the EU from 2026, materially changing the landed cost of non-EU glass. EU pharmacopoeia standards apply to all parenteral packaging.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'A', sustainability_note: 'Cullet (recycled glass) input can cut furnace energy by roughly 25% - verify the actual cullet ratio, as it varies widely by plant and colour.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$3.0k/FEU (weight-limited)' },
+      industry_kpi: { label: 'Cullet Ratio', value: '40-90% depending on colour' }
+    },
+    {
+      id: 'h_gc_3', lat: 34.97, lng: 136.62,
+      hub: 'JAPAN (NAGOYA / SETO)', title: 'Advanced Technical Ceramics Base',
+      companies: [
+        { name: 'Kyocera Corporation', website: 'https://global.kyocera.com/', turnover: '>$1B' },
+        { name: 'NGK Insulators', website: 'https://www.ngk-insulators.com/', turnover: '>$1B' },
+        { name: 'Murata Manufacturing', website: 'https://www.murata.com/', turnover: '>$1B' },
+        { name: 'AGC Inc.', website: 'https://www.agc.com/', turnover: '>$1B' }
+      ],
+      desc: 'World leadership in technical ceramics: MLCC dielectrics, semiconductor process components, ceramic substrates, and automotive sensors. Murata alone supplies a large share of global MLCC demand.',
+      customs: { hts_code: '6909.19', duty_rate: '0% (CPTPP) / 0-4% MFN', compliance_note: 'MLCCs and ceramic packages for semiconductor use can fall under export controls when destined for advanced-node fabs. Automotive-grade parts require AEC-Q200 qualification.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A+', sustainability_note: 'MLCC production depends on palladium and nickel; palladium has Russian supply exposure that has not been fully resolved. High-purity alumina supply is another concentrated input.' },
+      logistics: { port_wait_days: 3, freight_cost_estimate: '$4.0k/Air (ESD-protected)' },
+      industry_kpi: { label: 'MLCC Lead Time', value: '12-40 Weeks by cycle' }
+    }
+  ],
+
+  // 39. PAINTS, COATINGS & SURFACE TREATMENT
+  paint_coatings: [
+    {
+      id: 'h_pc_1', lat: 41.5, lng: -81.7,
+      hub: 'CLEVELAND / PITTSBURGH, USA', title: 'North American Coatings Majors',
+      companies: [
+        { name: 'Sherwin-Williams', website: 'https://www.sherwin-williams.com/', turnover: '>$1B' },
+        { name: 'PPG Industries', website: 'https://www.ppg.com/', turnover: '>$1B' },
+        { name: 'Axalta Coating Systems', website: 'https://www.axalta.com/', turnover: '>$1B' },
+        { name: 'RPM International', website: 'https://www.rpminc.com/', turnover: '>$1B' }
+      ],
+      desc: 'Global headquarters cluster for architectural, automotive OEM, and industrial coatings. Closest technical support for OEM colour matching and e-coat line qualification in North America.',
+      customs: { hts_code: '3208.90', duty_rate: '0% (Domestic) / 3.7% MFN', compliance_note: 'EPA Method 24 VOC limits vary by coating category and by state (California SCAQMD is strictest). TSCA reporting applies to new chemical substances. Lead-based paint remains banned for consumer use under 16 CFR 1303.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A-', sustainability_note: 'PFAS-free formulation is the dominant reformulation programme across the industry. Waterborne and powder systems continue to displace solvent-borne on regulatory pressure.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.5k/Truck (Class 3 flammable)' },
+      industry_kpi: { label: 'Colour Match', value: 'Delta E < 1.0 OEM standard' }
+    },
+    {
+      id: 'h_pc_2', lat: 52.37, lng: 4.9,
+      hub: 'NETHERLANDS / GERMANY', title: 'European Coatings & Resin Technology',
+      companies: [
+        { name: 'AkzoNobel', website: 'https://www.akzonobel.com/', turnover: '>$1B' },
+        { name: 'BASF Coatings', website: 'https://www.basf-coatings.com/', turnover: '>$1B' },
+        { name: 'Covestro', website: 'https://www.covestro.com/', turnover: '>$1B' },
+        { name: 'Beckers Group', website: 'https://www.beckers-group.com/', turnover: '$100M-$1B' }
+      ],
+      desc: 'Leadership in high-performance industrial, marine, and coil coatings plus the polyurethane and polyester resin chemistry beneath them. Sets the technical direction for low-VOC systems worldwide.',
+      customs: { hts_code: '3209.10', duty_rate: '0% (Intra-EU) / 3.7% MFN', compliance_note: 'EU Directive 2004/42/EC caps VOC content by product category. REACH authorisation is closing off chromate corrosion inhibitors, and the proposed universal PFAS restriction would affect fluoropolymer topcoats - track both dossiers.' },
+      esg: { carbon_footprint: 'Medium', ethical_rating: 'A', sustainability_note: 'Biocidal Products Regulation constrains antifouling marine paints. Bio-based resin content is a growing differentiator in EU tenders.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.9k/FEU (DG Class 3)' },
+      industry_kpi: { label: 'VOC Limit', value: '<140 g/L most EU categories' }
+    },
+    {
+      id: 'h_pc_3', lat: 31.23, lng: 121.47,
+      hub: 'YANGTZE DELTA, CHINA', title: 'Volume Coatings & Pigment Supply',
+      companies: [
+        { name: 'Nippon Paint China', website: 'https://www.nipponpaint.com.cn/', turnover: '>$1B' },
+        { name: 'Carpoly Chemical', website: 'https://www.carpoly.com/', turnover: '$100M-$1B' },
+        { name: 'Lomon Billions (TiO2)', website: 'https://www.lomonbillions.com/', turnover: '>$1B' },
+        { name: 'Sanhuan Pigment', website: 'https://www.sanhuanpigment.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Largest volume base for architectural coatings and, critically, titanium dioxide pigment - the single largest cost input in most white and light-coloured paint formulations.',
+      customs: { hts_code: '3206.11', duty_rate: '6% MFN + 25% Sec 301 (TiO2)', compliance_note: 'EU and US both have active anti-dumping investigations on Chinese TiO2; the EU imposed provisional duties in 2024. Section 301 applies to coatings and pigments - model landed cost with both AD and 301 before committing volume.' },
+      esg: { carbon_footprint: 'High', ethical_rating: 'B-', sustainability_note: 'Sulphate-route TiO2 production generates large volumes of acidic waste. The EU has classified inhalable TiO2 powder as a suspected carcinogen, affecting handling and labelling obligations.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$3.5k/FEU' },
+      industry_kpi: { label: 'TiO2 Content', value: '~20-25% of paint cost' }
+    }
+  ],
+
+  // 40. NUTRACEUTICALS & DIETARY SUPPLEMENTS
+  nutraceuticals: [
+    {
+      id: 'h_nut_1', lat: 33.68, lng: -117.83,
+      hub: 'SOUTHERN CALIFORNIA / UTAH, USA', title: 'North American Supplement Manufacturing',
+      companies: [
+        { name: 'Nutraceutical International', website: 'https://www.nutraceutical.com/', turnover: '$100M-$1B' },
+        { name: 'NOW Foods', website: 'https://www.nowfoods.com/', turnover: '$100M-$1B' },
+        { name: 'Thorne HealthTech', website: 'https://www.thorne.com/', turnover: '$100M-$1B' },
+        { name: 'Nutrascience Labs', website: 'https://www.nutrasciencelabs.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Dense cluster of cGMP contract manufacturers for capsules, tablets, powders, and gummies. Utah in particular hosts a disproportionate share of US supplement contract manufacturing capacity.',
+      customs: { hts_code: '2106.90', duty_rate: '0-6.4% MFN (varies by composition)', compliance_note: 'FDA 21 CFR Part 111 cGMP for dietary supplements applies to every facility. New Dietary Ingredient (NDI) notification required for ingredients not marketed before 1994. Structure/function claims need substantiation and an FDA disclaimer; disease claims are prohibited.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'B+', sustainability_note: 'Adulteration and identity fraud in botanical raw materials is the dominant quality risk. Require HPTLC or DNA identity testing on incoming botanicals, not just a supplier certificate of analysis.' },
+      logistics: { port_wait_days: 0, freight_cost_estimate: '$1.5k/Truck' },
+      industry_kpi: { label: 'Co-man Lead', value: '10-16 Weeks incl. stability' }
+    },
+    {
+      id: 'h_nut_2', lat: 51.44, lng: 5.48,
+      hub: 'NETHERLANDS / SWITZERLAND', title: 'Premium Ingredient & Vitamin Supply',
+      companies: [
+        { name: 'dsm-firmenich', website: 'https://www.dsm-firmenich.com/', turnover: '>$1B' },
+        { name: 'Lonza Capsules & Health Ingredients', website: 'https://www.lonza.com/', turnover: '>$1B' },
+        { name: 'Glanbia Nutritionals', website: 'https://www.glanbianutritionals.com/', turnover: '>$1B' },
+        { name: 'BASF Nutrition & Health', website: 'https://www.basf.com/', turnover: '>$1B' }
+      ],
+      desc: 'Source of branded, clinically substantiated ingredients and pharmaceutical-grade vitamins. Lonza Capsugel is the dominant supplier of two-piece capsules worldwide.',
+      customs: { hts_code: '2936.29', duty_rate: '0% (Intra-EU) / 0-6.4% MFN', compliance_note: 'EU Novel Food Regulation 2015/2283 requires pre-market authorisation for ingredients without significant EU consumption history before 1997 - this is a multi-year process. EFSA health claim authorisation is separate and equally slow.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'AA', sustainability_note: 'Algal-derived omega-3 is displacing fish oil on both sustainability and purity grounds. Fermentation-derived vitamins reduce petrochemical route dependence.' },
+      logistics: { port_wait_days: 2, freight_cost_estimate: '$2.8k/FEU' },
+      industry_kpi: { label: 'Novel Food Auth', value: '18-36 Months EU' }
+    },
+    {
+      id: 'h_nut_3', lat: 19.08, lng: 72.88,
+      hub: 'INDIA (MUMBAI / HYDERABAD)', title: 'Botanical Extracts & Bulk Nutraceutical Base',
+      companies: [
+        { name: 'Sami-Sabinsa Group', website: 'https://www.sabinsa.com/', turnover: '$100M-$1B' },
+        { name: 'OmniActive Health Technologies', website: 'https://www.omniactives.com/', turnover: '$100M-$1B' },
+        { name: 'Arjuna Natural', website: 'https://www.arjunanatural.com/', turnover: '$10M-$100M' },
+        { name: 'Vidya Herbs', website: 'https://www.vidyaherbs.com/', turnover: '$10M-$100M' }
+      ],
+      desc: 'Primary global source of standardised botanical extracts - curcumin, ashwagandha, boswellia, lutein - and bulk amino acids. Cost advantage is large but identity and heavy-metal testing is non-negotiable.',
+      customs: { hts_code: '1302.19', duty_rate: '0-3.2% MFN', compliance_note: 'FDA has issued import alerts against specific Indian botanical suppliers for adulteration and cGMP failures - check the import alert database before qualifying. Heavy metals (lead, arsenic, cadmium, mercury) and pesticide residue testing per USP <2232> is essential on every lot.' },
+      esg: { carbon_footprint: 'Low', ethical_rating: 'B', sustainability_note: 'Wild-harvest pressure on several Ayurvedic botanicals raises CITES and sustainability questions. Prefer cultivated, traceable supply chains with farm-level documentation.' },
+      logistics: { port_wait_days: 5, freight_cost_estimate: '$2.9k/FEU ex-Nhava Sheva' },
+      industry_kpi: { label: 'Lot Testing', value: 'Identity + heavy metals per lot' }
+    }
   ]
+
 }
 
 // ============================================================
@@ -1213,6 +2522,317 @@ export function categorizeQuery(query) {
   // ─────────────────────────────────────────────────────────────────────────
   // MAIN PRIORITY CHECKS
   // ─────────────────────────────────────────────────────────────────────────
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // EXPANSION CATEGORIES (16–40)
+  // These fire BEFORE the legacy Priority 1–18 blocks because the legacy
+  // blocks use broad single words ('battery', 'glass', 'pump', 'engine',
+  // 'paper') that would otherwise swallow every one of these queries.
+  // Every keyword below is a compound term — bare substrings are avoided so
+  // that existing routing for the original 15 categories is preserved.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // X1: Semiconductor manufacturing & materials
+  //     (before electronics catches 'wafer' / 'chip')
+  if (match([
+    'silicon wafer', 'epitaxial wafer', '300mm wafer', '200mm wafer', 'wafer fab',
+    'photoresist', 'euv', 'euv lithography', 'duv lithography', 'immersion lithography',
+    'photomask', 'reticle', 'cmp slurry', 'chemical mechanical planarization',
+    'sputtering target', 'ion implant', 'atomic layer deposition', 'plasma etch',
+    'abf substrate', 'ic substrate', 'leadframe', 'die attach', 'wire bond',
+    'wafer probe', 'osat', 'advanced packaging', 'cowos', 'chiplet',
+    'foundry', 'semiconductor foundry', 'semiconductor equipment', 'fab equipment',
+    'semiconductor grade', 'high purity gas', 'ultrapure water fab',
+    'polysilicon', 'gallium nitride wafer', 'silicon carbide wafer',
+    'node 3nm', '3nm', '2nm', '5nm', '7nm'
+  ])) return 'semiconductor'
+
+  // X2: EV battery & cell supply chain
+  //     (before electronics catches 'battery' / 'battery cell')
+  if (match([
+    'ev battery', 'traction battery', 'battery gigafactory', 'gigafactory',
+    'cathode active material', 'anode material', 'anode graphite', 'synthetic graphite',
+    'pcam', 'precursor cathode', 'nmc cathode', 'ncm cathode', 'nca cathode',
+    'lfp cell', 'lfp cathode', 'prismatic cell', 'pouch cell', 'cylindrical cell',
+    '4680 cell', '21700 cell', '18650 cell', 'cell to pack', 'cell-to-pack',
+    'battery electrolyte', 'electrolyte salt', 'lipf6', 'battery separator',
+    'solid state battery', 'battery module ev', 'battery pack ev',
+    'battery passport', 'battery recycling', 'black mass',
+    'bms', 'battery management system'
+  ])) return 'ev_battery'
+
+  // X3: Renewable energy equipment
+  //     (before electronics 'panel'/'inverter' and machinery 'wind turbine')
+  if (match([
+    'solar panel', 'solar module', 'pv module', 'photovoltaic', 'solar cell',
+    'solar farm', 'solar inverter', 'string inverter', 'microinverter',
+    'solar tracker', 'solar mounting', 'bifacial module', 'cdte module',
+    'perc cell', 'topcon cell', 'heterojunction cell',
+    'wind turbine', 'turbine blade', 'wind blade', 'nacelle', 'monopile',
+    'offshore wind', 'onshore wind', 'wind farm',
+    'electrolyser', 'electrolyzer', 'green hydrogen', 'fuel cell stack',
+    'battery energy storage', 'grid scale storage', 'grid storage', 'utility scale storage',
+    'renewable energy', 'geothermal plant', 'hydropower turbine'
+  ])) return 'renewable_energy'
+
+  // X4: Aerospace & defence structures
+  if (match([
+    'aerospace', 'aircraft part', 'airframe', 'aerostructure', 'fuselage',
+    'wing box', 'wing spar', 'landing gear', 'aircraft engine', 'jet engine',
+    'turbofan', 'turboprop', 'apu aircraft', 'avionics', 'flight control system',
+    'as9100', 'nadcap', 'aircraft fastener', 'aerospace fastener',
+    'aerospace composite', 'cfrp prepreg', 'aerospace prepreg', 'honeycomb core',
+    'satellite component', 'spacecraft', 'launch vehicle', 'rocket engine',
+    'aircraft interior', 'cabin seat aircraft', 'aircraft galley',
+    'titanium forging aerospace', 'aircraft bracket', 'aircraft skin panel'
+  ])) return 'aerospace'
+
+  // X5: Defence & military systems
+  if (match([
+    'defense contractor', 'defence contractor', 'military vehicle', 'armored vehicle',
+    'armoured vehicle', 'military grade', 'munition', 'ammunition', 'artillery',
+    'missile', 'missile component', 'warhead', 'solid rocket motor',
+    'itar', 'dfars', 'cmmc', 'usml', 'ddtc',
+    'body armor', 'body armour', 'ballistic plate', 'ballistic helmet',
+    'night vision', 'military radar', 'electronic warfare', 'radar system',
+    'naval combat system', 'submarine component', 'military drone', 'uav military'
+  ])) return 'defense_military'
+
+  // X6: Energy, oil & gas
+  //     (before machinery 'pump'/'valve'/'compressor'/'drill')
+  if (match([
+    'oilfield', 'oil field', 'oil and gas', 'oil & gas', 'upstream equipment',
+    'wellhead', 'christmas tree valve', 'subsea tree', 'subsea equipment',
+    'blowout preventer', 'bop stack', 'drill pipe', 'drill bit', 'drilling rig',
+    'drill collar', 'casing pipe', 'tubing oilfield', 'octg',
+    'frac pump', 'fracturing', 'mud pump', 'downhole tool',
+    'api 6a', 'api 6d', 'api 5l', 'lng train', 'lng terminal', 'lng carrier cargo',
+    'cryogenic valve', 'cryogenic tank', 'refinery equipment', 'pipeline valve',
+    'gas turbine package', 'flare system', 'separator vessel', 'crude oil',
+    'natural gas processing', 'petroleum equipment'
+  ])) return 'energy_oil_gas'
+
+  // X7: Mining & extractives
+  //     (before metals catches 'ore' / 'copper')
+  if (match([
+    'iron ore', 'copper ore', 'copper concentrate', 'bauxite', 'spodumene',
+    'lithium brine', 'mineral concentrate', 'mine site', 'mining operation',
+    'open pit mine', 'underground mine', 'tailings', 'tailings dam',
+    'mining equipment', 'haul truck', 'mineral processing', 'ore beneficiation',
+    'flotation cell', 'crushing plant', 'grinding mill ore', 'sag mill',
+    'potash', 'uranium ore', 'yellowcake', 'coal mine', 'metallurgical coal',
+    'artisanal mining', 'critical mineral', 'rare earth mining', 'nickel laterite',
+    'cobalt concentrate', 'mine offtake', 'kimberley process'
+  ])) return 'mining'
+
+  // X8: Maritime & shipbuilding
+  if (match([
+    'shipbuilding', 'shipyard', 'newbuild vessel', 'container ship', 'containership',
+    'bulk carrier', 'tanker vessel', 'lng carrier', 'ro-ro vessel',
+    'marine engine', 'ship engine', 'two-stroke engine', 'marine propulsion',
+    'propeller shaft marine', 'ship propeller', 'rudder', 'ballast water treatment',
+    'scrubber marine', 'ship crane', 'ship-to-shore crane', 'port crane',
+    'shipping container', 'reefer container', 'jones act', 'imo 2020',
+    'offshore vessel', 'dry dock', 'hull block', 'marine classification society'
+  ])) return 'maritime'
+
+  // X9: Railway & rail transit
+  if (match([
+    'rolling stock', 'railcar', 'rail car', 'freight car', 'locomotive',
+    'metro car', 'trainset', 'high speed train', 'passenger coach rail',
+    'railway track', 'rail track', 'railway signalling', 'railway signaling',
+    'etcs', 'positive train control', 'railway bogie', 'bogie frame',
+    'rail wheelset', 'rail axle', 'railway brake', 'pantograph',
+    'catenary', 'overhead line equipment', 'rail fastening', 'railway sleeper',
+    'railway tie', 'buy america rail', 'railway component', 'rail transit'
+  ])) return 'railway'
+
+  // X10: Robotics & industrial automation
+  //      (before machinery catches 'industrial robot' / 'robotic arm')
+  if (match([
+    'industrial robot', 'robotic arm', 'robot arm', 'six axis robot', '6-axis robot',
+    'scara robot', 'delta robot', 'cobot', 'collaborative robot',
+    'autonomous mobile robot', 'amr robot', 'agv', 'automated guided vehicle',
+    'robot controller', 'end effector', 'robot gripper', 'end-of-arm tooling',
+    'harmonic drive', 'strain wave gear', 'cycloidal reducer', 'precision reducer',
+    'servo motor robot', 'motion controller', 'machine vision', 'vision system',
+    'safety plc', 'industrial automation', 'factory automation', 'plc controller',
+    'warehouse automation', 'palletizing robot', 'pick and place robot'
+  ])) return 'robotics_automation'
+
+  // X11: Scientific instruments & metrology
+  if (match([
+    'mass spectrometer', 'mass spectrometry', 'chromatography', 'hplc', 'uplc',
+    'gas chromatograph', 'gc-ms', 'lc-ms', 'nmr spectrometer', 'spectrophotometer',
+    'electron microscope', 'sem microscope', 'tem microscope', 'atomic force microscope',
+    'coordinate measuring machine', 'cmm machine', 'metrology equipment',
+    'optical metrology', 'laser interferometer', 'profilometer',
+    'analytical instrument', 'laboratory instrument', 'lab equipment',
+    'scientific instrument', 'thermal analyzer', 'particle analyzer',
+    'xrf analyzer', 'xrd diffractometer', 'flow cytometer', 'pcr instrument',
+    'calibration standard', 'mass flow controller'
+  ])) return 'instruments_scientific'
+
+  // X12: Telecom & network infrastructure
+  //      (before electronics catches 'antenna' / 'cable')
+  if (match([
+    'telecom', 'telecommunication', '5g network', '5g equipment', 'ran equipment',
+    'open ran', 'base station', 'small cell', 'macro cell', 'cell tower',
+    'network switch', 'core router', 'optical transceiver', 'optical transport',
+    'optical fiber cable', 'optical fibre cable', 'fiber optic cable', 'single mode fiber',
+    'fiber preform', 'fusion splicer', 'odn', 'fttx', 'gpon', 'xgs-pon',
+    'submarine cable', 'subsea cable', 'data center switch', 'top of rack switch',
+    'white box switch', 'dwdm', 'sdh', 'microwave backhaul', 'satcom terminal'
+  ])) return 'telecom'
+
+  // X13: HVAC & building systems
+  //      (before machinery catches 'chiller' / 'hvac unit' / 'boiler')
+  if (match([
+    'hvac', 'air conditioner', 'air conditioning', 'heat pump', 'mini split',
+    'vrf system', 'rooftop unit', 'air handling unit', 'fan coil unit',
+    'refrigerant', 'r-410a', 'r410a', 'r-32 refrigerant', 'r-454b', 'hfc refrigerant',
+    'scroll compressor', 'rotary compressor', 'condensing unit', 'evaporator coil',
+    'condenser coil', 'thermostat', 'building automation', 'bms building',
+    'ductwork', 'air duct', 'ventilation system', 'exhaust fan building',
+    'seer2', 'hspf', 'ahri certified', 'chilled water system', 'boiler heating'
+  ])) return 'hvac'
+
+  // X14: Water treatment & fluid purification
+  if (match([
+    'water treatment', 'wastewater', 'waste water', 'desalination', 'desalinat',
+    'reverse osmosis', 'ro membrane', 'nanofiltration', 'ultrafiltration',
+    'membrane element', 'ion exchange resin', 'activated carbon filter',
+    'granular activated carbon', 'water filtration', 'water purification',
+    'clarifier', 'sludge treatment', 'chlorination system', 'uv disinfection',
+    'water softener', 'demineralization', 'boiler feedwater', 'cooling tower water',
+    'nsf 61', 'drinking water treatment', 'effluent treatment', 'pfas removal',
+    'irrigation system water'
+  ])) return 'water_treatment'
+
+  // X15: Cold chain & temperature-controlled logistics
+  if (match([
+    'cold chain', 'cold storage', 'reefer container', 'refrigerated container',
+    'refrigerated truck', 'refrigerated warehouse', 'freezer warehouse',
+    'blast freezer', 'temperature controlled logistics', 'temperature-controlled',
+    'temperature excursion', 'data logger temperature', 'temperature monitoring shipment',
+    'gdp logistics', 'ceiv pharma', 'validated cold chain', 'cryogenic shipper',
+    'dry ice shipping', 'insulated shipper', 'active container pharma',
+    'vaccine cold chain', 'frozen logistics', 'chilled logistics', '2-8c'
+  ])) return 'cold_chain'
+
+  // X16: Cosmetics & personal care formulation
+  //      (before consumer_goods and chemicals intercept)
+  if (match([
+    'cosmetic', 'cosmetics', 'skincare', 'skin care formulation', 'serum formulation',
+    'k-beauty', 'beauty odm', 'cosmetic odm', 'cosmetic contract manufactur',
+    'makeup', 'lipstick', 'foundation makeup', 'mascara', 'eyeshadow',
+    'sunscreen', 'spf formulation', 'moisturizer formulation',
+    'fragrance', 'perfume', 'eau de parfum', 'essential oil fragrance',
+    'inci', 'mocra', 'cpnp', 'cosmetic ingredient', 'emulsifier cosmetic',
+    'hyaluronic acid', 'niacinamide', 'retinol', 'peptide skincare',
+    'personal care formulation', 'cosmetic packaging component'
+  ])) return 'cosmetics'
+
+  // X17: Nutraceuticals & dietary supplements
+  if (match([
+    'nutraceutical', 'dietary supplement', 'food supplement', 'vitamin supplement',
+    'multivitamin', 'softgel', 'gummy supplement', 'capsule supplement',
+    'two-piece capsule', 'botanical extract', 'herbal extract', 'plant extract standardiz',
+    'curcumin', 'ashwagandha', 'boswellia', 'lutein', 'omega-3 supplement',
+    'fish oil supplement', 'algal oil', 'collagen peptide', 'whey protein powder',
+    'probiotic', 'prebiotic', 'creatine', 'amino acid supplement',
+    'novel food', 'ndi notification', 'aafco', 'sports nutrition'
+  ])) return 'nutraceuticals'
+
+  // X18: Pet & animal products
+  if (match([
+    'pet food', 'dog food', 'cat food', 'pet treat', 'pet supplement',
+    'animal feed', 'feed additive', 'animal nutrition', 'livestock feed',
+    'poultry feed', 'aquafeed', 'aqua feed', 'veterinary', 'vet product',
+    'animal health', 'animal vaccine', 'pet accessory', 'pet toy',
+    'cat litter', 'pet grooming', 'kibble', 'wet pet food', 'rendered protein'
+  ])) return 'pet_animal'
+
+  // X19: Luxury goods & leather accessories
+  if (match([
+    'luxury goods', 'luxury handbag', 'designer handbag', 'leather handbag',
+    'small leather goods', 'luxury watch', 'mechanical watch', 'watch movement',
+    'swiss made watch', 'watch case', 'hairspring', 'escapement',
+    'fine jewelry', 'fine jewellery', 'jewelry manufactur', 'jewellery manufactur',
+    'diamond setting', 'gold chain jewelry', 'exotic leather', 'crocodile leather',
+    'python leather', 'alligator leather', 'cites permit', 'vegetable tanned leather',
+    'made in italy leather', 'luxury packaging', 'haute couture'
+  ])) return 'luxury_goods'
+
+  // X20: Furniture & interior fittings
+  //      (before wood_paper catches 'wooden furniture')
+  if (match([
+    'furniture', 'sofa', 'couch', 'armchair', 'dining table', 'coffee table',
+    'office chair', 'task chair', 'ergonomic chair', 'desk furniture',
+    'bedroom furniture', 'wardrobe', 'kitchen cabinet', 'bathroom vanity',
+    'upholstered seating', 'upholstery furniture', 'mattress', 'bed frame',
+    'flat pack furniture', 'flat-pack furniture', 'rta furniture', 'shelving unit',
+    'contract furniture', 'hospitality furniture', 'outdoor furniture', 'patio furniture',
+    'furniture hardware', 'drawer slide', 'cabinet hinge', 'furniture fitting'
+  ])) return 'furniture'
+
+  // X21: Sports & outdoor equipment
+  if (match([
+    'athletic footwear', 'running shoe', 'sports shoe', 'sneaker', 'trainer shoe',
+    'sportswear', 'activewear', 'performance apparel', 'sports equipment',
+    'bicycle', 'bike frame', 'carbon frame bike', 'e-bike', 'ebike', 'drivetrain bicycle',
+    'groupset', 'bicycle component', 'helmet cycling', 'ski equipment', 'snowboard',
+    'ski binding', 'climbing harness', 'climbing rope', 'carabiner', 'via ferrata',
+    'camping gear', 'tent outdoor', 'sleeping bag', 'backpack outdoor', 'hiking boot',
+    'golf club', 'tennis racket', 'fitness equipment', 'treadmill', 'dwr finish'
+  ])) return 'sports_outdoor'
+
+  // X22: Toys & games
+  if (match([
+    'plush toy', 'soft toy', 'action figure', 'fashion doll', 'doll toy', 'board game',
+    'puzzle game', 'jigsaw puzzle', 'building block toy', 'construction toy',
+    'ride-on toy', 'toy vehicle', 'educational toy', 'learning toy',
+    'toy factory', 'toy product', 'toy industry', 'kids toy', 'children toy',
+    'astm f963', 'en 71', 'cpsia', 'icti', 'toy safety', 'toy manufactur',
+    'playset', 'collectible figure', 'trading card game', 'video game console accessory'
+  ])) return 'toys_games'
+
+  // X23: Printing, publishing & media production
+  //      (before wood_paper catches 'paper' and packaging catches 'label')
+  if (match([
+    'book printing', 'offset printing', 'commercial printing', 'digital printing',
+    'flexographic printing', 'flexo press', 'gravure printing', 'screen printing',
+    'printing press', 'printing plate', 'ctp plate', 'printing ink', 'offset ink',
+    'uv ink', 'low migration ink', 'toner cartridge', 'inkjet head',
+    'bookbinding', 'case bound', 'perfect binding', 'saddle stitch',
+    'catalog printing', 'magazine printing', 'direct mail printing',
+    'print on demand', 'pressure sensitive label printing', 'security printing'
+  ])) return 'printing_media'
+
+  // X24: Glass & technical ceramics
+  //      (before construction Pre-C and electronics 'ceramic capacitor')
+  if (match([
+    'technical ceramic', 'advanced ceramic', 'alumina ceramic', 'zirconia ceramic',
+    'silicon nitride ceramic', 'ceramic substrate', 'ceramic package',
+    'mlcc', 'multilayer ceramic capacitor', 'ceramic component semiconductor',
+    'borosilicate glass', 'pharmaceutical glass', 'type i glass vial', 'glass vial',
+    'glass ampoule', 'prefilled syringe glass', 'cover glass', 'gorilla glass',
+    'glass container', 'glass bottle manufactur', 'float glass furnace', 'cullet',
+    'optical glass', 'glass ceramic', 'refractory ceramic', 'porcelain insulator'
+  ])) return 'glass_ceramics'
+
+  // X25: Paints, coatings & surface treatment
+  //      (before chemicals Pre-B and plastics)
+  if (match([
+    'paint', 'coating', 'coatings', 'powder coating', 'e-coat', 'electrocoat',
+    'primer paint', 'topcoat', 'basecoat', 'clearcoat', 'automotive paint',
+    'industrial coating', 'marine coating', 'antifouling', 'coil coating',
+    'architectural paint', 'decorative paint', 'wood coating', 'can coating',
+    'titanium dioxide', 'tio2', 'pigment', 'dispersion pigment',
+    'anti-corrosion coating', 'zinc rich primer', 'chromate conversion',
+    'anodizing', 'anodising', 'electroplating', 'galvanizing', 'phosphating',
+    'thermal spray coating', 'pvd coating', 'cvd coating', 'voc coating'
+  ])) return 'paint_coatings'
 
   // Priority 1: Plastics, polymers, elastomers, rubber, composites
   // Must be first — "injection mold" would otherwise fall to electronics default
@@ -2319,6 +3939,561 @@ export const CATEGORY_RISKS = {
       id: 'r_mac_3', title: 'Export Control & Dual-Use Restrictions', type: 'Risk', severity: 'MEDIUM',
       desc: 'High-precision CNC machine tools (>4-axis, tight tolerances), certain pumps, and compressors are subject to Wassenaar Arrangement dual-use export controls. Resale or transfer to embargoed countries or restricted end-users can trigger severe US/EU penalties.',
       mitigation: 'Conduct end-user screening against BIS Entity List, OFAC SDN list, and Wassenaar control lists before purchase and at time of any resale or transfer. Obtain Export Control Classification Numbers (ECCNs) for all capital equipment. Maintain records for 5+ years.'
+    }
+  ],
+
+  // ── EXPANSION SET RISKS (categories 16-40) ─────────────────────────────
+  aerospace: [
+    {
+      id: 'r_aero_1', title: 'ITAR / EAR Export Control Exposure', type: 'Risk', severity: 'HIGH',
+      desc: 'Defence-derivative parts, technical data, and even CAD files fall under ITAR (22 CFR 120-130). The deemed-export rule means simply giving a foreign-national employee or an offshore machine shop access to controlled drawings is an export requiring a licence. Penalties run to $1M+ per violation and debarment from US government work.',
+      mitigation: 'Register with DDTC before any USML manufacturing. Implement technical data access controls segregated by nationality, with logged access. Screen every supplier against the Debarred Parties list. For Mexico or India machining, use a DDTC-approved Technical Assistance Agreement rather than assuming an exemption applies.'
+    },
+    {
+      id: 'r_aero_2', title: 'Single-Source Qualification Lock-In', type: 'Risk', severity: 'HIGH',
+      desc: 'Requalifying an aerospace part takes 18-24 months through AS9100 audit, NADCAP special-process approval, First Article Inspection, and customer PPAP. Titanium forgings, large structural castings, and NADCAP-approved heat treat and chem-processing lines are each held by a small number of qualified sources with no fast substitution path.',
+      mitigation: 'Start second-source qualification 24 months before you need it, not when the primary fails. Fund a dormant qualified alternate on a retainer for critical special processes. Negotiate tooling ownership and process documentation rights into every build-to-print contract so a transfer is technically possible.'
+    },
+    {
+      id: 'r_aero_3', title: 'Rate Ramp & Structural Supplier Fragility', type: 'Risk', severity: 'HIGH',
+      desc: 'OEM build-rate ramps repeatedly outrun the balance sheets of tier-2 and tier-3 suppliers, who must fund inventory and headcount long before revenue arrives. Castings, forgings, and fasteners have been the recurring constraint on every recent ramp, and the sub-tier consolidated heavily after 2020.',
+      mitigation: 'Run financial health monitoring (Altman Z-score, days-payable trends) on all critical sub-tiers quarterly. Offer supply-chain finance or advance payments to cash-constrained but technically sound suppliers. Hold 6-12 months of buffer on long-lead fasteners and forgings during ramp periods.'
+    },
+    {
+      id: 'r_aero_4', title: 'REACH Chromate Restriction on Aerospace Primers', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Hexavalent chromium corrosion-inhibiting primers and chromate conversion coatings remain the qualified standard on most airframes, but EU REACH authorisations are time-limited and being progressively withdrawn. Qualified chrome-free alternatives do not yet match performance on all substrates and require full requalification.',
+      mitigation: 'Track ECHA sunset dates for each chromate substance in your process specs. Begin qualification of trivalent chrome and chrome-free alternatives now on non-critical applications to build data. Confirm your EU-based processors hold valid authorisations covering the relevant use, not just a generic registration.'
+    }
+  ],
+  energy_oil_gas: [
+    {
+      id: 'r_oil_1', title: 'Sanctions & Restricted End-User Exposure', type: 'Risk', severity: 'HIGH',
+      desc: 'Oilfield equipment is heavily targeted by sanctions regimes. Russia-related restrictions cover a broad list of upstream technology, and OFAC pursues secondary-sanctions liability against non-US parties. Equipment resold through intermediaries into sanctioned projects creates liability that survives the original sale.',
+      mitigation: 'Screen every counterparty and end user against OFAC SDN, BIS Entity List, and EU consolidated lists at order entry and again at shipment. Include end-use and no-re-export clauses with audit rights in all sales contracts. Retain a trade counsel opinion for any transaction touching Central Asia, Turkey, or UAE intermediaries.'
+    },
+    {
+      id: 'r_oil_2', title: 'Extreme Capital Equipment Lead Times', type: 'Risk', severity: 'HIGH',
+      desc: 'Cryogenic valves, large compressors, and specialty alloy piping for LNG and refinery projects carry 52-78 week lead times, driven by the simultaneous global LNG buildout. A single missed forging slot can push a multi-billion-dollar project milestone by a quarter.',
+      mitigation: 'Place long-lead reservations for forging and casting slots before FID where the project risk profile allows. Qualify a second mill for each critical alloy grade. Build float into the project schedule explicitly for the top ten long-lead items rather than assuming vendor-quoted dates hold.'
+    },
+    {
+      id: 'r_oil_3', title: 'Commodity Price Cycle & Demand Whiplash', type: 'Risk', severity: 'HIGH',
+      desc: 'Upstream capex tracks oil price with a 6-12 month lag and swings 30-50% peak to trough. Suppliers who scale for a boom get stranded with capacity in the downturn, and the resulting exits permanently remove qualified capacity from the market - which is why lead times explode so violently on the next upswing.',
+      mitigation: 'Structure contracts with volume flexibility bands rather than fixed take-or-pay where possible. Maintain relationships with more suppliers than you currently need. Counter-cyclical qualification of new sources during downturns costs far less than emergency qualification during a ramp.'
+    },
+    {
+      id: 'r_oil_4', title: 'Methane & Scope 3 Regulatory Pressure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The EPA Waste Emissions Charge and the EU methane regulation impose direct costs on emissions from oil and gas operations, and operators are pushing measurement and reduction obligations down to equipment suppliers. Leak-prone valve and seal designs are becoming commercially disadvantaged.',
+      mitigation: 'Specify low-emission valve packing and connectors (API 622/624 certified) on new equipment. Require suppliers to provide fugitive emission test data. Participate in OGMP 2.0 Level 4/5 reporting to stay ahead of customer requirements rather than reacting to them.'
+    }
+  ],
+  ev_battery: [
+    {
+      id: 'r_evb_1', title: 'IRA Foreign Entity of Concern Disqualification', type: 'Risk', severity: 'HIGH',
+      desc: 'From 2024 for battery components and 2025 for critical minerals, any FEOC content - broadly, Chinese-owned or Chinese-controlled entities anywhere in the chain - disqualifies a vehicle from the $7,500 30D credit entirely. This is binary, not proportional: one non-compliant graphite or electrolyte-salt supplier can strand an entire model year.',
+      mitigation: 'Map ownership structures, not just locations, for every tier down to mineral extraction. Require contractual FEOC representations with audit rights and immediate-notification clauses on ownership change. Qualify non-China anode graphite (Syrah, Novonix, Posco) now - it is the single most common FEOC failure point.'
+    },
+    {
+      id: 'r_evb_2', title: 'Cathode & Anode Precursor Concentration', type: 'Risk', severity: 'HIGH',
+      desc: 'China refines the overwhelming majority of world battery-grade lithium, cobalt, and graphite regardless of where the ore is mined, and processes most precursor cathode active material (pCAM). Beijing has already demonstrated willingness to impose graphite export licensing. Ex-China refining capacity cannot be built in under three years.',
+      mitigation: 'Sign multi-year offtake with non-Chinese refiners even at a cost premium - treat it as insurance, not procurement. Qualify LFP alongside high-nickel chemistries to widen the sourcing option set. Hold strategic inventory of graphite and electrolyte salts at 6+ months for any programme with credit dependency.'
+    },
+    {
+      id: 'r_evb_3', title: 'Dangerous Goods Transport & Thermal Event Liability', type: 'Risk', severity: 'HIGH',
+      desc: 'Lithium cells ship as UN3480/UN3481 Class 9 dangerous goods. Every chemistry or format change requires fresh UN38.3 testing. Air freight of cells above 30% state of charge is restricted, and a single thermal runaway event in transit creates carrier liability, regulatory investigation, and potential lane closure.',
+      mitigation: 'Maintain current UN38.3 test summaries for every SKU and revision - carriers increasingly demand them at booking. Use IATA CEIV Lithium Battery certified forwarders. Ship at reduced state of charge and specify thermal-propagation-resistant packaging. Confirm cargo insurance explicitly covers lithium thermal events, as many policies exclude them.'
+    },
+    {
+      id: 'r_evb_4', title: 'EU Battery Regulation Carbon Footprint & Passport', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Regulation 2023/1542 requires a declared carbon footprint for EV batteries, then performance classes, then maximum thresholds - with a digital battery passport mandatory from February 2027. Cells manufactured on coal-heavy grids will face declaration disadvantage first and outright market exclusion later.',
+      mitigation: 'Collect primary cell-level carbon data from suppliers now; secondary averages will not satisfy the delegated act. Favour suppliers with renewable PPAs covering cell production. Begin building the data architecture for the digital passport - it requires component-level traceability that most supply chains cannot currently produce.'
+    }
+  ],
+  semiconductor: [
+    {
+      id: 'r_semi_1', title: 'Taiwan Strait Concentration Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'A single island produces the majority of world advanced logic and a large share of mature-node output. Any blockade, quarantine, or conflict removes capacity that cannot be replicated elsewhere in under three to five years. Even a non-kinetic scenario - insurance withdrawal, shipping reroutes - would disrupt supply within weeks.',
+      mitigation: 'Qualify mature-node parts at non-Taiwan foundries (GlobalFoundries, Tower, UMC Singapore, Samsung). Build 6-12 months of buffer on single-sourced Taiwan-fabbed components. Redesign where a part is Taiwan-exclusive and functionally substitutable. Track TSMC Arizona, Japan, and Germany fab qualification timelines and move volume as they come online.'
+    },
+    {
+      id: 'r_semi_2', title: 'Export Control Escalation & Extraterritorial Reach', type: 'Risk', severity: 'HIGH',
+      desc: 'US BIS rules, including the Foreign Direct Product Rule, reach non-US-made items produced with US technology. Controls have expanded repeatedly with limited notice, and Dutch and Japanese alignment has extended them to equipment and materials. A compliant shipment plan can become illegal between order and delivery.',
+      mitigation: 'Classify every part by ECCN and keep classifications current - not a one-time exercise. Screen end users and end uses monthly against Entity List and Military End User list updates. Build contractual rights to cancel or re-route on regulatory change. Retain export counsel for any China-nexus advanced-node transaction.'
+    },
+    {
+      id: 'r_semi_3', title: 'Upstream Materials Chokepoints', type: 'Risk', severity: 'HIGH',
+      desc: 'Photoresist, ABF substrate, high-purity gases, and CMP slurry are each supplied by a handful of firms, mostly Japanese. The 2011 Tohoku earthquake and the 2020 substrate shortage both showed that a materials disruption stops fabs faster than an equipment shortage. China gallium and germanium export controls demonstrated the same lever from the other direction.',
+      mitigation: 'Map materials dependency two tiers beyond your direct supplier - most buyers cannot name their photoresist source. Hold consignment inventory of critical chemistries where shelf life permits. Support dual-qualification of resist and substrate at the fab level, which requires fab cooperation and long lead time but is the only real mitigation.'
+    },
+    {
+      id: 'r_semi_4', title: 'Demand Cycle Volatility & Allocation Whiplash', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Semiconductor lead times swing from 8 to 52+ weeks across a cycle. Memory pricing moves 60-80% in a quarter. Buyers who over-order in a shortage create the inventory glut that causes the next crash, and suppliers respond by cutting capex, which sets up the following shortage.',
+      mitigation: 'Place non-cancellable orders only against firm demand; use options and capacity reservations for upside. Maintain 52-week rolling forecasts shared with suppliers to earn allocation priority. Avoid brokers and the grey market except for genuine line-down events - counterfeit rates in that channel are material.'
+    }
+  ],
+  mining: [
+    {
+      id: 'r_min_1', title: 'Resource Nationalism & Contract Renegotiation', type: 'Risk', severity: 'HIGH',
+      desc: 'Chile, Indonesia, Mexico, and several African jurisdictions have moved to increase state participation, raise royalties, restrict raw ore export, or nationalise lithium. Offtake agreements signed under one regime are routinely reopened by the next government, and the trend is accelerating with critical-mineral strategic value.',
+      mitigation: 'Weight sourcing toward FTA partners with stable mining codes (Australia, Canada, Chile with state-partnership structures priced in). Include stabilisation clauses and international arbitration seats in offtake contracts. Diversify across at least three jurisdictions for any mineral where a single country exceeds 40% of your supply.'
+    },
+    {
+      id: 'r_min_2', title: 'Human Rights & Artisanal Mining in Cobalt Supply', type: 'Risk', severity: 'HIGH',
+      desc: 'DRC supplies roughly 70% of world cobalt, and artisanal production - which involves documented child labour - flows into industrial concentrate streams. Litigation against downstream brands, EU Corporate Sustainability Due Diligence obligations, and UFLPA exposure where DRC material is refined in Xinjiang all create direct liability.',
+      mitigation: 'Source only through RMI-conformant refiners and require mine-level chain of custody, not just refiner attestation. Commission on-the-ground third-party verification - desk audits do not detect artisanal blending. Evaluate LFP chemistry for applications where energy density permits, which removes cobalt exposure entirely.'
+    },
+    {
+      id: 'r_min_3', title: 'Tailings Dam Failure & Catastrophic Liability', type: 'Risk', severity: 'HIGH',
+      desc: 'Brumadinho and Mariana demonstrated that a single tailings failure produces mass casualties, multi-billion-dollar liability, and immediate loss of production. Upstream-construction dams remain in use at many operations, and the Global Industry Standard on Tailings Management is not universally adopted.',
+      mitigation: 'Require GISTM conformance disclosure from every supplier in your critical mineral chain. Screen for upstream-construction dams specifically. Include force-majeure and alternate-supply provisions in offtake contracts. Factor tailings risk into supplier scoring alongside price and quality.'
+    },
+    {
+      id: 'r_min_4', title: 'Grade Decline & Structural Cost Inflation', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Average copper head grades have fallen steadily for two decades, meaning more ore, more energy, and more water per tonne of metal. Combined with permitting timelines of 10-15 years for new mines in the Americas, this makes supply response to demand growth structurally slow and prices structurally higher.',
+      mitigation: 'Model long-term contracts against a rising real-cost baseline rather than historical averages. Invest in material efficiency and design-for-recycling to reduce primary demand. Secure long-dated offtake early for minerals with a visible supply deficit (copper, lithium beyond 2028).'
+    }
+  ],
+  luxury_goods: [
+    {
+      id: 'r_lux_1', title: 'CITES & Exotic Material Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'Crocodile, alligator, python, and certain woods and shells are CITES-listed. Every cross-border movement requires species-specific permits, and a paperwork defect results in seizure and forfeiture of goods that may be worth six figures per unit. Enforcement has tightened significantly, including on intra-company transfers.',
+      mitigation: 'Maintain a CITES permit register keyed to individual unit serial numbers. Use only tanneries enrolled in verified farming programmes with traceability to the source farm. Pre-clear high-value shipments with customs brokers specialised in CITES. Consider whether the exotic material is worth the operational risk for lower-tier product lines.'
+    },
+    {
+      id: 'r_lux_2', title: 'Made In Origin Claim Substantiation', type: 'Risk', severity: 'HIGH',
+      desc: 'Made in Italy, Swiss Made, and similar claims carry legal definitions and are actively audited. Italian authorities have prosecuted brands whose Italian ateliers performed only finishing on foreign-assembled goods. Swiss Made requires 60% of manufacturing cost in Switzerland. A failed claim triggers both regulatory penalty and brand damage.',
+      mitigation: 'Document the value and operation breakdown by country for every SKU, updated when the bill of materials changes. Audit subcontractors for undisclosed offshoring - the failure usually happens at tier 2, not tier 1. Obtain a customs binding origin ruling for borderline cases rather than relying on internal interpretation.'
+    },
+    {
+      id: 'r_lux_3', title: 'Artisan Workshop Labour Audit Exposure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The Italian leather-goods supply chain runs on small subcontracted workshops. Italian prosecutors have placed several major maisons under judicial administration over labour conditions at unauthorised sub-subcontractors. The reputational cost of a finding is far larger than the cost saving that produced it.',
+      mitigation: 'Require full disclosure and pre-approval of all subcontracting, with contractual termination rights for undisclosed use. Conduct unannounced audits at tier 2 and tier 3, not just tier 1. Cap the number of subcontracting layers permitted. Price contracts so that compliant labour cost is actually affordable for the workshop.'
+    },
+    {
+      id: 'r_lux_4', title: 'Precious Metal & Diamond Sanctions Traceability', type: 'Risk', severity: 'MEDIUM',
+      desc: 'G7 restrictions on Russian-origin diamonds extend to stones substantially transformed in third countries, requiring traceability back to the mine. Similar pressure applies to Russian gold. Mixed parcels and traditional trading practices in Antwerp, Dubai, and Surat make provenance genuinely difficult to establish.',
+      mitigation: 'Require G7 traceability declarations from the polisher and the rough source, not only the setter. Prefer suppliers on blockchain provenance platforms (Tracr, Everledger) or with single-mine sourcing. Use LBMA Good Delivery refiners for all gold. Build in extra clearance time for high-value jewellery imports into the EU and US.'
+    }
+  ],
+  cosmetics: [
+    {
+      id: 'r_cos_1', title: 'FDA MoCRA Registration & Safety Substantiation', type: 'Risk', severity: 'HIGH',
+      desc: 'MoCRA now requires facility registration, product listing, adequate safety substantiation, and serious adverse event reporting for cosmetics sold in the US - including for foreign contract manufacturers. FDA gained mandatory recall authority for the first time. Many overseas ODMs are not yet compliant, and the importer carries the exposure.',
+      mitigation: 'Verify that every manufacturing facility in your chain holds a current FDA registration number, and confirm annually. Build a safety substantiation dossier per product, not per ingredient. Establish an adverse-event intake and 15-day reporting process before launch, not after the first complaint.'
+    },
+    {
+      id: 'r_cos_2', title: 'Multi-Jurisdiction Ingredient Ban Divergence', type: 'Risk', severity: 'HIGH',
+      desc: 'The EU restricts or bans over 1,600 substances; California, Washington, and other states are adding their own PFAS, formaldehyde-releaser, and phthalate bans on different timelines. A single global formulation is increasingly impossible, and reformulation costs $200k-$2M per SKU with 12-18 month timelines.',
+      mitigation: 'Maintain an ingredient watchlist screened monthly against EU Annexes II/III, state legislation, and retailer restricted-substance lists (which are often stricter than law). Design new formulations to the strictest applicable jurisdiction from the start. Keep a pre-qualified alternate for every at-risk ingredient in your top-20 SKUs.'
+    },
+    {
+      id: 'r_cos_3', title: 'EU Responsible Person & CPNP Dependency', type: 'Risk', severity: 'MEDIUM',
+      desc: 'EU market access requires a designated Responsible Person established in the EU who holds the Product Information File and bears legal liability. Many brands outsource this to a service provider; if that relationship terminates or the PIF is incomplete, products become non-compliant immediately and must be withdrawn.',
+      mitigation: 'Hold your own copy of the complete Product Information File including the Cosmetic Product Safety Report - do not rely solely on the RP holding it. Contract the RP relationship with notice periods and file-handover obligations. Audit PIF completeness annually against the Regulation 1223/2009 checklist.'
+    },
+    {
+      id: 'r_cos_4', title: 'Palm Derivative & Natural Extract Sourcing Risk', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Surfactants, emollients, and emulsifiers are overwhelmingly palm-derived, several steps removed from the plantation. EUDR requires deforestation-free due diligence with geolocation from 2025. Separately, natural extracts sourced from biodiverse regions trigger Nagoya Protocol access and benefit-sharing obligations.',
+      mitigation: 'Move to RSPO Segregated or Mass Balance certified palm derivatives and obtain plantation-level geolocation data from your chemical suppliers. Document Nagoya compliance for every botanical with a non-EU genetic origin. Evaluate palm-free alternatives (alkyl polyglucosides, methyl ester sulfonates) for hero products.'
+    }
+  ],
+  cold_chain: [
+    {
+      id: 'r_cc_1', title: 'Temperature Excursion & Product Loss', type: 'Risk', severity: 'HIGH',
+      desc: 'A single unlogged excursion outside the validated 2-8C or -18C corridor renders pharmaceutical or food cargo unsellable, and for GxP product it must be quarantined and often destroyed regardless of actual efficacy impact. Port congestion, reefer plug availability, and customs holds are the most common causes.',
+      mitigation: 'Fit continuous real-time telemetry, not just min/max loggers, on every high-value lane. Pre-agree excursion decision trees with QA so product is not held indefinitely pending review. Pre-qualify backup cold storage and reefer plug capacity at destination ports. Insure explicitly for spoilage - standard cargo cover often excludes it.'
+    },
+    {
+      id: 'r_cc_2', title: 'F-Gas Refrigerant Phase-Down', type: 'Risk', severity: 'HIGH',
+      desc: 'The EU F-gas Regulation and the US AIM Act are cutting high-GWP HFC supply on a fixed quota schedule. R-404A is already scarce and expensive in Europe. Facilities and reefer fleets running legacy refrigerant face rising service costs and eventual inability to recharge.',
+      mitigation: 'Inventory refrigerant type by asset and model the service-life cliff for each. Prioritise conversion to CO2 transcritical, ammonia, or low-GWP HFO systems at the next major maintenance interval rather than at failure. Secure multi-year refrigerant supply contracts for assets that cannot be converted yet.'
+    },
+    {
+      id: 'r_cc_3', title: 'Cold Storage Capacity Scarcity & Energy Cost', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Refrigerated warehousing is 3-5x more energy intensive per square foot than ambient, so energy price shocks flow straight into storage rates. Capacity near major consumption centres is structurally tight, and new automated facilities take 24-36 months to build.',
+      mitigation: 'Contract cold storage capacity on multi-year terms rather than spot, accepting a higher base rate for security. Negotiate energy pass-through caps. Consider network redesign to reduce total cold-chain days rather than only chasing lower per-pallet rates.'
+    },
+    {
+      id: 'r_cc_4', title: 'GDP & FSMA Sanitary Transport Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The FSMA Sanitary Transportation Rule and EU GDP guidelines make the shipper responsible for carrier temperature control, cleaning, and driver training - and for documenting it. Regulators increasingly inspect the shipper records, not just the carrier.',
+      mitigation: 'Qualify carriers formally with documented GDP or FSMA assessments and re-qualify annually. Conduct temperature mapping studies on each lane and season, not once at onboarding. Retain records for the full statutory period and make them retrievable within 24 hours of a request.'
+    }
+  ],
+
+  renewable_energy: [
+    {
+      id: 'r_ren_1', title: 'UFLPA Detention of Solar Modules', type: 'Risk', severity: 'HIGH',
+      desc: 'CBP applies a rebuttable presumption against any goods with Xinjiang inputs, and a large share of world polysilicon originates there. Thousands of module shipments have been detained, some for months, and rebuttal requires full polysilicon-to-module traceability documentation that many suppliers cannot produce. Project schedules and PPA deadlines slip as a result.',
+      mitigation: 'Require complete quartz-to-module traceability packages before shipment, not after detention. Prefer non-Chinese polysilicon (Wacker, OCI Malaysia, Hemlock) with documented segregation. Contractually place detention risk and demurrage cost on the supplier. Build 90-day schedule float on any China-linked module procurement.'
+    },
+    {
+      id: 'r_ren_2', title: 'AD/CVD & Circumvention Findings on Solar', type: 'Risk', severity: 'HIGH',
+      desc: 'US anti-dumping and countervailing duty orders cover Chinese cells and modules, and Commerce circumvention findings have extended them to Cambodia, Malaysia, Thailand, and Vietnam where Chinese wafers are merely assembled. Rates can be retroactive, turning a delivered project into a large unbudgeted duty liability.',
+      mitigation: 'Verify wafer origin, not just module assembly location. Track Commerce circumvention proceedings and preliminary determinations, which move faster than most procurement cycles. Structure contracts DDP with the supplier bearing all duty risk including retroactive assessment. Consider First Solar CdTe or Indian modules, which sit outside the current orders.'
+    },
+    {
+      id: 'r_ren_3', title: 'Wind Blade End-of-Life & Warranty Exposure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Thermoset epoxy blades are effectively unrecyclable at scale and increasingly face landfill bans in EU member states. Separately, blade quality issues have produced large warranty provisions across the major OEMs, and a supplier with a stressed balance sheet may not be able to honour a 20-year warranty.',
+      mitigation: 'Include decommissioning and recycling obligations in turbine supply agreements. Assess OEM warranty provisions and credit quality before selecting - the warranty is only as good as the balance sheet behind it. Track recyclable resin system commercialisation (Vestas CETEC, Siemens Gamesa RecyclableBlade) for future procurements.'
+    },
+    {
+      id: 'r_ren_4', title: 'IRA Domestic Content Threshold Escalation', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The 10% ITC domestic content adder requires an escalating percentage of US manufactured product cost. Projects planned against current thresholds may miss the bonus if procurement slips past a step-up date, materially changing project returns after financing is committed.',
+      mitigation: 'Model domestic content percentage using Treasury safe-harbour cost tables at bid stage and rerun on every procurement change. Lock domestic supply agreements before financial close. Build the threshold escalation schedule into the project timeline as a hard milestone, not a soft target.'
+    }
+  ],
+  telecom: [
+    {
+      id: 'r_tel_1', title: 'Trusted Vendor Mandates & Rip-and-Replace', type: 'Risk', severity: 'HIGH',
+      desc: 'US law bars Huawei and ZTE equipment from FCC-funded networks and funds removal of installed base; the EU 5G Toolbox drives similar exclusion across member states. Operators with legacy high-risk-vendor equipment face forced replacement capex, and the reimbursement programme has been chronically underfunded.',
+      mitigation: 'Audit installed base for restricted-vendor equipment including embedded modules and subsystems, which are frequently missed. Plan replacement on a technology-refresh cycle rather than waiting for a mandate deadline. Confirm funding eligibility before assuming reimbursement, and budget for the shortfall.'
+    },
+    {
+      id: 'r_tel_2', title: 'Optical Fibre & Preform Capacity Constraint', type: 'Risk', severity: 'HIGH',
+      desc: 'Fibre preform capacity cannot be expanded quickly, and AI data-centre buildout plus national broadband programmes have repeatedly pushed lead times to 20-40 weeks. Helium supply for fibre draw is an additional independent constraint tied to a small number of global sources.',
+      mitigation: 'Place multi-year fibre supply agreements with volume commitments to secure allocation. Qualify at least two preform sources across different regions. Track helium market conditions as a leading indicator of fibre availability. Hold strategic inventory of the specific fibre types your network standard requires.'
+    },
+    {
+      id: 'r_tel_3', title: 'Origin Washing & Section 301 Reclassification', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Networking hardware final assembly has moved to Vietnam and Mexico to avoid Section 301, but CBP has challenged whether simple assembly constitutes substantial transformation. A reclassification results in retroactive duty assessment plus penalties on the importer of record, not the supplier.',
+      mitigation: 'Obtain a CBP binding ruling for any product whose origin claim depends on relocated final assembly. Retain bills of materials and manufacturing process documentation evidencing genuine transformation. Include duty indemnity clauses in supply contracts covering retroactive assessment.'
+    },
+    {
+      id: 'r_tel_4', title: 'Submarine Cable & Critical Infrastructure Security Review', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Submarine cable projects and network equipment purchases increasingly face national security review, landing-permit delays, and restrictions on vendor nationality. Physical cable damage incidents in the Red Sea and Baltic have also demonstrated concentrated route risk.',
+      mitigation: 'Engage regulators early on landing permits - approval timelines have lengthened substantially. Design route diversity across distinct geographic corridors, not just distinct cables. Verify vendor eligibility under the relevant security frameworks before contract award.'
+    }
+  ],
+  furniture: [
+    {
+      id: 'r_fur_1', title: 'AD/CVD Orders on Chinese Furniture', type: 'Risk', severity: 'HIGH',
+      desc: 'US anti-dumping and countervailing duty orders cover wooden bedroom furniture, wooden cabinets and vanities, and upholstered seating from China, with company-specific rates that can exceed 250%. Rates are reset in annual administrative reviews, and importers are liable for the final rate retroactively - a cash-deposit rate at entry is not the final liability.',
+      mitigation: 'Verify the specific producer-exporter combination rate, not the country-wide rate, before ordering. Post adequate bonds and reserve for retroactive liability in annual reviews. Shift affected categories to Vietnam, Malaysia, or Mexico. Track circumvention inquiries, which have already reached several third countries.'
+    },
+    {
+      id: 'r_fur_2', title: 'Lacey Act & EUDR Timber Due Diligence', type: 'Risk', severity: 'HIGH',
+      desc: 'The Lacey Act makes it a US offence to import wood harvested in violation of any foreign law, with strict liability and criminal exposure. EUDR additionally requires plot-level geolocation and deforestation-free proof for wood entering the EU. Tropical hardwood in Asian furniture supply chains frequently lacks credible documentation.',
+      mitigation: 'Require species and harvest-country declarations at the SKU level, backed by FSC or PEFC chain of custody. Commission independent species testing (DNA or wood anatomy) on high-risk items - substitution of restricted species is common. Build the EUDR geolocation data collection into supplier onboarding now.'
+    },
+    {
+      id: 'r_fur_3', title: 'Formaldehyde & Flammability Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'TSCA Title VI and CARB Phase 2 cap formaldehyde emissions from composite wood, requiring third-party certification and lot-level records. Upholstered seating must meet CAL TB 117-2013 or equivalent flammability standards. Non-compliant goods are refused entry or recalled after sale.',
+      mitigation: 'Require TSCA Title VI compliant panel certificates traceable to the specific lot, not a generic mill statement. Test finished goods periodically rather than relying only on component certificates. Confirm flammability certification covers the exact foam and fabric combination shipped.'
+    },
+    {
+      id: 'r_fur_4', title: 'Container Economics & Cube Utilisation', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Furniture cubes out long before it weighs out, so freight cost per unit is unusually sensitive to packaging design and to spot rate volatility. Ocean rate spikes hit this category harder than dense goods, and a 3x rate movement can erase category margin entirely.',
+      mitigation: 'Design for knock-down and flat-pack shipping wherever the product allows - it is the single largest lever on landed cost. Contract annual ocean rates with volume commitments rather than riding spot. Model landed cost including freight in supplier selection, not FOB price alone.'
+    }
+  ],
+  sports_outdoor: [
+    {
+      id: 'r_spo_1', title: 'High MFN Footwear Tariffs & Classification Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Athletic footwear carries some of the highest surviving US MFN duties, up to 20% and in some categories higher, with rates driven by upper material composition and sole construction. Misclassification is common and produces retroactive duty assessment plus penalties across years of entries.',
+      mitigation: 'Obtain CBP binding rulings for each core construction platform. Audit classification annually against actual material composition, which drifts as suppliers substitute materials. Evaluate first-sale valuation, which is well established in this industry and can reduce dutiable value materially.'
+    },
+    {
+      id: 'r_spo_2', title: 'Shimano Drivetrain Single-Source Dependency', type: 'Risk', severity: 'HIGH',
+      desc: 'The bicycle industry depends on one supplier for the majority of drivetrain components. During the 2020-22 demand surge, lead times reached 100 weeks and complete bikes could not be built despite frame availability. There is no capacity to switch the whole industry to alternatives quickly.',
+      mitigation: 'Qualify SRAM, microSHIFT, or Sensah alternatives on at least part of the range so specification can flex. Place drivetrain orders on longer horizons than the rest of the bill of materials. Design frames with compatibility across drivetrain standards where possible rather than locking to one.'
+    },
+    {
+      id: 'r_spo_3', title: 'PPE Category III Certification Burden', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Climbing, mountaineering, and fall-arrest equipment is PPE Category III under EU Regulation 2016/425, requiring notified-body type examination plus ongoing production surveillance. A lapsed surveillance audit invalidates CE marking and halts sales immediately, regardless of product quality.',
+      mitigation: 'Track notified-body certificate validity and surveillance audit dates as hard operational milestones. Maintain the technical file continuously rather than reconstructing it at audit. Confirm that any manufacturing site change is notified and approved before production moves.'
+    },
+    {
+      id: 'r_spo_4', title: 'PFAS Restriction on Water-Repellent Finishes', type: 'Risk', severity: 'MEDIUM',
+      desc: 'PFAS-based durable water repellent treatments are being restricted across the EU and several US states. Non-fluorinated alternatives have shorter durability and different care requirements, and reformulation requires re-testing of the whole garment system.',
+      mitigation: 'Transition to PFAS-free DWR across the range on a planned schedule rather than reacting to individual bans. Manage consumer expectations on performance and care through explicit product communication. Require supplier declarations covering intentionally added PFAS and testing for unintentional presence.'
+    }
+  ],
+  toys_games: [
+    {
+      id: 'r_toy_1', title: 'CPSIA & EN 71 Safety Testing Liability', type: 'Risk', severity: 'HIGH',
+      desc: 'Children products require third-party testing by a CPSC-accepted lab for lead, phthalates, small parts, sharp edges, and flammability, with a Children Product Certificate per production lot. A failure results in mandatory recall, CPSC civil penalties that have reached tens of millions, and retailer chargebacks.',
+      mitigation: 'Test per production lot and per material change, not once at launch - suppliers substitute resins and pigments silently. Use CPSC-accepted labs only. Maintain traceability from finished good back to component lot so a recall can be scoped narrowly rather than across all inventory.'
+    },
+    {
+      id: 'r_toy_2', title: 'Extreme Seasonal Demand Concentration', type: 'Risk', severity: 'HIGH',
+      desc: 'A large share of annual toy sales occurs in the fourth quarter, so production, freight booking, and inventory decisions are made six to nine months ahead against forecasts that are frequently wrong. Missing the Q4 window means a full year of carrying cost; overbuilding means heavy markdown.',
+      mitigation: 'Book ocean capacity and factory slots by June for Q4 delivery. Split shipments across sailings to reduce single-vessel exposure. Hold a late-cycle air-freight option for hero SKUs. Use retailer point-of-sale data for in-season reorder decisions rather than relying only on pre-season forecast.'
+    },
+    {
+      id: 'r_toy_3', title: 'ICTI Ethical Toy Program Audit Findings', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Excessive overtime during the pre-Q4 peak is the most common ICTI audit failure in Chinese toy factories, and major retailers will delist suppliers on a serious finding. The commercial pressure that causes the overtime originates with the buyer order pattern.',
+      mitigation: 'Place orders earlier and level-load factory demand across more months to remove the structural cause. Require ICTI or equivalent certification with current validity. Audit unannounced during peak season, when findings actually surface, rather than in the quiet period.'
+    },
+    {
+      id: 'r_toy_4', title: 'Classification Drift into Chapter 95 Testing Scope', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Book-plus-object formats, promotional premiums, and licensed collectibles can reclassify between duty-free printed matter and toys, which changes both the duty treatment and whether full children product safety testing applies. Buyers routinely discover this after the goods ship.',
+      mitigation: 'Determine classification at design stage, not at import. Obtain binding rulings for ambiguous formats. Assume toy testing requirements apply whenever a product is marketed to children under 12, regardless of tariff classification, since CPSC scope is broader than HTS.'
+    }
+  ],
+  pet_animal: [
+    {
+      id: 'r_pet_1', title: 'Pet Food Recall & Contamination Liability', type: 'Risk', severity: 'HIGH',
+      desc: 'Aflatoxin, salmonella, and vitamin D over-fortification incidents have each caused large pet food recalls with animal fatalities, litigation, and permanent brand damage. Contract manufacturing means the brand carries the liability while a third party controls the process.',
+      mitigation: 'Require FSMA 21 CFR 507 preventive controls plans and audit them on site. Test incoming grains for mycotoxins on every lot. Verify vitamin premix dosing controls specifically - over-fortification incidents trace to premix handling errors. Maintain lot-level traceability enabling a four-hour recall scope determination.'
+    },
+    {
+      id: 'r_pet_2', title: 'Forced Labour in Marine Protein Supply', type: 'Risk', severity: 'HIGH',
+      desc: 'CBP has issued withhold release orders against Thai and Chinese fishing operations for forced labour. Wet pet food built on tuna and fish by-products carries direct exposure, and processor-level audits do not detect conditions on the vessels that supply them.',
+      mitigation: 'Require vessel-level traceability and labour verification, not just processor certification. Use MSC chain of custody or equivalent with vessel identification. Commission independent at-sea or port-based verification for high-volume lanes. Have an alternate protein source qualified in case of a WRO.'
+    },
+    {
+      id: 'r_pet_3', title: 'Contract Manufacturing Capacity Scarcity', type: 'Risk', severity: 'MEDIUM',
+      desc: 'North American extrusion and wet-canning capacity has been persistently tight since 2021. New brands cannot secure runs, and existing brands face allocation cuts when a co-manufacturer prioritises a larger customer. Building a new line takes 18-30 months.',
+      mitigation: 'Contract minimum guaranteed capacity with take-or-pay rather than purchase-order-by-purchase-order. Qualify a second co-manufacturer even at higher unit cost. Consider format flexibility (dry versus wet versus toppers) so demand can be shifted to available capacity.'
+    },
+    {
+      id: 'r_pet_4', title: 'State Feed Registration & Label Claim Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Pet food requires registration in each US state with AAFCO-aligned label review, and states enforce differently. Unsubstantiated health claims or incorrect guaranteed analysis trigger stop-sale orders that are state-specific and can strand inventory in distribution.',
+      mitigation: 'Centralise label control with a regulatory review gate before artwork release. Maintain a state registration calendar with renewal tracking. Substantiate every claim with feeding trials or formulation compliance per AAFCO protocols before it goes on pack.'
+    }
+  ],
+
+  printing_media: [
+    {
+      id: 'r_pri_1', title: 'Structural Print Demand Decline & Supplier Exit', type: 'Risk', severity: 'HIGH',
+      desc: 'Commercial print volumes continue a structural decline as media moves digital. Printers exit or consolidate with little notice, stranding work in progress and plates. Capacity for specific formats - large-format web offset, certain finishing operations - can disappear from a region entirely.',
+      mitigation: 'Monitor printer financial health, not just quality metrics. Hold your own digital files and, where feasible, own the plates or dies. Maintain a qualified backup printer for every recurring title. Avoid concentrating high-volume recurring work with a single financially stressed supplier.'
+    },
+    {
+      id: 'r_pri_2', title: 'Paper Price Volatility & Grade Availability', type: 'Risk', severity: 'HIGH',
+      desc: 'Coated and uncoated paper prices swing 25-50% across the cycle, and mills have permanently converted graphic-paper capacity to containerboard. Specific grades and basis weights disappear rather than merely getting expensive, forcing mid-print specification changes.',
+      mitigation: 'Contract paper separately from print where volume justifies, so you control grade and pricing. Design to widely available grades rather than niche specifications. Hold buffer stock of critical grades for recurring titles. Include paper-price escalation clauses with caps rather than absorbing volatility unpriced.'
+    },
+    {
+      id: 'r_pri_3', title: 'Long Sea-Freight Lead Times on Offshore Print', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Asian book printing offers major cost advantage but adds 6-8 weeks of ocean transit on top of production, giving 10-14 week total lead times. A publication date slip or a demand surprise cannot be corrected within the season, and air freight on books is prohibitively expensive because they weigh out.',
+      mitigation: 'Split print runs between offshore for the base quantity and domestic for reprints and upside. Build print-on-demand capability for the long tail. Confirm sailing schedules and buffer for port congestion in Q3 and Q4 when capacity tightens.'
+    },
+    {
+      id: 'r_pri_4', title: 'Ink Migration & Food-Contact Compliance', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Printing inks on food packaging must not migrate through the substrate. Mineral oil hydrocarbon (MOSH/MOAH) contamination from recycled fibre and conventional inks has triggered EU recalls and is the subject of tightening national limits, particularly in Germany.',
+      mitigation: 'Specify low-migration inks for all food-contact and food-adjacent packaging. Require migration testing on the finished pack structure, not just the ink. Use functional barriers where recycled fibre is present. Track German and EU MOSH/MOAH limit developments as the leading indicator for the wider market.'
+    }
+  ],
+  hvac: [
+    {
+      id: 'r_hvac_1', title: 'Refrigerant Phase-Down & Product Obsolescence', type: 'Risk', severity: 'HIGH',
+      desc: 'The AIM Act and EU F-gas Regulation are cutting HFC supply on a fixed quota schedule. R-410A equipment is being displaced by A2L refrigerants (R-32, R-454B), which are mildly flammable and require different certification, installation practice, and technician training. Existing inventory can become unsellable at a regulatory cut-off date.',
+      mitigation: 'Align inventory purchasing to the transition date schedule and avoid building stock of soon-to-be-restricted equipment. Confirm UL 60335-2-40 certification for all A2L products. Fund installer training ahead of the transition - the labour constraint is the practical bottleneck, not the equipment.'
+    },
+    {
+      id: 'r_hvac_2', title: 'Chinese Compressor & Component Dependency', type: 'Risk', severity: 'HIGH',
+      desc: 'Rotary and scroll compressors, heat exchanger coils, and electronic expansion valves are overwhelmingly China-sourced even inside Western-branded equipment. Section 301 raises cost, and any escalation or export restriction would halt production at nominally domestic assembly plants.',
+      mitigation: 'Map compressor and coil origin two tiers deep for all critical SKUs. Qualify alternate compressor sources in Thailand, Mexico, or India - several majors have been building this capacity. Hold strategic inventory on the specific compressor models with no alternate. Model landed cost with 301 included in supplier comparisons.'
+    },
+    {
+      id: 'r_hvac_3', title: 'DOE Efficiency Standard Transitions', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The 2023 shift to SEER2/HSPF2 with regional variation across North, Southeast, and Southwest zones made non-compliant inventory unsellable in specific states. Future standard increases will repeat this, and distributors carry the stranded inventory risk.',
+      mitigation: 'Track DOE rulemaking and compliance dates by region as procurement milestones. Manage channel inventory down ahead of each transition. Confirm that model numbers held in distribution are compliant for the specific state where they will be installed, not just nationally.'
+    },
+    {
+      id: 'r_hvac_4', title: 'Copper and Aluminium Input Cost Exposure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'HVAC equipment is copper and aluminium intensive, so unit cost tracks LME pricing closely. Copper has a structural supply deficit forecast from the late 2020s, and coil material substitution to all-aluminium affects field repairability and warranty cost.',
+      mitigation: 'Hedge copper exposure or negotiate index-linked pricing with caps. Evaluate all-aluminium coil designs against total lifecycle cost including field service, not just unit cost. Lock annual pricing early in periods of metal price weakness.'
+    }
+  ],
+  water_treatment: [
+    {
+      id: 'r_wat_1', title: 'PFAS Regulation & Treatment Capacity Demand', type: 'Risk', severity: 'HIGH',
+      desc: 'US EPA has set enforceable drinking-water limits for several PFAS compounds at single-digit parts per trillion, and the EU is following. Thousands of utilities must install granular activated carbon or ion exchange treatment simultaneously, and media supply and engineering capacity cannot meet that demand on the compliance timeline.',
+      mitigation: 'Reserve GAC and ion-exchange media supply under multi-year contracts now - spot availability will not exist near the deadline. Qualify multiple media suppliers and regeneration providers. Engage engineering firms early; the constraint is design and construction capacity as much as media.'
+    },
+    {
+      id: 'r_wat_2', title: 'NSF/ANSI 61 Certification on Wetted Materials', type: 'Risk', severity: 'HIGH',
+      desc: 'Any component in contact with drinking water requires NSF/ANSI 61 certification, and NSF 372 caps lead content. A supplier changing a resin, elastomer, or brass alloy without notification invalidates the certification, and the resulting non-compliance can force removal of installed equipment.',
+      mitigation: 'Require certification numbers per component and verify them against the NSF listing database, which is public. Include change-notification clauses with pre-approval rights for any wetted-material substitution. Re-verify certification validity annually, as listings lapse.'
+    },
+    {
+      id: 'r_wat_3', title: 'Membrane Supply Concentration', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Reverse-osmosis membrane element supply is concentrated among a small number of manufacturers, and elements are not freely interchangeable between vessel and system designs. A supplier disruption or allocation event affects plant operation directly since membranes require periodic replacement.',
+      mitigation: 'Design systems to accept elements from more than one manufacturer where hydraulics permit. Hold replacement element inventory sized to at least one full changeout for critical plants. Negotiate supply agreements with allocation priority rather than buying spot.'
+    },
+    {
+      id: 'r_wat_4', title: 'EU Urban Wastewater Directive Capex Wave', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The recast Urban Wastewater Treatment Directive adds quaternary treatment for micropollutants and an extended producer responsibility levy on pharmaceutical and cosmetics companies. This creates a large simultaneous capex wave across Europe with the same equipment and engineering constraints as the PFAS build-out.',
+      mitigation: 'Position long-lead equipment orders ahead of the compliance wave. For pharma and cosmetics companies, model the EPR levy into product cost planning now. Engage with national implementation consultations, since member-state transposition varies materially.'
+    }
+  ],
+  defense_military: [
+    {
+      id: 'r_def_1', title: 'ITAR, DFARS & CMMC Compliance Burden', type: 'Risk', severity: 'HIGH',
+      desc: 'Defence suppliers face overlapping regimes: ITAR registration and licensing, DFARS specialty metals and cybersecurity clauses, and CMMC Level 2 certification for handling controlled unclassified information. Non-compliance means contract loss, False Claims Act exposure, and debarment. Many capable commercial suppliers simply cannot meet the bar.',
+      mitigation: 'Budget genuinely for compliance infrastructure - it is a cost of entry, not overhead to be minimised. Segregate CUI environments with certified enclaves rather than trying to certify the whole enterprise. Flow down requirements explicitly to sub-tiers and verify rather than assume. Start CMMC assessment 12+ months before it becomes an award gate.'
+    },
+    {
+      id: 'r_def_2', title: 'Specialty Metals & Energetics Sourcing Restrictions', type: 'Risk', severity: 'HIGH',
+      desc: 'DFARS 252.225-7014 restricts the origin of steel, titanium, tungsten, and certain alloys to the US and qualifying countries. Separately, US energetics and solid rocket motor capacity is highly concentrated, and ammonium perchlorate has effectively one domestic producer. Demand surges cannot be met.',
+      mitigation: 'Verify melt-and-pour origin documentation for all specialty metals, not just the final processor. Qualify multiple mills within qualifying countries. For energetics, place long-horizon orders and accept allocation terms - there is no spot market. Track DPA Title III investments that may add capacity.'
+    },
+    {
+      id: 'r_def_3', title: 'Counterfeit & Non-Conforming Electronic Parts', type: 'Risk', severity: 'HIGH',
+      desc: 'Long programme lifecycles mean defence systems rely on obsolete electronic components sourced from the aftermarket, where counterfeit rates are significant. A counterfeit part in a fielded system creates safety-of-flight risk and DFARS 252.246-7007 liability for the contractor.',
+      mitigation: 'Purchase only from OEMs or franchised distributors; treat independent distributors as last resort with full test and inspection per AS6081. Implement a counterfeit avoidance plan meeting AS5553. Plan obsolescence proactively with lifetime buys rather than reacting when a part goes end-of-life.'
+    },
+    {
+      id: 'r_def_4', title: 'Budget Cycle & Programme Cancellation Exposure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Defence revenue depends on appropriations that shift with political cycles. Continuing resolutions delay new starts, and programmes are cancelled at any maturity level. Suppliers who invest in dedicated capacity against a programme forecast carry stranded-asset risk.',
+      mitigation: 'Negotiate termination-for-convenience cost recovery explicitly in contracts. Avoid dedicating capacity to a single programme where the facility has no commercial alternative use. Diversify across programmes, services, and allied customers rather than depending on a single line item.'
+    }
+  ],
+  maritime: [
+    {
+      id: 'r_mar_1', title: 'Shipyard Berth Scarcity & Delivery Slippage', type: 'Risk', severity: 'HIGH',
+      desc: 'Korean and Japanese yards capable of LNG carriers and complex tonnage are booked into 2028-29. Newbuild prices have risen sharply and delivery dates slip. For an operator with a charter commitment or a regulatory deadline, a delayed vessel means chartering replacement tonnage at spot.',
+      mitigation: 'Reserve berths well ahead of firm requirement, accepting option fees. Include liquidated damages for late delivery calibrated to actual charter exposure. Evaluate second-hand tonnage and life-extension of existing vessels as bridging options. Diversify across yards rather than concentrating a series.'
+    },
+    {
+      id: 'r_mar_2', title: 'USTR Section 301 Action on Chinese-Built Vessels', type: 'Risk', severity: 'HIGH',
+      desc: 'USTR action targeting Chinese shipbuilding dominance introduces port-entry fees and tariffs affecting Chinese-built vessels, cranes, and containers calling at US ports. This changes the economics of a fleet composition decision made years earlier and cannot be unwound quickly.',
+      mitigation: 'Model fleet deployment to route Chinese-built tonnage away from US calls where the fee structure makes it uneconomic. Factor origin into newbuild decisions for any vessel expected to trade to the US. Track the fee schedule and phase-in, which have been revised during consultation.'
+    },
+    {
+      id: 'r_mar_3', title: 'IMO Decarbonisation & Fuel Transition Uncertainty', type: 'Risk', severity: 'MEDIUM',
+      desc: 'IMO net-zero-by-2050 trajectory, EEXI/CII ratings, and EU ETS coverage of shipping all impose costs, but the winning alternative fuel - methanol, ammonia, LNG, biofuel - is not settled. A dual-fuel newbuild ordered for the wrong fuel becomes a stranded asset over a 25-year life.',
+      mitigation: 'Specify fuel-flexible or conversion-ready designs even at capex premium. Secure green fuel offtake alongside vessel orders where committing to a pathway. Model EU ETS and FuelEU Maritime cost into charter rate assumptions. Avoid single-fuel commitment for the full fleet.'
+    },
+    {
+      id: 'r_mar_4', title: 'Chokepoint & Route Disruption Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Red Sea attacks, Panama Canal drought restrictions, and Strait of Hormuz tension have each independently disrupted major trade lanes in recent years, adding 10-14 days of transit and sharply higher war-risk insurance premiums. These are now recurring rather than exceptional events.',
+      mitigation: 'Build routing contingency into service contracts with pre-agreed surcharge mechanisms rather than negotiating during a crisis. Hold safety stock sized to the Cape of Good Hope routing delay for Asia-Europe flows. Confirm war-risk insurance coverage and premium exposure before committing to affected lanes.'
+    }
+  ],
+
+  railway: [
+    {
+      id: 'r_rail_1', title: 'Buy America Content Threshold Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'FTA-funded rolling stock requires 70% domestic content and US final assembly, audited by pre-award and post-delivery review. Failure means loss of federal funding for the procurement. Simultaneously, NDAA Section 7613 bars Chinese state-controlled manufacturers entirely, removing the lowest-cost option.',
+      mitigation: 'Document component-level cost and origin from contract award, not at audit. Require suppliers to certify domestic content with supporting cost data. Engage FTA early on waiver possibilities for genuinely unavailable components. Budget the domestic content premium into the capital plan honestly.'
+    },
+    {
+      id: 'r_rail_2', title: 'Braking System Duopoly Dependency', type: 'Risk', severity: 'HIGH',
+      desc: 'Knorr-Bremse and Wabtec supply the substantial majority of world rail braking systems. There is no third source at scale for many applications, and braking is safety-critical with long homologation cycles, so substitution is not a short-term option under any circumstances.',
+      mitigation: 'Negotiate long-term agreements with capacity commitments and spare-parts stocking obligations. Hold critical spares inventory for the fleet life rather than relying on just-in-time supply. Factor the dependency into vehicle platform selection, since brake system choice largely follows the vehicle.'
+    },
+    {
+      id: 'r_rail_3', title: 'ETCS / Signalling Homologation Delay', type: 'Risk', severity: 'MEDIUM',
+      desc: 'ETCS and PTC signalling deployments have repeatedly overrun on schedule and budget because vehicle-infrastructure interoperability testing surfaces issues late. A vehicle cannot enter service without authorisation, so signalling delay directly strands delivered rolling stock.',
+      mitigation: 'Sequence signalling authorisation ahead of vehicle delivery in the programme plan. Budget realistic contingency for interoperability testing. Contract signalling and rolling stock with aligned milestones and shared risk rather than as independent procurements.'
+    },
+    {
+      id: 'r_rail_4', title: '30-40 Year Obsolescence Management', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Rail vehicles have design lives far longer than the electronic components inside them. Traction control electronics, HVAC controllers, and passenger information systems reach end of life multiple times over the vehicle life, and original suppliers exit the market.',
+      mitigation: 'Contract for spares availability and design documentation escrow at time of purchase - it cannot be obtained later. Plan mid-life refurbishment as a funded programme, not a surprise. Specify open interfaces where possible so subsystems can be replaced independently.'
+    }
+  ],
+  robotics_automation: [
+    {
+      id: 'r_rob_1', title: 'Precision Reducer Single-Source Bottleneck', type: 'Risk', severity: 'HIGH',
+      desc: 'Nabtesco and Harmonic Drive supply the overwhelming majority of world cycloidal and strain-wave gearboxes used in industrial robot joints. In tight cycles lead times reach 30-52 weeks. Every robot brand depends on the same two Japanese suppliers, so a disruption affects the entire industry simultaneously.',
+      mitigation: 'Place reducer orders on the longest horizon of any component in the build. Qualify Chinese alternatives (Leaderdrive, Zhongda) for non-critical axes to widen options, accepting the precision trade-off. Hold buffer inventory sized to a full quarter of build plan for high-runner models.'
+    },
+    {
+      id: 'r_rob_2', title: 'EU Machinery Regulation 2023/1230 Transition', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The Machinery Regulation replaces the Machinery Directive from January 2027 and adds explicit cybersecurity, software update, and AI-related safety requirements. Existing CE conformity assessments will not automatically satisfy it, and notified-body capacity for reassessment is limited.',
+      mitigation: 'Begin gap assessment against the new regulation now rather than in 2026. Book notified-body capacity early. Design new machines to the regulation from the outset. Confirm that software-update and cybersecurity documentation practices meet the new requirements, since these are genuinely new obligations.'
+    },
+    {
+      id: 'r_rob_3', title: 'Foreign Ownership Review on Automation Suppliers', type: 'Risk', severity: 'MEDIUM',
+      desc: 'KUKA is Midea-owned, and several automation and sensing suppliers have Chinese ownership. Defence, aerospace, and critical-infrastructure customers increasingly bar equipment from Chinese-controlled suppliers or require security review, which can disqualify an installed standard mid-programme.',
+      mitigation: 'Map ownership structure for all automation suppliers, not just country of manufacture. Maintain an alternate qualified robot brand for any line that may serve controlled work. Confirm customer restrictions before specifying, since retrofitting a line to a different robot brand is expensive.'
+    },
+    {
+      id: 'r_rob_4', title: 'AMR Component Tariff & Origin Exposure', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Autonomous mobile robots assembled domestically still depend on China-origin motors, LiDAR, batteries, and drive wheels, all carrying Section 301 exposure. LiDAR specifically has concentrated Chinese supply, and some suppliers face US entity-list scrutiny.',
+      mitigation: 'Map subassembly origin and model landed cost with tariffs included. Qualify non-Chinese LiDAR (Ouster, Sick, Hokuyo) for any deployment with government or critical-infrastructure end users. Verify battery UN38.3 documentation and FEOC status if any incentive eligibility is involved.'
+    }
+  ],
+  instruments_scientific: [
+    {
+      id: 'r_ins_1', title: 'Dual-Use Export Controls on Precision Instruments', type: 'Risk', severity: 'HIGH',
+      desc: 'High-accuracy coordinate measuring machines, electron microscopes, and certain mass spectrometers fall under Wassenaar dual-use controls (ECCN 2B006, 3A233 and related). Shipment to China or to a restricted end user without licence is a criminal violation, and controls have tightened for semiconductor-related metrology.',
+      mitigation: 'Classify every instrument by ECCN before quoting, not at shipment. Screen end users and obtain end-use statements. Build licence lead time into delivery commitments for controlled destinations. Retain export counsel for any semiconductor or defence end use.'
+    },
+    {
+      id: 'r_ins_2', title: 'Helium Supply Dependency', type: 'Risk', severity: 'HIGH',
+      desc: 'GC carrier gas, NMR and MRI cryogens, and leak detection all depend on helium, which has repeatedly gone into global allocation. Supply is concentrated in a small number of production facilities including in Qatar, Algeria, and Russia, and there is no substitute for cryogenic applications.',
+      mitigation: 'Qualify hydrogen or nitrogen carrier gas for GC methods where the analytical requirement permits - this is the single largest consumption reduction available. Install helium recovery and recycling systems on NMR. Contract multi-year supply with allocation priority rather than buying spot.'
+    },
+    {
+      id: 'r_ins_3', title: 'GxP Qualification Lock-In on Instrument Changes', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Instruments used in regulated pharmaceutical or clinical environments require IQ/OQ/PQ qualification and method validation. Changing instrument model or vendor requires revalidation of every method running on it, taking months and creating regulatory filing implications.',
+      mitigation: 'Standardise on platforms with long committed lifecycles and confirm vendor end-of-support horizons before purchase. Plan replacement in advance of obsolescence so revalidation can be scheduled rather than forced. Negotiate extended support contracts for instruments running critical validated methods.'
+    },
+    {
+      id: 'r_ins_4', title: 'Long Instrument Lead Times & Service Network Gaps', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Analytical instruments carry 16-30 week lead times, and in emerging markets the local service and spare-parts network is often the real constraint on uptime. An instrument down for eight weeks awaiting a part halts the laboratory work depending on it.',
+      mitigation: 'Order capital instruments against the project timeline with realistic buffer. Verify local service coverage and parts stocking before purchasing into a new geography. Hold critical spares (detectors, pumps, source components) on site for instruments on the critical path.'
+    }
+  ],
+  glass_ceramics: [
+    {
+      id: 'r_gc_1', title: 'Energy Cost & Furnace Campaign Risk', type: 'Risk', severity: 'HIGH',
+      desc: 'Glass melting is among the most energy-intensive industrial processes, so gas price shocks pass directly into price - European producers were severely affected in 2022. A furnace also cannot be stopped and restarted economically: an unplanned shutdown means a full rebuild costing tens of millions and 6-12 months.',
+      mitigation: 'Contract with energy-hedged suppliers or accept index-linked pricing with caps. Understand each supplier furnace campaign age - a furnace late in its 10-15 year campaign is a supply risk regardless of current performance. Dual-source across furnaces in different plants, not just different sales offices.'
+    },
+    {
+      id: 'r_gc_2', title: 'MLCC and Palladium Input Concentration', type: 'Risk', severity: 'HIGH',
+      desc: 'Multilayer ceramic capacitors depend on palladium and nickel electrodes and high-purity barium titanate. Palladium has significant Russian supply exposure that sanctions have not resolved. MLCC lead times have historically swung from 12 to 40+ weeks, and there is no design-around for most circuits.',
+      mitigation: 'Hold buffer inventory on high-runner MLCC case sizes and values. Qualify multiple manufacturers per part number where AEC-Q200 or equivalent allows. Monitor palladium market conditions as a leading indicator. Design with commonly available case sizes rather than the newest miniaturised parts where possible.'
+    },
+    {
+      id: 'r_gc_3', title: 'CBAM Carbon Cost on Imported Glass', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The EU Carbon Border Adjustment Mechanism prices embedded carbon on glass and ceramics imports from 2026. Non-EU glass with a coal-heavy energy profile will carry a significant additional landed cost, and reporting obligations begin before the financial obligation does.',
+      mitigation: 'Collect verified embedded emissions data from non-EU suppliers now to meet reporting obligations and to model the future cost. Favour suppliers with high cullet ratios and low-carbon energy. Rerun EU landed-cost comparisons with CBAM included before extending non-EU contracts past 2026.'
+    },
+    {
+      id: 'r_gc_4', title: 'Pharmaceutical Glass Qualification Rigidity', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Primary packaging glass for injectables must meet USP <660> Type I requirements with extractables and leachables studies specific to the drug product. Changing vial or syringe supplier requires regulatory filing, so the supplier relationship is effectively locked for the product life.',
+      mitigation: 'Qualify a secondary glass supplier in parallel during development, before commercial launch, when the filing cost is lowest. Include capacity commitments in supply agreements given the lock-in. Monitor supplier capacity expansion plans, since demand for injectable packaging is growing faster than supply.'
+    }
+  ],
+  paint_coatings: [
+    {
+      id: 'r_pc_1', title: 'PFAS and Chromate Restriction on Coatings', type: 'Risk', severity: 'HIGH',
+      desc: 'The proposed EU universal PFAS restriction would affect fluoropolymer topcoats and many additives, while REACH authorisation is progressively withdrawing hexavalent chromium corrosion inhibitors. Qualified alternatives often do not match performance, and requalification in aerospace, marine, and automotive applications takes years.',
+      mitigation: 'Inventory PFAS and chromate content across your coating specifications now. Begin alternative qualification on lower-criticality applications to build performance data. Track the ECHA PFAS dossier and chromate sunset dates as programme milestones. Confirm your applicators hold valid authorisations for the specific use.'
+    },
+    {
+      id: 'r_pc_2', title: 'Titanium Dioxide Cost & Trade Remedy Exposure', type: 'Risk', severity: 'HIGH',
+      desc: 'TiO2 is typically 20-25% of paint cost and the EU has imposed anti-dumping duties on Chinese TiO2, with US proceedings also active. TiO2 pricing is cyclical and supply is concentrated. The EU classification of inhalable TiO2 powder as a suspected carcinogen adds handling and labelling obligations.',
+      mitigation: 'Diversify TiO2 sourcing across chloride and sulphate route producers in multiple jurisdictions. Model AD duty scenarios into formulation cost. Evaluate opacity-efficient formulation and extender substitution to reduce TiO2 loading. Update SDS and handling procedures for the classification change.'
+    },
+    {
+      id: 'r_pc_3', title: 'VOC Regulation Divergence Across Jurisdictions', type: 'Risk', severity: 'MEDIUM',
+      desc: 'VOC limits differ by product category and by jurisdiction, with California SCAQMD and EU Directive 2004/42/EC each stricter than US federal rules. A single formulation cannot be sold everywhere, and non-compliant product shipped into a strict jurisdiction results in stop-sale.',
+      mitigation: 'Maintain a formulation-to-jurisdiction compliance matrix and gate shipments against it. Formulate new products to the strictest applicable limit. Track SCAQMD and CARB rulemaking, which typically leads the rest of the US market by several years.'
+    },
+    {
+      id: 'r_pc_4', title: 'Dangerous Goods Transport & Storage Constraints', type: 'Risk', severity: 'MEDIUM',
+      desc: 'Solvent-borne coatings ship as Class 3 flammable liquids with restrictions on air freight, quantity limits, and segregation requirements in warehousing. Non-compliant documentation causes shipment rejection, and improper storage creates fire risk and insurance exposure.',
+      mitigation: 'Use DG-certified forwarders and keep SDS and DG declarations current for every SKU and pack size. Confirm warehouse licensing for flammable storage volumes. Where feasible, shift to waterborne or powder systems, which removes the DG burden entirely alongside the VOC benefit.'
+    }
+  ],
+  nutraceuticals: [
+    {
+      id: 'r_nut_1', title: 'Botanical Adulteration & Identity Fraud', type: 'Risk', severity: 'HIGH',
+      desc: 'Economically motivated adulteration is endemic in botanical extracts - curcumin spiked with synthetic curcuminoids, ashwagandha diluted with starch, bilberry substituted with dyed cheaper species. Supplier certificates of analysis are routinely unreliable, and the brand carries the liability for a mislabelled product.',
+      mitigation: 'Run independent identity testing (HPTLC, DNA barcoding, or orthogonal chromatography) on every incoming lot - not just the first shipment. Use USP or AHP monograph methods rather than supplier methods. Audit suppliers on site. Treat a price materially below market as a fraud indicator, not a bargain.'
+    },
+    {
+      id: 'r_nut_2', title: 'FDA cGMP Import Alerts & Facility Compliance', type: 'Risk', severity: 'HIGH',
+      desc: 'FDA maintains import alerts against specific Indian and Chinese ingredient suppliers for cGMP failures and adulteration, resulting in detention without physical examination. A supplier added to an import alert after your order stops shipments immediately with no appeal at the border.',
+      mitigation: 'Check the FDA import alert database before qualification and monitor it monthly for existing suppliers. Require recent FDA or third-party GMP audit reports and 483 observation history. Maintain a qualified alternate for every critical ingredient. Hold 3-6 months of inventory on ingredients with concentrated supply.'
+    },
+    {
+      id: 'r_nut_3', title: 'Heavy Metal & Contaminant Limits', type: 'Risk', severity: 'HIGH',
+      desc: 'Botanical and mineral ingredients carry lead, arsenic, cadmium, and mercury risk from soil and processing. California Proposition 65 thresholds are far below federal limits and have generated extensive private litigation against supplement brands, independent of any actual safety issue.',
+      mitigation: 'Test every lot for the four heavy metals per USP <2232> and against Prop 65 thresholds, not just federal limits. Specify limits contractually with rejection rights. Prefer cultivated over wild-harvested material where soil conditions are documented. Carry Prop 65 warning language assessment in the label review process.'
+    },
+    {
+      id: 'r_nut_4', title: 'Novel Food & NDI Authorisation Barriers', type: 'Risk', severity: 'MEDIUM',
+      desc: 'The EU Novel Food Regulation requires pre-market authorisation taking 18-36 months for ingredients without significant EU consumption history before 1997, and the US requires New Dietary Ingredient notification for post-1994 ingredients. A product formulated for one market may be unlaunchable in the other.',
+      mitigation: 'Screen every ingredient against EU Novel Food catalogue and US NDI status at formulation stage, not at launch planning. Prefer ingredients with existing authorisation or an established supplier dossier. Budget authorisation timelines into the product roadmap where a novel ingredient is central to the concept.'
     }
   ]
 }

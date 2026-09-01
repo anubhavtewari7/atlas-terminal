@@ -252,11 +252,400 @@ const CATEGORY_PROFILES = {
     concentration: 'LOW — Germany, Japan, US, Korea all competitive',
     color: 'emerald',
   },
+
+  // ── Expansion profiles (categories 16-40) ────────────────────────────────
+  aerospace: {
+    label: 'Aerospace & Airframe Structures',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Civil aircraft parts largely duty-free. ITAR/EAR controls dominate, not tariffs.',
+    primaryHub: 'Everett/Seattle, USA / Toulouse, France / Montreal, Canada',
+    altHub: 'Guaymas, Mexico (USMCA) / Bristol, UK',
+    hts: '8803.30',
+    mfnRate: '0%',
+    tariffNote: 'Duty-free under WTO Civil Aircraft Agreement. ITAR: no re-export or foreign-national data access without a DDTC licence.',
+    esg: 'REACH chromate restrictions threaten aerospace primers. CFRP scrap has no scaled recycling route. DFARS specialty metals for US gov work.',
+    concentration: 'HIGH — Boeing/Airbus duopoly; NADCAP special processes held by few qualified sources',
+    color: 'rose',
+  },
+  energy_oil_gas: {
+    label: 'Energy / Oil & Gas Equipment',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Low tariff. Sanctions screening (OFAC/BIS) and API licensing are the real gates.',
+    primaryHub: 'Houston, USA / Stavanger, Norway',
+    altHub: 'Singapore (Jurong) / Ras Laffan, Qatar',
+    hts: '8431.43',
+    mfnRate: '2.5%',
+    tariffNote: 'US domestic 0%. GCC common tariff 5%. Norway EEA 0%. API 6A/16A monogram required.',
+    esg: 'OGMP 2.0 methane reporting flows down to suppliers. EPA Waste Emissions Charge penalises leak-prone components.',
+    concentration: 'MEDIUM-HIGH — cryogenic valves and large compressors at 52-78 week lead times',
+    color: 'rose',
+  },
+  ev_battery: {
+    label: 'EV Battery / Cell Supply Chain',
+    riskLevel: 'HIGH',
+    tariffRisk: 'CN cells: 3.4% MFN + 25% Sec 301 + IRA FEOC disqualification of the 30D credit.',
+    primaryHub: 'Ningde, China (CATL) / Chungcheong, South Korea',
+    altHub: 'US Battery Belt TN-GA-KY / Poland-Hungary (EU)',
+    hts: '8507.60',
+    mfnRate: '3.4%',
+    tariffNote: 'KORUS 0%. US domestic 0% + 45X credit ($45/kWh cell+module). FEOC screening required on every upstream tier.',
+    esg: 'EU Battery Regulation carbon-footprint declaration then digital battery passport from Feb 2027. Cobalt DRC/RMI due diligence mandatory.',
+    concentration: 'VERY HIGH — China refines most battery-grade Li, Co and graphite regardless of mine origin',
+    color: 'rose',
+  },
+  semiconductor: {
+    label: 'Semiconductor Manufacturing & Materials',
+    riskLevel: 'HIGH',
+    tariffRisk: 'ITA duty-free, but BIS export controls (incl. FDPR) reach non-US-made items.',
+    primaryHub: 'Hsinchu, Taiwan / Nagoya-Tohoku, Japan (materials)',
+    altHub: 'Phoenix, USA (CHIPS) / Eindhoven, Netherlands (litho)',
+    hts: '8542.31',
+    mfnRate: '0%',
+    tariffNote: '0% under Information Technology Agreement. Export licensing, not duty, is the constraint for China-nexus shipments.',
+    esg: 'Fabs consume 150k+ tonnes ultrapure water/day — Taiwan drought is a production risk. PFAS in photoresist under REACH review.',
+    concentration: 'VERY HIGH — Taiwan >90% of sub-7nm; ASML sole EUV source; photoresist from a handful of Japanese firms',
+    color: 'rose',
+  },
+  mining: {
+    label: 'Mining & Extractives',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Ores mostly low/zero duty. Resource nationalism and export bans are the real exposure.',
+    primaryHub: 'Pilbara, Australia / Antofagasta, Chile',
+    altHub: 'Saskatchewan, Canada / Katanga, DR Congo (high risk)',
+    hts: '2601.11',
+    mfnRate: '0%',
+    tariffNote: 'AUSFTA and US-Chile FTA 0% and IRA critical-mineral qualifying. Indonesia/Chile restrict raw ore export.',
+    esg: 'GISTM tailings conformance, Aboriginal heritage due diligence, and DRC artisanal child labour are the material issues.',
+    concentration: 'VERY HIGH — DRC ~70% of cobalt; Chile+Peru ~40% of copper',
+    color: 'rose',
+  },
+  luxury_goods: {
+    label: 'Luxury Goods / Leather & Watches',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'US leather goods 9% MFN. CITES permits required per unit for exotic skins.',
+    primaryHub: 'Florence/Scandicci, Italy / Jura Arc, Switzerland',
+    altHub: 'Hong Kong-Shenzhen (jewellery) / Spain (leather)',
+    hts: '4202.21',
+    mfnRate: '9%',
+    tariffNote: 'US 9% on leather handbags. Swiss Made requires 60% of cost in Switzerland. Made in Italy claims actively audited.',
+    esg: 'Leather Working Group tannery rating, Italian subcontractor labour audits, Kimberley Process and G7 Russian-diamond traceability.',
+    concentration: 'HIGH — Nivarox near-monopoly on hairsprings; Tuscan atelier capacity is finite',
+    color: 'amber',
+  },
+  cosmetics: {
+    label: 'Cosmetics & Personal Care',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Mostly duty-free. FDA MoCRA and EU CPNP registration are the market-access gates.',
+    primaryHub: 'Gyeonggi, South Korea (ODM) / Cosmetic Valley, France',
+    altHub: 'New Jersey, USA / Guangdong, China',
+    hts: '3304.99',
+    mfnRate: '0%',
+    tariffNote: 'KORUS 0%. EU/US cosmetics largely duty-free. MoCRA facility registration required for any facility shipping to the US.',
+    esg: 'EU bans/restricts 1,600+ substances. PFAS state bans drive reformulation. RSPO palm derivatives and Nagoya Protocol on botanicals.',
+    concentration: 'LOW-MEDIUM — Cosmax/Kolmar dominate K-beauty ODM but many qualified alternatives exist',
+    color: 'amber',
+  },
+  cold_chain: {
+    label: 'Cold Chain & Temp-Controlled Logistics',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Service category. F-gas refrigerant quotas and GDP/FSMA compliance drive cost.',
+    primaryHub: 'Rotterdam/Venlo, Netherlands / Atlanta, USA',
+    altHub: 'Singapore Changi (CEIV Pharma) / Dubai',
+    hts: '8418.69',
+    mfnRate: '2.2%',
+    tariffNote: 'Equipment 0-2.2% MFN. The commercial exposure is excursion loss and reefer plug availability, not duty.',
+    esg: 'F-gas phase-down forces R-404A migration to CO2 transcritical or ammonia. Cold storage is 3-5x ambient energy intensity.',
+    concentration: 'MEDIUM — Lineage/Americold consolidate US capacity; reefer plug scarcity at peak',
+    color: 'rose',
+  },
+  renewable_energy: {
+    label: 'Renewable Energy Equipment',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Solar: UFLPA detention + AD/CVD + circumvention findings on SE Asia assembly.',
+    primaryHub: 'Jiangsu, China (PV) / Jutland, Denmark (wind)',
+    altHub: 'Gujarat, India (PV) / Texas-Georgia, USA (45X)',
+    hts: '8541.43',
+    mfnRate: '0%',
+    tariffNote: 'CN modules: AD/CVD + Sec 201 + UFLPA hold risk. India: no AD/CVD order. US domestic: 45X $0.07/W module credit.',
+    esg: 'Xinjiang polysilicon forced-labour presumption. Wind blades are effectively unrecyclable thermoset composite.',
+    concentration: 'VERY HIGH — China holds 80-95% of every step of the PV chain',
+    color: 'rose',
+  },
+  telecom: {
+    label: 'Telecom & Network Infrastructure',
+    riskLevel: 'HIGH',
+    tariffRisk: 'ITA duty-free. Trusted-vendor mandates exclude Huawei/ZTE from funded networks.',
+    primaryHub: 'Helsinki/Stockholm (Nokia, Ericsson) / Taiwan (ODM)',
+    altHub: 'Japan-Korea optical belt / Vietnam-Mexico assembly',
+    hts: '8517.62',
+    mfnRate: '0%',
+    tariffNote: '0% under ITA. Verify substantial transformation on Vietnam/Mexico assembly — CBP has challenged screwdriver-assembly origin claims.',
+    esg: 'Nordic vendors publish full scope 3. Conflict-mineral (3TG) disclosure applies to copper and tantalum content.',
+    concentration: 'HIGH — fibre preform capacity is the hard constraint; Nokia/Ericsson are the only trusted-vendor RAN options',
+    color: 'rose',
+  },
+  furniture: {
+    label: 'Furniture & Interior Fittings',
+    riskLevel: 'HIGH',
+    tariffRisk: 'CN wooden bedroom furniture, cabinets and upholstered seating: AD/CVD up to 250%+.',
+    primaryHub: 'Binh Duong, Vietnam / Foshan, China',
+    altHub: 'Poland (EU volume) / Northeast Italy (design) / Mexico',
+    hts: '9403.60',
+    mfnRate: '0%',
+    tariffNote: 'MFN 0% but AD/CVD dominates for CN origin, assessed retroactively at the final review rate. VN has no blanket order.',
+    esg: 'Lacey Act strict liability on timber legality. EUDR plot-level geolocation from 2025. TSCA Title VI / CARB formaldehyde certification.',
+    concentration: 'LOW-MEDIUM — many qualified sources, but AD/CVD makes origin selection decisive',
+    color: 'rose',
+  },
+  sports_outdoor: {
+    label: 'Sports & Outdoor Equipment',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Athletic footwear carries up to 20% MFN — among the highest surviving US duties.',
+    primaryHub: 'Binh Duong, Vietnam (footwear) / Taichung, Taiwan (bicycles)',
+    altHub: 'Indonesia / Alpine Europe (technical/PPE) / China',
+    hts: '6404.11',
+    mfnRate: '20%',
+    tariffNote: 'Footwear duty driven by upper material and sole construction — classification is worth several margin points. First-sale valuation common.',
+    esg: 'PFAS-free DWR now effectively mandatory for EU. Bluesign/OEKO-TEX expected. Carbon-fibre layup scrap has no recycling route.',
+    concentration: 'HIGH — Shimano supplies the majority of world bicycle drivetrains with no fast alternative',
+    color: 'amber',
+  },
+  toys_games: {
+    label: 'Toys & Games',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Toys mostly MFN duty-free but exposed to Section 301 on Chinese origin.',
+    primaryHub: 'Dongguan/Shantou, China',
+    altHub: 'Vietnam / Billund-Hungary (premium EU) / Mexico',
+    hts: '9503.00',
+    mfnRate: '0%',
+    tariffNote: 'MFN 0%. Book-plus-object formats can reclassify from Chapter 49 into Chapter 95, pulling in full CPSIA testing.',
+    esg: 'ICTI Ethical Toy Program certification expected by all major retailers; pre-Q4 overtime is the most common audit failure.',
+    concentration: 'HIGH — Guangdong cluster produces the large majority of world toys',
+    color: 'amber',
+  },
+  pet_animal: {
+    label: 'Pet Food & Animal Products',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Mostly duty-free. FSMA 21 CFR 507 and state feed registration are the gates.',
+    primaryHub: 'US Midwest (MO/KS/IA) / Bangkok, Thailand (wet)',
+    altHub: 'Netherlands-Denmark (additives, vet) / Brazil',
+    hts: '2309.10',
+    mfnRate: '0%',
+    tariffNote: 'MFN 0% for prepared pet food. EU requires approved third-country establishment listing plus a veterinary health certificate.',
+    esg: 'CBP withhold-release orders on Thai/Chinese fishing over forced labour — marine protein needs vessel-level traceability.',
+    concentration: 'MEDIUM — North American co-manufacturing capacity persistently tight since 2021',
+    color: 'amber',
+  },
+  printing_media: {
+    label: 'Printing, Publishing & Media',
+    riskLevel: 'LOW',
+    tariffRisk: 'Printed books duty-free under HTS 4901 and largely excluded from Section 301.',
+    primaryHub: 'Shenzhen/Dongguan, China (books) / US Midwest',
+    altHub: 'Germany (presses) / Poland / India',
+    hts: '4901.99',
+    mfnRate: '0%',
+    tariffNote: 'Books 0%. Watch classification drift into Chapter 95 for book-plus-toy formats, which triggers CPSIA testing.',
+    esg: 'FSC-certified stock is standard. MOSH/MOAH ink migration limits tightening for food-contact printing, led by Germany.',
+    concentration: 'LOW-MEDIUM — capacity consolidating as print volumes structurally decline',
+    color: 'emerald',
+  },
+  hvac: {
+    label: 'HVAC & Building Systems',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN compressors and coils: 25% Sec 301. AHRI/UL listing required regardless of origin.',
+    primaryHub: 'Osaka, Japan (Daikin) / Texas-Southeast USA',
+    altHub: 'Yangtze Delta, China (components) / Mexico / Thailand',
+    hts: '8415.10',
+    mfnRate: '2.2%',
+    tariffNote: 'US domestic 0% and IRA 25C eligible. CN components 2.5% MFN + 25% Sec 301. CPTPP 0% from Japan.',
+    esg: 'AIM Act and EU F-gas cut HFC supply on a fixed schedule — R-410A is being displaced by A2L R-32 and R-454B.',
+    concentration: 'HIGH — most rotary/scroll compressors are China-made even inside Western-branded units',
+    color: 'amber',
+  },
+  water_treatment: {
+    label: 'Water Treatment & Purification',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Low duty. NSF/ANSI 61 and 372 certification is the binding requirement.',
+    primaryHub: 'California/US Southwest (membranes) / Israel',
+    altHub: 'Germany-Nordics (municipal) / Singapore',
+    hts: '8421.21',
+    mfnRate: '0%',
+    tariffNote: 'Equipment 0% MFN. Any wetted component needs a verifiable NSF/ANSI 61 listing — check the public NSF database, not the supplier claim.',
+    esg: 'EPA PFAS limits at single-digit ppt and the recast EU UWWTD create simultaneous global demand for GAC and ion-exchange media.',
+    concentration: 'MEDIUM-HIGH — RO membrane element supply concentrated among few manufacturers',
+    color: 'amber',
+  },
+  defense_military: {
+    label: 'Defence & Military Systems',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Not tariff-driven. ITAR, DFARS specialty metals and CMMC L2 are award gates.',
+    primaryHub: 'DC-Virginia corridor, USA / Bristol-Barrow, UK',
+    altHub: 'Changwon, South Korea / France-Germany (EU primes)',
+    hts: '9301.90',
+    mfnRate: 'N/A',
+    tariffNote: 'Licence-controlled rather than tariffed. AUKUS licence-free environment applies only to enrolled entities — verify before assuming exemption.',
+    esg: 'ESG-screened investors exclude the sector, raising supplier financing cost. AFFF PFAS remediation is a large legacy liability.',
+    concentration: 'VERY HIGH — solid rocket motors and ammonium perchlorate have effectively single domestic sources',
+    color: 'rose',
+  },
+  maritime: {
+    label: 'Maritime & Shipbuilding',
+    riskLevel: 'HIGH',
+    tariffRisk: 'USTR Sec 301 action adds port fees on Chinese-built vessels, cranes and containers.',
+    primaryHub: 'Ulsan/Geoje, South Korea / Shanghai-Jiangsu, China',
+    altHub: 'Japan / Denmark-N.Europe (propulsion & systems)',
+    hts: '8901.20',
+    mfnRate: '0%',
+    tariffNote: 'Newbuilds not conventionally tariffed, but the Jones Act bars foreign-built ships from US domestic trades and Sec 301 adds port entry fees.',
+    esg: 'IMO net-zero 2050 and EU ETS coverage drive methanol/ammonia dual-fuel. Require Hong Kong Convention recycling clauses.',
+    concentration: 'VERY HIGH — Korean yards hold near-exclusive membrane LNG capability; China >50% of global orderbook',
+    color: 'rose',
+  },
+  railway: {
+    label: 'Railway & Rail Transit',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Buy America 70% domestic content; NDAA 7613 bars Chinese state-controlled builders.',
+    primaryHub: 'Germany-France-Switzerland (systems) / Pittsburgh-Midwest USA',
+    altHub: 'Spain / Poland / Japan / India',
+    hts: '8607.21',
+    mfnRate: '2.5%',
+    tariffNote: 'MFN 2.5-3.7%. FTA-funded procurement requires 70% domestic content plus US final assembly — CRRC is statutorily excluded.',
+    esg: 'Rail is the lowest-carbon land mode; manufacturing carbon is dominated by steel and aluminium inputs.',
+    concentration: 'HIGH — Knorr-Bremse/Wabtec duopoly on rail braking with no third source at scale',
+    color: 'amber',
+  },
+  robotics_automation: {
+    label: 'Robotics & Industrial Automation',
+    riskLevel: 'HIGH',
+    tariffRisk: 'Low duty. Precision reducer supply and EU Machinery Regulation are the constraints.',
+    primaryHub: 'Japan (FANUC, Yaskawa, Nabtesco) / Stuttgart-Augsburg, Germany',
+    altHub: 'Silicon Valley-Boston (AMR) / South Korea / China',
+    hts: '8479.50',
+    mfnRate: '0%',
+    tariffNote: 'CPTPP 0% from Japan, 2.7% MFN from EU. AMR subassemblies (motors, LiDAR, batteries) remain China-origin with Sec 301 exposure.',
+    esg: 'ISO 10218 / ISO-TS 15066 safety certification. EU Machinery Regulation 2023/1230 adds cybersecurity and AI requirements from 2027.',
+    concentration: 'VERY HIGH — Nabtesco and Harmonic Drive supply most world precision reducers; every robot brand depends on them',
+    color: 'rose',
+  },
+  instruments_scientific: {
+    label: 'Scientific Instruments & Metrology',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Low duty, but Wassenaar dual-use controls apply to high-accuracy CMMs and microscopes.',
+    primaryHub: 'Boston-New England, USA / Jena-Oberkochen, Germany',
+    altHub: 'Tokyo-Kyoto, Japan / Switzerland',
+    hts: '9027.80',
+    mfnRate: '0%',
+    tariffNote: '0-1.7% MFN. ECCN 2B006 and related controls apply to precision metrology — classify before quoting, not before shipping.',
+    esg: 'Helium dependence for GC carrier gas and NMR cryogens is a genuine supply risk; qualify hydrogen carrier where the method allows.',
+    concentration: 'MEDIUM-HIGH — Zeiss SMT optics for EUV are irreplaceable; Horiba holds ~50%+ of fab mass flow controllers',
+    color: 'amber',
+  },
+  glass_ceramics: {
+    label: 'Glass & Technical Ceramics',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN flat glass AD duties. CBAM prices embedded carbon on EU glass imports from 2026.',
+    primaryHub: 'Corning NY, USA / France-Germany glass belt',
+    altHub: 'Nagoya-Seto, Japan (technical ceramics) / China',
+    hts: '7010.90',
+    mfnRate: '5%',
+    tariffNote: 'Container glass 5% MFN. CN flat glass carries AD duties. CBAM adds embedded-carbon cost into the EU from 2026.',
+    esg: 'Glass melting is among the most energy-intensive processes; cullet ratio drives both cost and footprint. MLCC palladium has Russian exposure.',
+    concentration: 'HIGH — pharma glass effectively locked by USP <660> qualification; MLCC lead times swing 12-40 weeks',
+    color: 'amber',
+  },
+  paint_coatings: {
+    label: 'Paints, Coatings & Pigments',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'CN coatings and TiO2: Sec 301 plus active AD duties on Chinese titanium dioxide.',
+    primaryHub: 'Cleveland-Pittsburgh, USA / Netherlands-Germany',
+    altHub: 'Yangtze Delta, China / Malaysia / India',
+    hts: '3208.90',
+    mfnRate: '3.7%',
+    tariffNote: 'US domestic 0%. CN origin 3.7% MFN + 25% Sec 301; EU has imposed AD duties on Chinese TiO2, typically 20-25% of paint cost.',
+    esg: 'Proposed EU universal PFAS restriction and REACH chromate sunset dates both force multi-year requalification programmes.',
+    concentration: 'LOW-MEDIUM — many coatings suppliers, but TiO2 pigment supply is concentrated and trade-remedy exposed',
+    color: 'amber',
+  },
+  nutraceuticals: {
+    label: 'Nutraceuticals & Supplements',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Low duty. FDA 21 CFR 111 cGMP and import alerts on named suppliers are the gates.',
+    primaryHub: 'Southern California-Utah, USA / Netherlands-Switzerland',
+    altHub: 'Mumbai-Hyderabad, India (extracts) / China (bulk vitamins)',
+    hts: '2106.90',
+    mfnRate: '0-6.4%',
+    tariffNote: 'Rate varies with composition. NDI notification required for post-1994 US ingredients; EU Novel Food authorisation takes 18-36 months.',
+    esg: 'Economically motivated botanical adulteration is endemic — independent identity testing per lot, not supplier CoA. Prop 65 heavy-metal litigation risk.',
+    concentration: 'MEDIUM — Lonza dominates two-piece capsules; botanical extracts concentrated in India with import-alert exposure',
+    color: 'amber',
+  },
 }
 
 function categorize(item) {
   const q = item.toLowerCase()
   const match = (kws) => kws.some(kw => q.includes(kw))
+
+  // ── Expansion categories: high-specificity prechecks ──────────────────────
+  // These run first because the legacy blocks below match broad single words
+  // ('glass', 'battery cell', 'relay', 'pump') that would otherwise swallow
+  // them. Only compound terms are used here so legacy routing is preserved.
+
+  // Semiconductor manufacturing & materials (before electronics)
+  if (match(['silicon wafer','epitaxial wafer','300mm wafer','200mm wafer','wafer fab','photoresist','euv','duv litho','immersion litho','photomask','reticle','cmp slurry','sputtering target','ion implant','atomic layer deposition','abf substrate','ic substrate','leadframe','die attach','wire bond','osat','advanced packaging','cowos','chiplet','semiconductor foundry','semiconductor equipment','fab equipment','semiconductor grade','polysilicon','sic wafer','gan wafer'])) return 'semiconductor'
+
+  // EV battery / cell supply chain (before electronics battery terms)
+  if (match(['ev battery','traction battery','gigafactory','cathode active material','anode material','anode graphite','synthetic graphite','pcam','nmc cathode','ncm cathode','nca cathode','lfp cathode','prismatic cell','pouch cell','cylindrical cell','4680','21700','18650','cell-to-pack','cell to pack','battery electrolyte','lipf6','battery separator','black mass','battery recycling','battery passport'])) return 'ev_battery'
+
+  // Renewable energy equipment (before electronics / machinery)
+  if (match(['solar panel','solar module','pv module','photovoltaic','solar cell','solar inverter','string inverter','microinverter','solar tracker','bifacial module','cdte module','perc cell','topcon cell','heterojunction cell','wind turbine','turbine blade','wind blade','nacelle','monopile','offshore wind','onshore wind','electrolyser','electrolyzer','green hydrogen','fuel cell stack','battery energy storage','grid scale storage','utility scale storage'])) return 'renewable_energy'
+
+  // Aerospace & airframe structures (before castings / fasteners)
+  if (match(['aerospace','aircraft part','airframe','aerostructure','fuselage','wing box','wing spar','landing gear','aircraft engine','jet engine','turbofan','turboprop','avionics','as9100','nadcap','aircraft fastener','aerospace fastener','aerospace composite','cfrp prepreg','honeycomb core','satellite component','spacecraft','launch vehicle','rocket engine','aircraft interior','aircraft bracket','aircraft skin'])) return 'aerospace'
+
+  // Defence & military systems
+  if (match(['defense contractor','defence contractor','military vehicle','armored vehicle','armoured vehicle','military grade','munition','ammunition','artillery','missile','warhead','solid rocket motor','itar','dfars','cmmc','usml','body armor','body armour','ballistic plate','ballistic helmet','night vision','military radar','electronic warfare','submarine component','military drone'])) return 'defense_military'
+
+  // Energy / oil & gas equipment (before machinery pump/valve/compressor)
+  if (match(['oilfield','oil field','oil and gas','oil & gas','wellhead','christmas tree valve','subsea tree','subsea equipment','blowout preventer','bop stack','drill pipe','drill bit','drilling rig','drill collar','casing pipe','octg','frac pump','fracturing','mud pump','downhole','api 6a','api 6d','api 5l','lng train','cryogenic valve','cryogenic tank','refinery equipment','pipeline valve','flare system','separator vessel'])) return 'energy_oil_gas'
+
+  // Mining & extractives (before raw metals)
+  if (match(['iron ore','copper ore','copper concentrate','bauxite','spodumene','lithium brine','mineral concentrate','mine site','mining operation','open pit mine','underground mine','tailings','haul truck','mineral processing','ore beneficiation','flotation cell','crushing plant','sag mill','potash','uranium ore','yellowcake','metallurgical coal','critical mineral','rare earth mining','nickel laterite','cobalt concentrate','kimberley process'])) return 'mining'
+
+  // Telecom & network infrastructure (before electrical / electronics)
+  if (match(['telecom','telecommunication','5g network','5g equipment','ran equipment','open ran','base station','small cell','cell tower','network switch','core router','optical transceiver','optical transport','optical fiber cable','optical fibre cable','fiber optic cable','single mode fiber','fiber preform','fusion splicer','gpon','xgs-pon','submarine cable','subsea cable','data center switch','white box switch','dwdm','microwave backhaul','satcom terminal'])) return 'telecom'
+
+  // HVAC & building systems (before machinery chiller/boiler)
+  if (match(['hvac','air conditioner','air conditioning','heat pump','mini split','vrf system','rooftop unit','air handling unit','fan coil','refrigerant','r-410a','r410a','r-32 refrigerant','r-454b','scroll compressor','rotary compressor','condensing unit','evaporator coil','condenser coil','thermostat','building automation','ductwork','air duct','ventilation system','seer2','hspf','ahri certified','chilled water system'])) return 'hvac'
+
+  // Water treatment & purification
+  if (match(['water treatment','wastewater','waste water','desalination','desalinat','reverse osmosis','ro membrane','nanofiltration','ultrafiltration','membrane element','ion exchange resin','activated carbon filter','granular activated carbon','water filtration','water purification','clarifier','sludge treatment','uv disinfection','water softener','demineralization','boiler feedwater','nsf 61','effluent treatment','pfas removal'])) return 'water_treatment'
+
+  // Robotics & industrial automation (before machinery robot terms)
+  if (match(['industrial robot','robotic arm','robot arm','six axis robot','6-axis robot','scara robot','delta robot','cobot','collaborative robot','autonomous mobile robot','amr robot','automated guided vehicle','robot controller','end effector','robot gripper','end-of-arm','harmonic drive','strain wave gear','cycloidal reducer','precision reducer','motion controller','machine vision','vision system','safety plc','industrial automation','factory automation','warehouse automation','palletizing robot','pick and place'])) return 'robotics_automation'
+
+  // Scientific instruments & metrology
+  if (match(['mass spectrometer','mass spectrometry','chromatography','hplc','uplc','gas chromatograph','gc-ms','lc-ms','nmr spectrometer','spectrophotometer','electron microscope','sem microscope','tem microscope','atomic force microscope','coordinate measuring machine','cmm machine','metrology equipment','optical metrology','laser interferometer','profilometer','analytical instrument','laboratory instrument','lab equipment','scientific instrument','xrf analyzer','xrd diffractometer','flow cytometer','pcr instrument','mass flow controller'])) return 'instruments_scientific'
+
+  // Glass & technical ceramics (before the legacy glass block)
+  if (match(['technical ceramic','advanced ceramic','alumina ceramic','zirconia ceramic','silicon nitride ceramic','ceramic substrate','ceramic package','mlcc','multilayer ceramic capacitor','pharmaceutical glass','type i glass','glass vial','glass ampoule','prefilled syringe','cover glass','gorilla glass','glass container','float glass furnace','cullet','optical glass','glass ceramic','refractory ceramic','porcelain insulator'])) return 'glass_ceramics'
+
+  // Maritime & shipbuilding
+  if (match(['shipbuilding','shipyard','newbuild vessel','container ship','containership','bulk carrier','tanker vessel','lng carrier','ro-ro vessel','marine engine','ship engine','two-stroke engine','marine propulsion','ship propeller','ballast water treatment','scrubber marine','ship-to-shore crane','port crane','shipping container','reefer container','jones act','offshore vessel','dry dock','hull block'])) return 'maritime'
+
+  // Railway & rail transit
+  if (match(['rolling stock','railcar','rail car','freight car','locomotive','metro car','trainset','high speed train','railway track','railway signalling','railway signaling','etcs','positive train control','bogie','rail wheelset','rail axle','railway brake','pantograph','catenary','overhead line equipment','rail fastening','railway sleeper','railway tie','railway component','rail transit'])) return 'railway'
+
+  // Cold chain & temperature-controlled logistics
+  if (match(['cold chain','cold storage','refrigerated container','refrigerated truck','refrigerated warehouse','freezer warehouse','blast freezer','temperature controlled logistics','temperature-controlled','temperature excursion','gdp logistics','ceiv pharma','validated cold chain','cryogenic shipper','dry ice shipping','insulated shipper','vaccine cold chain','frozen logistics','chilled logistics'])) return 'cold_chain'
+
+  // Sports & outdoor terms that collide with textiles ('shoe') / machinery
+  if (match(['athletic footwear','running shoe','sports shoe','sneaker','trainer shoe','sportswear','activewear','performance apparel','bicycle','bike frame','e-bike','ebike','groupset','bicycle component','cycling helmet','ski binding','snowboard','climbing harness','climbing rope','carabiner','hiking boot','golf club','tennis racket','treadmill'])) return 'sports_outdoor'
+
+  // Pet & animal terms that collide with agriculture/food ('food','feed')
+  if (match(['pet food','dog food','cat food','pet treat','pet supplement','animal feed','feed additive','animal nutrition','livestock feed','poultry feed','aquafeed','aqua feed','kibble','cat litter','veterinary','animal vaccine'])) return 'pet_animal'
+
+  // Pigment terms that collide with raw metals ('titanium')
+  if (match(['titanium dioxide','tio2','pigment dispersion','colour pigment','color pigment'])) return 'paint_coatings'
 
   // Paints / Coatings / Surface Treatments (check before chemicals)
   if (match(['paint','powder coat','powder-coat','e-coat','electrophoretic','primer coat','topcoat','basecoat','clearcoat','lacquer','varnish','anodiz','anodise','electroplat','zinc plat','chrome plat','phosphat','conversion coat','pvd coating','conformal coat','conformal coating','surface treatment','surface finish','cathodic dip','epoxy coat','polyurethane coat','anti-corrosion coat','enamel coat','ceramic coat','thermal spray','hard anodize'])) return 'coatings'
@@ -314,6 +703,37 @@ function categorize(item) {
 
   // Machinery / Equipment
   if (match(['pump','valve','compressor','cnc machine','machine tool','robot','robotic arm','conveyor','heat exchanger','gearbox','servo drive','vfd','press machine','lathe','mill ','grinder','welding machine','laser cutter','injection molding machine','extruder','hydraulic press','pneumatic cylinder','industrial equipment','capital equipment','plant equipment'])) return 'machinery'
+
+  // ── Expansion categories: consumer-facing & finished goods ────────────────
+  // Placed after the legacy blocks so existing BOM routing is unchanged.
+
+  // Luxury goods / leather & watches
+  if (match(['luxury goods','luxury handbag','designer handbag','leather handbag','small leather goods','luxury watch','mechanical watch','watch movement','swiss made','watch case','hairspring','escapement','fine jewelry','fine jewellery','jewelry manufactur','jewellery manufactur','diamond setting','exotic leather','crocodile leather','python leather','alligator leather','cites permit','vegetable tanned','haute couture'])) return 'luxury_goods'
+
+  // Cosmetics & personal care formulation
+  if (match(['cosmetic','skincare','skin care','serum formulation','k-beauty','beauty odm','makeup','lipstick','mascara','eyeshadow','sunscreen','spf formulation','moisturizer','fragrance','perfume','eau de parfum','inci','mocra','cpnp','emulsifier cosmetic','hyaluronic acid','niacinamide','retinol','peptide skincare','personal care formulation'])) return 'cosmetics'
+
+  // Furniture & interior fittings
+  if (match(['furniture','sofa','couch','armchair','dining table','coffee table','office chair','task chair','ergonomic chair','bedroom furniture','wardrobe','kitchen cabinet','bathroom vanity','upholstered seating','mattress','bed frame','flat pack','flat-pack','rta furniture','shelving unit','contract furniture','outdoor furniture','patio furniture','drawer slide','cabinet hinge'])) return 'furniture'
+
+  // Sports & outdoor equipment
+  if (match(['athletic footwear','running shoe','sports shoe','sneaker','sportswear','activewear','performance apparel','sports equipment','bicycle','bike frame','e-bike','ebike','groupset','bicycle component','cycling helmet','ski equipment','snowboard','ski binding','climbing harness','climbing rope','carabiner','camping gear','sleeping bag','hiking boot','golf club','tennis racket','fitness equipment','treadmill','dwr finish'])) return 'sports_outdoor'
+
+  // Toys & games
+  if (match(['plush toy','soft toy','action figure','fashion doll','doll toy','board game','puzzle game','jigsaw puzzle','building block toy','construction toy','ride-on toy','toy vehicle','educational toy','learning toy','toy factory','toy product','kids toy','children toy','astm f963','en 71','cpsia','icti','toy safety','toy manufactur','playset','collectible figure'])) return 'toys_games'
+
+  // Pet food & animal products
+  if (match(['pet food','dog food','cat food','pet treat','pet supplement','animal feed','feed additive','animal nutrition','livestock feed','poultry feed','aquafeed','aqua feed','veterinary','animal health','animal vaccine','pet accessory','cat litter','pet grooming','kibble','rendered protein'])) return 'pet_animal'
+
+  // Printing, publishing & media production
+  if (match(['book printing','offset printing','commercial printing','digital printing','flexographic','flexo press','gravure printing','screen printing','printing press','printing plate','ctp plate','printing ink','offset ink','uv ink','low migration ink','toner cartridge','inkjet head','bookbinding','case bound','perfect binding','saddle stitch','catalog printing','magazine printing','direct mail','print on demand','security printing'])) return 'printing_media'
+
+  // Paints, coatings & pigments (broader terms; the legacy 'coatings' block
+  // already catches process-coating language and fires first)
+  if (match(['titanium dioxide','tio2','pigment','dispersion pigment','architectural paint','decorative paint','marine coating','antifouling','coil coating','can coating','wood coating','paint manufactur','coating manufactur','zinc rich primer','chromate conversion','voc coating'])) return 'paint_coatings'
+
+  // Nutraceuticals & dietary supplements
+  if (match(['nutraceutical','dietary supplement','food supplement','vitamin supplement','multivitamin','softgel','gummy supplement','capsule supplement','two-piece capsule','botanical extract','herbal extract','curcumin','ashwagandha','boswellia','lutein','omega-3','fish oil supplement','algal oil','collagen peptide','whey protein','probiotic','prebiotic','creatine','amino acid supplement','novel food','ndi notification','aafco','sports nutrition'])) return 'nutraceuticals'
 
   // Fallback generic metals
   if (match(['steel','aluminum','aluminium','copper','iron','zinc','mineral','mining','metal','alloy','bronze','brass','stainless'])) return 'metals'

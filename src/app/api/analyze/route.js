@@ -58,7 +58,33 @@ export async function POST(req) {
       machinery:      'industrial machinery',
       wood_paper:     'wood / paper / pulp product',
       construction:   'glass & construction material',
-      consumer_goods: 'consumer goods / personal care product'
+      consumer_goods: 'consumer goods / personal care product',
+      // Expansion categories (16-40)
+      aerospace:              'aerospace / airframe component',
+      energy_oil_gas:         'oil & gas equipment',
+      ev_battery:             'EV battery / cell component',
+      semiconductor:          'semiconductor / fab material',
+      mining:                 'mined mineral / ore',
+      luxury_goods:           'luxury / leather good',
+      cosmetics:              'cosmetic / personal care formulation',
+      cold_chain:             'cold chain / temperature-controlled item',
+      renewable_energy:       'renewable energy equipment',
+      telecom:                'telecom / network equipment',
+      furniture:              'furniture / interior fitting',
+      sports_outdoor:         'sports & outdoor product',
+      toys_games:             'toy / game product',
+      pet_animal:             'pet food / animal product',
+      printing_media:         'printing / publishing service',
+      hvac:                   'HVAC / building system',
+      water_treatment:        'water treatment equipment',
+      defense_military:       'defence / military system',
+      maritime:               'maritime / shipbuilding item',
+      railway:                'railway / rolling stock component',
+      robotics_automation:    'robotics / automation equipment',
+      instruments_scientific: 'scientific instrument',
+      glass_ceramics:         'glass / technical ceramic',
+      paint_coatings:         'paint / coating / pigment',
+      nutraceuticals:         'nutraceutical / dietary supplement'
     };
     const categoryLabel = categoryLabels[category] || 'commodity';
 
