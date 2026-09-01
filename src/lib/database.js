@@ -1143,7 +1143,11 @@ export function categorizeQuery(query) {
     'concrete pump', 'cement mix', 'concrete block masonry',
     'iron aggregate', 'gravel aggregate',
     // Basalt must be here — P13 construction fires AFTER food P5a which catches 'salt' inside 'basalt'
-    'basalt', 'basalt fiber', 'basalt rock', 'basalt stone', 'basalt wool'
+    'basalt', 'basalt fiber', 'basalt rock', 'basalt stone', 'basalt wool',
+    // Ceramic/tile compounds — must be here because 'ceramic' contains 'ram' (→ P4 electronics RAM)
+    // and 'tile' alone is caught by P13 construction which fires too late
+    'ceramic tile', 'porcelain tile', 'floor tile', 'wall tile', 'mosaic tile',
+    'roof tile', 'paving tile', 'terracotta tile', 'vitrified tile', 'quarry tile'
   ])) return 'construction'
 
   // Pre-D: Medical compound terms (before metals 'metal' or packaging 'packaging' intercept)
@@ -1180,10 +1184,14 @@ export function categorizeQuery(query) {
 
   // Pre-F: Agriculture terms that would be caught by food's broad keywords
   //   'fish feed' contains 'fish', 'sunflower seed crop' contains 'sunflower seed'
+  //   'irrigation pipe' contains 'pipe' → caught by P2 industrial before agriculture fires
   if (match([
     'fish feed', 'fish meal', 'fish oil crude', 'fish oil agri',
     'sunflower seed crop', 'sunflower crop', 'seed corn', 'seed wheat',
-    'seed potato', 'seed soybean', 'cover crop seed'
+    'seed potato', 'seed soybean', 'cover crop seed',
+    'irrigation pipe', 'irrigation tube', 'irrigation tubing', 'drip line',
+    'drip tape', 'drip emitter', 'irrigation fitting', 'sprinkler head agri',
+    'center pivot', 'pivot irrigation', 'irrigation pump agri'
   ])) return 'agriculture'
 
   // Pre-F2: Processed food terms that collide with agriculture raw keywords
@@ -1331,7 +1339,8 @@ export function categorizeQuery(query) {
     'webcam', 'usb camera', 'security camera', 'ip camera', 'cctv camera',
     'router', 'wifi router', 'network switch', 'modem', 'access point',
     'hard drive', 'ssd', 'solid state drive', 'hdd', 'nvme',
-    'ram', 'memory module', 'ddr4', 'ddr5', 'dimm'
+    'ddr ram', 'computer ram', 'ram module', 'sdram', 'sram chip',
+    'memory module', 'ddr4', 'ddr5', 'dimm'
   ])) return 'electronics'
 
   // Pre-G0: Packaging containers that contain food substrings
