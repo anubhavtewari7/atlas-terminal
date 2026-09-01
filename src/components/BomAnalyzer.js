@@ -213,6 +213,32 @@ const CATEGORY_PROFILES = {
     concentration: 'LOW — packaging is highly regionalized',
     color: 'amber',
   },
+  wood_paper: {
+    label: 'Wood / Paper',
+    riskLevel: 'LOW',
+    tariffRisk: 'Hardwood duties vary 0-3.2% MFN. Softwood lumber: US/Canada antidumping duties up to 20%.',
+    primaryHub: 'Brazil / Canada / Southeast Asia',
+    altHub: 'Germany / New Zealand / Chile',
+    hts: '4412.31',
+    mfnRate: '3.2%',
+    tariffNote: 'Canadian softwood: antidumping + CVD ~20% combined. FSC/PEFC certification required for EU.',
+    esg: 'EUDR (EU Deforestation Regulation) requires due diligence documentation from 2025.',
+    concentration: 'LOW-MEDIUM — regional markets, but tropical hardwoods concentrated in SEA/Brazil',
+    color: 'amber',
+  },
+  food: {
+    label: 'Food / Beverage / Agriculture',
+    riskLevel: 'MEDIUM',
+    tariffRisk: 'Highly variable: 0% (CAFTA staples) to 35%+ (dairy, sugar, beef). SPS measures common.',
+    primaryHub: 'Brazil / Netherlands / US Midwest',
+    altHub: 'Thailand / Argentina / Mexico (USMCA)',
+    hts: '2106.90',
+    mfnRate: '6.4%',
+    tariffNote: 'USMCA: 0% most ag. EU imports require phytosanitary certs. Sugar/dairy TRQs apply.',
+    esg: 'FDA Food Safety Modernization Act (FSMA) compliance. Organic/fair-trade certification common.',
+    concentration: 'LOW-MEDIUM — diversified globally but weather/climate risk concentrated',
+    color: 'emerald',
+  },
   machinery: {
     label: 'Machinery / Equipment',
     riskLevel: 'LOW',
@@ -275,7 +301,13 @@ function categorize(item) {
   if (match(['api ','active pharmaceutical','pharmaceutical','drug substance','excipient','medical device','surgical','syringe','catheter','stent','implant','diagnostic kit','reagent','nitrile glove','latex glove','surgical mask','n95','sterile','gmp certified','iso 13485','medical grade','pharma grade','cleanroom'])) return 'medical'
 
   // Textiles / Apparel
-  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn','knit','woven','polyester fabric','nylon fabric','spandex','lycra','fleece','felt','non-woven','canvas','webbing','strap','velcro','zipper','button'])) return 'textiles'
+  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','fabric','yarn','knit','woven','polyester fabric','nylon fabric','spandex','lycra','fleece','felt','non-woven','canvas','webbing','strap','velcro','zipper','button','thread','sewing thread','embroidery thread','silk','linen','viscose','rayon','twill','lace','ribbon','elastic band','interlining','batting','interfacing'])) return 'textiles'
+
+  // Wood / Paper / Packaging Materials
+  if (match(['plywood','lumber','timber','hardwood','softwood','mdf','particleboard','chipboard','osb board','oriented strand','wood panel','teak','pine wood','oak wood','birch','maple wood','walnut wood','bamboo','rattan','kraft paper','corrugated paper','paper board','cardboard','paperboard','newsprint','tissue paper','kraft','pulp','paper roll','paper sheet','paper bag','wood pellet','engineered wood','laminate floor'])) return 'wood_paper'
+
+  // Food / Beverage
+  if (match(['tomato','potato','banana','avocado','mango','apple','orange','berry','vegetable','fruit','fish','seafood','shrimp','salmon','tuna','spice','pepper','salt','sugar cane','molasses','vinegar','sauce','soup','snack','cereal','pasta','noodle','biscuit','chocolate','candy','beverage','juice','beer','wine','spirits','tea','milk','cheese','butter','cream','ice cream','yogurt','oil','olive','palm','soy oil','protein'])) return 'food'
 
   // Packaging
   if (match(['corrugated box','cardboard box','shipping box','carton','blister pack','clamshell','pouch','stand-up pouch','shrink sleeve','label','pressure sensitive','glass bottle','glass jar','plastic bottle','plastic container','retail packaging','aseptic','foam insert','bubble wrap','pallet','strapping','shrink wrap'])) return 'packaging'
