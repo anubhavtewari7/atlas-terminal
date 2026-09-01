@@ -2551,6 +2551,7 @@ export function categorizeQuery(query) {
   //     (before electronics catches 'battery' / 'battery cell')
   if (match([
     'ev battery', 'traction battery', 'battery gigafactory', 'gigafactory',
+    'lithium cell', 'battery cell', 'cell pouch', 'cell module',
     'cathode active material', 'anode material', 'anode graphite', 'synthetic graphite',
     'pcam', 'precursor cathode', 'nmc cathode', 'ncm cathode', 'nca cathode',
     'lfp cell', 'lfp cathode', 'prismatic cell', 'pouch cell', 'cylindrical cell',
@@ -2723,10 +2724,10 @@ export function categorizeQuery(query) {
   // X16: Cosmetics & personal care formulation
   //      (before consumer_goods and chemicals intercept)
   if (match([
-    'cosmetic', 'cosmetics', 'skincare', 'skin care formulation', 'serum formulation',
+    'cosmetic', 'cosmetics', 'skincare', 'skin care', 'skin care formulation', 'serum formulation',
     'k-beauty', 'beauty odm', 'cosmetic odm', 'cosmetic contract manufactur',
     'makeup', 'lipstick', 'foundation makeup', 'mascara', 'eyeshadow',
-    'sunscreen', 'spf formulation', 'moisturizer formulation',
+    'sunscreen', 'spf formulation', 'moisturizer', 'skin cream', 'skin lotion', 'body lotion',
     'fragrance', 'perfume', 'eau de parfum', 'essential oil fragrance',
     'inci', 'mocra', 'cpnp', 'cosmetic ingredient', 'emulsifier cosmetic',
     'hyaluronic acid', 'niacinamide', 'retinol', 'peptide skincare',
@@ -2736,6 +2737,7 @@ export function categorizeQuery(query) {
   // X17: Nutraceuticals & dietary supplements
   if (match([
     'nutraceutical', 'dietary supplement', 'food supplement', 'vitamin supplement',
+    'vitamin c', 'vitamin d', 'vitamin b12', 'vitamin e', 'vitamin k',
     'multivitamin', 'softgel', 'gummy supplement', 'capsule supplement',
     'two-piece capsule', 'botanical extract', 'herbal extract', 'plant extract standardiz',
     'curcumin', 'ashwagandha', 'boswellia', 'lutein', 'omega-3 supplement',
@@ -2792,6 +2794,7 @@ export function categorizeQuery(query) {
     'plush toy', 'soft toy', 'action figure', 'fashion doll', 'doll toy', 'board game',
     'puzzle game', 'jigsaw puzzle', 'building block toy', 'construction toy',
     'ride-on toy', 'toy vehicle', 'educational toy', 'learning toy',
+    'plastic toy', 'wooden toy', 'electronic toy', 'baby toy', 'infant toy',
     'toy factory', 'toy product', 'toy industry', 'kids toy', 'children toy',
     'astm f963', 'en 71', 'cpsia', 'icti', 'toy safety', 'toy manufactur',
     'playset', 'collectible figure', 'trading card game', 'video game console accessory'
