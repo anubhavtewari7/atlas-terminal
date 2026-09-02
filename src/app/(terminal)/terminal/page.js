@@ -2127,6 +2127,45 @@ export default function Dashboard() {
         ════════════════════════════════════ */}
         <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
+          {/* Strategic Directive */}
+          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative shrink-0">
+            <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
+            <h2 className="text-[11px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
+              <Target size={14} /> Strategic Directive
+            </h2>
+            {directive ? (
+              <div className="space-y-4">
+                <div>
+                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
+                  <div className="text-[14px] font-bold text-white uppercase tracking-wider">{directive.best_region}</div>
+                </div>
+                <div>
+                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
+                  <div className="text-[14px] font-bold text-emerald-400 uppercase">{directive.best_partner}</div>
+                </div>
+                <div className="p-3 bg-rose-500/8 border border-rose-500/25 rounded-lg space-y-1">
+                  <div className="text-[8px] text-rose-500 uppercase font-bold tracking-widest flex items-center gap-1.5">
+                    <ShieldAlert size={10} /> Trade & Compliance Alert
+                  </div>
+                  <div className="text-[11px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
+                </div>
+                <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
+                  &ldquo;{directive.summary}&rdquo;
+                </div>
+              </div>
+            ) : (
+              <div className="text-[11px] text-slate-500 italic flex items-center gap-2 animate-pulse">
+                <Clock size={13} /> Run a mission scan to generate directive...
+              </div>
+            )}
+            {opportunities.length > 0 && (
+              <button onClick={() => setShowRecommendation(true)}
+                className="w-full mt-3 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all rounded-lg flex items-center justify-center gap-2">
+                <CheckCircle size={12} /> Get Recommendation
+              </button>
+            )}
+          </div>
+
           {/* Metals & Materials */}
           <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="market">
             <div className="flex items-center justify-between mb-3">
@@ -2204,45 +2243,6 @@ export default function Dashboard() {
               </div>
             </div>
           )}
-
-          {/* Strategic Directive */}
-          <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative shrink-0">
-            <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
-            <h2 className="text-[11px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
-              <Target size={14} /> Strategic Directive
-            </h2>
-            {directive ? (
-              <div className="space-y-4">
-                <div>
-                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
-                  <div className="text-[14px] font-bold text-white uppercase tracking-wider">{directive.best_region}</div>
-                </div>
-                <div>
-                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
-                  <div className="text-[14px] font-bold text-emerald-400 uppercase">{directive.best_partner}</div>
-                </div>
-                <div className="p-3 bg-rose-500/8 border border-rose-500/25 rounded-lg space-y-1">
-                  <div className="text-[8px] text-rose-500 uppercase font-bold tracking-widest flex items-center gap-1.5">
-                    <ShieldAlert size={10} /> Trade & Compliance Alert
-                  </div>
-                  <div className="text-[11px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
-                </div>
-                <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
-                  &ldquo;{directive.summary}&rdquo;
-                </div>
-              </div>
-            ) : (
-              <div className="text-[11px] text-slate-500 italic flex items-center gap-2 animate-pulse">
-                <Clock size={13} /> Run a mission scan to generate directive...
-              </div>
-            )}
-            {opportunities.length > 0 && (
-              <button onClick={() => setShowRecommendation(true)}
-                className="w-full mt-3 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all rounded-lg flex items-center justify-center gap-2">
-                <CheckCircle size={12} /> Get Recommendation
-              </button>
-            )}
-          </div>
 
           {/* Market Intelligence / News */}
           <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
