@@ -804,19 +804,19 @@ export default function BomAnalyzer({ onClose, onScan }) {
             <List size={13} className="text-violet-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[9px] font-bold text-violet-400 uppercase tracking-widest">BOM Analysis</div>
+            <div className="text-[10px] font-bold text-violet-400 uppercase tracking-widest">BOM Analysis</div>
             <div className="text-[8px] text-slate-500 mt-0.5 truncate max-w-[180px]">
               {results.length} items · <span className="text-rose-400">{summary.high} HIGH</span> · <span className="text-amber-400">{summary.medium} MED</span>
             </div>
             {lastScanned && (
-              <div className="text-[7px] text-slate-600 mt-0.5 truncate max-w-[180px]">Scanning: {lastScanned}</div>
+              <div className="text-[7px] text-slate-500 mt-0.5 truncate max-w-[180px]">Scanning: {lastScanned}</div>
             )}
           </div>
           <div className="flex items-center gap-1 ml-1">
             <div className="text-[8px] text-violet-500 group-hover:text-violet-300 font-bold uppercase tracking-wider transition-colors">↑ Expand</div>
             <button
               onClick={(e) => { e.stopPropagation(); onClose() }}
-              className="ml-2 p-1 text-slate-600 hover:text-slate-300 transition-colors rounded"
+              className="ml-2 p-1 text-slate-500 hover:text-slate-300 transition-colors rounded"
             >
               <X size={11} />
             </button>
@@ -843,7 +843,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-violet-400 tracking-[0.2em] uppercase">BOM Risk Analyzer</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">Bill of Materials — sourcing risk, tariff exposure, concentration</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Bill of Materials — sourcing risk, tariff exposure, concentration</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
@@ -856,19 +856,19 @@ export default function BomAnalyzer({ onClose, onScan }) {
               <p className="text-[12px] text-slate-500 leading-relaxed">
                 Paste your Bill of Materials below — one item per line, or comma / semicolon separated. Atlas will score each component for tariff exposure, sourcing concentration risk, and ESG flags.
               </p>
-              <p className="text-[10px] text-slate-600 -mt-2">One item per line -- material name + spec. No quantities needed.</p>
+              <p className="text-[11px] text-slate-500 -mt-2">One item per line -- material name + spec. No quantities needed.</p>
               <textarea
                 autoFocus
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 placeholder={`e.g.\nNdFeB permanent magnets (N52)\nLithium-ion battery cells\nInjection-molded ABS housing\nPCB assembly (8-layer)\nAluminum die casting\nBrake pad assembly\nNylon 66 connector`}
                 rows={9}
-                className="w-full bg-[#111] border border-white/10 px-5 py-4 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-violet-500 transition-all rounded-xl resize-none leading-relaxed"
+                className="w-full bg-[#111] border border-white/10 px-5 py-4 text-[12px] font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-violet-500 transition-all rounded-xl resize-none leading-relaxed"
               />
               <button
                 onClick={analyzeBOM}
                 disabled={!input.trim()}
-                className="w-full h-11 bg-violet-500 text-black font-bold text-[11px] uppercase tracking-widest hover:bg-violet-400 transition-all disabled:opacity-30 rounded-xl flex items-center justify-center gap-2"
+                className="w-full h-11 bg-violet-500 text-black font-bold text-[12px] uppercase tracking-widest hover:bg-violet-400 transition-all disabled:opacity-30 rounded-xl flex items-center justify-center gap-2"
               >
                 <List size={14} /> Analyze BOM
               </button>
@@ -888,7 +888,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
                 ].map((s, i) => (
                   <div key={i} className={`p-3 rounded-xl border ${s.color === 'rose' ? 'bg-rose-500/10 border-rose-500/30' : s.color === 'amber' ? 'bg-amber-500/10 border-amber-500/30' : s.color === 'emerald' ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-white/5 border-white/10'} text-center`}>
                     <div className={`text-[22px] font-bold font-mono ${s.color === 'rose' ? 'text-rose-400' : s.color === 'amber' ? 'text-amber-400' : s.color === 'emerald' ? 'text-emerald-400' : 'text-slate-500'}`}>{s.count}</div>
-                    <div className="text-[9px] text-slate-500 uppercase tracking-widest mt-0.5">{s.label}</div>
+                    <div className="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -907,11 +907,11 @@ export default function BomAnalyzer({ onClose, onScan }) {
                         <div className="flex items-center gap-3 min-w-0">
                           <div className={`w-2 h-2 rounded-full shrink-0 ${rc.dot}`} />
                           <span className="text-[12px] font-mono text-white truncate">{r.item}</span>
-                          <span className="text-[9px] text-slate-500 shrink-0 hidden sm:block">{r.category}</span>
+                          <span className="text-[10px] text-slate-500 shrink-0 hidden sm:block">{r.category}</span>
                         </div>
                         <div className="flex items-center gap-2 shrink-0 ml-3">
-                          <span className={`text-[9px] font-bold uppercase tracking-widest ${rc.text}`}>{r.riskLevel}</span>
-                          <span className="text-[10px] text-slate-600 font-mono hidden sm:block">HTS {r.hts}</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-widest ${rc.text}`}>{r.riskLevel}</span>
+                          <span className="text-[11px] text-slate-500 font-mono hidden sm:block">HTS {r.hts}</span>
                           {onScan && (
                             <button
                               onClick={(e) => { e.stopPropagation(); setLastScanned(r.item); setMinimized(true); onScan(r.item) }}
@@ -940,8 +940,8 @@ export default function BomAnalyzer({ onClose, onScan }) {
                             { label: 'ESG / Compliance Flag', value: r.esg, icon: <Info size={11} /> },
                           ].map((field, fi) => (
                             <div key={fi} className="space-y-0.5">
-                              <div className="text-[9px] text-slate-600 uppercase tracking-widest font-bold flex items-center gap-1">{field.icon}{field.label}</div>
-                              <div className="text-[11px] text-slate-300 leading-snug">{field.value}</div>
+                              <div className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-1">{field.icon}{field.label}</div>
+                              <div className="text-[12px] text-slate-300 leading-snug">{field.value}</div>
                             </div>
                           ))}
                         </div>
@@ -953,7 +953,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
 
               <button
                 onClick={() => { setResults(null); setInput('') }}
-                className="w-full h-9 border border-white/10 text-slate-500 hover:text-white hover:border-white/20 text-[9px] uppercase tracking-widest rounded-xl transition-all"
+                className="w-full h-9 border border-white/10 text-slate-500 hover:text-white hover:border-white/20 text-[10px] uppercase tracking-widest rounded-xl transition-all"
               >
                 Analyze new BOM
               </button>

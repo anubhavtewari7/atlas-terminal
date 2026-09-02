@@ -207,7 +207,7 @@ export default function DualUseChecker({ onClose }) {
             </div>
             <div>
               <div className="text-xs font-bold text-rose-400 uppercase tracking-widest">Dual-Use / Export Control</div>
-              <div className="text-[10px] text-slate-500">EAR / ITAR classification heuristic — not legal advice</div>
+              <div className="text-[11px] text-slate-500">EAR / ITAR classification heuristic — not legal advice</div>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
@@ -219,15 +219,15 @@ export default function DualUseChecker({ onClose }) {
           {/* Disclaimer */}
           <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/5 border border-amber-500/15">
             <AlertTriangle size={11} className="text-amber-500/70 shrink-0 mt-0.5" />
-            <p className="text-[9px] text-slate-600 leading-relaxed">
+            <p className="text-[10px] text-slate-500 leading-relaxed">
               This is a <span className="text-amber-400/80">heuristic screening tool</span>, not a formal ECCN classification. Always consult a licensed export compliance attorney or BIS for binding determinations. Violations carry civil penalties up to $1M and criminal penalties.
             </p>
           </div>
 
           {/* Input */}
           <div>
-            <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Product Description</label>
-            <p className="text-[9px] text-slate-600 mb-2">Include function, materials, performance specs, and intended end-use. More detail = better classification.</p>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Product Description</label>
+            <p className="text-[10px] text-slate-500 mb-2">Include function, materials, performance specs, and intended end-use. More detail = better classification.</p>
             <textarea
               value={description} onChange={e => setDescription(e.target.value)}
               placeholder="Describe the product including: function, performance specs, materials, end-use application, and any defense/aerospace/encryption context…"
@@ -238,7 +238,7 @@ export default function DualUseChecker({ onClose }) {
             <div className="flex flex-wrap gap-1.5 mt-2">
               {EXAMPLES.map((ex, i) => (
                 <button key={i} onClick={() => setDescription(ex)}
-                  className="text-[8px] text-slate-600 hover:text-slate-400 border border-white/8 hover:border-white/20 rounded px-2 py-1 transition-colors truncate max-w-[200px]">
+                  className="text-[8px] text-slate-500 hover:text-slate-400 border border-white/8 hover:border-white/20 rounded px-2 py-1 transition-colors truncate max-w-[200px]">
                   {ex}
                 </button>
               ))}
@@ -248,7 +248,7 @@ export default function DualUseChecker({ onClose }) {
           <button
             onClick={run}
             disabled={!description.trim()}
-            className="w-full h-10 bg-rose-500/80 text-white font-bold uppercase text-[10px] hover:bg-rose-500 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
+            className="w-full h-10 bg-rose-500/80 text-white font-bold uppercase text-[11px] hover:bg-rose-500 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
           >
             <Search size={11} /> Screen for Export Controls
           </button>
@@ -269,13 +269,13 @@ export default function DualUseChecker({ onClose }) {
                 </div>
                 {result.level === 'clear' ? (
                   <>
-                    <p className="text-[10px] text-slate-400 leading-relaxed">{result.summary}</p>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">{result.summary}</p>
                     {result.recommendation && (
-                      <p className="text-[10px] text-emerald-300/70 leading-relaxed mt-1.5">{result.recommendation}</p>
+                      <p className="text-[11px] text-emerald-300/70 leading-relaxed mt-1.5">{result.recommendation}</p>
                     )}
                   </>
                 ) : (
-                  <p className="text-[10px] text-slate-400 leading-relaxed">
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
                     {result.hits.length} control trigger{result.hits.length > 1 ? 's' : ''} detected. Review each finding below and consult your export compliance team.
                   </p>
                 )}
@@ -289,20 +289,20 @@ export default function DualUseChecker({ onClose }) {
                 }`}>
                   <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${
+                      <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded ${
                         hit.color === 'rose' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'
                       }`}>{hit.eccn}</span>
                       <span className="text-xs font-bold text-white">{hit.title}</span>
                     </div>
                     <div className="flex gap-1">
                       {hit.regime.map(r => (
-                        <span key={r} className="text-[8px] font-bold text-slate-600 border border-white/8 rounded px-1.5 py-0.5">{r}</span>
+                        <span key={r} className="text-[8px] font-bold text-slate-500 border border-white/8 rounded px-1.5 py-0.5">{r}</span>
                       ))}
                     </div>
                   </div>
                   <div className="px-4 py-3 space-y-2">
-                    <p className="text-[10px] text-slate-400 leading-relaxed">{hit.desc}</p>
-                    <div className={`text-[9px] font-bold leading-relaxed ${hit.color === 'rose' ? 'text-rose-400' : 'text-amber-400'}`}>
+                    <p className="text-[11px] text-slate-400 leading-relaxed">{hit.desc}</p>
+                    <div className={`text-[10px] font-bold leading-relaxed ${hit.color === 'rose' ? 'text-rose-400' : 'text-amber-400'}`}>
                       ⚡ {hit.action}
                     </div>
                     <div className="flex flex-wrap gap-1 mt-1">
@@ -319,7 +319,7 @@ export default function DualUseChecker({ onClose }) {
               {/* EAR99 positive signals if mixed */}
               {result.ear99Signals.length > 0 && result.level !== 'clear' && (
                 <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/15">
-                  <div className="text-[9px] font-bold text-emerald-400 mb-1">EAR99 signals also present:</div>
+                  <div className="text-[10px] font-bold text-emerald-400 mb-1">EAR99 signals also present:</div>
                   <div className="flex flex-wrap gap-1">
                     {result.ear99Signals.map(kw => (
                       <span key={kw} className="text-[8px] bg-emerald-500/10 border border-emerald-500/20 rounded px-1.5 py-0.5 text-emerald-500/70">{kw}</span>
@@ -330,7 +330,7 @@ export default function DualUseChecker({ onClose }) {
 
               {/* Resources */}
               <div className="p-3 rounded-lg bg-white/3 border border-white/8">
-                <div className="text-[9px] font-bold text-slate-400 mb-2">Official Resources</div>
+                <div className="text-[10px] font-bold text-slate-400 mb-2">Official Resources</div>
                 <div className="space-y-1">
                   {[
                     ['BIS SNAP-R (license applications)', 'https://snapr.bis.doc.gov'],
@@ -339,7 +339,7 @@ export default function DualUseChecker({ onClose }) {
                     ['BIS CCL ECCN lookup', 'https://www.bis.doc.gov/eccn'],
                   ].map(([label, url]) => (
                     <a key={url} href={url} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[9px] text-sky-400/70 hover:text-sky-400 transition-colors">
+                      className="flex items-center gap-1.5 text-[10px] text-sky-400/70 hover:text-sky-400 transition-colors">
                       <ExternalLink size={9} /> {label}
                     </a>
                   ))}

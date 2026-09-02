@@ -82,7 +82,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
             </div>
             <div>
               <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Currency Impact Calculator</div>
-              <div className="text-[10px] text-slate-500">FOB price sensitivity to FX moves</div>
+              <div className="text-[11px] text-slate-500">FOB price sensitivity to FX moves</div>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
@@ -93,13 +93,13 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
         <div className="p-5 space-y-4">
           {/* Currency selector */}
           <div>
-            <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Supplier Currency</label>
+            <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-2">Supplier Currency</label>
             <div className="grid grid-cols-4 gap-1.5">
               {Object.entries(DEFAULT_FX).slice(0, 8).map(([code, info]) => (
                 <button
                   key={code}
                   onClick={() => { setCurrency(code); setUserRate('') }}
-                  className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border
+                  className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border
                     ${currency === code
                       ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
                       : 'bg-white/3 border-white/8 text-slate-500 hover:text-white hover:border-white/20'}`}
@@ -114,7 +114,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                 <button
                   key={code}
                   onClick={() => { setCurrency(code); setUserRate('') }}
-                  className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border
+                  className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border
                     ${currency === code
                       ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
                       : 'bg-white/3 border-white/8 text-slate-500 hover:text-white hover:border-white/20'}`}
@@ -129,7 +129,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
           {/* Inputs */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
                 FOB Unit Price ({selectedCcy.symbol || currency})
               </label>
               <input
@@ -140,7 +140,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               />
             </div>
             <div>
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Order Quantity</label>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Order Quantity</label>
               <input
                 value={quantity} onChange={e => setQuantity(e.target.value)}
                 placeholder="e.g. 1000"
@@ -149,8 +149,8 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               />
             </div>
             <div>
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
-                Override FX Rate <span className="text-slate-600 normal-case">(optional)</span>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+                Override FX Rate <span className="text-slate-500 normal-case">(optional)</span>
               </label>
               <input
                 value={userRate} onChange={e => setUserRate(e.target.value)}
@@ -164,7 +164,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
           <button
             onClick={calculate}
             disabled={!fobPrice}
-            className="w-full h-10 bg-emerald-500 text-black font-bold uppercase text-[10px] hover:bg-emerald-400 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
+            className="w-full h-10 bg-emerald-500 text-black font-bold uppercase text-[11px] hover:bg-emerald-400 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
           >
             <TrendingUp size={11} /> Run Sensitivity Analysis
           </button>
@@ -176,34 +176,34 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               {/* Base case */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="p-4 rounded-xl bg-white/3 border border-white/8">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Current Rate</div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Current Rate</div>
                   <div className="text-xl font-black text-white">
                     {result.rate.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[9px] text-slate-500">{result.currency}/USD</div>
+                  <div className="text-[10px] text-slate-500">{result.currency}/USD</div>
                 </div>
                 <div className="p-4 rounded-xl bg-white/3 border border-white/8">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Unit Price (USD)</div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Unit Price (USD)</div>
                   <div className="text-xl font-black text-white">
                     ${result.priceUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[9px] text-slate-500">
+                  <div className="text-[10px] text-slate-500">
                     {result.selectedCcy?.symbol || ''}{result.priceLocal.toLocaleString()} ÷ {result.rate.toFixed(2)}
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-emerald-500/8 border border-emerald-500/20">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Total Order (USD)</div>
+                  <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Total Order (USD)</div>
                   <div className="text-xl font-black text-emerald-400">
                     ${result.totalUSD.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                   </div>
-                  <div className="text-[9px] text-slate-500">× {result.qty.toLocaleString()} units</div>
+                  <div className="text-[10px] text-slate-500">× {result.qty.toLocaleString()} units</div>
                 </div>
               </div>
 
               {/* Sensitivity table */}
               <div className="bg-white/3 border border-white/8 rounded-xl overflow-hidden">
                 <div className="px-4 py-2.5 border-b border-white/5">
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">FX Sensitivity — Impact on USD Cost</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">FX Sensitivity — Impact on USD Cost</span>
                 </div>
                 <div className="divide-y divide-white/5">
                   {result.scenarios.map((s, i) => {
@@ -217,17 +217,17 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                           {isPosMove
                             ? <TrendingUp size={10} className="text-emerald-400" />
                             : <TrendingDown size={10} className="text-rose-400" />}
-                          <span className={`text-[10px] font-bold ${isPosMove ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          <span className={`text-[11px] font-bold ${isPosMove ? 'text-emerald-400' : 'text-rose-400'}`}>
                             {s.pct > 0 ? '+' : ''}{s.pct}% {result.currency}
                           </span>
                         </div>
-                        <div className="text-[10px] text-slate-400">
+                        <div className="text-[11px] text-slate-400">
                           Rate: {s.newRate.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                         </div>
-                        <div className={`text-[10px] font-bold ${isFavorable ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className={`text-[11px] font-bold ${isFavorable ? 'text-emerald-400' : 'text-rose-400'}`}>
                           ${s.deltaUnit >= 0 ? '+' : ''}{s.deltaUnit.toFixed(2)}/unit
                         </div>
-                        <div className={`text-[10px] font-bold text-right ${isFavorable ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className={`text-[11px] font-bold text-right ${isFavorable ? 'text-emerald-400' : 'text-rose-400'}`}>
                           ${s.deltaTotal >= 0 ? '+' : ''}{s.deltaTotal.toLocaleString('en-US', { maximumFractionDigits: 0 })} total
                         </div>
                       </div>
@@ -239,7 +239,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               {/* Hedging note */}
               <div className="flex items-start gap-2 p-3 rounded-lg bg-amber-500/5 border border-amber-500/15">
                 <Info size={11} className="text-amber-500/70 shrink-0 mt-0.5" />
-                <p className="text-[9px] text-slate-600 leading-relaxed">
+                <p className="text-[10px] text-slate-500 leading-relaxed">
                   <span className="text-amber-400/80 font-bold">Hedging tip:</span> For orders &gt;$100k, consider a forward contract to lock in the current rate. FX volatility risk can be priced into your contract via a currency adjustment clause (CAC).
                 </p>
               </div>

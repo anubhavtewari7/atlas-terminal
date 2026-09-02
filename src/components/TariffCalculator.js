@@ -216,7 +216,7 @@ export default function TariffCalculator({ onClose }) {
             </div>
             <div>
               <div className="text-xs font-bold text-sky-400 uppercase tracking-widest">Tariff Calculator</div>
-              <div className="text-[10px] text-slate-500">US import duty — MFN + Section 301/232</div>
+              <div className="text-[11px] text-slate-500">US import duty — MFN + Section 301/232</div>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
@@ -228,22 +228,22 @@ export default function TariffCalculator({ onClose }) {
           {/* Inputs */}
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-1">
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">HS Code</label>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">HS Code</label>
               <input
                 value={hsCode}
                 onChange={e => setHsCode(e.target.value)}
                 placeholder="e.g. 8544.30"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-500/50"
               />
-              <p className="text-[9px] text-slate-600 mt-1">6-digit code from the Harmonized System (chapter.heading).</p>
+              <p className="text-[10px] text-slate-500 mt-1">6-digit code from the Harmonized System (chapter.heading).</p>
               {hsCode.length >= 2 && HS_CHAPTERS[hsCode.replace(/[^0-9]/g,'').substring(0,2)] && (
-                <div className="text-[9px] text-sky-400 mt-1 leading-tight">
+                <div className="text-[10px] text-sky-400 mt-1 leading-tight">
                   Chapter {hsCode.replace(/[^0-9]/g,'').substring(0,2)}: {HS_CHAPTERS[hsCode.replace(/[^0-9]/g,'').substring(0,2)].desc}
                 </div>
               )}
             </div>
             <div className="col-span-1">
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Origin Country</label>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Origin Country</label>
               <div className="relative">
                 <select
                   value={origin} onChange={e => setOrigin(e.target.value)}
@@ -258,7 +258,7 @@ export default function TariffCalculator({ onClose }) {
               </div>
             </div>
             <div className="col-span-1">
-              <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Cargo Value (USD)</label>
+              <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Cargo Value (USD)</label>
               <input
                 value={cargoValue}
                 onChange={e => setCargoValue(e.target.value)}
@@ -272,7 +272,7 @@ export default function TariffCalculator({ onClose }) {
           <button
             onClick={calculate}
             disabled={!hsCode || !origin || !cargoValue}
-            className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
+            className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[11px] hover:bg-sky-400 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
           >
             <Calculator size={11} /> Calculate Duty
           </button>
@@ -284,7 +284,7 @@ export default function TariffCalculator({ onClose }) {
               {result.isChinese && !result.ftaProgram && (
                 <div className="flex items-start gap-2.5 p-3 rounded-lg bg-amber-500/8 border border-amber-500/20">
                   <AlertTriangle size={13} className="text-amber-400 shrink-0 mt-0.5" />
-                  <div className="text-[10px] text-amber-300/80 leading-relaxed">
+                  <div className="text-[11px] text-amber-300/80 leading-relaxed">
                     <span className="font-bold text-amber-400">China Origin:</span> Section 301 tariffs apply on top of MFN rate.
                     {result.sec301Rate > 0 && ` Additional ${result.sec301Rate}% surcharge on this HS chapter.`}
                   </div>
@@ -293,7 +293,7 @@ export default function TariffCalculator({ onClose }) {
               {result.ftaProgram && (
                 <div className="flex items-start gap-2.5 p-3 rounded-lg bg-emerald-500/8 border border-emerald-500/20">
                   <CheckCircle size={13} className="text-emerald-400 shrink-0 mt-0.5" />
-                  <div className="text-[10px] text-emerald-300/80 leading-relaxed">
+                  <div className="text-[11px] text-emerald-300/80 leading-relaxed">
                     <span className="font-bold text-emerald-400">{result.ftaProgram.name} — Zero Duty:</span> {result.ftaProgram.note}
                   </div>
                 </div>
@@ -302,26 +302,26 @@ export default function TariffCalculator({ onClose }) {
               {/* Rate breakdown */}
               <div className="bg-white/3 border border-white/8 rounded-xl overflow-hidden">
                 <div className="px-4 py-2.5 border-b border-white/5">
-                  <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Duty Breakdown</span>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Duty Breakdown</span>
                 </div>
                 <div className="divide-y divide-white/5">
                   <div className="flex justify-between items-center px-4 py-2.5">
-                    <span className="text-[10px] text-slate-400">HS Chapter {result.chapter} — {result.chapterDesc}</span>
-                    <span className="text-[10px] font-bold text-white">MFN {result.mfnRate.toFixed(1)}%</span>
+                    <span className="text-[11px] text-slate-400">HS Chapter {result.chapter} — {result.chapterDesc}</span>
+                    <span className="text-[11px] font-bold text-white">MFN {result.mfnRate.toFixed(1)}%</span>
                   </div>
                   {result.surcharges.map((s, i) => (
                     <div key={i} className="flex justify-between items-center px-4 py-2.5">
                       <div>
-                        <span className="text-[10px] text-rose-400 font-bold">{s.label}</span>
-                        <span className="text-[9px] text-slate-600 ml-2">{s.note}</span>
+                        <span className="text-[11px] text-rose-400 font-bold">{s.label}</span>
+                        <span className="text-[10px] text-slate-500 ml-2">{s.note}</span>
                       </div>
-                      <span className="text-[10px] font-bold text-rose-400">+{s.rate}%</span>
+                      <span className="text-[11px] font-bold text-rose-400">+{s.rate}%</span>
                     </div>
                   ))}
                   {result.ftaProgram && (
                     <div className="flex justify-between items-center px-4 py-2.5">
-                      <span className="text-[10px] text-emerald-400 font-bold">{result.ftaProgram.name} Preference</span>
-                      <span className="text-[10px] font-bold text-emerald-400">−{result.mfnRate.toFixed(1)}%</span>
+                      <span className="text-[11px] text-emerald-400 font-bold">{result.ftaProgram.name} Preference</span>
+                      <span className="text-[11px] font-bold text-emerald-400">−{result.mfnRate.toFixed(1)}%</span>
                     </div>
                   )}
                 </div>
@@ -335,13 +335,13 @@ export default function TariffCalculator({ onClose }) {
                   riskColor === 'amber'   ? 'bg-amber-500/8 border-amber-500/20' :
                   'bg-sky-500/8 border-sky-500/20'
                 }`}>
-                  <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Duty Rate</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Total Duty Rate</div>
                   <div className={`text-3xl font-black ${
                     riskColor === 'emerald' ? 'text-emerald-400' :
                     riskColor === 'rose'    ? 'text-rose-400' :
                     riskColor === 'amber'   ? 'text-amber-400' : 'text-sky-400'
                   }`}>{result.totalRate.toFixed(1)}%</div>
-                  <div className="text-[9px] text-slate-600 mt-1">
+                  <div className="text-[10px] text-slate-500 mt-1">
                     {result.totalRate === 0 ? 'Duty-free under FTA' :
                      result.totalRate > 30  ? 'HIGH — significant cost impact' :
                      result.totalRate > 10  ? 'MODERATE — monitor exposure' : 'STANDARD MFN rate'}
@@ -349,18 +349,18 @@ export default function TariffCalculator({ onClose }) {
                 </div>
                 {result.value > 0 && (
                   <div className="p-4 rounded-xl bg-white/3 border border-white/8">
-                    <div className="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-1">Duty Amount</div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Duty Amount</div>
                     <div className="text-3xl font-black text-white">
                       ${result.dutyAmount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </div>
-                    <div className="text-[9px] text-slate-600 mt-1">on ${result.value.toLocaleString()} cargo value</div>
+                    <div className="text-[10px] text-slate-500 mt-1">on ${result.value.toLocaleString()} cargo value</div>
                   </div>
                 )}
               </div>
 
               <div className="flex items-start gap-2 p-3 rounded-lg bg-white/3 border border-white/8">
-                <Info size={11} className="text-slate-600 shrink-0 mt-0.5" />
-                <p className="text-[9px] text-slate-600 leading-relaxed">
+                <Info size={11} className="text-slate-500 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-slate-500 leading-relaxed">
                   Rates are representative — verify final duty with a licensed customs broker. First-sale valuation, binding rulings, and add-valorem fees (MPF, HMF) not included.
                 </p>
               </div>

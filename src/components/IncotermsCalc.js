@@ -58,7 +58,7 @@ export default function IncotermsCalc({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-purple-400 tracking-[0.2em] uppercase">Incoterms 2020 Calculator</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">International Commercial Terms — Risk & Cost Allocation</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">International Commercial Terms — Risk & Cost Allocation</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
@@ -68,7 +68,7 @@ export default function IncotermsCalc({ onClose }) {
           {/* Left — selector */}
           <div className="space-y-4">
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Select Incoterm</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Select Incoterm</label>
               <div className="grid grid-cols-4 md:grid-cols-3 gap-2">
                 {Object.keys(INCOTERMS).map(key => (
                   <button
@@ -85,7 +85,7 @@ export default function IncotermsCalc({ onClose }) {
             </div>
 
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Cargo Value (USD) — optional</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Cargo Value (USD) — optional</label>
               <input
                 value={cargoValue}
                 onChange={e => setCargoValue(e.target.value)}
@@ -96,9 +96,9 @@ export default function IncotermsCalc({ onClose }) {
 
             {estimatedLanded && (
               <div className="p-4 bg-purple-500/5 border border-purple-500/20 rounded-xl">
-                <div className="text-[9px] text-purple-400 uppercase font-bold mb-1 tracking-widest">Estimated Landed Cost</div>
+                <div className="text-[10px] text-purple-400 uppercase font-bold mb-1 tracking-widest">Estimated Landed Cost</div>
                 <div className="text-[24px] font-bold text-white font-mono">{estimatedLanded}</div>
-                <p className="text-[10px] text-slate-500 mt-1">{costInfo?.notes}</p>
+                <p className="text-[11px] text-slate-500 mt-1">{costInfo?.notes}</p>
               </div>
             )}
           </div>
@@ -106,23 +106,23 @@ export default function IncotermsCalc({ onClose }) {
           {/* Right — details */}
           <div className="space-y-4">
             <div className="p-5 bg-purple-500/5 border border-purple-500/30 rounded-xl">
-              <div className="text-[10px] text-purple-400 uppercase font-bold mb-1 tracking-widest">{selectedTerm}</div>
+              <div className="text-[11px] text-purple-400 uppercase font-bold mb-1 tracking-widest">{selectedTerm}</div>
               <div className="text-[18px] font-bold text-white mb-3">{term.name}</div>
-              <div className="text-[11px] text-slate-500 mb-2">Best for: <span className="text-slate-300">{term.bestFor}</span></div>
-              <div className="text-[11px] text-slate-500">Cost burden: <span className={`font-bold ${burdenColors[term.costBurden]}`}>{term.costBurden.toUpperCase()}</span></div>
+              <div className="text-[12px] text-slate-500 mb-2">Best for: <span className="text-slate-300">{term.bestFor}</span></div>
+              <div className="text-[12px] text-slate-500">Cost burden: <span className={`font-bold ${burdenColors[term.costBurden]}`}>{term.costBurden.toUpperCase()}</span></div>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
               <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
-                <div className="text-[9px] text-rose-400 uppercase font-bold mb-1 tracking-widest">🏭 Seller Obligation</div>
+                <div className="text-[10px] text-rose-400 uppercase font-bold mb-1 tracking-widest">🏭 Seller Obligation</div>
                 <p className="text-[12px] text-slate-300">{term.seller}</p>
               </div>
               <div className="p-4 bg-sky-500/5 border border-sky-500/20 rounded-xl">
-                <div className="text-[9px] text-sky-400 uppercase font-bold mb-1 tracking-widest">🏢 Buyer Obligation</div>
+                <div className="text-[10px] text-sky-400 uppercase font-bold mb-1 tracking-widest">🏢 Buyer Obligation</div>
                 <p className="text-[12px] text-slate-300">{term.buyer}</p>
               </div>
               <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-                <div className="text-[9px] text-amber-400 uppercase font-bold mb-1 tracking-widest">⚖️ Risk Transfers At</div>
+                <div className="text-[10px] text-amber-400 uppercase font-bold mb-1 tracking-widest">⚖️ Risk Transfers At</div>
                 <p className="text-[12px] text-slate-300">{term.riskTransfer}</p>
               </div>
             </div>

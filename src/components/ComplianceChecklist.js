@@ -95,7 +95,7 @@ export default function ComplianceChecklist({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-emerald-400 tracking-[0.2em] uppercase">Compliance Checklist Generator</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">Import/export requirements by product and destination</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Import/export requirements by product and destination</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
@@ -104,14 +104,14 @@ export default function ComplianceChecklist({ onClose }) {
         <form onSubmit={handleGenerate} className="p-4 md:p-6 border-b border-white/5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Product / Commodity</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Product / Commodity</label>
               <input autoFocus value={product} onChange={e => setProduct(e.target.value)} placeholder="e.g. Beef patties, Microchips, Lithium batteries"
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl placeholder:text-slate-700" />
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl placeholder:text-slate-500" />
             </div>
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Importing Into</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Importing Into</label>
               <input value={destination} onChange={e => setDestination(e.target.value)} placeholder="e.g. USA, EU, UK"
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl placeholder:text-slate-700" />
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-emerald-500 transition-all rounded-xl placeholder:text-slate-500" />
             </div>
           </div>
           <button type="submit" className="w-full h-12 bg-emerald-500 text-black font-bold text-[12px] uppercase tracking-widest hover:bg-emerald-400 active:bg-emerald-400 transition-all rounded-xl">
@@ -123,14 +123,14 @@ export default function ComplianceChecklist({ onClose }) {
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-[11px] text-slate-400 font-mono">{product} → {destination}</div>
-                <div className="text-[10px] text-slate-600 mt-0.5">{completedCount}/{checklist.length} items completed</div>
+                <div className="text-[12px] text-slate-400 font-mono">{product} → {destination}</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">{completedCount}/{checklist.length} items completed</div>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
                   <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${(completedCount / checklist.length) * 100}%` }} />
                 </div>
-                <button onClick={handleCopy} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[10px] text-slate-400 hover:text-white active:text-white hover:border-white/20 active:border-white/20 transition-all">
+                <button onClick={handleCopy} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[11px] text-slate-400 hover:text-white active:text-white hover:border-white/20 active:border-white/20 transition-all">
                   <Copy size={10} /> Copy
                 </button>
               </div>
@@ -145,7 +145,7 @@ export default function ComplianceChecklist({ onClose }) {
                   onClick={() => toggleCheck(i)}
                   className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all border ${checked[i] ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-[#111] border-white/5 hover:border-white/10'}`}
                 >
-                  <div className={`mt-0.5 shrink-0 ${checked[i] ? 'text-emerald-400' : 'text-slate-600'}`}>
+                  <div className={`mt-0.5 shrink-0 ${checked[i] ? 'text-emerald-400' : 'text-slate-500'}`}>
                     {checked[i] ? <CheckSquare size={16} /> : <Square size={16} />}
                   </div>
                   <span className={`text-[12px] leading-snug ${checked[i] ? 'text-slate-500 line-through' : 'text-slate-300'}`}>{item}</span>

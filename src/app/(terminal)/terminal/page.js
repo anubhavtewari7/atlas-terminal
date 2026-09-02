@@ -20,7 +20,7 @@ import DualUseChecker from '@/components/DualUseChecker'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
 import {
-  Shield, ShieldAlert, Zap, ChevronRight,
+  Shield, ShieldAlert, Zap, ChevronRight, ChevronDown, ChevronUp,
   Pause, Play, Newspaper, X, Target, Factory, Map,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
@@ -449,6 +449,8 @@ export default function Dashboard() {
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
   const [activeMobileTab, setActiveMobileTab] = useState('intel')
+  const [threatsCollapsed, setThreatsCollapsed] = useState(false)
+  const [hubsCollapsed, setHubsCollapsed] = useState(false)
   const [intelBrief, setIntelBrief] = useState(null)
   const [intelLoading, setIntelLoading] = useState(false)
   const [metalsTs, setMetalsTs] = useState(() => new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
@@ -945,7 +947,7 @@ export default function Dashboard() {
 
       {/* ── COMMODITY TICKER ── */}
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
-        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest mr-8 shrink-0">
+        <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-slate-500" />
           <span className="text-slate-500" title="Indicative reference prices for context — not a live market data feed. For decision-grade pricing, verify with your commodity broker or exchange terminal.">Reference Prices</span>
         </div>
@@ -997,11 +999,11 @@ export default function Dashboard() {
           </div>
           <span className="text-[11px] font-bold tracking-widest text-white">ATLAS</span>
         </div>
-        <div className="flex-1 mx-3 text-[10px] text-sky-400 truncate text-center">
+        <div className="flex-1 mx-3 text-[11px] text-sky-400 truncate text-center">
           {opportunities.length > 0 ? `${opportunities.length} hubs · ${profile.material}` : 'Supply Chain Intelligence'}
         </div>
         <button onClick={() => setShowSearch(true)}
-          className="text-[10px] font-bold bg-emerald-500 text-black px-3 py-1.5 rounded-lg shrink-0 active:bg-emerald-400 transition-colors">
+          className="text-[11px] font-bold bg-emerald-500 text-black px-3 py-1.5 rounded-lg shrink-0 active:bg-emerald-400 transition-colors">
           SCAN
         </button>
       </div>
@@ -1087,7 +1089,7 @@ export default function Dashboard() {
                 <h2 className="text-[12px] font-bold text-sky-400 tracking-[0.3em] mb-3 flex items-center gap-3">
                   <Target size={18} /> DEFINE SOURCING MISSION
                 </h2>
-                <p className="text-[11px] text-slate-600 mb-8 font-sans leading-relaxed">
+                <p className="text-[11px] text-slate-400 mb-8 font-sans leading-relaxed">
                   Describe what you need to procure — be specific. Include the material, application, and any constraints.
                   <br/>e.g. <span className="text-slate-500 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
                   &nbsp;<span className="text-slate-500 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
@@ -1098,7 +1100,7 @@ export default function Dashboard() {
                     autoFocus rows={4} value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Describe your sourcing requirement..."
-                    className="w-full bg-[#111] border border-white/10 p-6 text-[15px] font-mono focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-700 resize-none leading-relaxed rounded-xl"
+                    className="w-full bg-[#111] border border-white/10 p-6 text-[15px] font-mono focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-500 resize-none leading-relaxed rounded-xl"
                   />
                   <button type="submit" disabled={isAnalyzing || !searchQuery.trim()}
                     className="w-full h-16 bg-emerald-500 text-black font-bold flex items-center justify-center gap-3 hover:bg-emerald-400 active:bg-emerald-400 transition-all disabled:opacity-50 text-[14px] uppercase tracking-widest rounded-xl">
@@ -1124,12 +1126,12 @@ export default function Dashboard() {
               </div>
               <div>
                 <h1 className="font-bold text-xl tracking-widest leading-none text-white">ATLAS</h1>
-                <p className="text-[9px] text-slate-600 font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence</p>
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence</p>
               </div>
             </div>
             <div onClick={() => setShowSearch(true)} data-tour="mission"
               className="p-3 bg-[#111] border border-white/5 cursor-pointer hover:border-sky-500/30 transition-all rounded-lg group">
-              <div className="text-[10px] text-slate-600 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
+              <div className="text-[11px] text-slate-400 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
                 Active Mission
               </div>
               <div className="text-[13px] font-bold text-sky-400 uppercase truncate">{profile.material}</div>
@@ -1148,7 +1150,7 @@ export default function Dashboard() {
               <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="stability">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                  <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                     <Shield size={14} /> Hub Stability
                   </h2>
                   {level !== 'continent' && (
@@ -1158,7 +1160,7 @@ export default function Dashboard() {
                         else if (level === 'region') setHubNav(n => ({ ...n, level:'country', country:null, region:null }))
                         else if (level === 'hubs') setHubNav(n => ({ ...n, level:'region', region:null }))
                       }}
-                      className="text-[10px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
+                      className="text-[11px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
                       ← back
                     </button>
                   )}
@@ -1167,9 +1169,9 @@ export default function Dashboard() {
                 {/* Breadcrumb */}
                 {level !== 'continent' && (
                   <div className="flex items-center gap-1 mb-3 flex-wrap">
-                    <span className="text-[10px] text-slate-600">{continent}</span>
-                    {country && <><span className="text-[10px] text-slate-700">›</span><span className="text-[10px] text-slate-500">{country}</span></>}
-                    {region  && <><span className="text-[10px] text-slate-700">›</span><span className="text-[10px] text-sky-500/70">{region}</span></>}
+                    <span className="text-[11px] text-slate-400">{continent}</span>
+                    {country && <><span className="text-[11px] text-slate-500">›</span><span className="text-[11px] text-slate-500">{country}</span></>}
+                    {region  && <><span className="text-[11px] text-slate-500">›</span><span className="text-[11px] text-sky-500/70">{region}</span></>}
                   </div>
                 )}
 
@@ -1184,8 +1186,8 @@ export default function Dashboard() {
                       <div className={`h-full rounded-full ${barColor}`} style={{ width:`${s}%` }} />
                     </div>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-[10px] text-slate-600">WB Political Stability</span>
-                      <span className={`text-[10px] font-bold ${textColor}`}>{stabilityLabel}</span>
+                      <span className="text-[11px] text-slate-400">WB Political Stability</span>
+                      <span className={`text-[11px] font-bold ${textColor}`}>{stabilityLabel}</span>
                     </div>
                   </div>
                 )}
@@ -1198,7 +1200,7 @@ export default function Dashboard() {
                         onClick={() => setHubNav({ level:'country', continent:c, country:null, region:null })}
                         className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
                         <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
-                        <div className="text-[10px] text-slate-600 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
                       </button>
                     ))}
                   </div>
@@ -1216,7 +1218,7 @@ export default function Dashboard() {
                           onClick={() => setHubNav(n => ({ ...n, level:'region', country:cn }))}
                           className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
                           <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight truncate">{cn}</div>
-                          {cs !== undefined && <div className={`text-[10px] font-bold mt-0.5 ${tc}`}>◆ {cs}</div>}
+                          {cs !== undefined && <div className={`text-[11px] font-bold mt-0.5 ${tc}`}>◆ {cs}</div>}
                         </button>
                       )
                     })}
@@ -1232,9 +1234,9 @@ export default function Dashboard() {
                         className="w-full bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group flex items-center justify-between">
                         <div>
                           <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase">{zone}</div>
-                          <div className="text-[10px] text-slate-600 mt-0.5">{countryData.zones[zone].length} hubs</div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{countryData.zones[zone].length} hubs</div>
                         </div>
-                        <ChevronRight size={12} className="text-slate-700 group-hover:text-sky-400" />
+                        <ChevronRight size={12} className="text-slate-500 group-hover:text-sky-400" />
                       </button>
                     ))}
                   </div>
@@ -1261,7 +1263,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex items-center gap-1.5 shrink-0 ml-2">
                               <span className={`text-[11px] font-bold font-mono ${pt}`}>◆ {ps}</span>
-                              <span className={`text-[9px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
+                              <span className={`text-[10px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
                             </div>
                           </div>
                           <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mb-2">
@@ -1277,11 +1279,11 @@ export default function Dashboard() {
                               ))}
                             </div>
                           )}
-                          {alerts.length === 0 && <p className="text-[8px] text-slate-700">No active alerts</p>}
+                          {alerts.length === 0 && <p className="text-[8px] text-slate-500">No active alerts</p>}
                         </div>
                       )
                     })}
-                    <p className="text-[8px] text-slate-700 mt-1 text-center">Composite: WB stability + port-specific risk factors</p>
+                    <p className="text-[8px] text-slate-500 mt-1 text-center">Composite: WB stability + port-specific risk factors</p>
                   </div>
                 )}
               </div>
@@ -1294,9 +1296,9 @@ export default function Dashboard() {
             {/* Live Intelligence Brief */}
             {(intelLoading || intelBrief) && (
               <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
-                <h2 className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
+                <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                   <Newspaper size={13} /> Live Trade Intelligence
-                  {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
+                  {intelBrief && <span className="ml-auto text-[10px] text-slate-400">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
                 </h2>
                 {intelLoading ? (
                   <div className="space-y-2">
@@ -1313,97 +1315,106 @@ export default function Dashboard() {
                           <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
                           <div>
                             <p className="text-[11px] text-slate-300 leading-snug group-hover:text-white transition-colors">{a.title}</p>
-                            <p className="text-[9px] text-slate-600 mt-0.5">{a.source}</p>
+                            <p className="text-[10px] text-slate-400 mt-0.5">{a.source}</p>
                           </div>
                         </div>
                       </a>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[10px] text-slate-600 italic">No recent trade news found.</p>
+                  <p className="text-[11px] text-slate-400 italic">No recent trade news found.</p>
                 )}
-                <p className="text-[9px] text-slate-700 mt-3">GDELT · World Bank Political Stability Index</p>
+                <p className="text-[10px] text-slate-500 mt-3">GDELT · World Bank Political Stability Index</p>
               </div>
             )}
 
             {/* Global Threats */}
             <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
-              <h2 className="text-[10px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
+              <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
                 <ShieldAlert size={14} /> Global Threats
-                {risks.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{risks.length} active</span>}
+                {risks.length > 0 && <span className="text-[10px] text-slate-400">{risks.length} active</span>}
+                <span className="ml-auto text-slate-500">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
-              <div className="space-y-2">
-                {risks.length === 0 ? (
-                  <p className="text-[10px] text-slate-700 italic">Run a sourcing scan to surface relevant risk factors.</p>
-                ) : risks.map((r, i) => (
-                  <div key={r.id || i}
-                    onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
-                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
-                      selectedNode?.id === (r.id || i)
-                        ? 'bg-rose-500/10 border-rose-500/40'
-                        : 'bg-[#111] border-white/5 hover:border-rose-500/20'
-                    }`}>
-                    <div className="flex items-start gap-2">
-                      <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
-                        {r.severity || 'RISK'}
-                      </span>
-                      <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
+              {!threatsCollapsed && (
+                <div className="space-y-2">
+                  {risks.length === 0 ? (
+                    <p className="text-[11px] text-slate-500 italic">Run a sourcing scan to surface relevant risk factors.</p>
+                  ) : risks.map((r, i) => (
+                    <div key={r.id || i}
+                      onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
+                      className={`p-3 border transition-all cursor-pointer rounded-lg ${
+                        selectedNode?.id === (r.id || i)
+                          ? 'bg-rose-500/10 border-rose-500/40'
+                          : 'bg-[#111] border-white/5 hover:border-rose-500/20'
+                      }`}>
+                      <div className="flex items-start gap-2">
+                        <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
+                          {r.severity || 'RISK'}
+                        </span>
+                        <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Sourcing Hubs */}
             <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
-              <h2 className="text-[10px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0">
+              <h2 className="text-[11px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setHubsCollapsed(!hubsCollapsed)}>
                 <Factory size={14} /> Sourcing Hubs
-                {opportunities.length > 0 && <span className="ml-auto text-[9px] text-slate-600">{opportunities.length} identified</span>}
+                {opportunities.length > 0 && <span className="text-[10px] text-slate-400">{opportunities.length} identified</span>}
+                <span className="ml-auto text-slate-500">{hubsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
-              <div className="space-y-2">
-                {opportunities.length === 0 ? (
-                  <div className="space-y-1.5 pt-1">
-                    <p className="text-[9px] text-slate-600 uppercase tracking-widest mb-2">Try an example:</p>
-                    {[
-                      'IATF-certified brake pads for passenger vehicles',
-                      'Neodymium magnets for EV motor assembly',
-                      'Food-grade soy for QSR supply chain',
-                      'Semiconductor wafers for automotive ECU',
-                    ].map((q) => (
-                      <button key={q} onClick={() => handleSearch(null, q)}
-                        className="w-full text-left text-[10px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-2.5 rounded-lg transition-all">
-                        → {q}
-                      </button>
-                    ))}
-                  </div>
-                ) : opportunities.map((o, i) => (
-                  <div key={o.id || i}
-                    onClick={() => setSelectedNode(selectedNode?.id === o.id ? null : o)}
-                    className={`p-3 border transition-all cursor-pointer rounded-lg ${
-                      selectedNode?.id === o.id
-                        ? 'bg-emerald-500/10 border-emerald-500/40'
-                        : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
-                    }`}>
-                    <div className="text-[9px] text-emerald-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
-                      {o.hub}
-                      {(() => {
-                        const iso2 = getHubISO2(o.hub)
-                        const score = iso2 && intelBrief?.countryScores?.[iso2]
-                        if (!score) return null
-                        const c = score.stability >= 60 ? 'text-emerald-400' : score.stability >= 35 ? 'text-amber-400' : 'text-rose-400'
-                        return <span className={`ml-auto font-mono text-[8px] ${c}`} title="World Bank Political Stability Score">◆ {score.stability}</span>
-                      })()}
+              {!hubsCollapsed && (
+                <div className="space-y-2">
+                  {opportunities.length === 0 ? (
+                    <div className="space-y-1.5 pt-1">
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-2">Try an example:</p>
+                      {[
+                        'IATF-certified brake pads for passenger vehicles',
+                        'Neodymium magnets for EV motor assembly',
+                        'Food-grade soy for QSR supply chain',
+                        'Semiconductor wafers for automotive ECU',
+                      ].map((q) => (
+                        <button key={q} onClick={() => handleSearch(null, q)}
+                          className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-2.5 rounded-lg transition-all">
+                          → {q}
+                        </button>
+                      ))}
                     </div>
-                    <div className="text-[11px] font-bold uppercase leading-tight">{o.title}</div>
-                    {o.real_export_value_usd && (
-                      <div className="mt-1.5 flex items-center gap-1 text-[9px] text-sky-400 font-mono" title={`Official UN Comtrade export statistics, ${o.real_trade_data_year}`}>
-                        <CheckCircle size={9} />
-                        ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year}, UN Comtrade)
+                  ) : opportunities.map((o, i) => (
+                    <div key={o.id || i}
+                      onClick={() => setSelectedNode(selectedNode?.id === o.id ? null : o)}
+                      className={`p-3 border transition-all cursor-pointer rounded-lg ${
+                        selectedNode?.id === o.id
+                          ? 'bg-emerald-500/10 border-emerald-500/40'
+                          : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
+                      }`}>
+                      <div className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
+                        {o.hub}
+                        {(() => {
+                          const iso2 = getHubISO2(o.hub)
+                          const score = iso2 && intelBrief?.countryScores?.[iso2]
+                          if (!score) return null
+                          const c = score.stability >= 60 ? 'text-emerald-400' : score.stability >= 35 ? 'text-amber-400' : 'text-rose-400'
+                          return <span className={`ml-auto font-mono text-[8px] ${c}`} title="World Bank Political Stability Score">◆ {score.stability}</span>
+                        })()}
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
+                      <div className="text-[12px] font-bold uppercase leading-tight">{o.title}</div>
+                      {o.real_export_value_usd && (
+                        <div className="mt-1.5 flex items-center gap-1 text-[10px] text-sky-400 font-mono" title={`Official UN Comtrade export statistics, ${o.real_trade_data_year}`}>
+                          <CheckCircle size={9} />
+                          ${(o.real_export_value_usd / 1e6).toFixed(0)}M exported ({o.real_trade_data_year}, UN Comtrade)
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {opportunities.length > 0 && (
+                    <p className="text-[10px] text-slate-500 mt-1">FX note: verify landed cost impact if sourcing from this region</p>
+                  )}
+                </div>
+              )}
             </div>
 
           </div>
@@ -1415,7 +1426,7 @@ export default function Dashboard() {
         <main className="flex flex-col gap-2 overflow-hidden min-w-0 shrink-0 lg:flex-1 lg:gap-4">
 
           {/* Globe */}
-          <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
+          <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 lg:max-h-[48vh] bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
@@ -1423,18 +1434,18 @@ export default function Dashboard() {
             {/* Globe controls — desktop only (overlaid on globe) */}
             <div className="hidden lg:flex absolute top-4 left-4 z-10 flex-col gap-2">
               <div className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 rounded-lg backdrop-blur-md">
-                <Activity size={12} className="text-emerald-400" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Live_Global_Stream</span>
+                <Activity size={12} className="text-slate-500" />
+                <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Global_Stream</span>
               </div>
               <button onClick={() => setAutoRotate(!autoRotate)}
                 className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/70">
                 {autoRotate ? <Pause size={12} /> : <Play size={12} />}
-                <span className="text-[10px] font-bold uppercase tracking-widest">{autoRotate ? 'Pause' : 'Resume'}</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest">{autoRotate ? 'Pause' : 'Resume'}</span>
               </button>
               <button onClick={() => setShowTour(true)}
                 className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/50 hover:text-sky-400">
                 <Map size={12} />
-                <span className="text-[10px] font-bold uppercase tracking-widest">How it works</span>
+                <span className="text-[11px] font-bold uppercase tracking-widest">How it works</span>
               </button>
             </div>
 
@@ -1442,18 +1453,18 @@ export default function Dashboard() {
             <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-3 py-2 bg-black/70 backdrop-blur-sm">
               <div className="flex items-center gap-1.5">
                 <Activity size={10} className="text-emerald-400" />
-                <span className="text-[9px] font-bold uppercase tracking-widest text-emerald-400">Live Stream</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Live Stream</span>
               </div>
               <div className="flex items-center gap-2">
                 <button onClick={() => setAutoRotate(!autoRotate)}
                   className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/70 active:bg-white/20 transition-all">
                   {autoRotate ? <Pause size={10} /> : <Play size={10} />}
-                  <span className="text-[9px] font-bold uppercase">{autoRotate ? 'Pause' : 'Resume'}</span>
+                  <span className="text-[10px] font-bold uppercase">{autoRotate ? 'Pause' : 'Resume'}</span>
                 </button>
                 <button onClick={() => setShowTour(true)}
                   className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/50 active:bg-white/20 transition-all">
                   <Map size={10} />
-                  <span className="text-[9px] font-bold uppercase">Tour</span>
+                  <span className="text-[10px] font-bold uppercase">Tour</span>
                 </button>
               </div>
             </div>
@@ -1463,13 +1474,13 @@ export default function Dashboard() {
 
               <div className="bg-black/95 border border-white/10 p-6 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0" data-tour="directive">
                 <div className="flex justify-between items-start mb-4">
-                  <div className="text-[10px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
+                  <div className="text-[11px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
                     <Zap size={14} /> Strategic Advisory HUD
                   </div>
                   <div className="flex items-center gap-2">
                     {isOpportunity && (
                       <button onClick={() => setShowRFQ(true)}
-                        className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 text-emerald-400 text-[9px] font-bold uppercase hover:bg-emerald-500 hover:text-black transition-all rounded-lg">
+                        className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1.5 text-emerald-400 text-[10px] font-bold uppercase hover:bg-emerald-500 hover:text-black transition-all rounded-lg">
                         <Mail size={11} /> Generate RFQ
                       </button>
                     )}
@@ -1485,7 +1496,7 @@ export default function Dashboard() {
                 {isRisk && (
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                      <span className={`text-[9px] font-bold px-2 py-1 rounded border shrink-0 mt-0.5 ${severityStyle(selectedNode.severity)}`}>
+                      <span className={`text-[10px] font-bold px-2 py-1 rounded border shrink-0 mt-0.5 ${severityStyle(selectedNode.severity)}`}>
                         {selectedNode.severity} RISK
                       </span>
                       <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title}</div>
@@ -1493,13 +1504,13 @@ export default function Dashboard() {
                     <p className="text-[12px] text-slate-400 leading-relaxed font-sans">{selectedNode.desc}</p>
                     <div className="grid grid-cols-1 gap-3">
                       <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
-                        <div className="text-[9px] text-rose-400 uppercase font-bold mb-2 tracking-widest flex items-center gap-1.5">
+                        <div className="text-[10px] text-rose-400 uppercase font-bold mb-2 tracking-widest flex items-center gap-1.5">
                           <AlertTriangle size={10} /> Risk Exposure
                         </div>
                         <p className="text-[12px] text-slate-300 leading-relaxed">{selectedNode.desc}</p>
                       </div>
                       <div className="p-4 bg-sky-500/5 border border-sky-500/20 rounded-xl">
-                        <div className="text-[9px] text-sky-400 uppercase font-bold mb-2 tracking-widest flex items-center gap-1.5">
+                        <div className="text-[10px] text-sky-400 uppercase font-bold mb-2 tracking-widest flex items-center gap-1.5">
                           <CheckCircle size={10} /> Mitigation Strategy
                         </div>
                         <p className="text-[12px] text-slate-200 leading-relaxed font-sans">{selectedNode.mitigation}</p>
@@ -1517,7 +1528,7 @@ export default function Dashboard() {
                         <p className="text-[11px] text-slate-400 leading-relaxed font-sans mb-3">{selectedNode.desc}</p>
                         {selectedNode.industry_kpi && (
                           <div className="bg-[#111] p-3 border-l-2 border-sky-500 rounded-r-lg">
-                            <div className="text-[8px] text-slate-600 uppercase font-bold mb-0.5">{selectedNode.industry_kpi.label}</div>
+                            <div className="text-[8px] text-slate-400 uppercase font-bold mb-0.5">{selectedNode.industry_kpi.label}</div>
                             <div className="text-[16px] font-bold text-white">{selectedNode.industry_kpi.value}</div>
                           </div>
                         )}
@@ -1536,17 +1547,17 @@ export default function Dashboard() {
                       </div>
                       {selectedNode.esg && (
                         <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl">
-                          <div className="text-[9px] text-emerald-400 font-bold uppercase mb-2 flex items-center gap-1.5">
+                          <div className="text-[10px] text-emerald-400 font-bold uppercase mb-2 flex items-center gap-1.5">
                             <Leaf size={11} /> ESG Scorecard
                           </div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="text-[28px] font-bold text-white">{selectedNode.esg.ethical_rating}</div>
                             <div className="text-right">
-                              <div className="text-[8px] text-slate-600 uppercase">CO₂ Intensity</div>
+                              <div className="text-[8px] text-slate-400 uppercase">CO₂ Intensity</div>
                               <div className="text-[11px] text-slate-300 font-bold">{selectedNode.esg.carbon_footprint}</div>
                             </div>
                           </div>
-                          <p className="text-[10px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
+                          <p className="text-[11px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
                         </div>
                       )}
                     </div>
@@ -1554,32 +1565,32 @@ export default function Dashboard() {
                     {selectedNode.customs && (
                       <div className="bg-sky-500/5 border border-sky-500/20 p-4 rounded-xl grid grid-cols-2 gap-6">
                         <div className="space-y-3">
-                          <div className="text-[9px] font-bold text-sky-400 uppercase flex items-center gap-1.5 mb-0.5">
+                          <div className="text-[10px] font-bold text-sky-400 uppercase flex items-center gap-1.5 mb-0.5">
                             <FileText size={11} /> Regulatory / Trade
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <div className="text-[8px] text-slate-600 uppercase mb-0.5">HTS Code</div>
+                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">HTS Code</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.customs.hts_code}</div>
                             </div>
                             <div>
-                              <div className="text-[8px] text-slate-600 uppercase mb-0.5">Duty Rate</div>
+                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Duty Rate</div>
                               <div className="text-[13px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div>
                             </div>
                           </div>
-                          <div className="text-[10px] text-slate-500 border-t border-white/5 pt-2 leading-tight">{selectedNode.customs.compliance_note}</div>
+                          <div className="text-[11px] text-slate-500 border-t border-white/5 pt-2 leading-tight">{selectedNode.customs.compliance_note}</div>
                         </div>
                         <div className="space-y-3 border-l border-white/5 pl-6">
-                          <div className="text-[9px] font-bold text-sky-400 uppercase flex items-center gap-1.5 mb-0.5">
+                          <div className="text-[10px] font-bold text-sky-400 uppercase flex items-center gap-1.5 mb-0.5">
                             <Ship size={11} /> Logistics
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <div className="text-[8px] text-slate-600 uppercase mb-0.5">Lead Time</div>
+                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Lead Time</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} Days</div>
                             </div>
                             <div>
-                              <div className="text-[8px] text-slate-600 uppercase mb-0.5">Est. Freight</div>
+                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Est. Freight</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div>
                             </div>
                           </div>
@@ -1589,15 +1600,15 @@ export default function Dashboard() {
 
                     {selectedNode.companies && selectedNode.companies.length > 0 && (
                       <div className="pt-2">
-                        <div className="text-[9px] font-bold text-emerald-400 uppercase mb-2 flex items-center gap-2">
+                        <div className="text-[10px] font-bold text-emerald-400 uppercase mb-2 flex items-center gap-2">
                           <Factory size={11} /> Target Strategic Partners
                         </div>
                         {/* Turnover filter */}
                         <div className="flex items-center gap-1.5 mb-3 flex-wrap">
-                          <span className="text-[9px] text-slate-600 uppercase font-bold tracking-widest shrink-0">Size:</span>
+                          <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest shrink-0">Size:</span>
                           {[null, '>$1B', '$100M-$1B', '$10M-$100M', '<$10M'].map(f => (
                             <button key={f ?? 'all'} onClick={() => setTurnoverFilter(f)}
-                              className={`px-2 py-0.5 rounded text-[9px] font-bold border transition-all ${
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
                                 turnoverFilter === f
                                   ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
                                   : 'bg-white/5 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-400'
@@ -1612,14 +1623,14 @@ export default function Dashboard() {
                               turnoverFilter === null || c.turnover === turnoverFilter
                             )
                             if (filteredCompanies.length === 0) {
-                              return <p className="text-[10px] text-slate-600 italic col-span-3">No suppliers in this bracket for this hub.</p>
+                              return <p className="text-[11px] text-slate-400 italic col-span-3">No suppliers in this bracket for this hub.</p>
                             }
                             return filteredCompanies.map((c, i) => (
                               <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
                                 className="text-[11px] text-slate-300 font-mono bg-white/5 p-3 border border-white/5 rounded-lg hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all flex items-center justify-between group">
                                 <span className="truncate">{c.name}</span>
                                 <div className="flex flex-col items-end gap-0.5 shrink-0 ml-1">
-                                  {c.turnover && <span className="text-[8px] text-slate-600 font-mono">{c.turnover}</span>}
+                                  {c.turnover && <span className="text-[8px] text-slate-400 font-mono">{c.turnover}</span>}
                                   <ExternalLink size={10} className="opacity-30 group-hover:opacity-100 text-emerald-400" />
                                 </div>
                               </a>
@@ -1633,7 +1644,7 @@ export default function Dashboard() {
 
                 {/* ── EMPTY STATE ── */}
                 {!selectedNode && (
-                  <p className="text-[12px] text-slate-600 italic">
+                  <p className="text-[12px] text-slate-400 italic">
                     {opportunities.length > 0 ? 'Click a threat or sourcing hub in the left panel to inspect intelligence details.' : 'Run a scan above to identify global sourcing hubs and active risk factors.'}
                   </p>
                 )}
@@ -1652,7 +1663,7 @@ export default function Dashboard() {
           <div className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden flex flex-col" data-tour="new-tools">
             {/* Header */}
             <div className="px-3 py-2.5 border-b border-white/5 shrink-0">
-              <span className="text-[8px] font-bold text-slate-600 uppercase tracking-[0.2em]">Tools</span>
+              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em]">Tools</span>
             </div>
             {/* Buttons */}
             <div className="flex-1 overflow-y-auto flex flex-col py-1">
@@ -1674,7 +1685,7 @@ export default function Dashboard() {
                 { icon:<ShieldOff size={11}/>,   label:'Dual-Use',    action:()=>setShowDualUse(true),     color:'rose' },
               ].map((t, i) => (
                 <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
-                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-[9px] font-bold uppercase tracking-wider transition-all text-left border-l-2 disabled:opacity-25
+                  className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider transition-all text-left border-l-2 disabled:opacity-25
                     ${t.color==='emerald' ? 'border-l-emerald-500/40 text-emerald-400 hover:bg-emerald-500/8 hover:border-l-emerald-400' :
                       t.color==='rose'    ? 'border-l-rose-500/40 text-rose-400 hover:bg-rose-500/8 hover:border-l-rose-400' :
                       t.color==='purple'  ? 'border-l-purple-500/40 text-purple-400 hover:bg-purple-500/8 hover:border-l-purple-400' :
@@ -1691,11 +1702,11 @@ export default function Dashboard() {
           {/* Primary CTAs */}
           <div className="flex flex-col gap-2 shrink-0" data-tour="pdf">
             <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
-              className="w-full h-9 border border-white/15 text-white hover:bg-white/8 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 disabled:opacity-25">
+              className="w-full h-9 border border-white/15 text-white hover:bg-white/8 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 disabled:opacity-25">
               <Download size={11} /> {isExportingPDF ? 'Generating' : 'Export PDF'}
             </button>
             <button onClick={() => setShowSearch(true)}
-              className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[10px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)] rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all">
+              className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[11px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)] rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all">
               <SearchCode size={12} /> Scan
             </button>
           </div>
@@ -1716,7 +1727,7 @@ export default function Dashboard() {
             ].map(tab => (
               <button key={tab.id}
                 onClick={() => { setActiveMobileTab(tab.id); setSelectedNode(null) }}
-                className={`flex-1 flex flex-col items-center gap-1 py-3 text-[9px] font-bold uppercase tracking-wider transition-all border-b-2 ${
+                className={`flex-1 flex flex-col items-center gap-1 py-3 text-[10px] font-bold uppercase tracking-wider transition-all border-b-2 ${
                   activeMobileTab === tab.id
                     ? 'border-sky-500 text-sky-400 bg-sky-500/5'
                     : 'border-transparent text-slate-500 active:text-slate-300'
@@ -1735,7 +1746,7 @@ export default function Dashboard() {
               <>
                 {opportunities.length === 0 ? (
                   <div className="space-y-2 pt-1">
-                    <p className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-3">Try an example scan:</p>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">Try an example scan:</p>
                     {[
                       'IATF-certified brake pads for passenger vehicles',
                       'Neodymium magnets for EV motor assembly',
@@ -1752,7 +1763,7 @@ export default function Dashboard() {
                   <>
                     {directive && (
                       <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl space-y-3">
-                        <div className="text-[9px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
+                        <div className="text-[10px] font-bold text-sky-400 tracking-[0.3em] uppercase flex items-center gap-2">
                           <Zap size={11}/> Strategic Advisory
                         </div>
                         <p className="text-[12px] text-slate-300 leading-relaxed">{directive.summary}</p>
@@ -1762,11 +1773,11 @@ export default function Dashboard() {
                       </div>
                     )}
                     <div className="bg-[#111] border border-white/5 p-4 rounded-xl">
-                      <div className="text-[9px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
+                      <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
                         <BarChart3 size={11}/> Metals &amp; Materials
                         <div className="ml-auto flex items-center gap-1">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span className="text-[10px] text-slate-500 font-mono">{metalsTs}</span>
+                          <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-1.5">
@@ -1786,12 +1797,12 @@ export default function Dashboard() {
                           }).join(' ')
                           return (
                             <div key={i} className={`bg-[#0a0a0a] border rounded-lg p-2 text-center ${item.up ? 'border-emerald-500/10' : 'border-rose-500/10'}`}>
-                              <div className="text-[7px] text-slate-600 uppercase font-bold mb-0.5 truncate">{item.n}</div>
+                              <div className="text-[7px] text-slate-400 uppercase font-bold mb-0.5 truncate">{item.n}</div>
                               <svg width="44" height="12" viewBox="0 0 44 12" className="mx-auto mb-0.5 opacity-70">
                                 <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                               </svg>
                               <div className="text-[11px] font-bold text-white font-mono">{item.p}</div>
-                              <div className={`text-[9px] font-bold ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
+                              <div className={`text-[10px] font-bold ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>{item.c}</div>
                             </div>
                           )
                         })}
@@ -1799,13 +1810,13 @@ export default function Dashboard() {
                     </div>
                     {fxData?.rates && (
                       <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
-                        <div className="text-[9px] font-bold text-purple-400 tracking-[0.2em] uppercase mb-2">Live FX Rates</div>
+                        <div className="text-[10px] font-bold text-purple-400 tracking-[0.2em] uppercase mb-2">Live FX Rates</div>
                         <div className="grid grid-cols-2 gap-2">
                           {Object.entries(fxData.rates).slice(0, 6).map(([code, info]) => (
                             <div key={code} className="bg-[#0a0a0a] border border-white/5 p-2.5 rounded-lg">
-                              <div className="text-[8px] text-slate-600 uppercase font-bold mb-0.5">{code}</div>
+                              <div className="text-[8px] text-slate-400 uppercase font-bold mb-0.5">{code}</div>
                               <div className="text-[14px] font-bold text-white font-mono">{typeof info === 'object' ? info.rate : info}</div>
-                              {info.label && <div className="text-[8px] text-slate-600 leading-tight">{info.label}</div>}
+                              {info.label && <div className="text-[8px] text-slate-400 leading-tight">{info.label}</div>}
                             </div>
                           ))}
                         </div>
@@ -1827,11 +1838,11 @@ export default function Dashboard() {
                 {selectedNode && isOpportunity ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[10px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      className="flex items-center gap-2 text-[11px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
                       <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Hubs
                     </button>
                     <div className="bg-[#111] border border-emerald-500/30 p-4 rounded-xl space-y-1">
-                      <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{selectedNode.hub}</div>
+                      <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{selectedNode.hub}</div>
                       <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title}</div>
                       <p className="text-[11px] text-slate-400 leading-relaxed pt-1">{selectedNode.desc}</p>
                     </div>
@@ -1839,22 +1850,22 @@ export default function Dashboard() {
                       <div className="bg-[#111] border border-emerald-500/20 p-4 rounded-xl flex items-center gap-3">
                         <div className="text-[32px] font-bold text-white shrink-0">{selectedNode.esg.ethical_rating}</div>
                         <div className="min-w-0">
-                          <div className="text-[9px] text-emerald-400 font-bold uppercase mb-0.5">ESG · {selectedNode.esg.carbon_footprint}</div>
-                          <p className="text-[10px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
+                          <div className="text-[10px] text-emerald-400 font-bold uppercase mb-0.5">ESG · {selectedNode.esg.carbon_footprint}</div>
+                          <p className="text-[11px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
                         </div>
                       </div>
                     )}
                     {selectedNode.customs && (
                       <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl">
-                        <div className="text-[9px] text-sky-400 font-bold uppercase mb-3 flex items-center gap-1.5"><FileText size={10}/> Regulatory</div>
+                        <div className="text-[10px] text-sky-400 font-bold uppercase mb-3 flex items-center gap-1.5"><FileText size={10}/> Regulatory</div>
                         <div className="grid grid-cols-2 gap-3">
-                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">HTS Code</div><div className="text-[14px] font-mono text-white">{selectedNode.customs.hts_code}</div></div>
-                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Duty Rate</div><div className="text-[14px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div></div>
-                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Lead Time</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} days</div></div>
-                          <div><div className="text-[8px] text-slate-600 uppercase mb-0.5">Est. Freight</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div></div>
+                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">HTS Code</div><div className="text-[14px] font-mono text-white">{selectedNode.customs.hts_code}</div></div>
+                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Duty Rate</div><div className="text-[14px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div></div>
+                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Lead Time</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} days</div></div>
+                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Est. Freight</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div></div>
                         </div>
                         {selectedNode.customs.compliance_note && (
-                          <p className="text-[10px] text-slate-500 border-t border-white/5 mt-3 pt-3 leading-relaxed">{selectedNode.customs.compliance_note}</p>
+                          <p className="text-[11px] text-slate-500 border-t border-white/5 mt-3 pt-3 leading-relaxed">{selectedNode.customs.compliance_note}</p>
                         )}
                       </div>
                     )}
@@ -1869,13 +1880,13 @@ export default function Dashboard() {
                     )}
                     {selectedNode.companies?.length > 0 && (
                       <div className="bg-[#111] border border-white/5 p-4 rounded-xl space-y-2">
-                        <div className="text-[9px] font-bold text-emerald-400 uppercase mb-1 flex items-center gap-1.5"><Factory size={10}/> Key Suppliers</div>
+                        <div className="text-[10px] font-bold text-emerald-400 uppercase mb-1 flex items-center gap-1.5"><Factory size={10}/> Key Suppliers</div>
                         {selectedNode.companies.slice(0, 6).map((c, i) => (
                           <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
                             className="flex items-center justify-between p-3 bg-[#0a0a0a] border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all">
                             <span className="text-[11px] text-slate-300 font-mono truncate">{c.name}</span>
                             <div className="flex items-center gap-1 shrink-0 ml-2">
-                              {c.turnover && <span className="text-[8px] text-slate-600">{c.turnover}</span>}
+                              {c.turnover && <span className="text-[8px] text-slate-400">{c.turnover}</span>}
                               <ExternalLink size={10} className="text-emerald-400 opacity-60"/>
                             </div>
                           </a>
@@ -1892,9 +1903,9 @@ export default function Dashboard() {
                   <div className="space-y-2">
                     {opportunities.length === 0 ? (
                       <div className="space-y-3 pt-1">
-                        <p className="text-[11px] text-slate-600 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
+                        <p className="text-[11px] text-slate-400 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
                         <button onClick={() => setShowSearch(true)}
-                          className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[10px] rounded-xl hover:bg-emerald-500/15 active:bg-emerald-500/20 transition-all flex items-center justify-center gap-2">
+                          className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[11px] rounded-xl hover:bg-emerald-500/15 active:bg-emerald-500/20 transition-all flex items-center justify-center gap-2">
                           <Factory size={12}/> Find Sourcing Hubs
                         </button>
                       </div>
@@ -1902,14 +1913,14 @@ export default function Dashboard() {
                       <button key={o.id || i} onClick={() => setSelectedNode(o)}
                         className="w-full text-left p-4 bg-[#111] border border-white/5 active:border-emerald-500/30 active:bg-emerald-500/5 rounded-xl transition-all">
                         <div className="flex items-center justify-between mb-1.5">
-                          <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
-                          <ChevronRight size={14} className="text-slate-600"/>
+                          <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
+                          <ChevronRight size={14} className="text-slate-400"/>
                         </div>
                         <div className="text-[13px] font-bold uppercase leading-tight text-white">{o.title}</div>
                         <div className="flex items-center gap-3 mt-2">
-                          {o.customs?.duty_rate && <span className="text-[10px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
-                          {o.logistics?.port_wait_days !== undefined && <span className="text-[10px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
-                          {o.real_export_value_usd && <span className="text-[10px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={9}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
+                          {o.customs?.duty_rate && <span className="text-[11px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
+                          {o.logistics?.port_wait_days !== undefined && <span className="text-[11px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
+                          {o.real_export_value_usd && <span className="text-[11px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={9}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
                         </div>
                       </button>
                     ))}
@@ -1925,7 +1936,7 @@ export default function Dashboard() {
                 {selectedNode && isRisk ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[10px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      className="flex items-center gap-2 text-[11px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
                       <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Threats
                     </button>
                     <div className={`p-4 rounded-xl border space-y-3 ${
@@ -1943,7 +1954,7 @@ export default function Dashboard() {
                     </div>
                     {selectedNode.mitigation && (
                       <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl space-y-2">
-                        <div className="text-[9px] text-sky-400 uppercase font-bold tracking-widest flex items-center gap-1.5"><CheckCircle size={10}/> Mitigation Strategy</div>
+                        <div className="text-[10px] text-sky-400 uppercase font-bold tracking-widest flex items-center gap-1.5"><CheckCircle size={10}/> Mitigation Strategy</div>
                         <p className="text-[12px] text-slate-200 leading-relaxed">{selectedNode.mitigation}</p>
                       </div>
                     )}
@@ -1964,9 +1975,9 @@ export default function Dashboard() {
                     {/* Live Intel Brief — mobile */}
                     {(intelLoading || intelBrief) && (
                       <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
-                        <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
+                        <div className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
                           <Newspaper size={12} /> Live Trade Intelligence
-                          {intelBrief && <span className="ml-auto text-[9px] text-slate-600">{intelBrief.articleCount} articles</span>}
+                          {intelBrief && <span className="ml-auto text-[10px] text-slate-400">{intelBrief.articleCount} articles</span>}
                         </div>
                         {intelLoading ? (
                           <div className="space-y-1.5">
@@ -1982,21 +1993,21 @@ export default function Dashboard() {
                                   <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
                                   <div>
                                     <p className="text-[11px] text-slate-300 leading-snug group-active:text-white transition-colors">{a.title}</p>
-                                    <p className="text-[9px] text-slate-600 mt-0.5">{a.source}</p>
+                                    <p className="text-[10px] text-slate-400 mt-0.5">{a.source}</p>
                                   </div>
                                 </div>
                               </a>
                             ))}
                           </div>
                         ) : null}
-                        <p className="text-[9px] text-slate-700 mt-2">GDELT · World Bank</p>
+                        <p className="text-[10px] text-slate-500 mt-2">GDELT · World Bank</p>
                       </div>
                     )}
                     {risks.length === 0 ? (
                       <div className="space-y-3 pt-1">
-                        <p className="text-[11px] text-slate-600 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
+                        <p className="text-[11px] text-slate-400 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
                         <button onClick={() => setShowSearch(true)}
-                          className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[10px] rounded-xl hover:bg-rose-500/15 active:bg-rose-500/20 transition-all flex items-center justify-center gap-2">
+                          className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[11px] rounded-xl hover:bg-rose-500/15 active:bg-rose-500/20 transition-all flex items-center justify-center gap-2">
                           <ShieldAlert size={12}/> Run Threat Scan
                         </button>
                       </div>
@@ -2011,7 +2022,7 @@ export default function Dashboard() {
                             <div className="text-[13px] font-bold uppercase leading-snug text-white">{r.title || r.risk}</div>
                             {r.desc && <p className="text-[11px] text-slate-500 mt-1 leading-snug line-clamp-2">{r.desc}</p>}
                           </div>
-                          <ChevronRight size={14} className="text-slate-600 shrink-0 mt-1"/>
+                          <ChevronRight size={14} className="text-slate-400 shrink-0 mt-1"/>
                         </div>
                       </button>
                     ))}
@@ -2026,11 +2037,11 @@ export default function Dashboard() {
                 {/* Always-visible primary actions */}
                 <div className="grid grid-cols-2 gap-2">
                   <button onClick={() => setShowSearch(true)}
-                    className="flex items-center justify-center gap-2 py-3.5 bg-sky-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider">
+                    className="flex items-center justify-center gap-2 py-3.5 bg-sky-500 text-black rounded-xl text-[11px] font-bold uppercase tracking-wider">
                     <SearchCode size={13}/> New Mission
                   </button>
                   <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
-                    className="flex items-center justify-center gap-2 py-3.5 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[10px] font-bold uppercase tracking-wider disabled:opacity-30">
+                    className="flex items-center justify-center gap-2 py-3.5 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[11px] font-bold uppercase tracking-wider disabled:opacity-30">
                     <Download size={13}/> {isExportingPDF ? 'Generating...' : 'Export PDF'}
                   </button>
                 </div>
@@ -2038,12 +2049,12 @@ export default function Dashboard() {
                 {/* Generate RFQ — primary CTA when scan has results */}
                 {opportunities.length > 0 && (
                   <button onClick={() => setShowRFQ(true)}
-                    className="w-full py-3.5 flex items-center justify-center gap-2 bg-emerald-500 text-black rounded-xl text-[10px] font-bold uppercase tracking-wider active:bg-emerald-400 transition-all">
+                    className="w-full py-3.5 flex items-center justify-center gap-2 bg-emerald-500 text-black rounded-xl text-[11px] font-bold uppercase tracking-wider active:bg-emerald-400 transition-all">
                     <Mail size={13}/> Generate RFQ
                   </button>
                 )}
 
-                <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
+                <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
 
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -2063,7 +2074,7 @@ export default function Dashboard() {
                     <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
                       className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all relative ${
                         t.disabled
-                          ? 'bg-white/5 border-white/5 text-slate-700 cursor-not-allowed'
+                          ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed'
                           : t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 active:bg-emerald-500/20' :
                             t.color === 'rose'    ? 'bg-rose-500/5 border-rose-500/20 text-rose-400 active:bg-rose-500/20' :
                             t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 active:bg-sky-500/20' :
@@ -2073,9 +2084,9 @@ export default function Dashboard() {
                             'bg-white/5 border-white/10 text-slate-400 active:bg-white/10'
                       }`}>
                       {t.icon}
-                      <span className="text-[9px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
                       {t.disabled && t.needsScan && (
-                        <span className="absolute top-1.5 right-1.5 text-[8px] font-bold text-slate-700 uppercase">2+ hubs</span>
+                        <span className="absolute top-1.5 right-1.5 text-[8px] font-bold text-slate-500 uppercase">2+ hubs</span>
                       )}
                     </button>
                   ))}
@@ -2100,7 +2111,7 @@ export default function Dashboard() {
               </h2>
               <div className="flex items-center gap-1.5">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] text-slate-500 font-mono">{metalsTs}</span>
+                <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
@@ -2121,20 +2132,20 @@ export default function Dashboard() {
                 return (
                   <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
                     <div className="flex items-start justify-between gap-1 mb-1">
-                      <div className="text-[10px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
+                      <div className="text-[11px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
                       <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
                         <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[10px] text-slate-600">{item.u}</span></div>
-                    <div className={`text-[10px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[11px] text-slate-400">{item.u}</span></div>
+                    <div className={`text-[11px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
                     </div>
                   </div>
                 )
               })}
             </div>
-            <p className="text-[9px] text-slate-700 mt-2">Indicative reference prices — verify with exchange terminal.</p>
+            <p className="text-[10px] text-slate-500 mt-2">Indicative reference prices — verify with exchange terminal.</p>
           </div>
 
           {/* Live FX Rates */}
@@ -2146,10 +2157,10 @@ export default function Dashboard() {
                 </h2>
                 <button
                   onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
-                  className="flex items-center gap-1 text-[8px] text-slate-600 hover:text-amber-400 font-mono transition-colors"
+                  className="flex items-center gap-1 text-[8px] text-slate-400 hover:text-amber-400 font-mono transition-colors"
                   title="Rates refresh automatically every 5 minutes. Click to refresh now.">
                   <span>as of {fxData.date}</span>
-                  <span className="text-[10px]">⟳</span>
+                  <span className="text-[11px]">⟳</span>
                 </button>
               </div>
               <div className="grid grid-cols-2 gap-1.5">
@@ -2157,7 +2168,7 @@ export default function Dashboard() {
                   <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
                     <div>
                       <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
-                      <div className="text-[10px] text-slate-600 mt-0.5 leading-tight">
+                      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
                         {info.impact?.split(' ').slice(0, 3).join(' ')}
                       </div>
                     </div>
@@ -2173,31 +2184,31 @@ export default function Dashboard() {
           {/* Strategic Directive */}
           <div className="bg-[#0a0a0a] border border-emerald-500/30 p-5 flex flex-col gap-4 shadow-[0_0_25px_rgba(16,185,129,0.08)] rounded-xl relative shrink-0">
             <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
-            <h2 className="text-[10px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
+            <h2 className="text-[11px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
               <Target size={14} /> Strategic Directive
             </h2>
             {directive ? (
               <div className="space-y-4">
                 <div>
-                  <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
+                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
                   <div className="text-[14px] font-bold text-white uppercase tracking-wider">{directive.best_region}</div>
                 </div>
                 <div>
-                  <div className="text-[8px] text-slate-600 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
+                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
                   <div className="text-[14px] font-bold text-emerald-400 uppercase">{directive.best_partner}</div>
                 </div>
                 <div className="p-3 bg-rose-500/8 border border-rose-500/25 rounded-lg space-y-1">
                   <div className="text-[8px] text-rose-500 uppercase font-bold tracking-widest flex items-center gap-1.5">
                     <ShieldAlert size={10} /> Trade & Compliance Alert
                   </div>
-                  <div className="text-[10px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
+                  <div className="text-[11px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
                 </div>
                 <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
                   &ldquo;{directive.summary}&rdquo;
                 </div>
               </div>
             ) : (
-              <div className="text-[11px] text-slate-700 italic flex items-center gap-2 animate-pulse">
+              <div className="text-[11px] text-slate-500 italic flex items-center gap-2 animate-pulse">
                 <Clock size={13} /> Run a mission scan to generate directive...
               </div>
             )}
@@ -2206,7 +2217,7 @@ export default function Dashboard() {
           {/* Market Intelligence / News */}
           <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
             <div className="flex items-center justify-between shrink-0">
-              <h2 className="text-[10px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
+              <h2 className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
               </h2>
             </div>
@@ -2214,35 +2225,35 @@ export default function Dashboard() {
             <div className="flex items-center gap-1 flex-wrap shrink-0">
               {missionKeywords.length > 0 && (
                 <button onClick={() => setNewsFilter('mission')}
-                  className={`px-2 py-0.5 text-[10px] font-bold rounded transition-all flex items-center gap-1 ${
+                  className={`px-2 py-0.5 text-[11px] font-bold rounded transition-all flex items-center gap-1 ${
                     newsFilter === 'mission'
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'text-slate-600 hover:text-emerald-400 border border-white/5'
+                      : 'text-slate-400 hover:text-emerald-400 border border-white/5'
                   }`}>
                   ⚡ Mission
                 </button>
               )}
               {[['all','All'],['china','🇨🇳'],['eu','🇪🇺'],['usa','🇺🇸'],['latam','🌎'],['india','🇮🇳']].map(([key, label]) => (
                 <button key={key} onClick={() => setNewsFilter(key)}
-                  className={`px-2 py-0.5 text-[10px] font-bold rounded transition-all ${
+                  className={`px-2 py-0.5 text-[11px] font-bold rounded transition-all ${
                     newsFilter === key
                       ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                      : 'text-slate-700 hover:text-slate-400'
+                      : 'text-slate-500 hover:text-slate-400'
                   }`}>
                   {label}
                 </button>
               ))}
-              <span className="ml-auto text-[10px] text-slate-700 font-mono">{filteredNews.length}</span>
+              <span className="ml-auto text-[11px] text-slate-500 font-mono">{filteredNews.length}</span>
             </div>
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
-                <p className="text-[10px] text-slate-700 italic py-2">
+                <p className="text-[11px] text-slate-500 italic py-2">
                   {newsFilter === 'mission' ? 'No news loaded yet — run a mission scan first.' : 'No articles match this filter.'}
                 </p>
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
                   className="block border-b border-white/5 pb-3 last:border-0 group">
-                  <div className="text-[10px] text-slate-600 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
+                  <div className="text-[11px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
                     <span className="flex items-center gap-1">{item._mission && <span className="text-emerald-400">⚡</span>}{item.pubDate}</span>
                     <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 text-sky-400 transition-all" />
                   </div>

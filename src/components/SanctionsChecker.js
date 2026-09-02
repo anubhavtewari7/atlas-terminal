@@ -136,7 +136,7 @@ export default function SanctionsChecker({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-rose-400 tracking-[0.2em] uppercase">Sanctions & Restricted Party Checker</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">OFAC SDN · EU Consolidated List · UN Security Council · UFLPA</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">OFAC SDN · EU Consolidated List · UN Security Council · UFLPA</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
@@ -146,25 +146,25 @@ export default function SanctionsChecker({ onClose }) {
           {/* Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Entity / Supplier Name</label>
+              <label className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1.5 block">Entity / Supplier Name</label>
               <input
                 autoFocus
                 value={entity}
                 onChange={e => setEntity(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && runCheck()}
                 placeholder="e.g. Huawei, Gazprom, SQM S.A."
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
               />
-              <p className="text-[9px] text-slate-600 mt-1">One name per search -- run separately for each entity.</p>
+              <p className="text-[10px] text-slate-500 mt-1">One name per search -- run separately for each entity.</p>
             </div>
             <div>
-              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Country of Origin / Operation</label>
+              <label className="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1.5 block">Country of Origin / Operation</label>
               <input
                 value={country}
                 onChange={e => setCountry(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && runCheck()}
                 placeholder="e.g. China, Russia, Germany"
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-500 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
               />
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function SanctionsChecker({ onClose }) {
           <button
             onClick={runCheck}
             disabled={!entity.trim() && !country.trim()}
-            className="w-full h-11 bg-rose-500 text-white font-bold text-[11px] uppercase tracking-widest hover:bg-rose-400 transition-all disabled:opacity-30 rounded-xl flex items-center justify-center gap-2"
+            className="w-full h-11 bg-rose-500 text-white font-bold text-[12px] uppercase tracking-widest hover:bg-rose-400 transition-all disabled:opacity-30 rounded-xl flex items-center justify-center gap-2"
           >
             <Shield size={14} /> Run Sanctions Check
           </button>
@@ -184,11 +184,11 @@ export default function SanctionsChecker({ onClose }) {
                 <div className="flex items-center gap-2.5">
                   {cfg.icon}
                   <div>
-                    <div className="text-[10px] text-slate-500 uppercase tracking-widest">Country Risk — {result.country.toUpperCase()}</div>
+                    <div className="text-[11px] text-slate-500 uppercase tracking-widest">Country Risk — {result.country.toUpperCase()}</div>
                     <div className={`text-[15px] font-bold uppercase mt-0.5 ${cfg.text}`}>{result.level}</div>
                   </div>
                 </div>
-                <span className={`text-[9px] font-bold px-2 py-1 rounded-lg uppercase tracking-widest ${cfg.badge}`}>{result.program}</span>
+                <span className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-widest ${cfg.badge}`}>{result.program}</span>
               </div>
 
               {/* List statuses */}
@@ -199,13 +199,13 @@ export default function SanctionsChecker({ onClose }) {
                   { label: '🌐 UN SC', status: result.un },
                 ].map((item, i) => (
                   <div key={i} className="bg-black/20 rounded-lg p-2.5 text-center">
-                    <div className="text-[9px] text-slate-600 uppercase mb-1">{item.label}</div>
-                    <div className={`text-[11px] font-bold font-mono ${STATUS_COLOR[item.status] || 'text-slate-400'}`}>{item.status}</div>
+                    <div className="text-[10px] text-slate-500 uppercase mb-1">{item.label}</div>
+                    <div className={`text-[12px] font-bold font-mono ${STATUS_COLOR[item.status] || 'text-slate-400'}`}>{item.status}</div>
                   </div>
                 ))}
               </div>
 
-              <p className="text-[11px] text-slate-400 leading-relaxed">{result.note}</p>
+              <p className="text-[12px] text-slate-400 leading-relaxed">{result.note}</p>
             </div>
           )}
 
@@ -215,7 +215,7 @@ export default function SanctionsChecker({ onClose }) {
               <div className="flex items-center gap-2.5 mb-3">
                 {entityMatches.length > 0 ? <AlertTriangle size={16} className="text-rose-400" /> : <CheckCircle size={16} className="text-emerald-400" />}
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-widest">Entity Screening — {entity}</div>
+                  <div className="text-[11px] text-slate-500 uppercase tracking-widest">Entity Screening — {entity}</div>
                   <div className={`text-[14px] font-bold mt-0.5 ${entityMatches.length > 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
                     {entityMatches.length > 0 ? `${entityMatches.length} MATCH${entityMatches.length > 1 ? 'ES' : ''} FOUND` : 'NO MATCHES IN DATABASE'}
                   </div>
@@ -225,13 +225,13 @@ export default function SanctionsChecker({ onClose }) {
                 <div className="space-y-2">
                   {entityMatches.map((m, i) => (
                     <div key={i} className="bg-black/20 rounded-lg p-3">
-                      <div className="text-[9px] text-rose-400 font-bold uppercase tracking-widest mb-1">{m.list} — {m.severity}</div>
-                      <p className="text-[11px] text-slate-400 leading-snug">{m.note}</p>
+                      <div className="text-[10px] text-rose-400 font-bold uppercase tracking-widest mb-1">{m.list} — {m.severity}</div>
+                      <p className="text-[12px] text-slate-400 leading-snug">{m.note}</p>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-[11px] text-slate-400 leading-relaxed">
+                <p className="text-[12px] text-slate-400 leading-relaxed">
                   No keyword matches against Atlas&apos; curated SDN/Entity List database. <strong className="text-amber-400">Always verify</strong> against the official OFAC SDN, EU Consolidated, and UN SC lists before transacting.
                 </p>
               )}
@@ -240,8 +240,8 @@ export default function SanctionsChecker({ onClose }) {
 
           {/* Disclaimer + official links */}
           <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-            <div className="text-[9px] text-amber-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle size={11} /> Legal Disclaimer</div>
-            <p className="text-[10px] text-slate-500 leading-relaxed mb-3">Atlas provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
+            <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle size={11} /> Legal Disclaimer</div>
+            <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Atlas provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
             <div className="flex flex-wrap gap-2">
               {[
                 { label: 'OFAC SDN Search', url: 'https://sanctionssearch.ofac.treas.gov/' },
@@ -250,7 +250,7 @@ export default function SanctionsChecker({ onClose }) {
                 { label: 'BIS Entity List', url: 'https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list' },
               ].map((link, i) => (
                 <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[10px] text-slate-400 hover:text-sky-400 hover:border-sky-500/30 transition-all">
+                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[11px] text-slate-400 hover:text-sky-400 hover:border-sky-500/30 transition-all">
                   {link.label} <ExternalLink size={9} />
                 </a>
               ))}

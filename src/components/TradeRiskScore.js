@@ -53,7 +53,7 @@ export default function TradeRiskScore({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-rose-400 tracking-[0.2em] uppercase">Trade Lane Risk Score</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5">Composite risk index for any global trade corridor</p>
+              <p className="text-[11px] text-slate-500 mt-0.5">Composite risk index for any global trade corridor</p>
             </div>
           </div>
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
@@ -62,20 +62,20 @@ export default function TradeRiskScore({ onClose }) {
         <form onSubmit={handleAssess} className="p-4 md:p-6 border-b border-white/5 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Origin Country / Port</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Origin Country / Port</label>
               <input autoFocus value={origin} onChange={e => setOrigin(e.target.value)} placeholder="e.g. Shanghai, China"
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-700" />
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-500" />
             </div>
             <div>
-              <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Destination Country / Port</label>
+              <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Destination Country / Port</label>
               <input value={destination} onChange={e => setDestination(e.target.value)} placeholder="e.g. Los Angeles, USA"
-                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-700" />
+                className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-500" />
             </div>
           </div>
           <div>
-            <label className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Product / Cargo (optional)</label>
+            <label className="text-[11px] text-slate-500 uppercase font-bold tracking-widest mb-2 block">Product / Cargo (optional)</label>
             <input value={product} onChange={e => setProduct(e.target.value)} placeholder="e.g. Automotive components, Electronics, Perishables"
-              className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-700" />
+              className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[13px] font-mono text-white focus:outline-none focus:border-rose-500 transition-all rounded-xl placeholder:text-slate-500" />
           </div>
           <button type="submit" disabled={loading || !origin || !destination}
             className="w-full h-12 bg-rose-500 text-white font-bold text-[12px] uppercase tracking-widest hover:bg-rose-400 active:bg-rose-400 disabled:opacity-50 transition-all rounded-xl flex items-center justify-center gap-2">
@@ -93,12 +93,12 @@ export default function TradeRiskScore({ onClose }) {
               <div className={`p-5 border ${overall.border} rounded-xl bg-[#0f0f0f]`}>
                 <div className="flex items-center justify-between mb-3">
                   <div>
-                    <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">{origin} → {destination}</div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">Transit: {result.transit_days} days · Buffer: {result.recommended_buffer}</div>
+                    <div className="text-[11px] text-slate-500 uppercase font-bold tracking-widest">{origin} → {destination}</div>
+                    <div className="text-[12px] text-slate-400 mt-0.5">Transit: {result.transit_days} days · Buffer: {result.recommended_buffer}</div>
                   </div>
                   <div className="text-right">
                     <div className={`text-[42px] font-bold font-mono leading-none ${overall.text}`}>{result.overall_score}</div>
-                    <div className={`text-[11px] font-bold ${overall.text}`}>{result.rating} RISK</div>
+                    <div className={`text-[12px] font-bold ${overall.text}`}>{result.rating} RISK</div>
                   </div>
                 </div>
                 {/* Score bar */}
@@ -114,14 +114,14 @@ export default function TradeRiskScore({ onClose }) {
                   return (
                     <div key={i} className="flex items-center gap-3 p-3 bg-[#111] border border-white/5 rounded-xl">
                       <div className="w-24 shrink-0">
-                        <div className="text-[9px] text-slate-500 uppercase font-bold">{comp.label}</div>
+                        <div className="text-[10px] text-slate-500 uppercase font-bold">{comp.label}</div>
                         <div className={`text-[14px] font-bold font-mono ${c.text}`}>{comp.score}/100</div>
                       </div>
                       <div className="flex-1">
                         <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-1">
                           <div className={`h-full ${c.bg} rounded-full`} style={{ width: `${comp.score}%` }} />
                         </div>
-                        <div className="text-[10px] text-slate-500">{comp.detail}</div>
+                        <div className="text-[11px] text-slate-500">{comp.detail}</div>
                       </div>
                     </div>
                   )
@@ -131,15 +131,15 @@ export default function TradeRiskScore({ onClose }) {
               {/* Key alert + alternative */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
-                  <div className="text-[9px] text-rose-400 uppercase font-bold mb-1 tracking-widest">⚠️ Key Alert</div>
-                  <p className="text-[11px] text-slate-300 leading-snug">{result.key_alert}</p>
+                  <div className="text-[10px] text-rose-400 uppercase font-bold mb-1 tracking-widest">⚠️ Key Alert</div>
+                  <p className="text-[12px] text-slate-300 leading-snug">{result.key_alert}</p>
                 </div>
                 <div className="p-4 bg-sky-500/5 border border-sky-500/20 rounded-xl">
-                  <div className="text-[9px] text-sky-400 uppercase font-bold mb-1 tracking-widest">🔄 Alternative Route</div>
-                  <p className="text-[11px] text-slate-300 leading-snug">{result.alternative_route}</p>
+                  <div className="text-[10px] text-sky-400 uppercase font-bold mb-1 tracking-widest">🔄 Alternative Route</div>
+                  <p className="text-[12px] text-slate-300 leading-snug">{result.alternative_route}</p>
                 </div>
               </div>
-              <div className="p-3 bg-[#111] border border-white/5 rounded-xl text-[11px] text-slate-500 font-mono">
+              <div className="p-3 bg-[#111] border border-white/5 rounded-xl text-[12px] text-slate-500 font-mono">
                 💼 Cargo Insurance Estimate: <span className="text-white font-bold">{result.insurance_premium_estimate}</span>
               </div>
             </div>
