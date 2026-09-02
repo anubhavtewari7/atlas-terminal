@@ -1426,7 +1426,7 @@ export default function Dashboard() {
         <main className="flex flex-col gap-2 overflow-hidden min-w-0 shrink-0 lg:flex-1 lg:gap-4">
 
           {/* Globe */}
-          <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 lg:max-h-[48vh] bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
+          <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
             </div>
