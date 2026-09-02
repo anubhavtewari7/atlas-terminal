@@ -2582,10 +2582,11 @@ export function categorizeQuery(query) {
     'wing box', 'wing spar', 'landing gear', 'aircraft engine', 'jet engine',
     'turbofan', 'turboprop', 'apu aircraft', 'avionics', 'flight control system',
     'as9100', 'nadcap', 'aircraft fastener', 'aerospace fastener',
-    'aerospace composite', 'cfrp prepreg', 'aerospace prepreg', 'honeycomb core',
+    'aerospace composite', 'aircraft composite', 'cfrp prepreg', 'aerospace prepreg', 'honeycomb core',
     'satellite component', 'spacecraft', 'launch vehicle', 'rocket engine',
     'aircraft interior', 'cabin seat aircraft', 'aircraft galley',
-    'titanium forging aerospace', 'aircraft bracket', 'aircraft skin panel'
+    'titanium forging aerospace', 'aircraft bracket', 'aircraft skin panel',
+    'turbine blade aerospace', 'compressor blade', 'engine blade', 'nozzle guide vane'
   ])) return 'aerospace'
 
   // X5: Defence & military systems
@@ -2594,8 +2595,8 @@ export function categorizeQuery(query) {
     'armoured vehicle', 'military grade', 'munition', 'ammunition', 'artillery',
     'missile', 'missile component', 'warhead', 'solid rocket motor',
     'itar', 'dfars', 'cmmc', 'usml', 'ddtc',
-    'body armor', 'body armour', 'ballistic plate', 'ballistic helmet',
-    'night vision', 'military radar', 'electronic warfare', 'radar system',
+    'body armor', 'body armour', 'ballistic armor', 'ballistic plate', 'ballistic helmet', 'ballistic protection',
+    'night vision', 'military radar', 'defense radar', 'electronic warfare', 'radar system',
     'naval combat system', 'submarine component', 'military drone', 'uav military'
   ])) return 'defense_military'
 
@@ -2604,20 +2605,20 @@ export function categorizeQuery(query) {
   if (match([
     'oilfield', 'oil field', 'oil and gas', 'oil & gas', 'upstream equipment',
     'wellhead', 'christmas tree valve', 'subsea tree', 'subsea equipment',
-    'blowout preventer', 'bop stack', 'drill pipe', 'drill bit', 'drilling rig',
+    'blowout preventer', 'bop stack', 'drill pipe', 'drill bit', 'drilling rig', 'drilling equipment',
     'drill collar', 'casing pipe', 'tubing oilfield', 'octg',
     'frac pump', 'fracturing', 'mud pump', 'downhole tool',
-    'api 6a', 'api 6d', 'api 5l', 'lng train', 'lng terminal', 'lng carrier cargo',
+    'api 6a', 'api 6d', 'api 5l', 'lng train', 'lng terminal', 'lng carrier cargo', 'lng storage', 'lng tank', 'lng plant',
     'cryogenic valve', 'cryogenic tank', 'refinery equipment', 'pipeline valve',
     'gas turbine package', 'flare system', 'separator vessel', 'crude oil',
-    'natural gas processing', 'petroleum equipment'
+    'natural gas processing', 'petroleum equipment', 'oil refinery', 'oil pipeline'
   ])) return 'energy_oil_gas'
 
   // X7: Mining & extractives
   //     (before metals catches 'ore' / 'copper')
   if (match([
     'iron ore', 'copper ore', 'copper concentrate', 'bauxite', 'spodumene',
-    'lithium brine', 'mineral concentrate', 'mine site', 'mining operation',
+    'lithium brine', 'lithium mining', 'coal mining', 'coal mine', 'mineral concentrate', 'mine site', 'mining operation',
     'open pit mine', 'underground mine', 'tailings', 'tailings dam',
     'mining equipment', 'haul truck', 'mineral processing', 'ore beneficiation',
     'flotation cell', 'crushing plant', 'grinding mill ore', 'sag mill',
@@ -2631,7 +2632,8 @@ export function categorizeQuery(query) {
     'shipbuilding', 'shipyard', 'newbuild vessel', 'container ship', 'containership',
     'bulk carrier', 'tanker vessel', 'lng carrier', 'ro-ro vessel',
     'marine engine', 'ship engine', 'two-stroke engine', 'marine propulsion',
-    'propeller shaft marine', 'ship propeller', 'rudder', 'ballast water treatment',
+    'propeller shaft marine', 'ship propeller', 'anchor chain', 'mooring chain', 'vessel hull', 'ship hull',
+    'rudder', 'ballast water treatment',
     'scrubber marine', 'ship crane', 'ship-to-shore crane', 'port crane',
     'shipping container', 'reefer container', 'jones act', 'imo 2020',
     'offshore vessel', 'dry dock', 'hull block', 'marine classification society'
@@ -2639,13 +2641,13 @@ export function categorizeQuery(query) {
 
   // X9: Railway & rail transit
   if (match([
-    'rolling stock', 'railcar', 'rail car', 'freight car', 'locomotive',
+    'rolling stock', 'railcar', 'rail car', 'freight car', 'locomotive', 'railway locomotive',
     'metro car', 'trainset', 'high speed train', 'passenger coach rail',
-    'railway track', 'rail track', 'railway signalling', 'railway signaling',
+    'railway track', 'rail track', 'track rail', 'rail steel', 'railway signalling', 'railway signaling',
     'etcs', 'positive train control', 'railway bogie', 'bogie frame',
     'rail wheelset', 'rail axle', 'railway brake', 'pantograph',
     'catenary', 'overhead line equipment', 'rail fastening', 'railway sleeper',
-    'railway tie', 'buy america rail', 'railway component', 'rail transit'
+    'railway tie', 'railroad tie', 'railroad track', 'buy america rail', 'railway component', 'rail transit'
   ])) return 'railway'
 
   // X10: Robotics & industrial automation
@@ -2656,7 +2658,7 @@ export function categorizeQuery(query) {
     'autonomous mobile robot', 'amr robot', 'agv', 'automated guided vehicle',
     'robot controller', 'end effector', 'robot gripper', 'end-of-arm tooling',
     'harmonic drive', 'strain wave gear', 'cycloidal reducer', 'precision reducer',
-    'servo motor robot', 'motion controller', 'machine vision', 'vision system',
+    'servo motor robot', 'servo drive', 'servo amplifier', 'motion controller', 'machine vision', 'vision system',
     'safety plc', 'industrial automation', 'factory automation', 'plc controller',
     'warehouse automation', 'palletizing robot', 'pick and place robot'
   ])) return 'robotics_automation'
@@ -2668,8 +2670,9 @@ export function categorizeQuery(query) {
     'electron microscope', 'sem microscope', 'tem microscope', 'atomic force microscope',
     'coordinate measuring machine', 'cmm machine', 'metrology equipment',
     'optical metrology', 'laser interferometer', 'profilometer',
-    'analytical instrument', 'laboratory instrument', 'lab equipment',
+    'analytical instrument', 'analytical balance', 'precision balance', 'laboratory instrument', 'lab equipment',
     'scientific instrument', 'thermal analyzer', 'particle analyzer',
+    'laboratory centrifuge', 'centrifuge lab', 'clinical centrifuge',
     'xrf analyzer', 'xrd diffractometer', 'flow cytometer', 'pcr instrument',
     'calibration standard', 'mass flow controller'
   ])) return 'instruments_scientific'
@@ -2691,6 +2694,8 @@ export function categorizeQuery(query) {
   if (match([
     'hvac', 'air conditioner', 'air conditioning', 'heat pump', 'mini split',
     'vrf system', 'rooftop unit', 'air handling unit', 'fan coil unit',
+    'commercial chiller', 'industrial chiller', 'chiller plant', 'water chiller',
+    'ventilation fan', 'axial fan hvac', 'centrifugal fan hvac',
     'refrigerant', 'r-410a', 'r410a', 'r-32 refrigerant', 'r-454b', 'hfc refrigerant',
     'scroll compressor', 'rotary compressor', 'condensing unit', 'evaporator coil',
     'condenser coil', 'thermostat', 'building automation', 'bms building',
@@ -2701,8 +2706,8 @@ export function categorizeQuery(query) {
   // X14: Water treatment & fluid purification
   if (match([
     'water treatment', 'wastewater', 'waste water', 'desalination', 'desalinat',
-    'reverse osmosis', 'ro membrane', 'nanofiltration', 'ultrafiltration',
-    'membrane element', 'ion exchange resin', 'activated carbon filter',
+    'reverse osmosis', 'ro membrane', 'nanofiltration', 'ultrafiltration', 'uf membrane', 'ultrafiltration membrane',
+    'membrane element', 'membrane module water', 'ion exchange resin', 'activated carbon filter',
     'granular activated carbon', 'water filtration', 'water purification',
     'clarifier', 'sludge treatment', 'chlorination system', 'uv disinfection',
     'water softener', 'demineralization', 'boiler feedwater', 'cooling tower water',
@@ -2716,9 +2721,9 @@ export function categorizeQuery(query) {
     'refrigerated truck', 'refrigerated warehouse', 'freezer warehouse',
     'blast freezer', 'temperature controlled logistics', 'temperature-controlled',
     'temperature excursion', 'data logger temperature', 'temperature monitoring shipment',
-    'gdp logistics', 'ceiv pharma', 'validated cold chain', 'cryogenic shipper',
+    'gdp logistics', 'gdp pharma', 'good distribution practice', 'ceiv pharma', 'validated cold chain', 'cryogenic shipper',
     'dry ice shipping', 'insulated shipper', 'active container pharma',
-    'vaccine cold chain', 'frozen logistics', 'chilled logistics', '2-8c'
+    'vaccine cold chain', 'frozen logistics', 'frozen food logistics', 'chilled logistics', '2-8c'
   ])) return 'cold_chain'
 
   // X16: Cosmetics & personal care formulation
@@ -2738,6 +2743,7 @@ export function categorizeQuery(query) {
   if (match([
     'nutraceutical', 'dietary supplement', 'food supplement', 'vitamin supplement',
     'vitamin c', 'vitamin d', 'vitamin b12', 'vitamin e', 'vitamin k',
+    'omega-3 fish oil', 'omega 3 fish oil', 'fish oil supplement', 'fish oil capsule', 'krill oil',
     'multivitamin', 'softgel', 'gummy supplement', 'capsule supplement',
     'two-piece capsule', 'botanical extract', 'herbal extract', 'plant extract standardiz',
     'curcumin', 'ashwagandha', 'boswellia', 'lutein', 'omega-3 supplement',
@@ -2761,7 +2767,9 @@ export function categorizeQuery(query) {
     'small leather goods', 'luxury watch', 'mechanical watch', 'watch movement',
     'swiss made watch', 'watch case', 'hairspring', 'escapement',
     'fine jewelry', 'fine jewellery', 'jewelry manufactur', 'jewellery manufactur',
-    'diamond setting', 'gold chain jewelry', 'exotic leather', 'crocodile leather',
+    'diamond jewelry', 'diamond ring', 'diamond necklace', 'diamond setting',
+    'gold bullion', 'gold bar', 'gold coin', 'gold chain jewelry', 'gold jewelry',
+    'luxury leather', 'exotic leather', 'crocodile leather',
     'python leather', 'alligator leather', 'cites permit', 'vegetable tanned leather',
     'made in italy leather', 'luxury packaging', 'haute couture'
   ])) return 'luxury_goods'
@@ -2773,7 +2781,7 @@ export function categorizeQuery(query) {
     'office chair', 'task chair', 'ergonomic chair', 'desk furniture',
     'bedroom furniture', 'wardrobe', 'kitchen cabinet', 'bathroom vanity',
     'upholstered seating', 'upholstery furniture', 'mattress', 'bed frame',
-    'flat pack furniture', 'flat-pack furniture', 'rta furniture', 'shelving unit',
+    'flat pack furniture', 'flat-pack furniture', 'rta furniture', 'shelving unit', 'metal shelving', 'steel shelving', 'wire shelving',
     'contract furniture', 'hospitality furniture', 'outdoor furniture', 'patio furniture',
     'furniture hardware', 'drawer slide', 'cabinet hinge', 'furniture fitting'
   ])) return 'furniture'
@@ -2785,7 +2793,7 @@ export function categorizeQuery(query) {
     'bicycle', 'bike frame', 'carbon frame bike', 'e-bike', 'ebike', 'drivetrain bicycle',
     'groupset', 'bicycle component', 'helmet cycling', 'ski equipment', 'snowboard',
     'ski binding', 'climbing harness', 'climbing rope', 'carabiner', 'via ferrata',
-    'camping gear', 'tent outdoor', 'sleeping bag', 'backpack outdoor', 'hiking boot',
+    'camping gear', 'camping tent', 'tent outdoor', 'camp tent', 'sleeping bag', 'backpack outdoor', 'hiking boot',
     'golf club', 'tennis racket', 'fitness equipment', 'treadmill', 'dwr finish'
   ])) return 'sports_outdoor'
 
@@ -2827,7 +2835,7 @@ export function categorizeQuery(query) {
   // X25: Paints, coatings & surface treatment
   //      (before chemicals Pre-B and plastics)
   if (match([
-    'paint', 'coating', 'coatings', 'powder coating', 'e-coat', 'electrocoat',
+    'paint', 'coating', 'coatings', 'powder coating', 'powder coat', 'industrial powder', 'e-coat', 'electrocoat',
     'primer paint', 'topcoat', 'basecoat', 'clearcoat', 'automotive paint',
     'industrial coating', 'marine coating', 'antifouling', 'coil coating',
     'architectural paint', 'decorative paint', 'wood coating', 'can coating',
@@ -2857,7 +2865,7 @@ export function categorizeQuery(query) {
     'rubber compound', 'synthetic rubber', 'natural rubber',
     'carbon fiber', 'carbon fibre', 'fiberglass', 'fibreglass',
     'composite part', 'epoxy resin', 'epoxy compound',
-    'plastic film', 'packaging film', 'stretch film', 'shrink wrap',
+    'plastic film', 'packaging film', 'stretch film',
     'plastic extrusion', 'extrusion profile', 'plastic tube',
     'masterbatch', 'color concentrate', 'flame retardant compound',
     'engineering plastic', 'specialty polymer', 'bio-based plastic',
@@ -3141,7 +3149,7 @@ export function categorizeQuery(query) {
     'broth', 'stock', 'chicken broth', 'beef broth', 'vegetable broth',
     'soup', 'instant soup', 'noodle soup', 'cream soup',
     'snack', 'bar snack', 'savory snack', 'healthy snack',
-    'oat', 'oats', 'rolled oats', 'steel cut oats', 'oat bran', 'oat flour',
+    'oats', 'rolled oats', 'steel cut oats', 'oat bran', 'oat flour', 'oatmeal', 'porridge oats',
     'lentil', 'red lentil', 'green lentil', 'lentil soup',
     'chickpea', 'garbanzo', 'split pea', 'black bean', 'kidney bean', 'navy bean',
     'nut', 'almond', 'walnut', 'cashew', 'pistachio', 'hazelnut', 'pecan',
