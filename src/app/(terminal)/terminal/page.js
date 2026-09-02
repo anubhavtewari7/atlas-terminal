@@ -17,6 +17,7 @@ import FtaChecker from '@/components/FtaChecker'
 import TariffCalculator from '@/components/TariffCalculator'
 import CurrencyImpactCalc from '@/components/CurrencyImpactCalc'
 import DualUseChecker from '@/components/DualUseChecker'
+import SourcingRecommendation from '@/components/SourcingRecommendation'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
 import {
@@ -445,6 +446,8 @@ export default function Dashboard() {
   const [showTariffCalc, setShowTariffCalc] = useState(false)
   const [showCurrencyCalc, setShowCurrencyCalc] = useState(false)
   const [showDualUse, setShowDualUse] = useState(false)
+  const [showRecommendation, setShowRecommendation] = useState(false)
+  const [leftTab, setLeftTab] = useState('scan')
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
@@ -1028,6 +1031,15 @@ export default function Dashboard() {
           {showTariffCalc  && <TariffCalculator onClose={() => setShowTariffCalc(false)} />}
           {showCurrencyCalc && <CurrencyImpactCalc onClose={() => setShowCurrencyCalc(false)} />}
           {showDualUse   && <DualUseChecker onClose={() => setShowDualUse(false)} />}
+          {showRecommendation && opportunities.length > 0 && (
+            <SourcingRecommendation
+              opportunities={opportunities}
+              risks={risks}
+              intelBrief={intelBrief}
+              query={profile.material}
+              onClose={() => setShowRecommendation(false)}
+            />
+          )}
         </AnimatePresence>
 
         {/* ── GUIDED TOUR ── */}
@@ -1138,8 +1150,20 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Hub Stability Navigator */}
-          {(() => {
+          {/* Left sidebar tab bar */}
+          <div className="flex border-b border-white/10 shrink-0 sticky top-0 z-10 bg-[#0a0a0a] rounded-lg overflow-hidden">
+            <button onClick={() => setLeftTab('scan')}
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${leftTab === 'scan' ? 'text-emerald-400 border-b-2 border-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}>
+              Scan Results
+            </button>
+            <button onClick={() => setLeftTab('intel')}
+              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${leftTab === 'intel' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-slate-500 hover:text-slate-300'}`}>
+              Market Intel
+            </button>
+          </div>
+
+          {/* Hub Stability Navigator — INTEL tab */}
+          {leftTab === 'intel' && (() => {
             const { level, continent, country, region } = hubNav
             const countryData = country ? HUB_REGIONS[country] : null
             const s = countryData?.score
@@ -1293,8 +1317,8 @@ export default function Dashboard() {
           {/* Risk Panels */}
           <div className="flex flex-col gap-3">
 
-            {/* Live Intelligence Brief */}
-            {(intelLoading || intelBrief) && (
+            {/* Live Intelligence Brief — INTEL tab */}
+            {leftTab === 'intel' && (intelLoading || intelBrief) && (
               <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                   <Newspaper size={13} /> Live Trade Intelligence
@@ -1328,8 +1352,8 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Global Threats */}
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
+            {/* Global Threats — SCAN tab */}
+            {leftTab === 'scan' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
                 <ShieldAlert size={14} /> Global Threats
                 {risks.length > 0 && <span className="text-[10px] text-slate-400">{risks.length} active</span>}
@@ -1357,10 +1381,10 @@ export default function Dashboard() {
                   ))}
                 </div>
               )}
-            </div>
+            </div>}
 
-            {/* Sourcing Hubs */}
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
+            {/* Sourcing Hubs — SCAN tab */}
+            {leftTab === 'scan' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
               <h2 className="text-[11px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setHubsCollapsed(!hubsCollapsed)}>
                 <Factory size={14} /> Sourcing Hubs
                 {opportunities.length > 0 && <span className="text-[10px] text-slate-400">{opportunities.length} identified</span>}
@@ -1415,7 +1439,7 @@ export default function Dashboard() {
                   )}
                 </div>
               )}
-            </div>
+            </div>}
 
           </div>
         </aside>
@@ -2211,6 +2235,12 @@ export default function Dashboard() {
               <div className="text-[11px] text-slate-500 italic flex items-center gap-2 animate-pulse">
                 <Clock size={13} /> Run a mission scan to generate directive...
               </div>
+            )}
+            {opportunities.length > 0 && (
+              <button onClick={() => setShowRecommendation(true)}
+                className="w-full mt-3 h-9 bg-emerald-500 text-black font-bold text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all rounded-lg flex items-center justify-center gap-2">
+                <CheckCircle size={12} /> Get Recommendation
+              </button>
             )}
           </div>
 
