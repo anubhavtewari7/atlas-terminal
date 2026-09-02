@@ -2166,84 +2166,6 @@ export default function Dashboard() {
             )}
           </div>
 
-          {/* Metals & Materials */}
-          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="market">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                <BarChart3 size={14} /> Metals &amp; Materials
-              </h2>
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              {[
-                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
-                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
-                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
-                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
-                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
-                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
-              ].map((item, i) => {
-                const min = Math.min(...item.spark), max = Math.max(...item.spark)
-                const pts = item.spark.map((v, j) => {
-                  const x = (j / (item.spark.length - 1)) * 56
-                  const y = 16 - ((v - min) / (max - min + 0.01)) * 14
-                  return `${x},${y}`
-                }).join(' ')
-                return (
-                  <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
-                    <div className="flex items-start justify-between gap-1 mb-1">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
-                      <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
-                        <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[11px] text-slate-400">{item.u}</span></div>
-                    <div className={`text-[11px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
-                      {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-            <p className="text-[10px] text-slate-500 mt-2">Indicative reference prices — verify with exchange terminal.</p>
-          </div>
-
-          {/* Live FX Rates */}
-          {fxData && (
-            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="fx">
-              <div className="flex items-center justify-between mb-3">
-                <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.2em] uppercase flex items-center gap-2">
-                  <TrendingUp size={14} /> Live FX Rates
-                </h2>
-                <button
-                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
-                  className="flex items-center gap-1 text-[8px] text-slate-400 hover:text-amber-400 font-mono transition-colors"
-                  title="Rates refresh automatically every 5 minutes. Click to refresh now.">
-                  <span>as of {fxData.date}</span>
-                  <span className="text-[11px]">⟳</span>
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
-                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
-                    <div>
-                      <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
-                      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
-                        {info.impact?.split(' ').slice(0, 3).join(' ')}
-                      </div>
-                    </div>
-                    <span className="text-[14px] font-bold text-amber-300 font-mono">
-                      {typeof info.rate === 'number' ? info.rate.toFixed(2) : info.rate}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Market Intelligence / News */}
           <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
             <div className="flex items-center justify-between shrink-0">
@@ -2295,6 +2217,84 @@ export default function Dashboard() {
               ))}
             </div>
           </div>
+
+          {/* Metals & Materials */}
+          <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="market">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                <BarChart3 size={14} /> Metals &amp; Materials
+              </h2>
+              <div className="flex items-center gap-1.5">
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {[
+                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
+                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
+                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
+                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
+                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
+                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
+              ].map((item, i) => {
+                const min = Math.min(...item.spark), max = Math.max(...item.spark)
+                const pts = item.spark.map((v, j) => {
+                  const x = (j / (item.spark.length - 1)) * 56
+                  const y = 16 - ((v - min) / (max - min + 0.01)) * 14
+                  return `${x},${y}`
+                }).join(' ')
+                return (
+                  <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
+                    <div className="flex items-start justify-between gap-1 mb-1">
+                      <div className="text-[11px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
+                      <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
+                        <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[11px] text-slate-400">{item.u}</span></div>
+                    <div className={`text-[11px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+            <p className="text-[10px] text-slate-500 mt-2">Indicative reference prices -- verify with exchange terminal.</p>
+          </div>
+
+          {/* Live FX Rates */}
+          {fxData && (
+            <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl shadow-xl shrink-0" data-tour="fx">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.2em] uppercase flex items-center gap-2">
+                  <TrendingUp size={14} /> Live FX Rates
+                </h2>
+                <button
+                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
+                  className="flex items-center gap-1 text-[8px] text-slate-400 hover:text-amber-400 font-mono transition-colors"
+                  title="Rates refresh automatically every 5 minutes. Click to refresh now.">
+                  <span>as of {fxData.date}</span>
+                  <span className="text-[11px]">⟳</span>
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
+                  <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
+                    <div>
+                      <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
+                      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
+                        {info.impact?.split(' ').slice(0, 3).join(' ')}
+                      </div>
+                    </div>
+                    <span className="text-[14px] font-bold text-amber-300 font-mono">
+                      {typeof info.rate === 'number' ? info.rate.toFixed(2) : info.rate}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </aside>
       </div>
