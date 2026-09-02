@@ -856,6 +856,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
               <p className="text-[12px] text-slate-500 leading-relaxed">
                 Paste your Bill of Materials below — one item per line, or comma / semicolon separated. Atlas will score each component for tariff exposure, sourcing concentration risk, and ESG flags.
               </p>
+              <p className="text-[10px] text-slate-600 -mt-2">One item per line -- material name + spec. No quantities needed.</p>
               <textarea
                 autoFocus
                 value={input}

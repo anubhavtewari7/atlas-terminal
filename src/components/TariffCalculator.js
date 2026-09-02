@@ -235,6 +235,7 @@ export default function TariffCalculator({ onClose }) {
                 placeholder="e.g. 8544.30"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-sky-500/50"
               />
+              <p className="text-[9px] text-slate-600 mt-1">6-digit code from the Harmonized System (chapter.heading).</p>
               {hsCode.length >= 2 && HS_CHAPTERS[hsCode.replace(/[^0-9]/g,'').substring(0,2)] && (
                 <div className="text-[9px] text-sky-400 mt-1 leading-tight">
                   Chapter {hsCode.replace(/[^0-9]/g,'').substring(0,2)}: {HS_CHAPTERS[hsCode.replace(/[^0-9]/g,'').substring(0,2)].desc}

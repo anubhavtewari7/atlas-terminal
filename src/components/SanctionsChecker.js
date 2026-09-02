@@ -155,6 +155,7 @@ export default function SanctionsChecker({ onClose }) {
                 placeholder="e.g. Huawei, Gazprom, SQM S.A."
                 className="w-full bg-[#111] border border-white/10 px-4 py-3 text-[12px] font-mono text-white placeholder:text-slate-700 focus:outline-none focus:border-rose-500 transition-all rounded-xl"
               />
+              <p className="text-[9px] text-slate-600 mt-1">One name per search -- run separately for each entity.</p>
             </div>
             <div>
               <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Country of Origin / Operation</label>

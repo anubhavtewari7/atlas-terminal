@@ -227,6 +227,7 @@ export default function DualUseChecker({ onClose }) {
           {/* Input */}
           <div>
             <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Product Description</label>
+            <p className="text-[9px] text-slate-600 mb-2">Include function, materials, performance specs, and intended end-use. More detail = better classification.</p>
             <textarea
               value={description} onChange={e => setDescription(e.target.value)}
               placeholder="Describe the product including: function, performance specs, materials, end-use application, and any defense/aerospace/encryption context…"
