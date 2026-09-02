@@ -124,7 +124,7 @@ export default function TariffLookup({ onClose }) {
                   )}
                 </div>
                 <div className="text-right">
-                  <div className="text-[9px] text-slate-600 uppercase mb-1">Unit</div>
+                  <div className="text-[10px] text-slate-600 uppercase mb-1">Unit</div>
                   <div className="text-[12px] font-mono text-slate-300">{result.unit}</div>
                 </div>
               </div>
@@ -138,7 +138,7 @@ export default function TariffLookup({ onClose }) {
                   { label: 'HS6 Code', value: result.hs6_code, icon: '🌐' },
                 ].map((item, i) => (
                   <div key={i} className={`p-4 rounded-xl border ${item.highlight ? 'bg-amber-500/10 border-amber-500/30' : 'bg-[#111] border-white/5'}`}>
-                    <div className="text-[9px] text-slate-500 uppercase font-bold mb-2 tracking-widest">{item.icon} {item.label}</div>
+                    <div className="text-[10px] text-slate-500 uppercase font-bold mb-2 tracking-widest">{item.icon} {item.label}</div>
                     <div className={`text-[16px] font-bold font-mono ${item.highlight ? 'text-amber-400' : getRateColor(item.value)}`}>{item.value}</div>
                   </div>
                 ))}

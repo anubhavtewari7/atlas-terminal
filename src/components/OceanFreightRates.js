@@ -228,7 +228,7 @@ export default function OceanFreightRates({ onClose }) {
               const pct = (((idx.data.value - idx.data.prev) / idx.data.prev) * 100).toFixed(1)
               return (
                 <div key={i} className={`p-4 bg-${idx.color}-500/5 border border-${idx.color}-500/20 rounded-xl`}>
-                  <div className="text-[9px] text-slate-600 uppercase tracking-widest mb-1">{idx.label}</div>
+                  <div className="text-[10px] text-slate-600 uppercase tracking-widest mb-1">{idx.label}</div>
                   <div className={`text-[22px] font-bold font-mono text-${idx.color}-400`}>{idx.data.value.toLocaleString()}</div>
                   <div className={`text-[10px] font-mono mt-1 ${t.color}`}>{t.label} {Math.abs(pct)}% vs prior week · {idx.unit}</div>
                 </div>
@@ -270,17 +270,17 @@ export default function OceanFreightRates({ onClose }) {
                       </div>
                       <div>
                         <div className="text-[11px] font-bold text-white font-mono">{c.flag_from} {c.from} → {c.flag_to} {c.to}</div>
-                        <div className="text-[9px] text-slate-600 mt-0.5">{c.transit} transit · {c.carriers.slice(0, 2).join(', ')}{c.carriers.length > 2 ? ` +${c.carriers.length - 2}` : ''}</div>
+                        <div className="text-[10px] text-slate-600 mt-0.5">{c.transit} transit · {c.carriers.slice(0, 2).join(', ')}{c.carriers.length > 2 ? ` +${c.carriers.length - 2}` : ''}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="text-right">
                         <div className="text-[15px] font-bold text-white font-mono">${c.rate.toLocaleString()}</div>
-                        <div className={`flex items-center justify-end gap-1 text-[9px] font-mono ${t.color}`}>
+                        <div className={`flex items-center justify-end gap-1 text-[10px] font-mono ${t.color}`}>
                           <TrendIcon size={10} /> {pct}%
                         </div>
                       </div>
-                      <div className={`text-[9px] font-bold ${isOpen ? 'text-sky-400' : 'text-slate-600'}`}>{isOpen ? '▲' : '▼'}</div>
+                      <div className={`text-[10px] font-bold ${isOpen ? 'text-sky-400' : 'text-slate-600'}`}>{isOpen ? '▲' : '▼'}</div>
                     </div>
                   </button>
 
@@ -291,11 +291,11 @@ export default function OceanFreightRates({ onClose }) {
                       {/* Cost breakdown */}
                       <div className="grid grid-cols-2 gap-2">
                         <div className="p-3 bg-[#111] rounded-lg">
-                          <div className="text-[9px] text-slate-600 uppercase mb-1">Base Rate (FEU)</div>
+                          <div className="text-[10px] text-slate-600 uppercase mb-1">Base Rate (FEU)</div>
                           <div className="text-[14px] font-bold text-white font-mono">${(c.rate - totalSurcharge).toLocaleString()}</div>
                         </div>
                         <div className="p-3 bg-[#111] rounded-lg">
-                          <div className="text-[9px] text-slate-600 uppercase mb-1">Total Surcharges</div>
+                          <div className="text-[10px] text-slate-600 uppercase mb-1">Total Surcharges</div>
                           <div className="text-[14px] font-bold text-amber-400 font-mono">+${totalSurcharge}</div>
                         </div>
                       </div>
@@ -314,14 +314,14 @@ export default function OceanFreightRates({ onClose }) {
                       </div>
 
                       <div className="p-2.5 bg-amber-500/5 border border-amber-500/20 rounded-lg">
-                        <div className="text-[9px] text-amber-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-1"><Info size={9} /> All-In Estimate</div>
+                        <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-1 flex items-center gap-1"><Info size={9} /> All-In Estimate</div>
                         <div className="text-[13px] font-bold text-amber-300 font-mono">${c.rate.toLocaleString()} / FEU</div>
-                        <div className="text-[9px] text-slate-600 mt-0.5">Excludes destination charges, customs, insurance. Get booking-level quotes from carrier.</div>
+                        <div className="text-[10px] text-slate-600 mt-0.5">Excludes destination charges, customs, insurance. Get booking-level quotes from carrier.</div>
                       </div>
 
                       <div className="flex flex-wrap gap-1.5">
                         {c.carriers.map((carrier, i) => (
-                          <span key={i} className="px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-lg text-[9px] text-sky-400 font-mono">{carrier}</span>
+                          <span key={i} className="px-2.5 py-1 bg-sky-500/10 border border-sky-500/20 rounded-lg text-[10px] text-sky-400 font-mono">{carrier}</span>
                         ))}
                       </div>
                     </div>

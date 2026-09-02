@@ -113,7 +113,7 @@ export default function PortStatus({ onClose }) {
             <thead className="sticky top-0 bg-[#080808] border-b border-white/5">
               <tr>
                 {['#', 'Port', 'Country', 'Congestion', 'Wait Time', 'Volume', 'Trend', 'Status'].map(h => (
-                  <th key={h} className="p-3 text-left text-[9px] text-slate-600 uppercase font-bold tracking-widest">{h}</th>
+                  <th key={h} className="p-3 text-left text-[10px] text-slate-600 uppercase font-bold tracking-widest">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -127,7 +127,7 @@ export default function PortStatus({ onClose }) {
                     <td className="p-3 text-[11px] text-slate-600 font-mono">{port.rank}</td>
                     <td className="p-3">
                       <div className="text-[12px] font-bold text-white">{port.name}</div>
-                      {port.alert && <div className="text-[9px] text-amber-400 mt-0.5">{port.alert}</div>}
+                      {port.alert && <div className="text-[10px] text-amber-400 mt-0.5">{port.alert}</div>}
                     </td>
                     <td className="p-3 text-[11px] text-slate-400 font-mono whitespace-nowrap">{port.country}</td>
                     <td className="p-3 w-32">

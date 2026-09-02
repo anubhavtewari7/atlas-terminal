@@ -145,7 +145,7 @@ export default function FtaChecker({ onClose }) {
           {/* Inputs */}
           <div className="flex items-center gap-3">
             <div className="flex-1">
-              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Origin Country</label>
+              <label className="text-[10px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Origin Country</label>
               <select
                 value={origin}
                 onChange={e => setOrigin(e.target.value)}
@@ -159,7 +159,7 @@ export default function FtaChecker({ onClose }) {
               <ArrowRight size={16} className="text-slate-600" />
             </div>
             <div className="flex-1">
-              <label className="text-[9px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Destination Country</label>
+              <label className="text-[10px] text-slate-600 uppercase tracking-widest font-bold mb-1.5 block">Destination Country</label>
               <select
                 value={destination}
                 onChange={e => setDestination(e.target.value)}
@@ -196,8 +196,8 @@ export default function FtaChecker({ onClose }) {
                         <div className="text-[10px] text-slate-500 mt-0.5">{fta.full}</div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
-                        <span className={`text-[9px] font-bold px-2 py-1 rounded-lg uppercase tracking-widest ${sc.badge}`}>{fta.savings} SAVINGS</span>
-                        <span className="text-[9px] text-slate-600">Since {fta.since}</span>
+                        <span className={`text-[10px] font-bold px-2 py-1 rounded-lg uppercase tracking-widest ${sc.badge}`}>{fta.savings} SAVINGS</span>
+                        <span className="text-[10px] text-slate-600">Since {fta.since}</span>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -232,7 +232,7 @@ export default function FtaChecker({ onClose }) {
                 Standard MFN (Most Favored Nation) tariff rates apply. Consider sourcing via a third country that does have an FTA with the destination.
               </p>
               <div className="p-3 bg-black/20 rounded-lg">
-                <div className="text-[9px] text-slate-500 font-bold uppercase mb-2">Alternative Strategies</div>
+                <div className="text-[10px] text-slate-500 font-bold uppercase mb-2">Alternative Strategies</div>
                 <ul className="text-[10px] text-slate-400 space-y-1">
                   <li>• <strong className="text-white">RCEP</strong> — check if both countries are members (covers 15 Asia-Pacific nations)</li>
                   <li>• <strong className="text-white">GSP</strong> — Generalized System of Preferences for developing-country exporters</li>
@@ -246,7 +246,7 @@ export default function FtaChecker({ onClose }) {
           {/* Info about RoO */}
           {searched && hasFta && (
             <div className="p-3.5 bg-[#0f0f0f] border border-white/8 rounded-xl">
-              <div className="text-[9px] text-emerald-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><Info size={10} /> Rules of Origin Requirements</div>
+              <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><Info size={10} /> Rules of Origin Requirements</div>
               <p className="text-[10px] text-slate-500 leading-relaxed">
                 To claim FTA preferential rates, goods must satisfy the agreement&apos;s rules of origin. Common tests: <strong className="text-slate-300">Regional Value Content (RVC)</strong> (e.g., 35-60% of value from origin country), <strong className="text-slate-300">Tariff Classification Change (TCC)</strong> (input and output HS codes must differ at specified digit level), or <strong className="text-slate-300">Substantial Transformation</strong>. Request a <strong className="text-slate-300">Certificate of Origin</strong> from your supplier and verify with a trade attorney for high-value shipments.
               </p>
