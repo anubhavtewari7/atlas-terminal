@@ -32,7 +32,6 @@ body {
   font-family: var(--sans);
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
-  overflow-x: hidden;
 }
 
 .scene {
