@@ -20,10 +20,17 @@ function getSunPosition() {
 }
 
 // Night-side overlay -- GLSL shader with per-frame sun direction sync.
-// earthRotRef tracks the Earth mesh's current rotation.y so the terminator
-// stays geographically accurate even as the globe auto-rotates.
+//
+// MATH: The Earth mesh applies Ry(earthRotY) * Rx(-0.25) to local normals to
+// get world-space normals (XYZ Euler order, -0.25 rad fixed X tilt + Y auto-spin).
+// The NightOverlay has no rotation, so its world normals are its local normals.
+// For the overlay to match the geography we need:
+//   dot(n_overlay, sunDir_shader) = dot(n_local_earth, baseSunDir)
+// which requires:
+//   sunDir_shader = Ry(+earthRotY) × Rx(-0.25) × baseSunDir
+// Note the POSITIVE earthRotY (not negative).
 function NightOverlay({ earthRotRef }) {
-  // Base sun direction at Earth rotation.y = 0 (computed once at mount)
+  // Base sun direction in the Earth-local frame at rotation.y = 0
   const baseSunDir = useMemo(() => {
     const p     = getSunPosition()
     const phi   = (90 - p.lat) * (Math.PI / 180)
@@ -35,18 +42,19 @@ function NightOverlay({ earthRotRef }) {
     ).normalize()
   }, [])
 
-  // Shader uniforms -- sunDir is mutated every frame via useFrame
+  // Shader uniforms -- sunDir mutated each frame
   const uniforms = useRef({ sunDir: { value: baseSunDir.clone() } })
 
-  // Scratch objects to avoid per-frame allocations
-  const _mat = useMemo(() => new THREE.Matrix4(), [])
-  const _vec = useMemo(() => new THREE.Vector3(), [])
+  // Pre-allocated scratch objects (no per-frame GC)
+  const _mat  = useMemo(() => new THREE.Matrix4(), [])
+  const _matX = useMemo(() => new THREE.Matrix4().makeRotationX(-0.25), []) // Earth's fixed X tilt
+  const _vec  = useMemo(() => new THREE.Vector3(), [])
 
-  // Each frame: rotate the sun direction by -earthRotY so it tracks
-  // the geography correctly as the Earth mesh spins
+  // Each frame: sunDir_shader = Ry(+earthRotY) × Rx(-0.25) × baseSunDir
   useFrame(() => {
     const rotY = earthRotRef?.current ?? 0
-    _mat.makeRotationY(-rotY)
+    _mat.makeRotationY(rotY)   // ← positive: matches the Earth's own Y rotation
+    _mat.multiply(_matX)       // then apply the fixed -0.25 rad X tilt
     _vec.copy(baseSunDir).applyMatrix4(_mat)
     uniforms.current.sunDir.value.copy(_vec)
   })
