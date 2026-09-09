@@ -933,7 +933,7 @@ export default function Home() {
           )}
           {status === 'error' && (
             <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--red)', marginTop: 12 }}>
-              Something went wrong -- please try again or email anubhav.tewari@slate.auto
+              Something went wrong -- please try again in a moment
             </p>
           )}
         </div>
