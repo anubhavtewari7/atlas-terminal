@@ -622,13 +622,72 @@ export default function Home() {
     e.preventDefault()
     if (!email || status === 'loading' || status === 'done') return
     setStatus('loading')
+
+    const TERMINAL_URL = 'https://atlas-terminal-tau.vercel.app/terminal'
+
+    const messageHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/></head>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 16px;">
+  <tr><td align="center">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width:540px;">
+      <tr><td style="padding-bottom:28px;">
+        <span style="font-size:26px;font-weight:900;letter-spacing:-0.05em;color:#0EA5E9;">ATLAS</span>
+        <span style="font-size:11px;font-family:'Courier New',monospace;letter-spacing:0.16em;text-transform:uppercase;color:#94A3B8;margin-left:12px;">Terminal</span>
+      </td></tr>
+      <tr><td style="background:#ffffff;border-radius:16px;border:1px solid #E2E8F0;padding:40px;">
+        <p style="margin:0 0 12px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#0EA5E9;">// Early Access Granted</p>
+        <h1 style="margin:0 0 16px;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:#0F172A;line-height:1.15;">You're in.</h1>
+        <p style="margin:0 0 28px;font-size:15px;color:#475569;line-height:1.75;">Welcome to ATLAS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
+        <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+          <tr><td style="background:linear-gradient(135deg,#0EA5E9,#1D4ED8);border-radius:100px;">
+            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">Open ATLAS Terminal &rarr;</a>
+          </td></tr>
+        </table>
+        <hr style="border:none;border-top:1px solid #E2E8F0;margin:0 0 28px;"/>
+        <p style="margin:0 0 16px;font-size:13px;font-weight:600;color:#0F172A;text-transform:uppercase;letter-spacing:0.06em;">What you can do from day one</p>
+        <table cellpadding="0" cellspacing="0" width="100%">
+          <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Scan any product in plain language -- ATLAS maps global sourcing hubs, names real suppliers, and pulls live UN Comtrade export data.</td></tr>
+          <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Monitor 92,000+ live fire hotspots, M4.5+ earthquakes, and 15 conflict zones -- overlaid on your sourcing geography automatically.</td></tr>
+          <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Instant compliance: OFAC sanctions, ECCN classification, Section 301 tariffs, and FTA eligibility -- checked at the point of sourcing.</td></tr>
+          <tr><td style="vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="font-size:13px;color:#475569;line-height:1.65;">Export a PDF mission brief, supplier RFQ, and total landed cost model in one click.</td></tr>
+        </table>
+        <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:24px;">
+          <tr><td style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px 18px;">
+            <p style="margin:0 0 5px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#94A3B8;">Bookmark this</p>
+            <a href="${TERMINAL_URL}" style="font-family:'Courier New',monospace;font-size:12px;color:#0EA5E9;text-decoration:none;">${TERMINAL_URL}</a>
+          </td></tr>
+        </table>
+        <p style="margin:20px 0 0;font-size:12px;color:#94A3B8;">If you don't see this email in your inbox, check your spam or promotions folder and mark it as Not Spam.</p>
+      </td></tr>
+      <tr><td style="padding:24px 0;text-align:center;">
+        <p style="margin:0;font-size:11px;color:#94A3B8;">&copy; 2026 ATLAS Terminal &nbsp;&middot;&nbsp; ${email}</p>
+        <p style="margin:6px 0 0;font-size:10px;color:#CBD5E1;">You received this because you requested early access.</p>
+      </td></tr>
+    </table>
+  </td></tr>
+</table>
+</body>
+</html>`
+
     try {
-      const res = await fetch('/api/waitlist', {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          service_id: 'service_xrughp6',
+          template_id: 'template_6ucxkhs',
+          user_id: 'NFvpRULP0SJgNBrJs',
+          template_params: {
+            to_email: email,
+            subject: 'Your ATLAS Terminal access is ready',
+            message: messageHtml,
+          },
+        }),
       })
-      if (!res.ok) throw new Error('failed')
+      if (res.status !== 200) throw new Error('failed')
       setStatus('done')
     } catch {
       setStatus('error')
