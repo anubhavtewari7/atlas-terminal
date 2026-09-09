@@ -1,10 +1,74 @@
 "use client"
 
-import React, { useRef, useMemo } from 'react'
+import React, { useRef, useMemo, useState } from 'react'
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
+
+// ── Solar terminator -- computes where the sun is right now ──
+function getSunPosition() {
+  const now = new Date()
+  const start = new Date(now.getFullYear(), 0, 0)
+  const dayOfYear = Math.floor((now - start) / 86400000)
+  // Approximate solar declination (degrees)
+  const decl = -23.45 * Math.cos(2 * Math.PI * (dayOfYear + 10) / 365)
+  // Subsolar longitude: at UTC 12:00, sun is over 0° lng (Greenwich)
+  const utcH = now.getUTCHours() + now.getUTCMinutes() / 60 + now.getUTCSeconds() / 3600
+  const sunLng = (12 - utcH) * 15
+  return { lat: decl, lng: sunLng }
+}
+
+// Night-side overlay using a GLSL shader -- smooth terminator gradient
+function NightOverlay() {
+  const sunPos = getSunPosition()
+
+  const sunDir = useMemo(() => {
+    const phi   = (90 - sunPos.lat) * (Math.PI / 180)
+    const theta = (sunPos.lng + 180) * (Math.PI / 180)
+    return new THREE.Vector3(
+      -Math.sin(phi) * Math.cos(theta),
+       Math.cos(phi),
+       Math.sin(phi) * Math.sin(theta)
+    ).normalize()
+  }, [sunPos.lat, sunPos.lng])
+
+  const uniforms = useMemo(() => ({
+    sunDir: { value: sunDir }
+  }), [sunDir])
+
+  const vertexShader = `
+    varying vec3 vWorldNormal;
+    void main() {
+      vWorldNormal = normalize(mat3(modelMatrix) * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `
+
+  const fragmentShader = `
+    uniform vec3 sunDir;
+    varying vec3 vWorldNormal;
+    void main() {
+      float cosA = dot(normalize(vWorldNormal), normalize(sunDir));
+      // Soft terminator: dark side fully opaque at cosA = -0.12, transparent at cosA = 0.08
+      float night = smoothstep(0.08, -0.12, cosA);
+      gl_FragColor = vec4(0.0, 0.005, 0.04, night * 0.62);
+    }
+  `
+
+  return (
+    <mesh renderOrder={1}>
+      <sphereGeometry args={[2.016, 64, 64]} />
+      <shaderMaterial
+        transparent
+        depthWrite={false}
+        uniforms={uniforms}
+        vertexShader={vertexShader}
+        fragmentShader={fragmentShader}
+      />
+    </mesh>
+  )
+}
 
 // Chokepoint marker -- amber diamond pulsing dot
 function ChokepointMarker({ cp }) {
@@ -68,7 +132,7 @@ function ChokepointMarker({ cp }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate }) {
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight }) {
   const meshRef = useRef()
   const texture = useLoader(THREE.TextureLoader, '/earth.jpg')
 
@@ -80,6 +144,9 @@ function Earth({ risks, opportunities, chokepoints, autoRotate }) {
 
   return (
     <group>
+      {/* Night-side overlay -- rendered outside the rotating mesh so it stays sun-aligned */}
+      {showDayNight && <NightOverlay />}
+
       <mesh ref={meshRef} rotation={[-0.25, 0, 0]}>
         <sphereGeometry args={[2, 64, 64]} />
         <meshPhongMaterial map={texture} shininess={5} emissive="#ffffff" emissiveIntensity={0.1} />
@@ -102,8 +169,8 @@ function Earth({ risks, opportunities, chokepoints, autoRotate }) {
           <Marker key={`opp-${i}`} node={node} color="#10b981" type="OPPORTUNITY" />
         ))}
 
-        {/* CHOKEPOINT NODES (AMBER/RED) -- always visible as ambient risk layer */}
-        {(chokepoints || []).map((cp, i) => (
+        {/* CHOKEPOINT NODES (AMBER/RED) -- toggleable via showChokepoints */}
+        {showChokepoints && (chokepoints || []).map((cp, i) => (
           <ChokepointMarker key={`cp-${cp.id || i}`} cp={cp} />
         ))}
       </mesh>
@@ -176,7 +243,7 @@ function Marker({ node, color, type }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -186,7 +253,14 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
         <pointLight position={[-10, 10, 5]} intensity={2} color="#38bdf8" />
 
         <React.Suspense fallback={<Html center><div className="text-sky-400 font-mono text-[10px] animate-pulse">SYNCING_MAP...</div></Html>}>
-          <Earth risks={risks} opportunities={opportunities} chokepoints={chokepoints} autoRotate={autoRotate} />
+          <Earth
+            risks={risks}
+            opportunities={opportunities}
+            chokepoints={chokepoints}
+            autoRotate={autoRotate}
+            showChokepoints={showChokepoints}
+            showDayNight={showDayNight}
+          />
         </React.Suspense>
 
         <OrbitControls enablePan={false} minDistance={3} maxDistance={12} rotateSpeed={0.5} />

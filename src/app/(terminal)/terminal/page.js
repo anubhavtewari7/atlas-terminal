@@ -26,7 +26,7 @@ import {
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
-  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff
+  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -501,7 +501,9 @@ export default function Dashboard() {
   const [newsFilter, setNewsFilter] = useState('all')
   const [missionKeywords, setMissionKeywords] = useState([])
   const [selectedNode, setSelectedNode] = useState(null)
-  const [autoRotate, setAutoRotate] = useState(true)
+  const [autoRotate, setAutoRotate]           = useState(true)
+  const [showChokepoints, setShowChokepoints] = useState(true)
+  const [showDayNight, setShowDayNight]       = useState(true)
   const [showSearch, setShowSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -1589,45 +1591,55 @@ export default function Dashboard() {
           {/* Globe */}
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
-              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} />
+              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} />
             </div>
 
             {/* Globe controls — desktop only (overlaid on globe) */}
-            <div className="hidden lg:flex absolute top-4 left-4 z-10 flex-col gap-2">
-              <div className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 rounded-lg backdrop-blur-md">
-                <Activity size={12} className="text-slate-500" />
-                <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Global_Stream</span>
-              </div>
+            <div className="hidden lg:flex absolute top-4 left-4 z-10 flex-col gap-1.5">
+              <button onClick={() => setShowDayNight(!showDayNight)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showDayNight ? 'bg-sky-500/15 border-sky-500/30 text-sky-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                {showDayNight ? <Moon size={12} /> : <Sun size={12} />}
+                Day / Night
+              </button>
+              <button onClick={() => setShowChokepoints(!showChokepoints)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showChokepoints ? 'bg-amber-500/15 border-amber-500/30 text-amber-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                <Anchor size={12} />
+                Chokepoints
+              </button>
               <button onClick={() => setAutoRotate(!autoRotate)}
-                className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/70">
+                className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/70 text-[11px] font-bold uppercase tracking-widest">
                 {autoRotate ? <Pause size={12} /> : <Play size={12} />}
-                <span className="text-[11px] font-bold uppercase tracking-widest">{autoRotate ? 'Pause' : 'Resume'}</span>
+                {autoRotate ? 'Pause' : 'Resume'}
               </button>
               <button onClick={() => setShowTour(true)}
-                className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/50 hover:text-sky-400">
+                className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/50 hover:text-sky-400 text-[11px] font-bold uppercase tracking-widest">
                 <Map size={12} />
-                <span className="text-[11px] font-bold uppercase tracking-widest">How it works</span>
+                How it works
               </button>
             </div>
 
             {/* Globe controls — mobile compact overlay (bottom strip, doesn't cover globe) */}
-            <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-3 py-2 bg-black/70 backdrop-blur-sm">
-              <div className="flex items-center gap-1.5">
-                <Activity size={10} className="text-emerald-400" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-emerald-400">Live Stream</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button onClick={() => setAutoRotate(!autoRotate)}
-                  className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/70 active:bg-white/20 transition-all">
-                  {autoRotate ? <Pause size={10} /> : <Play size={10} />}
-                  <span className="text-[10px] font-bold uppercase">{autoRotate ? 'Pause' : 'Resume'}</span>
-                </button>
-                <button onClick={() => setShowTour(true)}
-                  className="flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/50 active:bg-white/20 transition-all">
-                  <Map size={10} />
-                  <span className="text-[10px] font-bold uppercase">Tour</span>
-                </button>
-              </div>
+            <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-3 py-2 bg-black/70 backdrop-blur-sm gap-1.5 overflow-x-auto no-scrollbar">
+              <button onClick={() => setShowDayNight(!showDayNight)}
+                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showDayNight ? 'border-sky-500/40 text-sky-400 bg-sky-500/10' : 'border-white/10 text-slate-500'}`}>
+                {showDayNight ? <Moon size={10} /> : <Sun size={10} />}
+                Night
+              </button>
+              <button onClick={() => setShowChokepoints(!showChokepoints)}
+                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showChokepoints ? 'border-amber-500/40 text-amber-400 bg-amber-500/10' : 'border-white/10 text-slate-500'}`}>
+                <Anchor size={10} />
+                Routes
+              </button>
+              <button onClick={() => setAutoRotate(!autoRotate)}
+                className="shrink-0 flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/70 active:bg-white/20 transition-all">
+                {autoRotate ? <Pause size={10} /> : <Play size={10} />}
+                <span className="text-[10px] font-bold uppercase">{autoRotate ? 'Pause' : 'Resume'}</span>
+              </button>
+              <button onClick={() => setShowTour(true)}
+                className="shrink-0 flex items-center gap-1 bg-white/10 border border-white/10 px-2.5 py-1 rounded-lg text-white/50 active:bg-white/20 transition-all">
+                <Map size={10} />
+                <span className="text-[10px] font-bold uppercase">Tour</span>
+              </button>
             </div>
 
             {/* ── STRATEGIC ADVISORY HUD ── */}
