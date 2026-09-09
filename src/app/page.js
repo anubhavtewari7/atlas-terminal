@@ -642,8 +642,8 @@ export default function Home() {
         <h1 style="margin:0 0 16px;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:#0F172A;line-height:1.15;">You're in.</h1>
         <p style="margin:0 0 28px;font-size:15px;color:#475569;line-height:1.75;">Welcome to ATLAS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
         <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
-          <tr><td style="background:linear-gradient(135deg,#0EA5E9,#1D4ED8);border-radius:100px;">
-            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;">Open ATLAS Terminal &rarr;</a>
+          <tr><td bgcolor="#0EA5E9" style="background:#0EA5E9;border-radius:100px;">
+            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Open ATLAS Terminal &rarr;</a>
           </td></tr>
         </table>
         <hr style="border:none;border-top:1px solid #E2E8F0;margin:0 0 28px;"/>
