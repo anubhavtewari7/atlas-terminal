@@ -18,16 +18,16 @@ export default function SourcingRecommendation({ opportunities, risks, intelBrie
   const highRisks     = risks.filter(r => r.severity === 'HIGH')
   let timing, timingColor
   if (criticalRisks.length > 0) {
-    timing      = 'HOLD — resolve critical risk first'
+    timing      = 'HOLD -- resolve critical risk first'
     timingColor = 'text-rose-400'
   } else if (highRisks.length >= 2) {
-    timing      = 'HEDGE — place partial orders, maintain buffer stock'
+    timing      = 'HEDGE -- place partial orders, maintain buffer stock'
     timingColor = 'text-amber-400'
   } else if (highRisks.length === 1) {
-    timing      = 'PROCEED WITH CAUTION — monitor risk closely'
+    timing      = 'PROCEED WITH CAUTION -- monitor risk closely'
     timingColor = 'text-amber-400'
   } else {
-    timing      = 'BUY NOW — favorable conditions'
+    timing      = 'BUY NOW -- favorable conditions'
     timingColor = 'text-emerald-400'
   }
 
@@ -88,7 +88,7 @@ export default function SourcingRecommendation({ opportunities, risks, intelBrie
               <>
                 <Row label="SOURCE FROM" value={primary.hub} valueClass="text-white font-bold" />
                 <Row label="SUPPLIER TYPE" value={primary.title} />
-                <Row label="STABILITY SCORE" value={`${primary.stability_score ?? 'N/A'} / 100`} valueClass={primary.stability_score >= 60 ? 'text-emerald-400' : primary.stability_score >= 35 ? 'text-amber-400' : 'text-rose-400'} />
+                <Row label="STABILITY SCORE" value={primary.stability_score != null ? `${primary.stability_score} / 100` : 'N/A'} valueClass={primary.stability_score == null ? 'text-slate-500' : primary.stability_score >= 60 ? 'text-emerald-400' : primary.stability_score >= 35 ? 'text-amber-400' : 'text-rose-400'} />
                 <div className="pt-1">
                   <div className="text-[9px] text-slate-500 uppercase tracking-widest mb-1">WHY THIS HUB</div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">{hubReason}</p>

@@ -1224,7 +1224,7 @@ export default function Dashboard() {
                         onClick={() => setHubNav({ level:'country', continent:c, country:null, region:null })}
                         className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
                         <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{HUB_COUNTRIES[c]?.length} countries</div>
+                        <div className="text-[11px] text-slate-400 mt-0.5">{HUB_COUNTRIES[c]?.length} {HUB_COUNTRIES[c]?.length === 1 ? 'country' : 'countries'}</div>
                       </button>
                     ))}
                   </div>
