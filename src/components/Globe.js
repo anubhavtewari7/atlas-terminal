@@ -6,7 +6,69 @@ import { OrbitControls, PerspectiveCamera, Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { motion } from 'framer-motion'
 
-function Earth({ risks, opportunities, autoRotate }) {
+// Chokepoint marker -- amber diamond pulsing dot
+function ChokepointMarker({ cp }) {
+  const [hovered, setHovered] = React.useState(false)
+
+  const position = useMemo(() => {
+    const phi   = (90 - cp.lat) * (Math.PI / 180)
+    const theta = (cp.lng + 180) * (Math.PI / 180)
+    const radius = 2.03
+    return [
+      -radius * Math.sin(phi) * Math.cos(theta),
+       radius * Math.cos(phi),
+       radius * Math.sin(phi) * Math.sin(theta)
+    ]
+  }, [cp.lat, cp.lng])
+
+  const isCrit = cp.status === 'CRITICAL'
+  const isElev = cp.status === 'ELEVATED'
+  const color  = isCrit ? '#ef4444' : isElev ? '#f97316' : cp.status === 'MODERATE' ? '#f59e0b' : '#10b981'
+
+  return (
+    <mesh
+      position={position}
+      onPointerOver={() => setHovered(true)}
+      onPointerOut={() => setHovered(false)}
+    >
+      {/* Diamond core (rotated box) */}
+      <boxGeometry args={[0.055, 0.055, 0.055]} />
+      <meshBasicMaterial color={color} />
+
+      {/* Soft glow ring */}
+      <mesh scale={[1, 1, 1]}>
+        <sphereGeometry args={[0.10, 12, 12]} />
+        <meshBasicMaterial color={color} transparent opacity={0.18} />
+      </mesh>
+
+      <Html distanceFactor={8} zIndexRange={[90, 0]}>
+        <div className="pointer-events-none select-none">
+          {hovered && (
+            <motion.div
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex flex-col bg-black/95 border-l-2 px-3 py-2 shadow-2xl rounded-r-lg max-w-[200px]"
+              style={{ borderColor: color }}
+            >
+              <div className="flex items-center gap-1.5 mb-1">
+                <div className="w-1.5 h-1.5 rounded-sm rotate-45" style={{ backgroundColor: color }} />
+                <span className="text-white text-[9px] font-mono font-bold uppercase tracking-widest whitespace-nowrap">
+                  {cp.name}
+                </span>
+              </div>
+              <span className="text-[8px] font-bold uppercase tracking-widest mb-1" style={{ color }}>
+                {cp.status}
+              </span>
+              <p className="text-[9px] text-slate-400 leading-snug">{cp.desc}</p>
+            </motion.div>
+          )}
+        </div>
+      </Html>
+    </mesh>
+  )
+}
+
+function Earth({ risks, opportunities, chokepoints, autoRotate }) {
   const meshRef = useRef()
   const texture = useLoader(THREE.TextureLoader, '/earth.jpg')
 
@@ -38,6 +100,11 @@ function Earth({ risks, opportunities, autoRotate }) {
         {/* OPPORTUNITY NODES (GREEN) */}
         {opportunities.map((node, i) => (
           <Marker key={`opp-${i}`} node={node} color="#10b981" type="OPPORTUNITY" />
+        ))}
+
+        {/* CHOKEPOINT NODES (AMBER/RED) -- always visible as ambient risk layer */}
+        {(chokepoints || []).map((cp, i) => (
+          <ChokepointMarker key={`cp-${cp.id || i}`} cp={cp} />
         ))}
       </mesh>
     </group>
@@ -109,7 +176,7 @@ function Marker({ node, color, type }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], autoRotate = true }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -117,11 +184,11 @@ export default function Globe({ risks = [], opportunities = [], autoRotate = tru
         <ambientLight intensity={2.5} />
         <pointLight position={[10, 10, 10]} intensity={4} color="#ffffff" />
         <pointLight position={[-10, 10, 5]} intensity={2} color="#38bdf8" />
-        
+
         <React.Suspense fallback={<Html center><div className="text-sky-400 font-mono text-[10px] animate-pulse">SYNCING_MAP...</div></Html>}>
-          <Earth risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
+          <Earth risks={risks} opportunities={opportunities} chokepoints={chokepoints} autoRotate={autoRotate} />
         </React.Suspense>
-        
+
         <OrbitControls enablePan={false} minDistance={3} maxDistance={12} rotateSpeed={0.5} />
       </Canvas>
     </div>

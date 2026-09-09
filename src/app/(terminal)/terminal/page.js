@@ -214,6 +214,69 @@ function pickBestFallbackHub(hubs, query) {
   return best
 }
 
+// ── Day / Night business-hours indicator ──
+// Derives local time from longitude (UTC offset ≈ lng / 15h).
+// Returns { open: bool, localTime: '9:00 AM', icon: '☀️' | '🌙' }
+function hubDayStatus(lng) {
+  if (lng == null) return null
+  const now = new Date()
+  const utcOffsetMs = (lng / 15) * 3600 * 1000
+  const local = new Date(now.getTime() + utcOffsetMs)
+  const h   = local.getUTCHours()
+  const day = local.getUTCDay() // 0=Sun … 6=Sat
+  const isWeekday  = day >= 1 && day <= 5
+  const isWorkHour = h >= 8 && h < 18
+  const h12  = h % 12 || 12
+  const ampm = h >= 12 ? 'PM' : 'AM'
+  return {
+    open:      isWeekday && isWorkHour,
+    localTime: `${h12}:${String(local.getUTCMinutes()).padStart(2,'0')} ${ampm}`,
+    icon:      h >= 6 && h < 20 ? '☀' : '🌙'
+  }
+}
+
+// ── Global trade chokepoints ──
+// Static risk layer -- status reflects current geopolitical conditions (2026).
+const CHOKEPOINTS = [
+  { id:'bab',     name:'Bab-el-Mandeb',     lat:12.5,  lng:43.5,   status:'CRITICAL',  statusColor:'#ef4444',
+    regions:['asia','india','me'],
+    desc:'Active Houthi missile corridor. Most carriers avoiding. Full Cape rerouting mandatory. (+12-14d, +$2,500/FEU)' },
+  { id:'suez',    name:'Suez Canal',         lat:30.7,  lng:32.3,   status:'ELEVATED',  statusColor:'#f97316',
+    regions:['asia','india','me'],
+    desc:'Northbound traffic at risk due to Red Sea threat. Many carriers diverting via Cape of Good Hope.' },
+  { id:'taiwan',  name:'Taiwan Strait',      lat:24.5,  lng:120.0,  status:'ELEVATED',  statusColor:'#f97316',
+    regions:['asia'],
+    desc:'PLA military exercises ongoing. Vessel diversions via Luzon Strait adding 1-2 transit days.' },
+  { id:'hormuz',  name:'Strait of Hormuz',   lat:26.6,  lng:56.2,   status:'MODERATE',  statusColor:'#f59e0b',
+    regions:['me','india'],
+    desc:'Iran tensions persist. Critical for Gulf LNG and crude oil tanker traffic. Monitor closely.' },
+  { id:'panama',  name:'Panama Canal',       lat:9.1,   lng:-79.7,  status:'MODERATE',  statusColor:'#f59e0b',
+    regions:['americas'],
+    desc:'Drought-induced draft restrictions reducing daily transits by ~30%. Expect 5-7 day queue delays.' },
+  { id:'malacca', name:'Strait of Malacca',  lat:2.5,   lng:101.3,  status:'NORMAL',    statusColor:'#10b981',
+    regions:['asia'],
+    desc:'Operational. Low piracy risk. 90,000+ vessels/year. Primary Asia-to-West artery -- monitor.' },
+  { id:'cape',    name:'Cape of Good Hope',  lat:-34.4, lng:18.5,   status:'OPEN',      statusColor:'#10b981',
+    regions:['asia','me','india'],
+    desc:'Active Suez bypass corridor. Adds 12-14 days and ~$2,500/FEU vs Suez route. Currently clear.' },
+  { id:'dover',   name:'English Channel',    lat:51.1,  lng:1.4,    status:'NORMAL',    statusColor:'#10b981',
+    regions:['europe','asia','me'],
+    desc:'Stable. High vessel density. Weather delays possible in winter months.' },
+]
+
+// Returns the chokepoints most relevant to a hub based on longitude-based region
+function getRelevantChokepoints(hub) {
+  if (!hub?.lng) return []
+  const lng = hub.lng
+  let region
+  if      (lng >  100) region = 'asia'
+  else if (lng >   50) region = 'me'
+  else if (lng >   20) region = 'india'
+  else if (lng < -30)  region = 'americas'
+  else                  region = 'europe'
+  return CHOKEPOINTS.filter(c => c.regions.includes(region))
+}
+
 // ── Earthquake risk merger ──
 // Fetches live USGS data and prepends relevant seismic events to the risk list.
 // Called after every scan (success or fallback). Silent on error.
@@ -1483,6 +1546,15 @@ export default function Dashboard() {
                       <div className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
                         {o.hub}
                         {(() => {
+                          const ds = hubDayStatus(o.lng)
+                          if (!ds) return null
+                          return (
+                            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`} title={`Local time: ${ds.localTime}`}>
+                              {ds.icon} {ds.open ? 'OPEN' : 'CLOSED'}
+                            </span>
+                          )
+                        })()}
+                        {(() => {
                           const iso2 = getHubISO2(o.hub)
                           const score = iso2 && intelBrief?.countryScores?.[iso2]
                           if (!score) return null
@@ -1517,7 +1589,7 @@ export default function Dashboard() {
           {/* Globe */}
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
-              <Globe risks={risks} opportunities={opportunities} autoRotate={autoRotate} />
+              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} />
             </div>
 
             {/* Globe controls — desktop only (overlaid on globe) */}
@@ -1611,6 +1683,22 @@ export default function Dashboard() {
                 {/* ── OPPORTUNITY NODE DISPLAY ── */}
                 {isOpportunity && (
                   <div className="space-y-4">
+                    {/* Day / Night status strip */}
+                    {selectedNode.lng != null && (() => {
+                      const ds = hubDayStatus(selectedNode.lng)
+                      if (!ds) return null
+                      return (
+                        <div className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${ds.open ? 'bg-emerald-500/8 border-emerald-500/20' : 'bg-white/3 border-white/8'}`}>
+                          <span className="text-[14px]">{ds.icon === '☀' ? '☀️' : '🌙'}</span>
+                          <div>
+                            <div className={`text-[10px] font-bold uppercase tracking-widest ${ds.open ? 'text-emerald-400' : 'text-slate-500'}`}>
+                              {ds.open ? 'Business Hours -- Open for RFQ' : 'After Hours -- Closed'}
+                            </div>
+                            <div className="text-[9px] text-slate-600">Local time: {ds.localTime}</div>
+                          </div>
+                        </div>
+                      )
+                    })()}
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <div className="text-[13px] font-bold uppercase mb-1 text-white tracking-wider">{selectedNode.title}</div>
@@ -2005,7 +2093,18 @@ export default function Dashboard() {
                         className="w-full text-left p-4 bg-[#111] border border-white/5 active:border-emerald-500/30 active:bg-emerald-500/5 rounded-xl transition-all">
                         <div className="flex items-center justify-between mb-1.5">
                           <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
-                          <ChevronRight size={14} className="text-slate-400"/>
+                          <div className="flex items-center gap-1.5">
+                            {(() => {
+                              const ds = hubDayStatus(o.lng)
+                              if (!ds) return null
+                              return (
+                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`}>
+                                  {ds.icon} {ds.open ? 'OPEN' : 'CLOSED'}
+                                </span>
+                              )
+                            })()}
+                            <ChevronRight size={14} className="text-slate-400"/>
+                          </div>
                         </div>
                         <div className="text-[13px] font-bold uppercase leading-tight text-white">{o.title}</div>
                         <div className="flex items-center gap-3 mt-2">
@@ -2232,6 +2331,50 @@ export default function Dashboard() {
               </button>
             )}
           </div>
+
+          {/* Freight Route Risk -- Chokepoints */}
+          {opportunities.length > 0 && (() => {
+            const primaryHub = opportunities[0]
+            const relevant   = getRelevantChokepoints(primaryHub)
+            if (relevant.length === 0) return null
+            const critCount = relevant.filter(c => c.status === 'CRITICAL' || c.status === 'ELEVATED').length
+            return (
+              <div className="bg-[#0a0a0a] border border-amber-500/25 p-4 flex flex-col gap-3 rounded-xl shadow-[0_0_20px_rgba(245,158,11,0.06)] shrink-0">
+                <h2 className="text-[11px] font-bold text-amber-400 tracking-[0.25em] uppercase flex items-center gap-2 shrink-0">
+                  <Ship size={13} /> Freight Route Risk
+                  {critCount > 0 && (
+                    <span className="ml-auto text-[9px] font-bold px-2 py-0.5 rounded bg-rose-500/15 border border-rose-500/30 text-rose-400">
+                      {critCount} ACTIVE ALERT{critCount > 1 ? 'S' : ''}
+                    </span>
+                  )}
+                </h2>
+                <p className="text-[10px] text-slate-500 -mt-1">
+                  Chokepoints on primary route from {primaryHub.hub}
+                </p>
+                <div className="space-y-2">
+                  {relevant.map(cp => {
+                    const isCrit   = cp.status === 'CRITICAL'
+                    const isElev   = cp.status === 'ELEVATED'
+                    const isMod    = cp.status === 'MODERATE'
+                    const isNormal = cp.status === 'NORMAL' || cp.status === 'OPEN'
+                    const border   = isCrit ? 'border-rose-500/30 bg-rose-500/5' : isElev ? 'border-amber-500/25 bg-amber-500/5' : isMod ? 'border-yellow-500/20 bg-yellow-500/5' : 'border-white/8 bg-white/2'
+                    const textCol  = isCrit ? 'text-rose-400' : isElev ? 'text-amber-400' : isMod ? 'text-yellow-400' : 'text-emerald-400'
+                    const dot      = isCrit ? '🔴' : isElev ? '🟠' : isMod ? '🟡' : '🟢'
+                    return (
+                      <div key={cp.id} className={`p-3 rounded-lg border ${border}`}>
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <span className="text-[11px]">{dot}</span>
+                          <span className="text-[10px] font-bold text-white uppercase tracking-wider">{cp.name}</span>
+                          <span className={`ml-auto text-[8px] font-bold uppercase tracking-widest ${textCol}`}>{cp.status}</span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 leading-snug">{cp.desc}</p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })()}
 
           {/* Market Intelligence / News */}
           <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
