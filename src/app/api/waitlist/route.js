@@ -11,56 +11,69 @@ const welcomeEmailHtml = (email) => `
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Welcome to ATLAS Terminal</title>
-<style>
-  body { margin: 0; padding: 0; background: #05080F; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 48px 24px; }
-  .logo { font-size: 28px; font-weight: 900; letter-spacing: -0.05em; color: #38BDF8; margin-bottom: 40px; }
-  .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 40px; }
-  .eyebrow { font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: #38BDF8; margin-bottom: 20px; }
-  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; color: #EDF4FF; margin: 0 0 16px; line-height: 1.2; }
-  p { font-size: 15px; color: rgba(237,244,255,0.60); line-height: 1.75; margin: 0 0 24px; font-weight: 300; }
-  .cta-btn { display: inline-block; padding: 16px 36px; border-radius: 100px; background: linear-gradient(135deg, #0EA5E9, #1D4ED8); color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; letter-spacing: -0.01em; }
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 32px 0; }
-  .mono { font-family: 'Courier New', monospace; font-size: 11px; color: rgba(237,244,255,0.30); letter-spacing: 0.06em; }
-  .url-box { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 14px 18px; margin-top: 20px; }
-  .url-label { font-family: 'Courier New', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(237,244,255,0.25); margin-bottom: 6px; }
-  .url-text { font-family: 'Courier New', monospace; font-size: 12px; color: #38BDF8; word-break: break-all; }
-  .feature { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: #38BDF8; margin-top: 7px; flex-shrink: 0; }
-  .feat-text { font-size: 13px; color: rgba(237,244,255,0.55); font-weight: 300; line-height: 1.6; }
-  .footer { margin-top: 40px; text-align: center; }
-  .footer p { font-size: 11px; color: rgba(237,244,255,0.20); margin: 0; }
-</style>
 </head>
-<body>
-<div class="wrap">
-  <div class="logo">ATLAS</div>
-  <div class="card">
-    <div class="eyebrow">// Early Access Granted</div>
-    <h1>You're in.</h1>
-    <p>Welcome to ATLAS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
+<body style="margin:0;padding:0;background:#F1F5F9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#F1F5F9;padding:40px 16px;">
+  <tr><td align="center">
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width:540px;">
 
-    <a href="${TERMINAL_URL}" class="cta-btn">Open ATLAS Terminal &rarr;</a>
+      <!-- Logo -->
+      <tr><td style="padding-bottom:28px;">
+        <span style="font-size:26px;font-weight:900;letter-spacing:-0.05em;color:#0EA5E9;">ATLAS</span>
+        <span style="font-size:11px;font-family:'Courier New',monospace;letter-spacing:0.16em;text-transform:uppercase;color:#94A3B8;margin-left:12px;">Terminal</span>
+      </td></tr>
 
-    <hr class="divider" />
+      <!-- Card -->
+      <tr><td style="background:#ffffff;border-radius:16px;border:1px solid #E2E8F0;padding:40px;">
 
-    <p style="margin-bottom: 16px;">Here's what you can do from day one:</p>
-    <div class="feature"><div class="dot"></div><div class="feat-text">Scan any product or material in plain language -- ATLAS maps the best global sourcing hubs, names real suppliers, and pulls live UN Comtrade export data.</div></div>
-    <div class="feature"><div class="dot"></div><div class="feat-text">Monitor 92,000+ live fire hotspots, M4.5+ earthquakes, and 15 geopolitical conflict zones -- all overlaid on your sourcing geography automatically.</div></div>
-    <div class="feature"><div class="dot"></div><div class="feat-text">Get instant compliance verdicts: OFAC sanctions, ECCN classification, Section 301 tariffs, and FTA eligibility -- checked at the point of sourcing.</div></div>
-    <div class="feature"><div class="dot"></div><div class="feat-text">Export a PDF mission brief, supplier RFQ, and total landed cost model in one click.</div></div>
+        <p style="margin:0 0 12px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#0EA5E9;">// Early Access Granted</p>
+        <h1 style="margin:0 0 16px;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:#0F172A;line-height:1.15;">You're in.</h1>
+        <p style="margin:0 0 28px;font-size:15px;color:#475569;line-height:1.75;">Welcome to ATLAS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
 
-    <div class="url-box">
-      <div class="url-label">Your terminal URL -- bookmark this</div>
-      <div class="url-text">${TERMINAL_URL}</div>
-    </div>
-  </div>
+        <!-- CTA button -->
+        <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+          <tr><td style="background:linear-gradient(135deg,#0EA5E9,#1D4ED8);border-radius:100px;">
+            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;letter-spacing:-0.01em;">Open ATLAS Terminal &rarr;</a>
+          </td></tr>
+        </table>
 
-  <div class="footer">
-    <p class="mono">ATLAS Terminal &nbsp;&middot;&nbsp; ${email} &nbsp;&middot;&nbsp; &copy; 2026</p>
-    <p style="font-size: 10px; color: rgba(237,244,255,0.12); margin-top: 8px;">You received this because you requested early access to ATLAS Terminal.</p>
-  </div>
-</div>
+        <hr style="border:none;border-top:1px solid #E2E8F0;margin:0 0 28px;" />
+
+        <p style="margin:0 0 16px;font-size:13px;font-weight:600;color:#0F172A;text-transform:uppercase;letter-spacing:0.06em;">What you can do from day one</p>
+
+        <table cellpadding="0" cellspacing="0" width="100%">
+          <tr><td style="padding-bottom:14px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td>
+          <td style="padding-bottom:14px;font-size:13px;color:#475569;line-height:1.65;">Scan any product in plain language -- ATLAS maps global sourcing hubs, names real suppliers, and pulls live UN Comtrade export data.</td></tr>
+
+          <tr><td style="padding-bottom:14px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td>
+          <td style="padding-bottom:14px;font-size:13px;color:#475569;line-height:1.65;">Monitor 92,000+ live fire hotspots, M4.5+ earthquakes, and 15 conflict zones -- overlaid on your sourcing geography automatically.</td></tr>
+
+          <tr><td style="padding-bottom:14px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td>
+          <td style="padding-bottom:14px;font-size:13px;color:#475569;line-height:1.65;">Instant compliance: OFAC sanctions, ECCN classification, Section 301 tariffs, and FTA eligibility -- checked at the point of sourcing.</td></tr>
+
+          <tr><td style="vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td>
+          <td style="font-size:13px;color:#475569;line-height:1.65;">Export a PDF mission brief, supplier RFQ, and total landed cost model in one click.</td></tr>
+        </table>
+
+        <!-- URL box -->
+        <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:28px;">
+          <tr><td style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px 18px;">
+            <p style="margin:0 0 5px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#94A3B8;">Bookmark this</p>
+            <a href="${TERMINAL_URL}" style="font-family:'Courier New',monospace;font-size:12px;color:#0EA5E9;text-decoration:none;word-break:break-all;">${TERMINAL_URL}</a>
+          </td></tr>
+        </table>
+
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="padding:24px 0;text-align:center;">
+        <p style="margin:0;font-size:11px;color:#94A3B8;">&copy; 2026 ATLAS Terminal &nbsp;&middot;&nbsp; ${email}</p>
+        <p style="margin:6px 0 0;font-size:10px;color:#CBD5E1;">You received this because you requested early access.</p>
+      </td></tr>
+
+    </table>
+  </td></tr>
+</table>
 </body>
 </html>
 `
