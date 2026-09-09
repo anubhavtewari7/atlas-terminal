@@ -145,15 +145,17 @@ const FALLBACK_INCIDENTS = [
 
 // --------------------------------------------------------------------------
 // Fetch live ACLED data (last 30 days, supply-chain countries, relevant types)
+//
+// Supports two auth modes -- whichever env vars are set:
+//   1. Bearer token  (ACLED_TOKEN)  -- new developer.acleddata.com portal
+//   2. Key + email   (ACLED_API_KEY + ACLED_EMAIL)  -- legacy access portal
 // --------------------------------------------------------------------------
-async function fetchAcledLive(apiKey, email) {
+async function fetchAcledLive({ token, apiKey, email }) {
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 3600 * 1000)
-  const dateStr = thirtyDaysAgo.toISOString().split('T')[0].replace(/-/g, '-')
-  const today   = new Date().toISOString().split('T')[0].replace(/-/g, '-')
+  const dateStr = thirtyDaysAgo.toISOString().split('T')[0]
+  const today   = new Date().toISOString().split('T')[0]
 
   const params = new URLSearchParams({
-    key:              apiKey,
-    email:            email,
     event_date:       dateStr,
     event_date_where: 'BETWEEN',
     event_date2:      today,
@@ -162,9 +164,16 @@ async function fetchAcledLive(apiKey, email) {
     limit:            '500',
   })
 
-  const res = await fetch(`https://api.acleddata.com/acled/read?${params}`, {
-    headers: { 'User-Agent': 'ATLAS-Terminal/1.0' }
-  })
+  // Legacy key+email auth adds creds as query params
+  if (!token && apiKey && email) {
+    params.set('key',   apiKey)
+    params.set('email', email)
+  }
+
+  const headers = { 'User-Agent': 'ATLAS-Terminal/1.0' }
+  if (token) headers['Authorization'] = `Bearer ${token}`
+
+  const res = await fetch(`https://api.acleddata.com/acled/read?${params}`, { headers })
   if (!res.ok) throw new Error(`ACLED ${res.status}`)
   const json = await res.json()
   if (!json.data?.length) throw new Error('No ACLED data')
@@ -220,14 +229,18 @@ export async function GET() {
       return NextResponse.json(_cache)
     }
 
+    // Prefer new Bearer token (developer.acleddata.com portal),
+    // fall back to legacy key + email pair (old access portal)
+    const token  = process.env.ACLED_TOKEN
     const apiKey = process.env.ACLED_API_KEY
     const email  = process.env.ACLED_EMAIL
+    const hasAuth = token || (apiKey && email)
 
     let incidents, source
 
-    if (apiKey && email) {
+    if (hasAuth) {
       try {
-        const events = await fetchAcledLive(apiKey, email)
+        const events = await fetchAcledLive({ token, apiKey, email })
         incidents = acledToRisks(events)
         source    = 'ACLED Live'
       } catch (acledErr) {
@@ -236,9 +249,9 @@ export async function GET() {
         source    = 'ACLED Baseline (API error)'
       }
     } else {
-      console.info('[/api/incidents] No ACLED key -- using hardcoded baseline')
+      console.info('[/api/incidents] No ACLED credentials -- using hardcoded baseline')
       incidents = FALLBACK_INCIDENTS
-      source    = 'ACLED Baseline (no key)'
+      source    = 'ACLED Baseline (no credentials)'
     }
 
     const payload = {
@@ -246,7 +259,7 @@ export async function GET() {
       total: incidents.length,
       updated: new Date().toISOString(),
       source,
-      keyConfigured: !!(apiKey && email),
+      keyConfigured: !!hasAuth,
     }
 
     _cache     = payload
