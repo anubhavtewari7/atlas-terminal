@@ -89,7 +89,7 @@ export async function POST(request) {
     // Also notify yourself so you know who signed up
     await resend.emails.send({
       from: 'ATLAS Terminal <onboarding@resend.dev>',
-      to: 'anubhav.tewari@slate.auto',
+      to: 'anubhavtewari7@gmail.com',
       subject: `New ATLAS signup: ${email}`,
       html: `<p style="font-family:monospace;font-size:14px;color:#333">New early access request:<br><br><strong>${email}</strong><br><br>${new Date().toUTCString()}</p>`,
     })
