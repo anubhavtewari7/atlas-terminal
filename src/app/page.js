@@ -678,7 +678,7 @@ export default function Home() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           service_id: 'service_xrughp6',
-          template_id: 'template_6ucxkhs',
+          template_id: 'template_bjw3dhz',
           user_id: 'NFvpRULP0SJgNBrJs',
           template_params: {
             to_email: email,
