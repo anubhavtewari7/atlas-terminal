@@ -497,6 +497,57 @@ footer {
 .f-note { font-size: 11px; color: var(--text3); margin-top: 4px; font-weight: 300; }
 .f-right { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.14em; text-transform: uppercase; }
 
+.press-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 48px;
+  margin-bottom: 0;
+}
+.press-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.press-pub {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(237,244,255,0.55);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(237,244,255,0.15);
+  padding-bottom: 1px;
+  transition: color 0.2s, border-color 0.2s;
+  letter-spacing: -0.01em;
+}
+.press-pub:hover { color: var(--text); border-color: rgba(237,244,255,0.4); }
+
+.press-quote-wrap {
+  text-align: center;
+  max-width: 680px;
+  margin: 20px auto 56px;
+  padding: 0 32px;
+}
+.press-quote {
+  font-size: 16px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text2);
+  line-height: 1.75;
+  margin: 0 0 12px;
+}
+.press-cite {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text3);
+  font-style: normal;
+}
+.press-cite em { font-style: normal; color: var(--accent); }
+
 @media (max-width: 860px) {
   .split, .split.flip { grid-template-columns: 1fr; direction: ltr; gap: 48px; }
   .stats-strip { grid-template-columns: repeat(3, 1fr); }
@@ -632,6 +683,26 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Press */}
+      <div className="press-strip r" style={{ transitionDelay: '0.95s' }}>
+        <span className="press-label">As featured in</span>
+        <a
+          href="https://www.sdcexec.com/software-technology/wms-tms/news/22973252/atlas-terminal-atlas-terminal-launches-supply-chain-intelligence-platform-for-procurement-and-sourcing-professionals"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="press-pub"
+        >
+          Supply &amp; Demand Chain Executive
+        </a>
+      </div>
+
+      <div className="press-quote-wrap r" style={{ transitionDelay: '1.0s' }}>
+        <blockquote className="press-quote">
+          &ldquo;Procurement teams are making multi-million-dollar sourcing decisions while juggling eight browser tabs. The intelligence exists; it just shouldn&apos;t be this hard to access.&rdquo;
+        </blockquote>
+        <cite className="press-cite">-- Anubhav Tewari, Founder &amp; Developer, ATLAS Terminal &nbsp;&middot;&nbsp; <em>Supply &amp; Demand Chain Executive, Sep 1 2026</em></cite>
+      </div>
 
       {/* Marquee */}
       <div className="marquee-wrap">
