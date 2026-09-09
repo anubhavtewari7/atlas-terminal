@@ -58,6 +58,7 @@ const welcomeEmailHtml = (email) => `
         <!-- URL box -->
         <table cellpadding="0" cellspacing="0" width="100%" style="margin-top:28px;">
           <tr><td style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:10px;padding:14px 18px;">
+            <p style="margin:0 0 16px;font-size:12px;color:#64748B;">📬 If you don't see this email, check your <strong>spam or promotions folder</strong> and mark it as Not Spam.</p>
             <p style="margin:0 0 5px;font-family:'Courier New',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#94A3B8;">Bookmark this</p>
             <a href="${TERMINAL_URL}" style="font-family:'Courier New',monospace;font-size:12px;color:#0EA5E9;text-decoration:none;word-break:break-all;">${TERMINAL_URL}</a>
           </td></tr>

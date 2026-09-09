@@ -913,7 +913,7 @@ export default function Home() {
           <p className="cta-p">Not a dashboard. Not a report. A terminal -- designed for speed, depth, and immediate action. Enter your email and we&apos;ll send you access.</p>
           {status === 'done' ? (
             <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--green)', letterSpacing: '0.12em' }}>
-              &#10003; CHECK YOUR INBOX -- ACCESS LINK SENT
+              &#10003; ACCESS LINK SENT -- CHECK YOUR INBOX (and spam, just in case)
             </p>
           ) : (
             <form className="email-form" onSubmit={handleSubmit}>
