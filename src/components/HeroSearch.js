@@ -2,16 +2,34 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const EXAMPLES = [
+const SUGGESTIONS = [
   'IATF-certified brake pads for passenger vehicles',
   'Neodymium magnets for EV motor assembly',
   'Semiconductor wafers for automotive ECU',
   'Food-grade soy for QSR supply chain',
+  'Titanium sponge for aerospace structural parts',
+  'Corrugated packaging boxes for e-commerce fulfillment',
+  'Thermoplastic polyurethane (TPU) pellets for injection molding',
+  'Copper cathodes for electrical wire manufacturing',
+  'Generic pharmaceutical APIs (Paracetamol & Amoxicillin)',
+  'Hydraulic pumps & valves for industrial machinery',
+  'Cotton yarn & denim fabric for garment manufacturing',
+  'Multilayer ceramic capacitors (MLCC) for circuit boards',
+  'Double-sided glass fiber woven roving for construction',
+  'Lithium hydroxide battery grade for cathode synthesis',
+  'Polyurethane coating for automotive exterior trim'
 ]
+
+const EXAMPLES = SUGGESTIONS.slice(0, 4)
 
 export default function HeroSearch() {
   const [query, setQuery] = useState('')
+  const [isFocused, setIsFocused] = useState(false)
   const router = useRouter()
+
+  const matches = query.trim()
+    ? SUGGESTIONS.filter(s => s.toLowerCase().includes(query.toLowerCase()))
+    : []
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -20,29 +38,74 @@ export default function HeroSearch() {
     router.push(`/terminal?q=${encodeURIComponent(q)}`)
   }
 
+  const handleSelectSuggestion = (s) => {
+    setQuery(s)
+    setIsFocused(false)
+    router.push(`/terminal?q=${encodeURIComponent(s)}`)
+  }
+
   return (
-    <div style={{ marginTop: '2rem', width: '100%', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto' }}>
+    <div style={{ marginTop: '2rem', width: '100%', maxWidth: '600px', marginLeft: 'auto', marginRight: 'auto', position: 'relative' }}>
       <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', width: '100%' }}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="e.g. IATF-certified brake pads for passenger vehicles"
-          style={{
-            flex: 1,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            borderRadius: '10px',
-            padding: '12px 16px',
-            color: '#fff',
-            fontSize: '13px',
-            fontFamily: 'inherit',
-            outline: 'none',
-            minWidth: 0,
-          }}
-          onFocus={e => e.target.style.borderColor = 'rgba(0,229,160,0.5)'}
-          onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'}
-        />
+        <div style={{ position: 'relative', flex: 1 }}>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="e.g. IATF-certified brake pads for passenger vehicles"
+            style={{
+              width: '100%',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              color: '#fff',
+              fontSize: '13px',
+              fontFamily: 'inherit',
+              outline: 'none',
+              minWidth: 0,
+              boxSizing: 'border-box'
+            }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+          />
+          {/* Inline Auto-Complete Suggestions Dropdown */}
+          {isFocused && matches.length > 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              marginTop: '6px',
+              background: '#0a0a0a',
+              border: '1px solid rgba(56,189,248,0.3)',
+              borderRadius: '10px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.8)',
+              zIndex: 50,
+              maxHeight: '220px',
+              overflowY: 'auto'
+            }}>
+              {matches.map((s, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => handleSelectSuggestion(s)}
+                  style={{
+                    padding: '10px 14px',
+                    fontSize: '12px',
+                    color: '#e2e8f0',
+                    cursor: 'pointer',
+                    borderBottom: idx === matches.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.05)',
+                    transition: 'background 0.15s',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(56,189,248,0.15)'; e.currentTarget.style.color = '#38bdf8' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#e2e8f0' }}
+                >
+                  🔍 {s}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
         <button type="submit" style={{
           background: '#00e5a0',
           color: '#000',
@@ -83,3 +146,4 @@ export default function HeroSearch() {
     </div>
   )
 }
+

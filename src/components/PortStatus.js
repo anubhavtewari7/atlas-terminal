@@ -67,7 +67,7 @@ export default function PortStatus({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_80px_rgba(56,189,248,0.08)] overflow-hidden flex flex-col" style={{ maxHeight: '85vh' }}
+        className="bg-[#080808] border border-white/10 w-full max-w-4xl rounded-2xl shadow-[0_0_80px_rgba(56,189,248,0.08)] overflow-hidden flex flex-col pb-24 md:pb-0" style={{ maxHeight: '85vh' }}
       >
         <div className="flex items-center justify-between p-6 border-b border-white/5 shrink-0">
           <div className="flex items-center gap-3">

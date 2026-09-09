@@ -72,7 +72,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 10 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }}
-        className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto"
+        className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto pb-24 md:pb-6"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/5">
@@ -85,9 +85,15 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               <div className="text-[11px] text-slate-500">FOB price sensitivity to FX moves</div>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
-            <X size={16} />
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Live FX • Updated 2m ago</span>
+            </div>
+            <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
+              <X size={16} />
+            </button>
+          </div>
         </div>
 
         <div className="p-5 space-y-4">

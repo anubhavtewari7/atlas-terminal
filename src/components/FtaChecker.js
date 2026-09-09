@@ -125,7 +125,7 @@ export default function FtaChecker({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] max-h-[90vh] overflow-y-auto"
+        className="bg-[#080808] border border-white/10 w-full max-w-3xl rounded-2xl shadow-[0_0_80px_rgba(16,185,129,0.08)] max-h-[90vh] overflow-y-auto pb-24 md:pb-6"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-white/5">
