@@ -277,9 +277,10 @@ function getRelevantChokepoints(hub) {
   return CHOKEPOINTS.filter(c => c.regions.includes(region))
 }
 
-// ── Earthquake risk merger ──
-// Fetches live USGS data and prepends relevant seismic events to the risk list.
-// Called after every scan (success or fallback). Silent on error.
+// ── Live risk mergers ──
+// Each function fetches a live data source and splices its risk objects into
+// the running risk list. Called after every scan. Silent on error.
+
 async function fetchAndMergeEarthquakeRisks(baseRisks) {
   try {
     const res = await fetch('/api/earthquakes')
@@ -287,12 +288,47 @@ async function fetchAndMergeEarthquakeRisks(baseRisks) {
     const data = await res.json()
     const eqRisks = data.risks || []
     if (eqRisks.length === 0) return baseRisks
-    // Remove any stale earthquake entries already in baseRisks (e.g. from a previous scan)
     const filtered = baseRisks.filter(r => !r.id?.startsWith('eq_'))
-    // HIGH-magnitude events go first, MEDIUM appended at the end
     const highEq = eqRisks.filter(r => r.severity === 'HIGH')
     const medEq  = eqRisks.filter(r => r.severity !== 'HIGH')
     return [...highEq, ...filtered, ...medEq]
+  } catch {
+    return baseRisks
+  }
+}
+
+// NASA FIRMS -- active wildfire hotspots near supply-chain sourcing regions
+async function fetchAndMergeWildfireRisks(baseRisks) {
+  try {
+    const res = await fetch('/api/wildfires')
+    if (!res.ok) return baseRisks
+    const data = await res.json()
+    const fireRisks = data.risks || []
+    if (fireRisks.length === 0) return baseRisks
+    // Remove stale fire entries, then prepend HIGH fires, append others
+    const filtered = baseRisks.filter(r => !r.id?.startsWith('fire_'))
+    const highFire = fireRisks.filter(r => r.severity === 'HIGH')
+    const medFire  = fireRisks.filter(r => r.severity !== 'HIGH')
+    return [...highFire, ...filtered, ...medFire]
+  } catch {
+    return baseRisks
+  }
+}
+
+// ACLED -- armed conflict, organized crime, and geopolitical incident data
+async function fetchAndMergeIncidentRisks(baseRisks) {
+  try {
+    const res = await fetch('/api/incidents')
+    if (!res.ok) return baseRisks
+    const data = await res.json()
+    const incidentRisks = data.incidents || []
+    if (incidentRisks.length === 0) return baseRisks
+    // Remove stale acled entries, then prepend HIGH incidents, append others
+    const filtered = baseRisks.filter(r => !r.id?.startsWith('acled_'))
+    const highInc = incidentRisks.filter(r => r.severity === 'HIGH')
+    const medInc  = incidentRisks.filter(r => r.severity !== 'HIGH')
+    // Incidents go after earthquakes + fires (prepended above) but before base risks
+    return [...filtered.filter(r => r.severity === 'HIGH'), ...highInc, ...filtered.filter(r => r.severity !== 'HIGH'), ...medInc]
   } catch {
     return baseRisks
   }
@@ -732,7 +768,9 @@ export default function Dashboard() {
       const data = await res.json()
 
       if (data.opportunities?.length > 0) {
-        const mergedRisks = await fetchAndMergeEarthquakeRisks(data.risks || [])
+        const eqRisks   = await fetchAndMergeEarthquakeRisks(data.risks || [])
+        const fireRisks = await fetchAndMergeWildfireRisks(eqRisks)
+        const mergedRisks = await fetchAndMergeIncidentRisks(fireRisks)
         setRisks(mergedRisks)
         setOpportunities(data.opportunities)
         setDirective(data.directive || null)
@@ -771,7 +809,9 @@ export default function Dashboard() {
       }
 
       setOpportunities(hubs)
-      const mergedFallbackRisks = await fetchAndMergeEarthquakeRisks(fallbackRisks)
+      const eqFallbackRisks   = await fetchAndMergeEarthquakeRisks(fallbackRisks)
+      const fireFallbackRisks = await fetchAndMergeWildfireRisks(eqFallbackRisks)
+      const mergedFallbackRisks = await fetchAndMergeIncidentRisks(fireFallbackRisks)
       setRisks(mergedFallbackRisks)
       setDirective(fbDir)
       setMarketData({
