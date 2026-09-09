@@ -129,11 +129,12 @@ nav.scrolled {
   animation: slideUp 0.8s 0.3s var(--ease) forwards;
 }
 .hero-title {
-  font-size: clamp(5rem, 12vw, 9.5rem);
+  font-size: clamp(4rem, 10vw, 8.5rem);
   font-weight: 900;
-  letter-spacing: -0.055em;
-  line-height: 0.9;
+  letter-spacing: -0.02em;
+  line-height: 1;
   margin-bottom: 32px;
+  padding: 0 0.08em;
   background: linear-gradient(160deg, #ffffff 0%, #bfdbfe 55%, #7dd3fc 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
