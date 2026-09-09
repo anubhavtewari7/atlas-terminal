@@ -19,42 +19,37 @@ function getSunPosition() {
   return { lat: decl, lng: sunLng }
 }
 
-// Night-side overlay using a GLSL shader -- smooth terminator gradient
-function NightOverlay() {
-  const sunPos = getSunPosition()
-
-  const sunDir = useMemo(() => {
-    const phi   = (90 - sunPos.lat) * (Math.PI / 180)
-    const theta = (sunPos.lng + 180) * (Math.PI / 180)
+// Night-side overlay -- GLSL shader with per-frame sun direction sync.
+// earthRotRef tracks the Earth mesh's current rotation.y so the terminator
+// stays geographically accurate even as the globe auto-rotates.
+function NightOverlay({ earthRotRef }) {
+  // Base sun direction at Earth rotation.y = 0 (computed once at mount)
+  const baseSunDir = useMemo(() => {
+    const p     = getSunPosition()
+    const phi   = (90 - p.lat) * (Math.PI / 180)
+    const theta = (p.lng + 180) * (Math.PI / 180)
     return new THREE.Vector3(
       -Math.sin(phi) * Math.cos(theta),
        Math.cos(phi),
        Math.sin(phi) * Math.sin(theta)
     ).normalize()
-  }, [sunPos.lat, sunPos.lng])
+  }, [])
 
-  const uniforms = useMemo(() => ({
-    sunDir: { value: sunDir }
-  }), [sunDir])
+  // Shader uniforms -- sunDir is mutated every frame via useFrame
+  const uniforms = useRef({ sunDir: { value: baseSunDir.clone() } })
 
-  const vertexShader = `
-    varying vec3 vWorldNormal;
-    void main() {
-      vWorldNormal = normalize(mat3(modelMatrix) * normal);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-    }
-  `
+  // Scratch objects to avoid per-frame allocations
+  const _mat = useMemo(() => new THREE.Matrix4(), [])
+  const _vec = useMemo(() => new THREE.Vector3(), [])
 
-  const fragmentShader = `
-    uniform vec3 sunDir;
-    varying vec3 vWorldNormal;
-    void main() {
-      float cosA = dot(normalize(vWorldNormal), normalize(sunDir));
-      // Soft terminator: dark side fully opaque at cosA = -0.12, transparent at cosA = 0.08
-      float night = smoothstep(0.08, -0.12, cosA);
-      gl_FragColor = vec4(0.0, 0.005, 0.04, night * 0.62);
-    }
-  `
+  // Each frame: rotate the sun direction by -earthRotY so it tracks
+  // the geography correctly as the Earth mesh spins
+  useFrame(() => {
+    const rotY = earthRotRef?.current ?? 0
+    _mat.makeRotationY(-rotY)
+    _vec.copy(baseSunDir).applyMatrix4(_mat)
+    uniforms.current.sunDir.value.copy(_vec)
+  })
 
   return (
     <mesh renderOrder={1}>
@@ -62,9 +57,23 @@ function NightOverlay() {
       <shaderMaterial
         transparent
         depthWrite={false}
-        uniforms={uniforms}
-        vertexShader={vertexShader}
-        fragmentShader={fragmentShader}
+        uniforms={uniforms.current}
+        vertexShader={`
+          varying vec3 vWorldNormal;
+          void main() {
+            vWorldNormal = normalize(mat3(modelMatrix) * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `}
+        fragmentShader={`
+          uniform vec3 sunDir;
+          varying vec3 vWorldNormal;
+          void main() {
+            float cosA = dot(normalize(vWorldNormal), normalize(sunDir));
+            float night = smoothstep(0.08, -0.12, cosA);
+            gl_FragColor = vec4(0.0, 0.005, 0.04, night * 0.62);
+          }
+        `}
       />
     </mesh>
   )
@@ -133,19 +142,22 @@ function ChokepointMarker({ cp }) {
 }
 
 function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight }) {
-  const meshRef = useRef()
-  const texture = useLoader(THREE.TextureLoader, '/earth.jpg')
+  const meshRef    = useRef()
+  const earthRotY  = useRef(0)           // shared with NightOverlay via ref
+  const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
 
   useFrame((state, delta) => {
     if (autoRotate && meshRef.current) {
       meshRef.current.rotation.y += delta * 0.04
+      earthRotY.current = meshRef.current.rotation.y
     }
   })
 
   return (
     <group>
-      {/* Night-side overlay -- rendered outside the rotating mesh so it stays sun-aligned */}
-      {showDayNight && <NightOverlay />}
+      {/* Night-side overlay -- sibling to the Earth mesh; sun direction is
+          corrected each frame by -earthRotY so it stays geographically accurate */}
+      {showDayNight && <NightOverlay earthRotRef={earthRotY} />}
 
       <mesh ref={meshRef} rotation={[-0.25, 0, 0]}>
         <sphereGeometry args={[2, 64, 64]} />
