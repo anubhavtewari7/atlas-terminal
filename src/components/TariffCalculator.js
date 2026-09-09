@@ -206,7 +206,7 @@ export default function TariffCalculator({ onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 10 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95 }}
-        className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto"
+        className="bg-[#0a0a0a] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto pb-24 md:pb-6"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/5">

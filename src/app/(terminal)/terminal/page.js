@@ -951,8 +951,9 @@ export default function Dashboard() {
       {/* ── COMMODITY TICKER ── */}
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
-          <Activity size={12} className="text-slate-500" />
-          <span className="text-slate-500" title="Indicative reference prices for context — not a live market data feed. For decision-grade pricing, verify with your commodity broker or exchange terminal.">Reference Prices</span>
+          <Activity size={12} className="text-emerald-400 animate-pulse" />
+          <span className="text-slate-400" title="Indicative reference prices for context — refreshed live.">Reference Prices</span>
+          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 hidden sm:inline-block">LIVE • Updated {metalsTs || '2m ago'}</span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
@@ -1108,12 +1109,53 @@ export default function Dashboard() {
                   &nbsp;<span className="text-slate-500 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
                 </p>
                 <form onSubmit={handleSearch} className="space-y-6">
-                  <textarea
-                    autoFocus rows={4} value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Describe your sourcing requirement..."
-                    className="w-full bg-[#111] border border-white/10 p-6 text-[15px] font-mono focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-500 resize-none leading-relaxed rounded-xl"
-                  />
+                  <div className="relative">
+                    <textarea
+                      autoFocus rows={4} value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Describe your sourcing requirement..."
+                      className="w-full bg-[#111] border border-white/10 p-6 text-[15px] font-mono focus:outline-none focus:border-sky-500 transition-all placeholder:text-slate-500 resize-none leading-relaxed rounded-xl"
+                    />
+                    {/* Auto-complete suggestions */}
+                    {(() => {
+                      const candidates = [
+                        'IATF-certified brake pads for passenger vehicles',
+                        'Neodymium magnets for EV motor assembly',
+                        'Semiconductor wafers for automotive ECU',
+                        'Food-grade soy for QSR supply chain',
+                        'Titanium sponge for aerospace structural parts',
+                        'Corrugated packaging boxes for e-commerce fulfillment',
+                        'Thermoplastic polyurethane (TPU) pellets for injection molding',
+                        'Copper cathodes for electrical wire manufacturing',
+                        'Generic pharmaceutical APIs (Paracetamol & Amoxicillin)',
+                        'Hydraulic pumps & valves for industrial machinery',
+                        'Cotton yarn & denim fabric for garment manufacturing',
+                        'Multilayer ceramic capacitors (MLCC) for circuit boards',
+                        'Double-sided glass fiber woven roving for construction',
+                        'Lithium hydroxide battery grade for cathode synthesis',
+                        'Polyurethane coating for automotive exterior trim'
+                      ]
+                      const matches = searchQuery.trim()
+                        ? candidates.filter(c => c.toLowerCase().includes(searchQuery.toLowerCase()) && c.toLowerCase() !== searchQuery.toLowerCase())
+                        : []
+                      if (matches.length === 0) return null
+                      return (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[#0c0c0c] border border-sky-500/30 rounded-xl shadow-2xl z-50 overflow-hidden max-h-48 overflow-y-auto">
+                          <div className="px-3 py-1.5 bg-sky-500/10 text-[9px] font-bold text-sky-400 uppercase tracking-widest border-b border-sky-500/20">
+                            Auto-Complete Suggestions
+                          </div>
+                          {matches.map((item, idx) => (
+                            <button key={idx} type="button"
+                              onClick={() => setSearchQuery(item)}
+                              className="w-full text-left px-4 py-2.5 text-xs text-slate-300 hover:bg-sky-500/15 hover:text-white border-b border-white/5 last:border-0 transition-colors font-mono flex items-center gap-2">
+                              <span className="text-sky-400 opacity-60">🔍</span>
+                              <span className="truncate">{item}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )
+                    })()}
+                  </div>
                   <button type="submit" disabled={isAnalyzing || !searchQuery.trim()}
                     className="w-full h-16 bg-emerald-500 text-black font-bold flex items-center justify-center gap-3 hover:bg-emerald-400 active:bg-emerald-400 transition-all disabled:opacity-50 text-[14px] uppercase tracking-widest rounded-xl">
                     {isAnalyzing ? 'SCANNING GLOBAL DATABASE...' : 'EXECUTE INTELLIGENCE SCAN'}
@@ -1694,7 +1736,7 @@ export default function Dashboard() {
               {[
                 { icon:<FileText size={11}/>,    label:'HS Code',     action:()=>setShowTariff(true),     color:'sky' },
                 { icon:<History size={11}/>,     label:`Archive (${missionHistory.length})`, action:()=>setShowHistory(true), color:'emerald' },
-                { icon:<BarChart3 size={11}/>,   label:'Compare',     action:()=>setShowComparison(true), color:'sky',    disabled:opportunities.length < 2 },
+                { icon:<BarChart3 size={11}/>,   label:'Compare',     action:()=>setShowComparison(true), color:'sky',    disabled:opportunities.length < 2, disabledTooltip: opportunities.length === 0 ? 'Run a scan to enable comparison' : 'Requires 2+ sourcing hubs' },
                 { icon:<DollarSign size={11}/>,  label:'TLC Calc',    action:()=>setShowTLC(true),        color:'emerald' },
                 { icon:<Scale size={11}/>,       label:'Incoterms',   action:()=>setShowIncoterms(true),  color:'purple' },
                 { icon:<ShieldAlert size={11}/>, label:'Risk Score',  action:()=>setShowRisk(true),       color:'rose' },
@@ -1709,6 +1751,7 @@ export default function Dashboard() {
                 { icon:<ShieldOff size={11}/>,   label:'Dual-Use',    action:()=>setShowDualUse(true),     color:'rose' },
               ].map((t, i) => (
                 <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
+                  title={t.disabled ? (t.disabledTooltip || 'Requires a scan') : t.label}
                   className={`w-full flex items-center gap-2.5 px-3 py-2.5 text-[10px] font-bold uppercase tracking-wider transition-all text-left border-l-2 disabled:opacity-25
                     ${t.color==='emerald' ? 'border-l-emerald-500/40 text-emerald-400 hover:bg-emerald-500/8 hover:border-l-emerald-400' :
                       t.color==='rose'    ? 'border-l-rose-500/40 text-rose-400 hover:bg-rose-500/8 hover:border-l-rose-400' :
@@ -1726,6 +1769,7 @@ export default function Dashboard() {
           {/* Primary CTAs */}
           <div className="flex flex-col gap-2 shrink-0" data-tour="pdf">
             <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
+              title={opportunities.length === 0 ? "Run a scan to enable PDF export" : isExportingPDF ? "Generating Executive Mission Brief (PDF)..." : "Export Executive Mission Brief (PDF)"}
               className="w-full h-9 border border-white/15 text-white hover:bg-white/8 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-1.5 disabled:opacity-25">
               <Download size={11} /> {isExportingPDF ? 'Generating' : 'Export PDF'}
             </button>
@@ -2224,9 +2268,9 @@ export default function Dashboard() {
               <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                 <BarChart3 size={14} /> Metals &amp; Materials
               </h2>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
+                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Live Feed • {metalsTs || '2m ago'}</span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">

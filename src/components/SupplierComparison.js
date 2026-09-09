@@ -47,7 +47,7 @@ export default function SupplierComparison({ hubs, onClose }) {
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="bg-[#090909] border border-white/10 w-full max-w-[95vw] rounded-2xl shadow-[0_0_100px_rgba(56,189,248,0.1)] overflow-hidden flex flex-col"
+        className="bg-[#090909] border border-white/10 w-full max-w-[95vw] rounded-2xl shadow-[0_0_100px_rgba(56,189,248,0.1)] overflow-hidden flex flex-col pb-24 md:pb-0"
         style={{ maxHeight: '90vh' }}
       >
         {/* Header */}

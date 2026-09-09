@@ -849,7 +849,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
           <button onClick={onClose} className="p-2 text-slate-500 hover:text-white transition-all"><X size={20} /></button>
         </div>
 
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 pb-24 lg:pb-6">
           {/* Input */}
           {!results && (
             <div className="p-6 space-y-4">
