@@ -29,5 +29,9 @@ export const metadata = {
 };
 
 export default function TerminalLayout({ children }) {
-  return <>{children}</>;
+  return (
+    <div style={{ overflow: 'hidden', height: '100dvh' }}>
+      {children}
+    </div>
+  );
 }
