@@ -44,10 +44,26 @@ function CongestionBar({ score }) {
 }
 
 export default function PortStatus({ onClose }) {
-  const [filter, setFilter] = useState('all')
+  const [filter, setFilter]         = useState('all')
+  const [portData, setPortData]     = useState(PORT_DATA)
+  const [dataSource, setDataSource] = useState('Loading...')
+  const [lastUpdated, setLastUpdated] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/ports')
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => {
+        if (data.ports?.length) setPortData(data.ports)
+        setDataSource(data.source || 'Live Feed')
+        setLastUpdated(data.updated ? new Date(data.updated) : null)
+      })
+      .catch(() => {
+        setDataSource('Baseline (offline)')
+      })
+  }, [])
 
   const regions = { all: 'All Ports', westus: 'West Coast US', eastus: 'East Coast US', asia: 'Asia Pacific', mexico: 'West Mexico', europe: 'Europe', mideast: 'Middle East' }
-  const filtered = PORT_DATA.filter(p => {
+  const filtered = portData.filter(p => {
     if (filter === 'all') return true
     if (filter === 'westus') return p.country.includes('🇺🇸') && (p.name.includes('Los Angeles') || p.name.includes('Long Beach') || p.name.includes('Seattle') || p.name.includes('Oakland'))
     if (filter === 'eastus') return p.country.includes('🇺🇸') && (p.name.includes('New York') || p.name.includes('Savannah') || p.name.includes('Charleston') || p.name.includes('Baltimore'))
@@ -58,7 +74,7 @@ export default function PortStatus({ onClose }) {
     return true
   })
 
-  const alerts = PORT_DATA.filter(p => p.alert)
+  const alerts = portData.filter(p => p.alert)
 
   return (
     <motion.div
@@ -76,8 +92,11 @@ export default function PortStatus({ onClose }) {
             </div>
             <div>
               <h2 className="text-[13px] font-bold text-sky-400 tracking-[0.2em] uppercase">Global Port Congestion Monitor</h2>
-              <p className="text-[10px] text-slate-600 mt-0.5" title="This is illustrative baseline data for planning purposes, not a live feed. For current conditions, check your carrier's terminal tracker or a subscription service (e.g. MarineTraffic, project44).">
-                Top 20 global ports — Illustrative baseline data
+              <p className="text-[10px] text-slate-600 mt-0.5">
+                Top {portData.length} global ports — {dataSource}
+                {lastUpdated && (
+                  <span className="text-slate-700"> · Updated {lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                )}
               </p>
             </div>
           </div>

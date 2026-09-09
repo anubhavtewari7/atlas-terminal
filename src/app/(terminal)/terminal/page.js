@@ -214,6 +214,27 @@ function pickBestFallbackHub(hubs, query) {
   return best
 }
 
+// ── Earthquake risk merger ──
+// Fetches live USGS data and prepends relevant seismic events to the risk list.
+// Called after every scan (success or fallback). Silent on error.
+async function fetchAndMergeEarthquakeRisks(baseRisks) {
+  try {
+    const res = await fetch('/api/earthquakes')
+    if (!res.ok) return baseRisks
+    const data = await res.json()
+    const eqRisks = data.risks || []
+    if (eqRisks.length === 0) return baseRisks
+    // Remove any stale earthquake entries already in baseRisks (e.g. from a previous scan)
+    const filtered = baseRisks.filter(r => !r.id?.startsWith('eq_'))
+    // HIGH-magnitude events go first, MEDIUM appended at the end
+    const highEq = eqRisks.filter(r => r.severity === 'HIGH')
+    const medEq  = eqRisks.filter(r => r.severity !== 'HIGH')
+    return [...highEq, ...filtered, ...medEq]
+  } catch {
+    return baseRisks
+  }
+}
+
 // ── Severity color helper ──
 const severityStyle = (s) => {
   if (!s) return 'text-slate-400 border-slate-500/20 bg-slate-500/5'
@@ -646,7 +667,8 @@ export default function Dashboard() {
       const data = await res.json()
 
       if (data.opportunities?.length > 0) {
-        setRisks(data.risks || [])
+        const mergedRisks = await fetchAndMergeEarthquakeRisks(data.risks || [])
+        setRisks(mergedRisks)
         setOpportunities(data.opportunities)
         setDirective(data.directive || null)
         setMarketData(data.market_data || null)
@@ -684,7 +706,8 @@ export default function Dashboard() {
       }
 
       setOpportunities(hubs)
-      setRisks(fallbackRisks)
+      const mergedFallbackRisks = await fetchAndMergeEarthquakeRisks(fallbackRisks)
+      setRisks(mergedFallbackRisks)
       setDirective(fbDir)
       setMarketData({
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
