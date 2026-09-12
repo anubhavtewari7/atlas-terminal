@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-12T15:14:44Z",
+  "lastUpdated": "2026-09-12T17:08:00Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -94,16 +94,6 @@
       "timestamp": "2026-09-12T00:00:00Z"
     },
     {
-      "id": "port-klang-dredging-sep-2026",
-      "title": "Port Klang Emergency Dredging Sep 7-27 Limits Drafts",
-      "summary": "Emergency maintenance dredging at Port Klang, Malaysia from September 7 to 27 is restricting vessel drafts and complicating schedules for Southeast Asia-bound cargo. The timing coincides with peak typhoon-season disruptions across Asia, increasing cumulative schedule pressure.",
-      "severity": "LOW",
-      "type": "DISRUPTION",
-      "region": "ASIA-PACIFIC",
-      "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
-      "timestamp": "2026-09-12T00:00:00Z"
-    },
-    {
       "id": "panama-canal-draft-restrictions-sep-2026",
       "title": "Panama Canal Re-Imposes Draft Restrictions in 2026",
       "summary": "The Panama Canal Authority has reintroduced vessel draft restrictions in 2026 as water levels remain below historical norms following the severe 2023-2024 drought. Shippers on trans-Pacific and US East Coast lanes face reduced cargo loads per transit, adding cost and pushing some volume to alternative routes.",
@@ -142,6 +132,26 @@
       "region": "ASIA-PACIFIC",
       "source": "https://www.jmrodgers.com/news/september-2026-freight-market-update/",
       "timestamp": "2026-09-12T15:14:44Z"
+    },
+    {
+      "id": "pharma-tariffs-sep29-2026",
+      "title": "US Pharma Tariffs Take Effect September 29",
+      "summary": "The Trump administration has imposed duties on certain patented pharmaceuticals and associated pharmaceutical ingredients effective September 29, 2026. The new tariffs add significant compliance complexity for pharmaceutical importers and could raise input costs for US healthcare providers and manufacturers relying on foreign-sourced active ingredients.",
+      "severity": "MEDIUM",
+      "type": "REGULATORY",
+      "region": "AMERICAS",
+      "source": "https://www.tradecomplianceresourcehub.com/2026/09/10/trump-2-0-tariff-tracker/",
+      "timestamp": "2026-09-10T00:00:00Z"
+    },
+    {
+      "id": "china-rare-earth-leverage-sep-2026",
+      "title": "China Uses Rare Earth Controls to Extract Tariff Cuts",
+      "summary": "Beijing has successfully leveraged export restrictions on rare earth materials as a coercive instrument, pressuring US manufacturers dependent on critical mineral inputs to lobby for tariff reductions. ODI analysis identifies persistent US supply chain vulnerabilities to this form of geoeconomic coercion as a structural risk through 2026 and beyond.",
+      "severity": "MEDIUM",
+      "type": "GEOPOLITICAL",
+      "region": "GLOBAL",
+      "source": "https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/",
+      "timestamp": "2026-09-12T00:00:00Z"
     }
   ],
   "commodityNotes": [
@@ -200,8 +210,8 @@
       "region": "North America Trade Corridor",
       "severity": "HIGH",
       "type": "REGULATORY",
-      "desc": "US-Canada trade war escalating: Canada imposed Sep 8 retaliatory tariffs on US steel and electronics; US import prohibition on certain Canadian goods effective Sep 29; Panama Canal draft restrictions adding further transit cost.",
-      "affectedCommodities": ["Lumber", "Aluminum", "Steel", "Autos", "Agricultural Products"]
+      "desc": "US-Canada trade war escalating: Canada imposed Sep 8 retaliatory tariffs on US steel and electronics; US import prohibition on certain Canadian goods and new pharma tariffs both effective Sep 29; Panama Canal draft restrictions adding further transit cost.",
+      "affectedCommodities": ["Lumber", "Aluminum", "Steel", "Autos", "Agricultural Products", "Pharmaceuticals"]
     },
     {
       "region": "Strait of Hormuz",
@@ -219,6 +229,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-12T17:08:00Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 2,
+      "alertsExpired": 0,
+      "summary": "Added: US pharma tariffs effective Sep 29 (REGULATORY) and China rare-earth export leverage (GEOPOLITICAL). Dropped Port Klang LOW alert to stay at 15-alert limit. No alerts expired (all within 48h window)."
+    },
     {
       "runAt": "2026-09-12T15:14:44Z",
       "searchesPerformed": 5,
