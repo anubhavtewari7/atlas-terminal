@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-12T14:46:57Z",
+  "lastUpdated": "2026-09-12T14:57:44Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -25,28 +25,18 @@
     },
     {
       "id": "asia-europe-port-delays-sep-2026",
-      "title": "Shanghai, Ningbo, Rotterdam Face 20-36 Day Delays",
-      "summary": "Severe congestion at Shanghai, Ningbo, Rotterdam, and Antwerp is creating cascading delays across east-west trade lanes. Jebel Ali, Dammam, and Mombasa are also significantly impacted, with vessel bunching and strong demand compounding weather-related disruptions.",
+      "title": "Shanghai, Ningbo, Rotterdam Face Multi-Week Delays",
+      "summary": "Severe congestion at Shanghai, Ningbo, Rotterdam, and Antwerp is creating cascading delays across east-west trade lanes, compounded by Typhoon SAUDEL which closed Ningbo for 78 hours this week. Carriers are skipping ports and omitting calls to recover schedules, raising rollover risk for general cargo bookings.",
       "severity": "HIGH",
       "type": "DISRUPTION",
       "region": "ASIA-PACIFIC",
-      "source": "https://www.gocomet.com/real-time-port-congestion",
+      "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
       "timestamp": "2026-09-12T10:00:00Z"
-    },
-    {
-      "id": "us-canada-50pct-tariffs-aug-2026",
-      "title": "US Imposes 50% Tariffs on $20B Canadian Goods",
-      "summary": "The United States imposed 50% tariffs on approximately $20 billion in Canadian goods in August 2026 after trade talks collapsed. Canada's Prime Minister Carney announced retaliatory tariffs on a dollar-for-dollar basis.",
-      "severity": "HIGH",
-      "type": "REGULATORY",
-      "region": "AMERICAS",
-      "source": "https://www.aljazeera.com/news/2026/8/22/us-imposes-50-tariffs-on-20bn-worth-of-canadian-goods-after-talks-fail",
-      "timestamp": "2026-08-22T00:00:00Z"
     },
     {
       "id": "canada-import-ban-sep-29-2026",
       "title": "US to Prohibit Certain Canadian Imports from Sep 29",
-      "summary": "The Trump Administration has announced a prohibition on importation of certain Canadian products effective September 29, 2026, escalating the ongoing US-Canada trade dispute. This follows the earlier 50% tariff imposition and is expected to further disrupt North American supply chains.",
+      "summary": "The Trump Administration has announced a prohibition on importation of certain Canadian products effective September 29, 2026, escalating the ongoing US-Canada trade dispute. This follows Canada's September 8 retaliatory tariffs on US steel and electronics and is expected to further disrupt North American supply chains.",
       "severity": "HIGH",
       "type": "REGULATORY",
       "region": "AMERICAS",
@@ -54,29 +44,9 @@
       "timestamp": "2026-09-10T00:00:00Z"
     },
     {
-      "id": "taiwan-semiconductor-supply-risk-2026",
-      "title": "Taiwan Holds 60% of Global Semiconductor Output",
-      "summary": "Taiwan continues to account for 60% of global semiconductor production and over 90% of the most advanced chips, creating persistent systemic risk for automotive, aerospace, and digital supply chains. New semiconductor tariff rules based on Country of Diffusion rather than Country of Origin are adding compliance complexity for importers.",
-      "severity": "HIGH",
-      "type": "GEOPOLITICAL",
-      "region": "ASIA-PACIFIC",
-      "source": "https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/",
-      "timestamp": "2026-09-01T00:00:00Z"
-    },
-    {
-      "id": "energy-prices-surge-24pct-2026",
-      "title": "Energy Prices Projected to Surge 24% in 2026",
-      "summary": "Crude oil prices rose 5.7% in August 2026, with energy prices projected to surge 24% this year to their highest level since Russia's 2022 invasion of Ukraine. Middle East tensions and supply constraints are driving the rally.",
-      "severity": "MEDIUM",
-      "type": "COMMODITY",
-      "region": "GLOBAL",
-      "source": "https://www.worldbank.org/en/research/commodity-markets",
-      "timestamp": "2026-09-05T00:00:00Z"
-    },
-    {
       "id": "copper-production-decline-sep-2026",
       "title": "Copper Output Falls at Codelco and Freeport",
-      "summary": "Copper futures traded near $6.45/lb under pressure as major miners Codelco and Freeport-McMoRan reported double-digit production declines. US reconsideration of refined metal import tariffs has added uncertainty to an already constrained market.",
+      "summary": "Copper futures fell nearly 5% in a single session before stabilizing near $6.45/lb, pressured by US reconsideration of refined metal import tariffs. Major miners Codelco and Freeport-McMoRan reported double-digit production declines, contributing to a 1.1% drop in global copper output in H1 2026.",
       "severity": "MEDIUM",
       "type": "COMMODITY",
       "region": "AMERICAS",
@@ -84,54 +54,84 @@
       "timestamp": "2026-09-11T00:00:00Z"
     },
     {
-      "id": "critical-minerals-geopolitical-risk-2026",
-      "title": "Critical Minerals Supply Chains Under Geopolitical Stress",
-      "summary": "Rare earths, lithium, cobalt, and other critical minerals face persistent supply shortages driven by geopolitical competition and strategic rivalries between US and China. The US-led 'Pax Silica' initiative is attempting to secure technology supply chains, intensifying competition for mineral resources globally.",
-      "severity": "MEDIUM",
-      "type": "GEOPOLITICAL",
-      "region": "GLOBAL",
-      "source": "https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/",
-      "timestamp": "2026-09-01T00:00:00Z"
+      "id": "typhoon-saudel-ningbo-sep-2026",
+      "title": "Typhoon SAUDEL Closes Ningbo, Disrupts Asia Schedules",
+      "summary": "Typhoon SAUDEL forced the closure of Ningbo port for 78 hours this week and is driving vessel bunching across Asia, extending the US peak shipping season into September. The National Retail Federation forecasts 2.31 million TEUs will move through major US ports in September, potentially the busiest month of 2026.",
+      "severity": "HIGH",
+      "type": "WEATHER",
+      "region": "ASIA-PACIFIC",
+      "source": "https://tbgfs.com/supply-chain-disruptions-extend-u-s-peak-season-into-september/",
+      "timestamp": "2026-09-12T08:00:00Z"
     },
     {
-      "id": "steel-market-weakness-sep-2026",
-      "title": "Global Steel Markets Weak Amid Idle Capacity",
-      "summary": "Steel markets remain soft globally with ample supply, significant idle capacity, and weak-to-falling demand. No near-term recovery catalyst is in view as construction activity remains subdued in key markets.",
-      "severity": "LOW",
+      "id": "crude-oil-100-iran-hormuz-sep-2026",
+      "title": "Crude Oil Hits $100/bbl as Iran-Gulf Hormuz Talks Open",
+      "summary": "Brent crude reached $99.99/barrel on September 11, up 20% over the past month and 59.5% year-on-year, driven by Middle East tensions and supply constraints. Iranian state media confirmed Tehran will meet Gulf states in Oman to discuss the Strait of Hormuz, introducing uncertainty into the key oil transit chokepoint.",
+      "severity": "HIGH",
       "type": "COMMODITY",
-      "region": "GLOBAL",
-      "source": "https://www.worldbank.org/en/research/commodity-markets",
-      "timestamp": "2026-09-05T00:00:00Z"
+      "region": "MIDDLE-EAST",
+      "source": "https://tradingeconomics.com/commodity/crude-oil",
+      "timestamp": "2026-09-11T00:00:00Z"
+    },
+    {
+      "id": "canada-retaliatory-tariffs-sep8-2026",
+      "title": "Canada Hits US Steel and Electronics with Tariffs",
+      "summary": "Canada imposed retaliatory tariffs on US steel, electronics, and other products starting September 8, responding to Washington's 50% levy on $20 billion in Canadian goods. US-Canada trade negotiations remain stalled, with Trump warning of further escalation.",
+      "severity": "HIGH",
+      "type": "REGULATORY",
+      "region": "AMERICAS",
+      "source": "https://www.aljazeera.com/news/2026/8/23/canada-to-hit-us-with-retaliatory-tariffs-as-trade-war-escalates",
+      "timestamp": "2026-09-12T00:00:00Z"
+    },
+    {
+      "id": "iran-aviation-sanctions-sep-2026",
+      "title": "US Treasury Broadens Iran Aviation Sanctions",
+      "summary": "The US Treasury Department has expanded Iran aviation sanctions, increasing scrutiny of regional support networks and raising compliance risks for MRO companies, freight forwarders, aircraft brokers, and parts suppliers in the UAE, Turkey, Malaysia, and other transit markets. Companies with exposure to these networks face heightened enforcement risk.",
+      "severity": "MEDIUM",
+      "type": "REGULATORY",
+      "region": "MIDDLE-EAST",
+      "source": "https://www.jdsupra.com/topics/tariffs/office-of-foreign-assets-control-ofac/economic-sanctions",
+      "timestamp": "2026-09-12T00:00:00Z"
+    },
+    {
+      "id": "port-klang-dredging-sep-2026",
+      "title": "Port Klang Emergency Dredging Sep 7-27 Limits Drafts",
+      "summary": "Emergency maintenance dredging at Port Klang, Malaysia from September 7 to 27 is restricting vessel drafts and complicating schedules for Southeast Asia-bound cargo. The timing coincides with peak typhoon-season disruptions across Asia, increasing cumulative schedule pressure.",
+      "severity": "LOW",
+      "type": "DISRUPTION",
+      "region": "ASIA-PACIFIC",
+      "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
+      "timestamp": "2026-09-12T00:00:00Z"
     }
   ],
   "commodityNotes": [
     {
       "commodity": "Brent Crude",
-      "note": "Energy prices up 5.7% in August and projected to surge 24% in 2026, hitting highest levels since Russia's 2022 Ukraine invasion.",
+      "note": "Crude oil hit $99.99/barrel on Sep 11, up 20% over the past month and 59.5% YoY; Iran-Gulf talks on Strait of Hormuz access add fresh upside risk.",
       "direction": "UP",
-      "driver": "Middle East conflict and supply constraints",
-      "source": "https://www.worldbank.org/en/research/commodity-markets"
+      "driver": "Middle East conflict, supply constraints, and Strait of Hormuz uncertainty",
+      "source": "https://tradingeconomics.com/commodity/crude-oil"
     },
     {
       "commodity": "Copper",
-      "note": "Copper near $6.45/lb, under pressure from US tariff reconsideration and double-digit production declines at Codelco and Freeport-McMoRan.",
+      "note": "Copper fell nearly 5% in a single session before stabilizing near $6.45/lb, pressured by US tariff reconsideration on refined metals and Codelco/Freeport output declines.",
       "direction": "DOWN",
-      "driver": "US tariff uncertainty and major miner output declines",
+      "driver": "US tariff uncertainty and major miner double-digit production declines",
       "source": "https://tradingeconomics.com/commodity/copper"
     },
     {
       "commodity": "Steel",
-      "note": "Steel markets remain weak globally with ample supply, idle capacity, and weak-to-falling demand across key markets.",
-      "direction": "DOWN",
-      "driver": "Oversupply and weak construction demand",
+      "note": "Steel markets remain soft globally with ample supply, idle capacity, and weak construction demand; US and European prices modestly firmer than Asia.",
+      "direction": "STABLE",
+      "driver": "Oversupply and subdued construction activity globally",
       "source": "https://www.worldbank.org/en/research/commodity-markets"
     },
     {
       "commodity": "Nat Gas",
-      "note": "Natural gas prices elevated as part of broader energy price surge; Middle East tensions supporting prices.",
+      "note": "Natural gas prices remain elevated as part of broader energy rally; IEA sharply cut global oil demand outlook by 2.5M bpd for 2026, limiting upside but geopolitical premium persists.",
       "direction": "UP",
-      "driver": "Broader energy price rally and geopolitical risk premium",
-      "source": "https://www.itiger.com/news/2551921674"
+      "driver": "Geopolitical risk premium and broader energy price rally",
+      "source": "https://tradingeconomics.com/commodity/crude-oil"
     }
   ],
   "disruptionZones": [
@@ -145,23 +145,23 @@
     {
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
-      "type": "PORT",
-      "desc": "Shanghai, Ningbo, and other major Asian ports experiencing 20-36 day vessel wait times due to vessel bunching from Cape rerouting, adverse weather, and strong demand.",
+      "type": "WEATHER",
+      "desc": "Typhoon SAUDEL closed Ningbo for 78 hours; vessel bunching from Cape rerouting and pre-National Day demand surge creating 20-36 day wait times at major ports.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
       "region": "North America Trade Corridor",
       "severity": "HIGH",
       "type": "REGULATORY",
-      "desc": "US-Canada trade dispute escalating with 50% tariffs on $20B in Canadian goods and an import ban effective September 29, 2026; Canada retaliating dollar-for-dollar.",
-      "affectedCommodities": ["Lumber", "Aluminum", "Autos", "Agricultural Products"]
+      "desc": "US-Canada trade war escalating: Canada imposed Sep 8 retaliatory tariffs on US steel and electronics; US import prohibition on certain Canadian goods effective Sep 29.",
+      "affectedCommodities": ["Lumber", "Aluminum", "Steel", "Autos", "Agricultural Products"]
     },
     {
-      "region": "Taiwan Strait",
+      "region": "Strait of Hormuz",
       "severity": "HIGH",
       "type": "CONFLICT",
-      "desc": "Taiwan's dominant position in semiconductor manufacturing (60% of global supply, 90%+ of advanced chips) represents a concentrated systemic risk to global technology supply chains.",
-      "affectedCommodities": ["Semiconductors", "Electronics", "Automotive Components"]
+      "desc": "Iran-Gulf state talks in Oman over Strait of Hormuz access introduce uncertainty; ~20% of global oil trade transits this chokepoint daily.",
+      "affectedCommodities": ["Oil", "LNG", "Nat Gas"]
     },
     {
       "region": "Northern Europe Ports",
@@ -172,6 +172,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-12T14:57:44Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 5,
+      "alertsExpired": 5,
+      "summary": "Added: Typhoon SAUDEL Ningbo closure, crude oil at $100 with Iran Hormuz talks, Canada Sep 8 retaliatory tariffs, Iran aviation sanctions expansion, Port Klang dredging. Expired 5 stale alerts from Aug 22-Sep 5."
+    },
     {
       "runAt": "2026-09-12T14:46:57Z",
       "searchesPerformed": 5,
