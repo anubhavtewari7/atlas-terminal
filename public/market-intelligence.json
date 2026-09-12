@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-12T16:10:00Z",
+  "lastUpdated": "2026-09-12T15:14:44Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -132,6 +132,16 @@
       "region": "GLOBAL",
       "source": "https://www.spglobal.com/en/research-insights/market-insights/geopolitical-risk/supply-chain-resilience",
       "timestamp": "2026-09-12T16:00:00Z"
+    },
+    {
+      "id": "china-national-day-cargo-rush-sep-2026",
+      "title": "Pre-National Day Cargo Surge to Intensify Sep Congestion",
+      "summary": "Shippers are accelerating bookings ahead of China's National Day Golden Week holiday (October 1), compounding congestion caused by typhoon-delayed cargo competing for limited capacity. Carriers have pulled approximately 20% of capacity via blank sailings, pushing FAK bookings into elevated rollover risk through end of September.",
+      "severity": "MEDIUM",
+      "type": "DISRUPTION",
+      "region": "ASIA-PACIFIC",
+      "source": "https://www.jmrodgers.com/news/september-2026-freight-market-update/",
+      "timestamp": "2026-09-12T15:14:44Z"
     }
   ],
   "commodityNotes": [
@@ -151,9 +161,9 @@
     },
     {
       "commodity": "Steel",
-      "note": "Steel markets remain soft globally with ample supply and weak construction demand; US and European prices modestly firmer than Asia amid ongoing trade barriers.",
-      "direction": "STABLE",
-      "driver": "Oversupply and subdued construction activity globally",
+      "note": "Steel prices firmer in the US and Europe amid trade barriers and tariff disruptions, while largely unchanged across Asia; North American markets supported by US-Canada trade war and import restrictions.",
+      "direction": "UP",
+      "driver": "US and European tariff barriers and US-Canada trade war disruptions",
       "source": "https://www.worldbank.org/en/research/commodity-markets"
     },
     {
@@ -183,7 +193,7 @@
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
       "type": "WEATHER",
-      "desc": "Typhoon SAUDEL closed Ningbo for 78 hours; Yokohama and Port Klang at 90-95% yard utilization; vessel bunching from Cape rerouting and pre-National Day demand surge creating 20-36 day wait times.",
+      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours, driving vessel bunching across Asia; pre-National Day cargo rush at end of September expected to intensify congestion further.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
@@ -209,6 +219,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-12T15:14:44Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 1,
+      "alertsExpired": 0,
+      "summary": "Added: China National Day pre-holiday cargo rush alert (carriers cut 20% capacity via blank sailings, Oct 1 Golden Week surge imminent). Updated steel commodity note direction to UP (US/Europe firmer). No alerts expired."
+    },
     {
       "runAt": "2026-09-12T16:10:00Z",
       "searchesPerformed": 5,
