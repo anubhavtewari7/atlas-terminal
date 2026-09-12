@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-12T14:57:44Z",
+  "lastUpdated": "2026-09-12T16:10:00Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -102,36 +102,73 @@
       "region": "ASIA-PACIFIC",
       "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
       "timestamp": "2026-09-12T00:00:00Z"
+    },
+    {
+      "id": "panama-canal-draft-restrictions-sep-2026",
+      "title": "Panama Canal Re-Imposes Draft Restrictions in 2026",
+      "summary": "The Panama Canal Authority has reintroduced vessel draft restrictions in 2026 as water levels remain below historical norms following the severe 2023-2024 drought. Shippers on trans-Pacific and US East Coast lanes face reduced cargo loads per transit, adding cost and pushing some volume to alternative routes.",
+      "severity": "MEDIUM",
+      "type": "DISRUPTION",
+      "region": "AMERICAS",
+      "source": "https://www.xeneta.com/blog/the-biggest-supply-chain-risks-of-2026-and-how-to-navigate-them",
+      "timestamp": "2026-09-12T16:00:00Z"
+    },
+    {
+      "id": "pointe-noire-yard-congestion-sep-2026",
+      "title": "Pointe Noire Port Yard Over Capacity, 3+ Day Delays",
+      "summary": "Pointe Noire (Republic of the Congo) is experiencing severe yard congestion exceeding 100% utilization, with vessel waiting times reaching 3.4 days and vessel delays of up to five days. The congestion is disrupting cargo flows for West and Central African importers relying on this key gateway.",
+      "severity": "MEDIUM",
+      "type": "DISRUPTION",
+      "region": "GLOBAL",
+      "source": "https://www.jmrodgers.com/news/september-2026-freight-market-update/",
+      "timestamp": "2026-09-12T16:00:00Z"
+    },
+    {
+      "id": "pax-silica-semiconductor-supply-chain-sep-2026",
+      "title": "US Pax Silica Initiative Reshaping Semiconductor Supply",
+      "summary": "A new US-led economic cooperation framework called Pax Silica is pulling allied nations into coordinated semiconductor and AI hardware supply chain blocs, accelerating decoupling from Chinese supply networks. Companies dependent on Chinese chip packaging, advanced substrates, or rare earth inputs face growing sourcing disruption risk as the initiative takes hold.",
+      "severity": "MEDIUM",
+      "type": "GEOPOLITICAL",
+      "region": "GLOBAL",
+      "source": "https://www.spglobal.com/en/research-insights/market-insights/geopolitical-risk/supply-chain-resilience",
+      "timestamp": "2026-09-12T16:00:00Z"
     }
   ],
   "commodityNotes": [
     {
       "commodity": "Brent Crude",
-      "note": "Crude oil hit $99.99/barrel on Sep 11, up 20% over the past month and 59.5% YoY; Iran-Gulf talks on Strait of Hormuz access add fresh upside risk.",
+      "note": "Crude oil hit $99.99/barrel on Sep 11, up 20% over the past month and 59.5% YoY; Iran-Gulf talks on Strait of Hormuz access add fresh upside risk; energy prices forecast up 24% for full-year 2026.",
       "direction": "UP",
       "driver": "Middle East conflict, supply constraints, and Strait of Hormuz uncertainty",
       "source": "https://tradingeconomics.com/commodity/crude-oil"
     },
     {
       "commodity": "Copper",
-      "note": "Copper fell nearly 5% in a single session before stabilizing near $6.45/lb, pressured by US tariff reconsideration on refined metals and Codelco/Freeport output declines.",
+      "note": "Copper stabilized near $6.45/lb after a near-5% single-session drop; US tariff reconsideration on refined metals and double-digit output declines at Codelco and Freeport weigh on near-term price direction.",
       "direction": "DOWN",
       "driver": "US tariff uncertainty and major miner double-digit production declines",
       "source": "https://tradingeconomics.com/commodity/copper"
     },
     {
       "commodity": "Steel",
-      "note": "Steel markets remain soft globally with ample supply, idle capacity, and weak construction demand; US and European prices modestly firmer than Asia.",
+      "note": "Steel markets remain soft globally with ample supply and weak construction demand; US and European prices modestly firmer than Asia amid ongoing trade barriers.",
       "direction": "STABLE",
       "driver": "Oversupply and subdued construction activity globally",
       "source": "https://www.worldbank.org/en/research/commodity-markets"
     },
     {
       "commodity": "Nat Gas",
-      "note": "Natural gas prices remain elevated as part of broader energy rally; IEA sharply cut global oil demand outlook by 2.5M bpd for 2026, limiting upside but geopolitical premium persists.",
+      "note": "Natural gas prices elevated as part of broader energy rally driven by Middle East risk premium; energy index rose 8.8% in August 2026, led by nat gas at +10.1%.",
       "direction": "UP",
       "driver": "Geopolitical risk premium and broader energy price rally",
       "source": "https://tradingeconomics.com/commodity/crude-oil"
+    },
+    {
+      "commodity": "Gold",
+      "note": "Precious metals surged 8.8% in August 2026, with gold benefiting from geopolitical uncertainty, dollar weakness, and flight-to-safety demand amid Middle East conflict and global trade fragmentation.",
+      "direction": "UP",
+      "driver": "Safe-haven demand from Middle East conflict and global trade fragmentation",
+      "source": "https://www.worldbank.org/en/research/commodity-markets"
     }
   ],
   "disruptionZones": [
@@ -146,14 +183,14 @@
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
       "type": "WEATHER",
-      "desc": "Typhoon SAUDEL closed Ningbo for 78 hours; vessel bunching from Cape rerouting and pre-National Day demand surge creating 20-36 day wait times at major ports.",
+      "desc": "Typhoon SAUDEL closed Ningbo for 78 hours; Yokohama and Port Klang at 90-95% yard utilization; vessel bunching from Cape rerouting and pre-National Day demand surge creating 20-36 day wait times.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
       "region": "North America Trade Corridor",
       "severity": "HIGH",
       "type": "REGULATORY",
-      "desc": "US-Canada trade war escalating: Canada imposed Sep 8 retaliatory tariffs on US steel and electronics; US import prohibition on certain Canadian goods effective Sep 29.",
+      "desc": "US-Canada trade war escalating: Canada imposed Sep 8 retaliatory tariffs on US steel and electronics; US import prohibition on certain Canadian goods effective Sep 29; Panama Canal draft restrictions adding further transit cost.",
       "affectedCommodities": ["Lumber", "Aluminum", "Steel", "Autos", "Agricultural Products"]
     },
     {
@@ -172,6 +209,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-12T16:10:00Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 3,
+      "alertsExpired": 0,
+      "summary": "Added: Panama Canal draft restrictions, Pointe Noire yard overcapacity, Pax Silica semiconductor supply chain initiative. Added Gold to commodityNotes. No alerts expired (all within 48h window)."
+    },
     {
       "runAt": "2026-09-12T14:57:44Z",
       "searchesPerformed": 5,
