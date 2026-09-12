@@ -1,20 +1,183 @@
 {
-  "lastUpdated": "2026-09-12T00:00:00.000Z",
+  "lastUpdated": "2026-09-12T14:46:57Z",
   "version": 1,
-  "agentStatus": "initializing",
+  "agentStatus": "active",
   "alerts": [
     {
-      "id": "seed-001",
-      "title": "Atlas Intelligence Agent Activated",
-      "summary": "Hourly market intelligence agent is now active. Updates will appear here automatically.",
-      "severity": "LOW",
-      "type": "SYSTEM",
+      "id": "red-sea-cape-reroute-sep-2026",
+      "title": "Red Sea Rerouting Adds Days to Transit Times",
+      "summary": "Vessels continue rerouting around the Cape of Good Hope due to Red Sea security risks, significantly extending east-west transit times. Drewry's container rate index has climbed to its highest level since September 2024 as a result.",
+      "severity": "HIGH",
+      "type": "DISRUPTION",
+      "region": "MIDDLE-EAST",
+      "source": "https://www.xeneta.com/blog/the-biggest-supply-chain-risks-of-2026-and-how-to-navigate-them",
+      "timestamp": "2026-09-12T12:00:00Z"
+    },
+    {
+      "id": "global-port-congestion-four-year-high-sep-2026",
+      "title": "Global Port Congestion Hits 4-Year High",
+      "summary": "Over 10% of the global container fleet is waiting at anchorage, with 80% of 454 tracked ports experiencing elevated congestion. Average vessel wait times range from near zero at efficient hubs to over 45 days at the worst-affected ports.",
+      "severity": "HIGH",
+      "type": "DISRUPTION",
       "region": "GLOBAL",
-      "source": "",
-      "timestamp": "2026-09-12T00:00:00.000Z"
+      "source": "https://metro.global/2026/07/07/global-port-congestion-is-worse-than-expected/",
+      "timestamp": "2026-09-12T10:00:00Z"
+    },
+    {
+      "id": "asia-europe-port-delays-sep-2026",
+      "title": "Shanghai, Ningbo, Rotterdam Face 20-36 Day Delays",
+      "summary": "Severe congestion at Shanghai, Ningbo, Rotterdam, and Antwerp is creating cascading delays across east-west trade lanes. Jebel Ali, Dammam, and Mombasa are also significantly impacted, with vessel bunching and strong demand compounding weather-related disruptions.",
+      "severity": "HIGH",
+      "type": "DISRUPTION",
+      "region": "ASIA-PACIFIC",
+      "source": "https://www.gocomet.com/real-time-port-congestion",
+      "timestamp": "2026-09-12T10:00:00Z"
+    },
+    {
+      "id": "us-canada-50pct-tariffs-aug-2026",
+      "title": "US Imposes 50% Tariffs on $20B Canadian Goods",
+      "summary": "The United States imposed 50% tariffs on approximately $20 billion in Canadian goods in August 2026 after trade talks collapsed. Canada's Prime Minister Carney announced retaliatory tariffs on a dollar-for-dollar basis.",
+      "severity": "HIGH",
+      "type": "REGULATORY",
+      "region": "AMERICAS",
+      "source": "https://www.aljazeera.com/news/2026/8/22/us-imposes-50-tariffs-on-20bn-worth-of-canadian-goods-after-talks-fail",
+      "timestamp": "2026-08-22T00:00:00Z"
+    },
+    {
+      "id": "canada-import-ban-sep-29-2026",
+      "title": "US to Prohibit Certain Canadian Imports from Sep 29",
+      "summary": "The Trump Administration has announced a prohibition on importation of certain Canadian products effective September 29, 2026, escalating the ongoing US-Canada trade dispute. This follows the earlier 50% tariff imposition and is expected to further disrupt North American supply chains.",
+      "severity": "HIGH",
+      "type": "REGULATORY",
+      "region": "AMERICAS",
+      "source": "https://www.wiley.law/trump-administration-tariff-tracker",
+      "timestamp": "2026-09-10T00:00:00Z"
+    },
+    {
+      "id": "taiwan-semiconductor-supply-risk-2026",
+      "title": "Taiwan Holds 60% of Global Semiconductor Output",
+      "summary": "Taiwan continues to account for 60% of global semiconductor production and over 90% of the most advanced chips, creating persistent systemic risk for automotive, aerospace, and digital supply chains. New semiconductor tariff rules based on Country of Diffusion rather than Country of Origin are adding compliance complexity for importers.",
+      "severity": "HIGH",
+      "type": "GEOPOLITICAL",
+      "region": "ASIA-PACIFIC",
+      "source": "https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/",
+      "timestamp": "2026-09-01T00:00:00Z"
+    },
+    {
+      "id": "energy-prices-surge-24pct-2026",
+      "title": "Energy Prices Projected to Surge 24% in 2026",
+      "summary": "Crude oil prices rose 5.7% in August 2026, with energy prices projected to surge 24% this year to their highest level since Russia's 2022 invasion of Ukraine. Middle East tensions and supply constraints are driving the rally.",
+      "severity": "MEDIUM",
+      "type": "COMMODITY",
+      "region": "GLOBAL",
+      "source": "https://www.worldbank.org/en/research/commodity-markets",
+      "timestamp": "2026-09-05T00:00:00Z"
+    },
+    {
+      "id": "copper-production-decline-sep-2026",
+      "title": "Copper Output Falls at Codelco and Freeport",
+      "summary": "Copper futures traded near $6.45/lb under pressure as major miners Codelco and Freeport-McMoRan reported double-digit production declines. US reconsideration of refined metal import tariffs has added uncertainty to an already constrained market.",
+      "severity": "MEDIUM",
+      "type": "COMMODITY",
+      "region": "AMERICAS",
+      "source": "https://tradingeconomics.com/commodity/copper",
+      "timestamp": "2026-09-11T00:00:00Z"
+    },
+    {
+      "id": "critical-minerals-geopolitical-risk-2026",
+      "title": "Critical Minerals Supply Chains Under Geopolitical Stress",
+      "summary": "Rare earths, lithium, cobalt, and other critical minerals face persistent supply shortages driven by geopolitical competition and strategic rivalries between US and China. The US-led 'Pax Silica' initiative is attempting to secure technology supply chains, intensifying competition for mineral resources globally.",
+      "severity": "MEDIUM",
+      "type": "GEOPOLITICAL",
+      "region": "GLOBAL",
+      "source": "https://odi.org/en/insights/critical-minerals-geopolitics-in-2026-risks-supply-chains-and-global-power-shifts/",
+      "timestamp": "2026-09-01T00:00:00Z"
+    },
+    {
+      "id": "steel-market-weakness-sep-2026",
+      "title": "Global Steel Markets Weak Amid Idle Capacity",
+      "summary": "Steel markets remain soft globally with ample supply, significant idle capacity, and weak-to-falling demand. No near-term recovery catalyst is in view as construction activity remains subdued in key markets.",
+      "severity": "LOW",
+      "type": "COMMODITY",
+      "region": "GLOBAL",
+      "source": "https://www.worldbank.org/en/research/commodity-markets",
+      "timestamp": "2026-09-05T00:00:00Z"
     }
   ],
-  "commodityNotes": [],
-  "disruptionZones": [],
-  "agentLog": []
+  "commodityNotes": [
+    {
+      "commodity": "Brent Crude",
+      "note": "Energy prices up 5.7% in August and projected to surge 24% in 2026, hitting highest levels since Russia's 2022 Ukraine invasion.",
+      "direction": "UP",
+      "driver": "Middle East conflict and supply constraints",
+      "source": "https://www.worldbank.org/en/research/commodity-markets"
+    },
+    {
+      "commodity": "Copper",
+      "note": "Copper near $6.45/lb, under pressure from US tariff reconsideration and double-digit production declines at Codelco and Freeport-McMoRan.",
+      "direction": "DOWN",
+      "driver": "US tariff uncertainty and major miner output declines",
+      "source": "https://tradingeconomics.com/commodity/copper"
+    },
+    {
+      "commodity": "Steel",
+      "note": "Steel markets remain weak globally with ample supply, idle capacity, and weak-to-falling demand across key markets.",
+      "direction": "DOWN",
+      "driver": "Oversupply and weak construction demand",
+      "source": "https://www.worldbank.org/en/research/commodity-markets"
+    },
+    {
+      "commodity": "Nat Gas",
+      "note": "Natural gas prices elevated as part of broader energy price surge; Middle East tensions supporting prices.",
+      "direction": "UP",
+      "driver": "Broader energy price rally and geopolitical risk premium",
+      "source": "https://www.itiger.com/news/2551921674"
+    }
+  ],
+  "disruptionZones": [
+    {
+      "region": "Red Sea / Horn of Africa",
+      "severity": "HIGH",
+      "type": "CONFLICT",
+      "desc": "Ongoing security threats forcing vessels to reroute around Cape of Good Hope, adding 10-14 days to Asia-Europe transit times and driving container rates to multi-year highs.",
+      "affectedCommodities": ["Oil", "Container Freight", "Consumer Goods", "Electronics"]
+    },
+    {
+      "region": "Asia-Pacific Ports",
+      "severity": "HIGH",
+      "type": "PORT",
+      "desc": "Shanghai, Ningbo, and other major Asian ports experiencing 20-36 day vessel wait times due to vessel bunching from Cape rerouting, adverse weather, and strong demand.",
+      "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
+    },
+    {
+      "region": "North America Trade Corridor",
+      "severity": "HIGH",
+      "type": "REGULATORY",
+      "desc": "US-Canada trade dispute escalating with 50% tariffs on $20B in Canadian goods and an import ban effective September 29, 2026; Canada retaliating dollar-for-dollar.",
+      "affectedCommodities": ["Lumber", "Aluminum", "Autos", "Agricultural Products"]
+    },
+    {
+      "region": "Taiwan Strait",
+      "severity": "HIGH",
+      "type": "CONFLICT",
+      "desc": "Taiwan's dominant position in semiconductor manufacturing (60% of global supply, 90%+ of advanced chips) represents a concentrated systemic risk to global technology supply chains.",
+      "affectedCommodities": ["Semiconductors", "Electronics", "Automotive Components"]
+    },
+    {
+      "region": "Northern Europe Ports",
+      "severity": "MEDIUM",
+      "type": "PORT",
+      "desc": "Rotterdam and Antwerp experiencing cascading delays as late-arriving vessels from Asia create uneven cargo surges and operational inefficiencies.",
+      "affectedCommodities": ["Container Freight", "Consumer Goods", "Industrial Goods"]
+    }
+  ],
+  "agentLog": [
+    {
+      "runAt": "2026-09-12T14:46:57Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 10,
+      "alertsExpired": 0,
+      "summary": "First live agent run: found global port congestion at 4-year highs, Red Sea rerouting ongoing, US-Canada tariff escalation with Sep 29 import ban, Taiwan semiconductor risk, copper production declines, and 24% energy price surge forecast."
+    }
+  ]
 }
