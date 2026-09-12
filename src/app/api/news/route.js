@@ -23,12 +23,13 @@ function parseRss(text) {
   });
 }
 
-// Two independent sources so a single feed being unreachable, or a single
-// niche topic (shipping-only), doesn't leave the Market Intelligence panel
-// with too little content for the regional filters to find matches in.
+// Multiple sources for redundancy -- if one is blocked on Vercel, others still fire.
+// Ordered by relevance to supply chain / trade professionals.
 const SOURCES = [
-  'https://gcaptain.com/feed/',              // maritime / shipping / logistics
-  'https://feeds.bbci.co.uk/news/business/rss.xml' // broad global business & trade
+  'https://feeds.bbci.co.uk/news/business/rss.xml',         // broad global business & trade
+  'https://rss.nytimes.com/services/xml/rss/nyt/Business.xml', // NYT business
+  'https://feeds.a.dj.com/rss/RSSWorldNews.xml',             // WSJ world news
+  'https://www.ft.com/?format=rss',                          // Financial Times
 ];
 
 export async function GET() {

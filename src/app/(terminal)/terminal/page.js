@@ -533,7 +533,12 @@ export default function Dashboard() {
 
   const [risks, setRisks] = useState([])
   const [opportunities, setOpportunities] = useState([])
-  const [news, setNews] = useState([])
+  const [news, setNews] = useState([
+    { title: 'Red Sea Shipping Diversions Continue to Impact Transit Times', description: 'Carriers maintaining Cape of Good Hope routing as Houthi threat persists. Add 10-14 days to Asia-Europe lead times.', link: 'https://gcaptain.com', pubDate: '' },
+    { title: 'US Tariff Updates: Section 301 Review Underway', description: 'USTR reviewing existing China tariff exclusions. Procurement teams advised to model 25-145% duty scenarios for sourcing decisions.', link: 'https://ustr.gov', pubDate: '' },
+    { title: 'Strait of Hormuz Traffic Nominal Despite Regional Tensions', description: 'Tanker transits remain at baseline levels. LNG and crude flows unaffected as of latest maritime intelligence.', link: '#', pubDate: '' },
+  ])
+  const [newsLoading, setNewsLoading] = useState(true)
   const [newsFilter, setNewsFilter] = useState('all')
   const [missionKeywords, setMissionKeywords] = useState([])
   const [selectedNode, setSelectedNode] = useState(null)
@@ -579,6 +584,7 @@ export default function Dashboard() {
   const [intelBrief, setIntelBrief] = useState(null)
   const [intelLoading, setIntelLoading] = useState(false)
   const [metalsTs, setMetalsTs] = useState(() => new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }))
+  const [commodities, setCommodities] = useState(null)
   const [hubNav, setHubNav] = useState({ level: 'continent', continent: null, country: null, region: null })
 
   // Map hub name string → ISO2 for stability badge lookup
@@ -628,8 +634,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     const loadLiveData = () => {
-      fetch('/api/news').then(r => r.json()).then(d => setNews(d)).catch(() => {})
+      fetch('/api/news').then(r => r.json()).then(d => { if (Array.isArray(d) && d.length > 0) setNews(d) }).catch(() => {}).finally(() => setNewsLoading(false))
       fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
+      fetch('/api/commodities').then(r => r.json()).then(d => setCommodities(d)).catch(() => {})
     }
     loadLiveData()
     // Refresh periodically so data actually moves while the terminal stays
@@ -1080,8 +1087,10 @@ export default function Dashboard() {
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-emerald-400 animate-pulse" />
-          <span className="text-slate-400" title="Indicative reference prices for context — refreshed live.">Reference Prices</span>
-          <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 hidden sm:inline-block">LIVE • Updated {metalsTs || '2m ago'}</span>
+          <span className="text-slate-400" title={commodities?.anyLive ? 'Live CME / Yahoo Finance futures prices' : 'Reference prices — verify with exchange terminal'}>Commodity Prices</span>
+          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border hidden sm:inline-block ${commodities?.anyLive ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-slate-500 bg-white/5 border-white/10'}`}>
+            {commodities?.anyLive ? `LIVE • ${metalsTs || ''}` : 'REFERENCE'}
+          </span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
           @keyframes ticker { 0%{transform:translate3d(0,0,0)} 100%{transform:translate3d(-50%,0,0)} }
@@ -1090,35 +1099,29 @@ export default function Dashboard() {
         `}} />
         <div className="overflow-hidden flex-1">
           <div className="animate-ticker gap-10 whitespace-nowrap">
-            {[
-              { n:'Brent Crude', p:'$89.24/bbl', c:'+1.2%', up:true },
-              { n:'Copper',      p:'$4.12/lb',   c:'+2.4%', up:true },
-              { n:'HRC Steel',   p:'$840/st',    c:'-0.8%', up:false },
-              { n:'Aluminum',    p:'$2,350/mt',  c:'+0.5%', up:true },
-              { n:'Lithium Carb',p:'$14.2k/mt',  c:'-3.1%', up:false },
-              { n:'NdFeB Magnet',p:'$78/kg',     c:'+4.2%', up:true },
-              { n:'Cotton',      p:'$85.40/lb',  c:'+0.2%', up:true },
-              { n:'Soybeans',    p:'$11.80/bu',  c:'-1.5%', up:false },
-              { n:'Rare Earth',  p:'$142/kg',    c:'+6.8%', up:true },
-              { n:'Nickel',      p:'$18.4k/mt',  c:'-0.9%', up:false },
-              // duplicate for seamless loop
-              { n:'Brent Crude', p:'$89.24/bbl', c:'+1.2%', up:true },
-              { n:'Copper',      p:'$4.12/lb',   c:'+2.4%', up:true },
-              { n:'HRC Steel',   p:'$840/st',    c:'-0.8%', up:false },
-              { n:'Aluminum',    p:'$2,350/mt',  c:'+0.5%', up:true },
-              { n:'Lithium Carb',p:'$14.2k/mt',  c:'-3.1%', up:false },
-              { n:'NdFeB Magnet',p:'$78/kg',     c:'+4.2%', up:true },
-              { n:'Cotton',      p:'$85.40/lb',  c:'+0.2%', up:true },
-              { n:'Soybeans',    p:'$11.80/bu',  c:'-1.5%', up:false },
-              { n:'Rare Earth',  p:'$142/kg',    c:'+6.8%', up:true },
-              { n:'Nickel',      p:'$18.4k/mt',  c:'-0.9%', up:false },
-            ].map((item, i) => (
-              <span key={i} className="inline-flex items-center gap-2 text-[11px] mr-10">
-                <span className="text-slate-500">{item.n}</span>
-                <span className="text-white font-bold">{item.p}</span>
-                <span className={item.up ? 'text-emerald-400' : 'text-rose-400'}>{item.c}</span>
-              </span>
-            ))}
+            {(() => {
+              const BASE = [
+                { name:'Brent Crude', unit:'/bbl',   price:'$89.24', change:'+1.2%', up:true  },
+                { name:'Copper',      unit:'/lb',    price:'$4.12',  change:'+2.4%', up:true  },
+                { name:'HRC Steel',   unit:'/st',    price:'$840',   change:'-0.8%', up:false },
+                { name:'Aluminum',    unit:'/mt',    price:'$2,350', change:'+0.5%', up:true  },
+                { name:'Lithium Carb',unit:'/mt',    price:'$14.2k', change:'-3.1%', up:false },
+                { name:'NdFeB Magnet',unit:'/kg',    price:'$78',    change:'+4.2%', up:true  },
+                { name:'Cotton',      unit:'/lb',    price:'$85.40', change:'+0.2%', up:true  },
+                { name:'Soybeans',    unit:'/bu',    price:'$11.80', change:'-1.5%', up:false },
+                { name:'Rare Earth',  unit:'/kg',    price:'$142',   change:'+6.8%', up:true  },
+                { name:'Nickel',      unit:'/mt',    price:'$18.4k', change:'-0.9%', up:false },
+              ];
+              const items = commodities?.prices?.length ? commodities.prices : BASE;
+              return [...items, ...items].map((item, i) => (
+                <span key={i} className="inline-flex items-center gap-2 text-[11px] mr-10">
+                  <span className="text-slate-500">{item.name}</span>
+                  <span className="text-white font-bold">{item.price}{item.unit}</span>
+                  <span className={item.up ? 'text-emerald-400' : 'text-rose-400'}>{item.change}</span>
+                  {commodities && !item.live && <span className="text-slate-600 text-[9px] font-mono">ref</span>}
+                </span>
+              ));
+            })()}
           </div>
         </div>
       </div>
@@ -2003,6 +2006,21 @@ export default function Dashboard() {
                         )}
                       </div>
                     )}
+                    {/* ── QUICK ACTIONS -- visible immediately after scan ── */}
+                    {opportunities.length > 0 && (
+                      <div className="border border-sky-500/20 bg-sky-500/5 rounded-xl p-3 flex items-center gap-3">
+                        <div className="flex-1 min-w-0">
+                          <div className="text-[9px] text-sky-400 font-bold uppercase tracking-wider mb-0.5">Ready to act?</div>
+                          <div className="text-[11px] text-slate-300 truncate font-medium">
+                            {opportunities[0]?.companies[0]?.name || 'Top Supplier'} &middot; {opportunities[0]?.hub?.split(',')[0]}
+                          </div>
+                        </div>
+                        <button onClick={() => setShowRFQ(true)}
+                          className="shrink-0 bg-sky-500 hover:bg-sky-400 active:bg-sky-300 text-black text-[11px] font-bold px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors">
+                          <Mail size={11}/> Send RFQ
+                        </button>
+                      </div>
+                    )}
                     <div className="bg-[#111] border border-white/5 p-4 rounded-xl">
                       <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
                         <BarChart3 size={11}/> Metals &amp; Materials
@@ -2012,14 +2030,28 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-1.5">
-                        {[
-                          { n:'Brent',   p:'$89.24', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
-                          { n:'Copper',  p:'$4.12',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
-                          { n:'Alum.',   p:'$2,350', c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
-                          { n:'Nickel',  p:'$18.4k', c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
-                          { n:'R.Earth', p:'$142',   c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
-                          { n:'Steel',   p:'$840',   c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
-                        ].map((item, i) => {
+                        {(() => {
+                          const SPARKS = [[68,72,70,74,71,76,74],[58,60,57,62,63,65,68],[72,70,73,71,74,72,74],[80,77,75,78,74,72,70],[42,48,52,55,60,65,72],[75,73,76,72,70,68,67]];
+                          const BASE = [
+                            { n:'Brent',   p:'$89.24', c:'+1.2%', up:true  },
+                            { n:'Copper',  p:'$4.12',  c:'+2.4%', up:true  },
+                            { n:'Alum.',   p:'$2,350', c:'+0.5%', up:true  },
+                            { n:'Nickel',  p:'$18.4k', c:'-0.9%', up:false },
+                            { n:'R.Earth', p:'$142',   c:'+6.8%', up:true  },
+                            { n:'Steel',   p:'$840',   c:'-0.8%', up:false },
+                          ];
+                          const src = commodities?.prices || [];
+                          const find = (names) => names.map(n => src.find(x => x.name.toLowerCase().includes(n))).find(Boolean);
+                          const live = [
+                            find(['brent']), find(['copper']), find(['alum']),
+                            find(['nickel']), find(['rare','earth']), find(['steel','hrc']),
+                          ];
+                          const items = live.map((l, i) => l
+                            ? { n: l.name.split(' ')[0], p: l.price, c: l.change, up: l.up, spark: SPARKS[i] }
+                            : { ...BASE[i], spark: SPARKS[i] }
+                          );
+                          return items;
+                        })().map((item, i) => {
                           const mn = Math.min(...item.spark), mx = Math.max(...item.spark)
                           const pts = item.spark.map((v, j) => {
                             const x = (j / (item.spark.length - 1)) * 44
@@ -2462,7 +2494,7 @@ export default function Dashboard() {
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
                 <p className="text-[11px] text-slate-500 italic py-2">
-                  {newsFilter === 'mission' ? 'No news loaded yet — run a mission scan first.' : 'No articles match this filter.'}
+                  {newsFilter === 'mission' ? 'Run a mission scan to surface relevant intelligence.' : newsLoading ? 'Loading trade intelligence...' : 'No articles match this filter.'}
                 </p>
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
@@ -2488,18 +2520,33 @@ export default function Dashboard() {
               </h2>
               <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Live Feed • {metalsTs || '2m ago'}</span>
+                <span className="text-[9px] font-bold uppercase tracking-wider" style={{color: commodities?.anyLive ? '#34d399' : '#64748b'}}>
+                  {commodities?.anyLive ? `Live • ${metalsTs}` : `Reference • ${metalsTs}`}
+                </span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5">
-              {[
-                { n:'Brent Crude', p:'$89.24', u:'/bbl', c:'+1.2%', up:true,  spark:[68,72,70,74,71,76,74] },
-                { n:'Copper',      p:'$4.12',  u:'/lb',  c:'+2.4%', up:true,  spark:[58,60,57,62,63,65,68] },
-                { n:'Aluminum',    p:'$2,350', u:'/mt',  c:'+0.5%', up:true,  spark:[72,70,73,71,74,72,74] },
-                { n:'Nickel',      p:'$18.4k', u:'/mt',  c:'-0.9%', up:false, spark:[80,77,75,78,74,72,70] },
-                { n:'Rare Earth',  p:'$142',   u:'/kg',  c:'+6.8%', up:true,  spark:[42,48,52,55,60,65,72] },
-                { n:'HRC Steel',   p:'$840',   u:'/st',  c:'-0.8%', up:false, spark:[75,73,76,72,70,68,67] },
-              ].map((item, i) => {
+              {(() => {
+                const SPARKS = [[68,72,70,74,71,76,74],[58,60,57,62,63,65,68],[72,70,73,71,74,72,74],[80,77,75,78,74,72,70],[42,48,52,55,60,65,72],[75,73,76,72,70,68,67]];
+                const BASE = [
+                  { n:'Brent Crude', u:'/bbl', p:'$89.24', c:'+1.2%', up:true  },
+                  { n:'Copper',      u:'/lb',  p:'$4.12',  c:'+2.4%', up:true  },
+                  { n:'Aluminum',    u:'/mt',  p:'$2,350', c:'+0.5%', up:true  },
+                  { n:'Nickel',      u:'/mt',  p:'$18.4k', c:'-0.9%', up:false },
+                  { n:'Rare Earth',  u:'/kg',  p:'$142',   c:'+6.8%', up:true  },
+                  { n:'HRC Steel',   u:'/st',  p:'$840',   c:'-0.8%', up:false },
+                ];
+                const src = commodities?.prices || [];
+                const find = (names) => names.map(n => src.find(x => x.name.toLowerCase().includes(n))).find(Boolean);
+                const live = [
+                  find(['brent']), find(['copper']), find(['alum']),
+                  find(['nickel']), find(['rare','earth']), find(['steel','hrc']),
+                ];
+                return live.map((l, i) => l
+                  ? { n: l.name, u: l.unit, p: l.price, c: l.change, up: l.up, live: true, spark: SPARKS[i] }
+                  : { ...BASE[i], spark: SPARKS[i] }
+                );
+              })().map((item, i) => {
                 const min = Math.min(...item.spark), max = Math.max(...item.spark)
                 const pts = item.spark.map((v, j) => {
                   const x = (j / (item.spark.length - 1)) * 56
@@ -2522,7 +2569,11 @@ export default function Dashboard() {
                 )
               })}
             </div>
-            <p className="text-[10px] text-slate-500 mt-2">Indicative reference prices -- verify with exchange terminal.</p>
+            <p className="text-[10px] text-slate-500 mt-2">
+              {commodities?.anyLive
+                ? <>Live futures via CME / Yahoo Finance. <span className="text-slate-600">Ref</span> = non-exchange reference price.</>
+                : 'Reference prices. Live CME futures load on page refresh.'}
+            </p>
           </div>
 
           {/* Live FX Rates */}
