@@ -149,7 +149,7 @@ function ChokepointMarker({ cp }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight }) {
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats }) {
   const meshRef    = useRef()
   const earthRotY  = useRef(0)           // shared with NightOverlay via ref
   const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
@@ -176,11 +176,8 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
           <meshBasicMaterial color="#38bdf8" wireframe transparent opacity={0.05} />
         </mesh>
 
-        {/* RISK NODES (RED) — only risks tied to a physical location have
-            lat/lng; abstract/geopolitical risks (export controls, tariff
-            exposure, etc.) have none and would otherwise render as NaN
-            markers. They're shown in the sidebar risk list instead. */}
-        {risks.filter(node => typeof node.lat === 'number' && typeof node.lng === 'number').map((node, i) => (
+        {/* RISK NODES (RED) — toggleable via showThreats button */}
+        {showThreats && risks.filter(node => typeof node.lat === 'number' && typeof node.lng === 'number').map((node, i) => (
           <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" />
         ))}
 
@@ -263,7 +260,7 @@ function Marker({ node, color, type }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -280,6 +277,7 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
             autoRotate={autoRotate}
             showChokepoints={showChokepoints}
             showDayNight={showDayNight}
+            showThreats={showThreats}
           />
         </React.Suspense>
 

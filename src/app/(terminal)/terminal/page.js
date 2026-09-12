@@ -545,6 +545,7 @@ export default function Dashboard() {
   const [autoRotate, setAutoRotate]           = useState(true)
   const [showChokepoints, setShowChokepoints] = useState(true)
   const [showDayNight, setShowDayNight]       = useState(true)
+  const [showThreats, setShowThreats]         = useState(false)
   const [showSearch, setShowSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
@@ -1634,7 +1635,7 @@ export default function Dashboard() {
           {/* Globe */}
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
-              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} />
+              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} showThreats={showThreats} />
             </div>
 
             {/* Globe controls — desktop only (overlaid on globe) */}
@@ -1648,6 +1649,11 @@ export default function Dashboard() {
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showChokepoints ? 'bg-amber-500/15 border-amber-500/30 text-amber-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
                 <Anchor size={12} />
                 Chokepoints
+              </button>
+              <button onClick={() => setShowThreats(!showThreats)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showThreats ? 'bg-rose-500/15 border-rose-500/30 text-rose-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                <ShieldAlert size={12} />
+                {showThreats ? 'Hide Threats' : 'Threats'}
               </button>
               <button onClick={() => setAutoRotate(!autoRotate)}
                 className="flex items-center gap-2 bg-black/60 border border-white/10 px-3 py-1.5 hover:bg-sky-500/20 rounded-lg backdrop-blur-md transition-all text-white/70 text-[11px] font-bold uppercase tracking-widest">
@@ -1875,10 +1881,28 @@ export default function Dashboard() {
                 )}
 
                 {/* ── EMPTY STATE ── */}
-                {!selectedNode && (
-                  <p className="text-[12px] text-slate-400 italic">
-                    {opportunities.length > 0 ? 'Click a threat or sourcing hub in the left panel to inspect intelligence details.' : 'Run a scan above to identify global sourcing hubs and active risk factors.'}
-                  </p>
+                {!selectedNode && opportunities.length === 0 && (
+                  <p className="text-[12px] text-slate-400 italic">Run a scan above to identify global sourcing hubs and active risk factors.</p>
+                )}
+                {!selectedNode && opportunities.length > 0 && (
+                  <div className="space-y-3">
+                    {directive?.summary && (
+                      <p className="text-[12px] text-slate-300 leading-relaxed">{directive.summary}</p>
+                    )}
+                    <div className="border border-sky-500/20 bg-sky-500/5 rounded-xl p-3 flex items-center gap-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[9px] text-sky-400 font-bold uppercase tracking-wider mb-0.5">Ready to act?</div>
+                        <div className="text-[11px] text-slate-300 truncate font-medium">
+                          {opportunities[0]?.companies[0]?.name || 'Top Supplier'} &middot; {opportunities[0]?.hub?.split(',')[0]}
+                        </div>
+                      </div>
+                      <button onClick={() => setShowRFQ(true)}
+                        className="shrink-0 bg-sky-500 hover:bg-sky-400 active:bg-sky-300 text-black text-[11px] font-bold px-3 py-2 rounded-lg flex items-center gap-1.5 transition-colors">
+                        <Mail size={11}/> Send RFQ
+                      </button>
+                    </div>
+                    <p className="text-[11px] text-slate-500">Click a green hub or red threat on the globe for details.</p>
+                  </div>
                 )}
               </div>
             </div>
