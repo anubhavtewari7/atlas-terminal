@@ -1,0 +1,20 @@
+{
+  "lastUpdated": "2026-09-12T00:00:00.000Z",
+  "version": 1,
+  "agentStatus": "initializing",
+  "alerts": [
+    {
+      "id": "seed-001",
+      "title": "Atlas Intelligence Agent Activated",
+      "summary": "Hourly market intelligence agent is now active. Updates will appear here automatically.",
+      "severity": "LOW",
+      "type": "SYSTEM",
+      "region": "GLOBAL",
+      "source": "",
+      "timestamp": "2026-09-12T00:00:00.000Z"
+    }
+  ],
+  "commodityNotes": [],
+  "disruptionZones": [],
+  "agentLog": []
+}
