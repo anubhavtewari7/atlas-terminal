@@ -149,7 +149,7 @@ function ChokepointMarker({ cp }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats }) {
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick }) {
   const meshRef    = useRef()
   const earthRotY  = useRef(0)           // shared with NightOverlay via ref
   const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
@@ -178,12 +178,12 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
 
         {/* RISK NODES (RED) — toggleable via showThreats button */}
         {showThreats && risks.filter(node => typeof node.lat === 'number' && typeof node.lng === 'number').map((node, i) => (
-          <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" />
+          <Marker key={`risk-${i}`} node={node} color="#ff3333" type="RISK" onNodeClick={onNodeClick} />
         ))}
 
         {/* OPPORTUNITY NODES (GREEN) */}
         {opportunities.map((node, i) => (
-          <Marker key={`opp-${i}`} node={node} color="#10b981" type="OPPORTUNITY" />
+          <Marker key={`opp-${i}`} node={node} color="#10b981" type="OPPORTUNITY" onNodeClick={onNodeClick} />
         ))}
 
         {/* CHOKEPOINT NODES (AMBER/RED) -- toggleable via showChokepoints */}
@@ -195,7 +195,7 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
   )
 }
 
-function Marker({ node, color, type }) {
+function Marker({ node, color, type, onNodeClick }) {
   const { lat, lng, title, hub } = node
   const [hovered, setHovered] = React.useState(false)
   
@@ -211,10 +211,11 @@ function Marker({ node, color, type }) {
   }, [lat, lng])
 
   return (
-    <mesh 
-      position={position} 
-      onPointerOver={() => setHovered(true)} 
-      onPointerOut={() => setHovered(false)}
+    <mesh
+      position={position}
+      onPointerOver={(e) => { e.stopPropagation(); setHovered(true) }}
+      onPointerOut={(e) => { e.stopPropagation(); setHovered(false) }}
+      onClick={(e) => { e.stopPropagation(); if (onNodeClick) onNodeClick(node) }}
     >
       {/* CORE DOT — bigger and vivid */}
       <sphereGeometry args={[0.07, 16, 16]} />
@@ -260,7 +261,7 @@ function Marker({ node, color, type }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -278,6 +279,7 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
             showChokepoints={showChokepoints}
             showDayNight={showDayNight}
             showThreats={showThreats}
+            onNodeClick={onNodeClick}
           />
         </React.Suspense>
 

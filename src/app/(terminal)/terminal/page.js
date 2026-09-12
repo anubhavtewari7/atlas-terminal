@@ -1635,7 +1635,7 @@ export default function Dashboard() {
           {/* Globe */}
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
-              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} showThreats={showThreats} />
+              <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} showThreats={showThreats} onNodeClick={(node) => setSelectedNode(node)} />
             </div>
 
             {/* Globe controls — desktop only (overlaid on globe) */}
@@ -1691,8 +1691,10 @@ export default function Dashboard() {
               </button>
             </div>
 
-            {/* ── STRATEGIC ADVISORY HUD ── */}
-            <div className="hidden lg:block absolute bottom-4 left-4 right-4 z-10">
+          </div>
+
+          {/* ── STRATEGIC ADVISORY HUD ── */}
+          <div className="hidden lg:block shrink-0">
 
               <div className="bg-black/95 border border-white/10 p-6 shadow-[0_0_80px_rgba(0,0,0,0.9)] rounded-2xl backdrop-blur-xl min-w-0" data-tour="directive">
                 <div className="flex justify-between items-start mb-4">
@@ -1906,7 +1908,6 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-          </div>
 
         </main>
 
