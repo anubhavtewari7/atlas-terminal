@@ -6,7 +6,7 @@
 import { NextResponse } from 'next/server';
 
 const GITHUB_RAW = 'https://raw.githubusercontent.com/anubhavtewari7/atlas-terminal/main/public/market-intelligence.json';
-const TO = 'anubhav.tewari@slate.auto';
+const TO = 'anubhavtewari7@gmail.com'; // Resend free tier -- change to slate.auto after verifying a sender domain at resend.com/domains
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
