@@ -18,7 +18,7 @@ import TariffCalculator from '@/components/TariffCalculator'
 import CurrencyImpactCalc from '@/components/CurrencyImpactCalc'
 import DualUseChecker from '@/components/DualUseChecker'
 import SourcingRecommendation from '@/components/SourcingRecommendation'
-import AtlasLogo from '@/components/AtlasLogo'
+import NautilusLogo from '@/components/NautilusLogo'
 import GuidedTour from '@/components/GuidedTour'
 import { getLandedCostDefaults } from '@/lib/procurement-costs'
 import {
@@ -472,7 +472,7 @@ export default function Dashboard() {
   const [showCurrencyCalc, setShowCurrencyCalc] = useState(false)
   const [showDualUse, setShowDualUse] = useState(false)
   const [showRecommendation, setShowRecommendation] = useState(false)
-  const [leftTab, setLeftTab] = useState('scan')
+  const [activeTab, setActiveTab] = useState('sourcing')
   const [isExportingPDF, setIsExportingPDF] = useState(false)
   const [turnoverFilter, setTurnoverFilter] = useState(null)
   const [showTour, setShowTour] = useState(false)
@@ -704,6 +704,7 @@ export default function Dashboard() {
         setRisks(mergedRisks)
         setOpportunities(data.opportunities)
         setActiveMobileTab('hubs')
+        setActiveTab('sourcing')   // auto-switch desktop to Sourcing tab on scan complete
         setDirective(data.directive || null)
         setMarketData(data.market_data || null)
         addLog(`[SUCCESS] Scan complete. ${data.opportunities.length} hubs identified.`)
@@ -753,6 +754,7 @@ export default function Dashboard() {
 
       setOpportunities(hubs)
       setActiveMobileTab('hubs')
+      setActiveTab('sourcing')
       const eqFallbackRisks   = await fetchAndMergeEarthquakeRisks(fallbackRisks)
       const fireFallbackRisks = await fetchAndMergeWildfireRisks(eqFallbackRisks)
       const mergedFallbackRisks = await fetchAndMergeIncidentRisks(fireFallbackRisks)
@@ -1069,7 +1071,7 @@ export default function Dashboard() {
       <div className="lg:hidden flex items-center justify-between px-3 py-2 bg-[#0a0a0a] border-b border-white/10 shrink-0">
         <div className="flex items-center gap-2">
           <div className="w-7 h-7 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center rounded-md">
-            <AtlasLogo size={16} />
+            <NautilusLogo size={16} />
           </div>
           <span className="text-[11px] font-bold tracking-widest text-white">NAUTILUS</span>
         </div>
@@ -1243,40 +1245,71 @@ export default function Dashboard() {
         ════════════════════════════════════ */}
         <aside className="hidden lg:flex w-96 flex-col gap-4 shrink-0 z-10 overflow-y-auto custom-scrollbar pr-1">
 
-          {/* Brand + Mission */}
-          <div className="bg-[#0a0a0a] border border-white/10 p-5 rounded-xl shadow-2xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 rounded-lg">
-                <AtlasLogo size={22} />
-              </div>
-              <div>
-                <h1 className="font-bold text-xl tracking-widest leading-none text-white">NAUTILUS</h1>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence</p>
+          {/* Brand + Mission (compact header) */}
+          <div className="bg-[#0a0a0a] border border-white/10 px-4 py-3 rounded-xl shadow-2xl shrink-0 flex items-center gap-3">
+            <div className="w-8 h-8 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 rounded-lg shrink-0">
+              <NautilusLogo size={16} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[9px] text-slate-500 uppercase tracking-[0.2em] font-bold">Active Mission</div>
+              <div onClick={() => setShowSearch(true)} data-tour="mission"
+                className="text-[12px] font-bold text-sky-400 uppercase truncate cursor-pointer hover:text-sky-300 transition-colors"
+                title="Click to start new scan">
+                {profile.material}
               </div>
             </div>
-            <div onClick={() => setShowSearch(true)} data-tour="mission"
-              className="p-3 bg-[#111] border border-white/5 cursor-pointer hover:border-sky-500/30 transition-all rounded-lg group">
-              <div className="text-[11px] text-slate-400 uppercase mb-1 font-bold tracking-widest group-hover:text-sky-400 transition-all">
-                Active Mission
-              </div>
-              <div className="text-[13px] font-bold text-sky-400 uppercase truncate">{profile.material}</div>
-            </div>
-          </div>
-
-          {/* Left sidebar tab bar */}
-          <div className="flex border-b border-white/10 shrink-0 sticky top-0 z-10 bg-[#0a0a0a] rounded-lg overflow-hidden">
-            <button onClick={() => setLeftTab('scan')}
-              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${leftTab === 'scan' ? 'text-emerald-400 border-b-2 border-emerald-400' : 'text-slate-500 hover:text-slate-300'}`}>
-              Scan Results
-            </button>
-            <button onClick={() => setLeftTab('intel')}
-              className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest transition-all ${leftTab === 'intel' ? 'text-sky-400 border-b-2 border-sky-400' : 'text-slate-500 hover:text-slate-300'}`}>
-              Market Intel
+            <button onClick={() => setShowSearch(true)}
+              className="shrink-0 w-7 h-7 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 hover:bg-emerald-500/20 rounded-lg flex items-center justify-center transition-all">
+              <SearchCode size={12} />
             </button>
           </div>
 
-          {/* Hub Stability Navigator — INTEL tab */}
-          {leftTab === 'intel' && (() => {
+          {/* ── Primary Tab Navigation ── */}
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shrink-0">
+            {/* Row 1: Command | Sourcing | Risk | Compliance */}
+            <div className="grid grid-cols-4 border-b border-white/5">
+              {[
+                { id: 'command',     label: 'Command',    color: 'sky' },
+                { id: 'sourcing',    label: 'Sourcing',   color: 'emerald' },
+                { id: 'risk',        label: 'Risk',       color: 'rose' },
+                { id: 'compliance',  label: 'Compliance', color: 'amber' },
+              ].map(t => (
+                <button key={t.id} onClick={() => setActiveTab(t.id)}
+                  className={`py-2 text-[9px] font-bold uppercase tracking-widest transition-all border-b-2 ${
+                    activeTab === t.id
+                      ? t.color === 'emerald' ? 'text-emerald-400 border-emerald-400 bg-emerald-500/5'
+                      : t.color === 'rose'    ? 'text-rose-400 border-rose-400 bg-rose-500/5'
+                      : t.color === 'amber'   ? 'text-amber-400 border-amber-400 bg-amber-500/5'
+                      : 'text-sky-400 border-sky-400 bg-sky-500/5'
+                      : 'border-transparent text-slate-500 hover:text-slate-300'
+                  }`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+            {/* Row 2: Cost | Intelligence | Reports */}
+            <div className="grid grid-cols-3">
+              {[
+                { id: 'cost',         label: 'Cost',         color: 'amber' },
+                { id: 'intelligence', label: 'Intelligence',  color: 'sky' },
+                { id: 'reports',      label: 'Reports',       color: 'purple' },
+              ].map(t => (
+                <button key={t.id} onClick={() => setActiveTab(t.id)}
+                  className={`py-2 text-[9px] font-bold uppercase tracking-widest transition-all border-b-2 ${
+                    activeTab === t.id
+                      ? t.color === 'amber'  ? 'text-amber-400 border-amber-400 bg-amber-500/5'
+                      : t.color === 'purple' ? 'text-purple-400 border-purple-400 bg-purple-500/5'
+                      : 'text-sky-400 border-sky-400 bg-sky-500/5'
+                      : 'border-transparent text-slate-500 hover:text-slate-300'
+                  }`}>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Hub Stability Navigator — INTELLIGENCE tab */}
+          {activeTab === 'intelligence' && (() => {
             const { level, continent, country, region } = hubNav
             const countryData = country ? HUB_REGIONS[country] : null
             const s = countryData?.score
@@ -1433,7 +1466,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-3">
 
             {/* Live Intelligence Brief — INTEL tab */}
-            {leftTab === 'intel' && (intelLoading || intelBrief) && (
+            {activeTab === 'intelligence' && (intelLoading || intelBrief) && (
               <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                   <Newspaper size={13} /> Live Trade Intelligence
@@ -1467,11 +1500,17 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Global Threats — SCAN tab */}
-            {leftTab === 'scan' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
+            {/* Global Threats — SOURCING + RISK tabs */}
+            {(activeTab === 'sourcing' || activeTab === 'risk') && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
                 <ShieldAlert size={14} /> Global Threats
-                {risks.length > 0 && <span className="text-[10px] text-slate-400">{risks.length} active</span>}
+                {risks.length > 0
+                  ? <span className="flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-rose-500/25 bg-rose-500/8 text-rose-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse inline-block" />
+                      LIVE · {risks.length}
+                    </span>
+                  : <span className="text-[8px] text-slate-600 font-normal normal-case border border-white/8 px-1.5 py-0.5 rounded-full">post-scan</span>
+                }
                 <span className="ml-auto text-slate-500">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
               {!threatsCollapsed && (
@@ -1498,8 +1537,8 @@ export default function Dashboard() {
               )}
             </div>}
 
-            {/* Sourcing Hubs — SCAN tab */}
-            {leftTab === 'scan' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
+            {/* Sourcing Hubs — SOURCING tab */}
+            {activeTab === 'sourcing' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
               <h2 className="text-[11px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setHubsCollapsed(!hubsCollapsed)}>
                 <Factory size={14} /> Sourcing Hubs
                 {opportunities.length > 0 && <span className="text-[10px] text-slate-400">{opportunities.length} identified</span>}
@@ -1564,6 +1603,244 @@ export default function Dashboard() {
                 </div>
               )}
             </div>}
+
+            {/* ── COMMAND TAB ── */}
+            {activeTab === 'command' && (
+              <div className="space-y-3">
+                {/* Mission state */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center gap-2"><Target size={11} /> Mission Summary</div>
+                  <div className="grid grid-cols-3 gap-2 text-center mb-3">
+                    <div className="bg-[#111] rounded-lg p-2.5">
+                      <div className="text-[20px] font-bold text-emerald-400">{opportunities.length}</div>
+                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Hubs Found</div>
+                    </div>
+                    <div className="bg-[#111] rounded-lg p-2.5">
+                      <div className="text-[20px] font-bold text-rose-400">{risks.length}</div>
+                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Threats</div>
+                    </div>
+                    <div className="bg-[#111] rounded-lg p-2.5">
+                      <div className={`text-[20px] font-bold ${marketData?.confidence_score >= 75 ? 'text-emerald-400' : marketData?.confidence_score >= 50 ? 'text-amber-400' : 'text-slate-500'}`}>
+                        {marketData?.confidence_score ?? '--'}
+                      </div>
+                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Confidence</div>
+                    </div>
+                  </div>
+                  {opportunities.length === 0 && (
+                    <button onClick={() => setShowSearch(true)}
+                      className="w-full h-9 bg-emerald-500 text-black font-bold text-[11px] uppercase tracking-widest rounded-lg hover:bg-emerald-400 transition-colors flex items-center justify-center gap-1.5">
+                      <SearchCode size={12} /> Run Intelligence Scan
+                    </button>
+                  )}
+                </div>
+
+                {/* Top hub + directive preview */}
+                {directive && (
+                  <div className="bg-[#0a0a0a] border border-emerald-500/20 p-4 rounded-xl space-y-2">
+                    <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap size={11} /> Strategic Directive</div>
+                    <div className="text-[12px] font-bold text-white">{directive.best_region}</div>
+                    <div className="text-[11px] text-emerald-400 font-bold">{directive.best_partner}</div>
+                    <p className="text-[10px] text-slate-400 leading-snug italic">&ldquo;{directive.summary}&rdquo;</p>
+                  </div>
+                )}
+
+                {/* Quick-fire actions */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={11} /> Quick Actions</div>
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {[
+                      { label: 'Export PDF',   action: exportToPDF,                  disabled: opportunities.length === 0, color: 'white' },
+                      { label: 'Send RFQ',     action: () => setShowRFQ(true),        disabled: opportunities.length === 0, color: 'sky' },
+                      { label: 'Compare Hubs', action: () => setShowComparison(true), disabled: opportunities.length < 2,   color: 'sky' },
+                      { label: 'AI Advisory',  action: () => setShowRecommendation(true), disabled: opportunities.length === 0, color: 'emerald' },
+                    ].map((a, i) => (
+                      <button key={i} onClick={a.disabled ? undefined : a.action} disabled={a.disabled}
+                        className={`py-2 text-[10px] font-bold uppercase tracking-widest rounded-lg border transition-all disabled:opacity-30 ${a.color === 'emerald' ? 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10' : a.color === 'sky' ? 'border-sky-500/30 text-sky-400 hover:bg-sky-500/10' : 'border-white/10 text-slate-300 hover:bg-white/5'}`}>
+                        {a.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── RISK TAB -- extra content (threats already shown above) ── */}
+            {activeTab === 'risk' && (
+              <div className="space-y-3">
+                {/* Chokepoint status list */}
+                <div className="bg-[#0a0a0a] border border-amber-500/20 p-4 rounded-xl">
+                  <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5"><Anchor size={11} /> Maritime Chokepoints</div>
+                  <div className="space-y-1.5">
+                    {CHOKEPOINTS.slice(0, 6).map(cp => {
+                      const dot = cp.status === 'CRITICAL' ? 'bg-rose-500' : cp.status === 'ELEVATED' ? 'bg-amber-500' : cp.status === 'MODERATE' ? 'bg-yellow-500' : 'bg-emerald-500'
+                      const txt = cp.status === 'CRITICAL' ? 'text-rose-400' : cp.status === 'ELEVATED' ? 'text-amber-400' : cp.status === 'MODERATE' ? 'text-yellow-400' : 'text-emerald-400'
+                      return (
+                        <div key={cp.id} className="flex items-center gap-2 py-1 border-b border-white/4 last:border-0">
+                          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${dot}`} />
+                          <span className="text-[11px] text-slate-300 flex-1 truncate">{cp.name}</span>
+                          <span className={`text-[8px] font-bold uppercase ${txt}`}>{cp.status}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+                {/* Prompt to run a scan if no threats yet */}
+                {risks.length === 0 && (
+                  <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl text-center">
+                    <p className="text-[11px] text-slate-500 italic">Run a scan to surface geopolitical threats, earthquakes, and wildfires for your supply region.</p>
+                    <button onClick={() => setShowSearch(true)} className="mt-2 text-[10px] font-bold text-sky-400 uppercase tracking-widest hover:text-sky-300 transition-colors">Run Scan &rsaquo;</button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ── COMPLIANCE TAB ── */}
+            {activeTab === 'compliance' && (
+              <div className="space-y-3">
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5"><Shield size={11} /> Compliance Tools</div>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {[
+                      { label: 'Sanctions Screening',   desc: 'OFAC · EU · UN lists',       action: () => setShowSanctions(true),   color: 'rose' },
+                      { label: 'FTA Eligibility Check', desc: 'USMCA · CPTPP · EVFTA',      action: () => setShowFta(true),         color: 'emerald' },
+                      { label: 'Tariff Calculator',     desc: 'HTS · MFN · Section 232',    action: () => setShowTariffCalc(true),   color: 'sky' },
+                      { label: 'HS Code Lookup',        desc: 'Schedule B classification',   action: () => setShowTariff(true),      color: 'sky' },
+                      { label: 'Dual-Use Check',        desc: 'EAR / ITAR export control',  action: () => setShowDualUse(true),     color: 'rose' },
+                      { label: 'Compliance Checklist',  desc: 'Pre-shipment verification',  action: () => setShowCompliance(true),  color: 'amber' },
+                      { label: 'Incoterms Guide',       desc: 'FOB · CIF · DDP explained',  action: () => setShowIncoterms(true),   color: 'purple' },
+                    ].map((t, i) => (
+                      <button key={i} onClick={t.action}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-left transition-all ${t.color === 'rose' ? 'border-rose-500/20 hover:bg-rose-500/8 hover:border-rose-500/30' : t.color === 'emerald' ? 'border-emerald-500/20 hover:bg-emerald-500/8 hover:border-emerald-500/30' : t.color === 'amber' ? 'border-amber-500/20 hover:bg-amber-500/8 hover:border-amber-500/30' : t.color === 'purple' ? 'border-purple-500/20 hover:bg-purple-500/8 hover:border-purple-500/30' : 'border-sky-500/20 hover:bg-sky-500/8 hover:border-sky-500/30'}`}>
+                        <div>
+                          <div className={`text-[11px] font-bold uppercase tracking-wider ${t.color === 'rose' ? 'text-rose-400' : t.color === 'emerald' ? 'text-emerald-400' : t.color === 'amber' ? 'text-amber-400' : t.color === 'purple' ? 'text-purple-400' : 'text-sky-400'}`}>{t.label}</div>
+                          <div className="text-[9px] text-slate-500 mt-0.5">{t.desc}</div>
+                        </div>
+                        <ChevronRight size={12} className="text-slate-600 shrink-0" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── COST TAB ── */}
+            {activeTab === 'cost' && (
+              <div className="space-y-3">
+                {/* FX snapshot */}
+                {fxData && (
+                  <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                    <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                      <TrendingUp size={11} /> Live FX Rates
+                      <span className="ml-auto text-[8px] text-slate-500 font-normal normal-case">as of {fxData.date}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
+                        <div key={code} className="flex items-center justify-between p-2 bg-[#111] border border-white/5 rounded-lg">
+                          <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
+                          <span className="text-[13px] font-bold text-amber-300 font-mono">
+                            {typeof info.rate === 'number' ? info.rate.toFixed(2) : info.rate}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Commodity snapshot */}
+                {commodities && (
+                  <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                    <div className="text-[10px] text-sky-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
+                      <BarChart3 size={11} /> Key Materials
+                      <span className={`ml-auto text-[8px] font-normal normal-case ${commodities.anyLive ? 'text-emerald-400' : 'text-slate-500'}`}>
+                        {commodities.anyLive ? 'Live' : 'Reference'}
+                      </span>
+                    </div>
+                    <div className="space-y-1.5">
+                      {(commodities.prices || []).slice(0, 5).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between py-1 border-b border-white/4 last:border-0">
+                          <span className="text-[11px] text-slate-300">{c.name}</span>
+                          <div className="text-right">
+                            <span className="text-[11px] font-bold font-mono text-white">{c.price}</span>
+                            <span className={`ml-1.5 text-[10px] font-bold ${c.change?.startsWith('+') ? 'text-emerald-400' : 'text-rose-400'}`}>{c.change}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {/* Cost tools */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><Calculator size={11} /> Cost Tools</div>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {[
+                      { label: 'Total Landed Cost', desc: 'Duties + freight + FX',     action: () => setShowTLC(true),          color: 'emerald' },
+                      { label: 'Ocean Freight',      desc: 'Lane benchmarks by route',  action: () => setShowOcean(true),        color: 'sky' },
+                      { label: 'FX Impact Calc',     desc: 'Currency exposure model',   action: () => setShowCurrencyCalc(true), color: 'amber' },
+                    ].map((t, i) => (
+                      <button key={i} onClick={t.action}
+                        className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-left transition-all ${t.color === 'emerald' ? 'border-emerald-500/20 hover:bg-emerald-500/8' : t.color === 'amber' ? 'border-amber-500/20 hover:bg-amber-500/8' : 'border-sky-500/20 hover:bg-sky-500/8'}`}>
+                        <div>
+                          <div className={`text-[11px] font-bold uppercase tracking-wider ${t.color === 'emerald' ? 'text-emerald-400' : t.color === 'amber' ? 'text-amber-400' : 'text-sky-400'}`}>{t.label}</div>
+                          <div className="text-[9px] text-slate-500 mt-0.5">{t.desc}</div>
+                        </div>
+                        <ChevronRight size={12} className="text-slate-600 shrink-0" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ── REPORTS TAB ── */}
+            {activeTab === 'reports' && (
+              <div className="space-y-3">
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="text-[10px] text-purple-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5"><FileText size={11} /> Export &amp; Reports</div>
+                  <div className="space-y-2">
+                    <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
+                      className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-all disabled:opacity-30 text-left">
+                      <div>
+                        <div className="text-[11px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5"><Download size={11} /> Executive Brief (PDF)</div>
+                        <div className="text-[9px] text-slate-500 mt-0.5">Full sourcing analysis with hub scores, risk, compliance</div>
+                      </div>
+                    </button>
+                    <button onClick={() => setShowRFQ(true)} disabled={opportunities.length === 0}
+                      className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-sky-500/20 hover:bg-sky-500/8 transition-all disabled:opacity-30 text-left">
+                      <div>
+                        <div className="text-[11px] font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5"><Mail size={11} /> Smart RFQ</div>
+                        <div className="text-[9px] text-slate-500 mt-0.5">Auto-generated supplier inquiry ready to send</div>
+                      </div>
+                    </button>
+                    <button onClick={() => setShowComparison(true)} disabled={opportunities.length < 2}
+                      className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-all disabled:opacity-30 text-left">
+                      <div>
+                        <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5"><BarChart3 size={11} /> Hub Comparison</div>
+                        <div className="text-[9px] text-slate-500 mt-0.5">Side-by-side scoring for {opportunities.length} sourcing hubs</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+                {/* Mission history */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><History size={11} /> Mission Archive</div>
+                    <button onClick={() => setShowHistory(true)} className="text-[8px] text-sky-400 hover:text-sky-300 uppercase tracking-widest transition-colors">View All &rsaquo;</button>
+                  </div>
+                  {missionHistory.length === 0 ? (
+                    <p className="text-[11px] text-slate-500 italic">No missions saved yet. Run a scan to create an archive entry.</p>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {missionHistory.slice(-4).reverse().map((m, i) => (
+                        <button key={i} onClick={() => replayMission(m)}
+                          className="w-full text-left p-2.5 bg-[#111] border border-white/5 rounded-lg hover:border-sky-500/20 transition-all group">
+                          <div className="text-[11px] font-bold text-slate-300 group-hover:text-white transition-colors truncate uppercase">{m.query}</div>
+                          <div className="text-[9px] text-slate-500 mt-0.5">{new Date(m.timestamp).toLocaleDateString()} · {m.opportunities?.length ?? 0} hubs</div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
           </div>
         </aside>
@@ -2349,6 +2626,9 @@ export default function Dashboard() {
             <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
             <h2 className="text-[11px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
               <Target size={14} /> Strategic Directive
+              <span className={`ml-auto text-[8px] font-bold px-1.5 py-0.5 rounded-full border ${directive ? 'border-emerald-500/25 text-emerald-400 bg-emerald-500/8' : 'border-white/8 text-slate-600'}`}>
+                {directive ? 'AI-GENERATED' : 'PENDING SCAN'}
+              </span>
             </h2>
             {directive ? (
               <div className="space-y-4">
@@ -2433,6 +2713,15 @@ export default function Dashboard() {
               <h2 className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
               </h2>
+              <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[8px] font-bold uppercase tracking-wider"
+                style={newsLoading
+                  ? { borderColor: 'rgba(100,116,139,0.3)', color: '#64748b' }
+                  : news.length > 0
+                  ? { borderColor: 'rgba(16,185,129,0.3)', color: '#34d399', backgroundColor: 'rgba(16,185,129,0.05)' }
+                  : { borderColor: 'rgba(100,116,139,0.2)', color: '#475569' }}>
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${newsLoading ? 'bg-slate-500' : news.length > 0 ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}`} />
+                {newsLoading ? 'Loading' : news.length > 0 ? `Live · ${news.length} articles` : 'Unavailable'}
+              </div>
             </div>
             {/* Region filter */}
             <div className="flex items-center gap-1 flex-wrap shrink-0">
