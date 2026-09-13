@@ -13,6 +13,7 @@ const COUNTRIES = [
   'Singapore', 'Vietnam', 'India', 'Brazil', 'Chile', 'Peru',
   'Colombia', 'Indonesia', 'Thailand', 'Malaysia', 'Taiwan',
   'New Zealand', 'Israel', 'Morocco', 'South Africa', 'UAE', 'Bahrain',
+  'Brunei', 'Myanmar', 'Philippines', 'Cambodia',
 ]
 
 const FTA_DB = {
@@ -84,6 +85,65 @@ const FTA_DB = {
   ],
   'india:south korea': [
     { name: 'IKCEPA', full: 'India–Korea Comprehensive Economic Partnership Agreement', since: 'Jan 2010', duty: 'Reduced/0%', coverage: '85% of goods', savings: 'HIGH', note: 'Major tariff reductions on Korean electronics, automobiles; Indian textiles and pharma benefit.', url: 'https://commerce.gov.in/trade-agreements/india-korea-cepa/' },
+  ],
+
+  // ── CPTPP (Comprehensive and Progressive Agreement for Trans-Pacific Partnership) ──
+  // Members: Australia, Brunei, Canada, Chile, Japan, Malaysia, Mexico, NZ, Peru, Singapore, Vietnam
+  // UK acceded Jan 2024. US is NOT a member.
+  'australia:canada': [
+    { name: 'CPTPP', full: 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership', since: 'Dec 2018', duty: '0% (phased)', coverage: 'Most goods', savings: 'HIGH', note: 'Both are CPTPP members. Tariff elimination on most industrial and agricultural goods. Verify HS code against each party\'s tariff schedule.', url: 'https://www.mfat.govt.nz/en/trade/free-trade-agreements/free-trade-agreements-in-force/cptpp/' },
+  ],
+  'australia:vietnam': [
+    { name: 'CPTPP', full: 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership', since: 'Jan 2019 (VN)', duty: '0% (phased)', coverage: 'Most goods', savings: 'HIGH', note: 'Vietnam is a founding CPTPP member. Strong for Australian agriculture (beef, dairy, wine) and Vietnamese textiles/apparel.', url: 'https://www.mfat.govt.nz/en/trade/free-trade-agreements/free-trade-agreements-in-force/cptpp/' },
+    { name: 'ASEAN-Australia-NZ FTA', full: 'ASEAN–Australia–New Zealand FTA (AANZFTA)', since: 'Jan 2010', duty: 'Reduced/0%', coverage: 'Most goods', savings: 'MEDIUM', note: 'Broad elimination of tariffs between ASEAN and Australia/NZ. Verify cumulation rules for goods with regional content.', url: 'https://www.dfat.gov.au/trade/agreements/in-force/aanzfta' },
+  ],
+  'canada:vietnam': [
+    { name: 'CPTPP', full: 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership', since: 'Dec 2018 (CA) / Jan 2019 (VN)', duty: '0% (phased)', coverage: 'Most goods', savings: 'HIGH', note: 'Both are CPTPP members. Vietnam eliminated tariffs on most Canadian goods; Canada phased duties on Vietnamese apparel and footwear.', url: 'https://www.canada.ca/en/global-affairs/news/2018/12/canada-and-the-comprehensive-and-progressive-agreement-for-trans-pacific-partnership.html' },
+  ],
+  'japan:vietnam': [
+    { name: 'CPTPP', full: 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership', since: 'Dec 2018', duty: '0% (phased)', coverage: 'Most goods', savings: 'HIGH', note: 'Both founding CPTPP members. Strong for Japanese machinery/auto parts into Vietnam and Vietnamese seafood/textiles into Japan.', url: 'https://www.mfat.govt.nz/en/trade/free-trade-agreements/free-trade-agreements-in-force/cptpp/' },
+    { name: 'AJCEP', full: 'ASEAN–Japan Comprehensive Economic Partnership', since: 'Dec 2008', duty: 'Reduced/0%', coverage: 'Industrial & agricultural goods', savings: 'MEDIUM', note: 'Framework covering Japan and all ASEAN members. Goods must meet cumulative ASEAN-Japan origin rules.', url: 'https://www.mofa.go.jp/policy/economy/fta/asean.html' },
+  ],
+  'japan:malaysia': [
+    { name: 'CPTPP', full: 'Comprehensive and Progressive Agreement for Trans-Pacific Partnership', since: 'Sep 2022 (MY)', duty: '0% (phased)', coverage: 'Most goods', savings: 'HIGH', note: 'Malaysia ratified CPTPP in Sep 2022. Tariff elimination phased over 11 years for sensitive goods.', url: 'https://www.mfat.govt.nz/en/trade/free-trade-agreements/free-trade-agreements-in-force/cptpp/' },
+    { name: 'JMJEPA', full: 'Japan–Malaysia Economic Partnership Agreement', since: 'Jul 2006', duty: 'Reduced/0%', coverage: 'Most industrial goods', savings: 'HIGH', note: 'Bilateral EPA covering electronics, automobiles, machinery. Agricultural goods partially covered.', url: 'https://www.mofa.go.jp/policy/economy/fta/malaysia.html' },
+  ],
+  'united kingdom:australia': [
+    { name: 'UK-Australia FTA', full: 'UK–Australia Free Trade Agreement', since: 'May 2023', duty: '0%', coverage: '99% of goods', savings: 'HIGH', note: 'UK\'s first major post-Brexit bilateral FTA. Full tariff elimination on 99% of goods. Strong for Australian beef, lamb, dairy, wine; UK cars and Scotch whisky.', url: 'https://www.gov.uk/guidance/uk-australia-free-trade-agreement-the-uk-s-approach' },
+  ],
+  'united kingdom:new zealand': [
+    { name: 'UK-NZ FTA', full: 'UK–New Zealand Free Trade Agreement', since: 'Feb 2024', duty: '0%', coverage: '99.5% of goods', savings: 'HIGH', note: 'In force Feb 2024. Near-complete tariff elimination. Strong for NZ dairy, meat, wine; UK machinery and services.', url: 'https://www.gov.uk/guidance/uk-new-zealand-free-trade-agreement' },
+  ],
+
+  // ── EU bilateral FTAs (accessed via any EU member state e.g. Germany, France, Netherlands) ──
+  'germany:vietnam': [
+    { name: 'EVFTA', full: 'EU–Vietnam Free Trade Agreement', since: 'Aug 2020', duty: '0% (99% of goods over 10 yrs)', coverage: '99% of goods', savings: 'HIGH', note: 'EU eliminates 99% of tariffs on Vietnamese goods over 10 years. Vietnam eliminates 65% of EU tariffs immediately, rest phased. Strong for Vietnamese electronics, textiles, footwear.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/vietnam_en' },
+  ],
+  'france:vietnam': [
+    { name: 'EVFTA', full: 'EU–Vietnam Free Trade Agreement', since: 'Aug 2020', duty: '0% (phased)', coverage: '99% of goods', savings: 'HIGH', note: 'All EU member states benefit from EVFTA. Vietnam is a key beneficiary for apparel, electronics, and seafood exports to Europe.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/vietnam_en' },
+  ],
+  'netherlands:vietnam': [
+    { name: 'EVFTA', full: 'EU–Vietnam Free Trade Agreement', since: 'Aug 2020', duty: '0% (phased)', coverage: '99% of goods', savings: 'HIGH', note: 'Rotterdam is the primary EU entry port for Vietnamese goods. EVFTA eliminates most tariffs over 7-10 years.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/vietnam_en' },
+  ],
+  'germany:south korea': [
+    { name: 'EU-Korea FTA', full: 'EU–South Korea Free Trade Agreement', since: 'Jul 2011', duty: '0%', coverage: '98.7% of goods', savings: 'HIGH', note: 'First EU FTA in Asia. Near-complete tariff elimination. Strong for Korean electronics, cars; EU machinery, pharma, chemicals. Cumulation with other EU members applies.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/south-korea_en' },
+  ],
+  'germany:japan': [
+    { name: 'JEFTA', full: 'Japan–EU Economic Partnership Agreement', since: 'Feb 2019', duty: '0% on 97% of goods', coverage: '97% of goods', savings: 'HIGH', note: 'World\'s largest bilateral FTA by GDP. Eliminates 97% of EU tariffs on Japanese goods. Strong for Japanese cars, electronics; EU beef, dairy, wine, cheese.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/japan_en' },
+  ],
+  'germany:singapore': [
+    { name: 'EUSFTA', full: 'EU–Singapore Free Trade Agreement', since: 'Nov 2019', duty: '0%', coverage: '84% of goods (rising to 100%)', savings: 'HIGH', note: 'First EU FTA with an ASEAN country. 84% of tariffs eliminated immediately, remainder phased over 5 years. Singapore as a regional hub means indirect access to ASEAN.', url: 'https://policy.trade.ec.europa.eu/eu-trade-relationships-country-and-region/countries-and-regions/singapore_en' },
+  ],
+  'germany:canada': [
+    { name: 'CETA', full: 'Canada–EU Comprehensive Economic and Trade Agreement', since: 'Sep 2017', duty: '0% on 98% of goods', coverage: '98% of goods', savings: 'HIGH', note: 'Provisional application in force since 2017. Eliminates 98% of tariff lines. Full ratification still pending in some EU member states but goods trade fully covered.', url: 'https://www.international.gc.ca/trade-commerce/trade-policy/ceta-aecg/index.aspx' },
+  ],
+  'france:canada': [
+    { name: 'CETA', full: 'Canada–EU Comprehensive Economic and Trade Agreement', since: 'Sep 2017', duty: '0% on 98% of goods', coverage: '98% of goods', savings: 'HIGH', note: 'CETA applies to all EU member states. Broad tariff elimination for industrial goods, significant agricultural preferences.', url: 'https://www.international.gc.ca/trade-commerce/trade-policy/ceta-aecg/index.aspx' },
+  ],
+
+  // ── US–Vietnam: no bilateral FTA, but note relevant frameworks ──
+  'united states:vietnam': [
+    { name: 'No bilateral FTA', full: 'No US–Vietnam Free Trade Agreement', since: 'N/A', duty: 'MFN rates (column 1)', coverage: 'None', savings: 'NONE', note: 'The US is NOT a CPTPP member and has no bilateral FTA with Vietnam. Standard MFN rates apply. GSP expired in 2020 and has not been renewed for Vietnam. Consider CPTPP routing via Canada or Mexico for potential duty relief on qualifying origin goods.', url: 'https://ustr.gov/countries-regions/southeast-asia-pacific/vietnam' },
   ],
 }
 

@@ -97,7 +97,8 @@ const SEC301_RATES = {
 
 // ── Section 232 steel & aluminum surcharges ────────────────────────────────
 const SEC232 = {
-  steel: { chapters: ['72','73'], rate: 25, countries: ['china','russia','ukraine'] },
+  // Ukraine excluded from Sec 232 steel by Presidential Proclamation -- only China and Russia remain
+  steel: { chapters: ['72','73'], rate: 25, countries: ['china','russia'] },
   aluminum: { chapters: ['76'], rate: 10, countries: ['china','russia'] },
 }
 

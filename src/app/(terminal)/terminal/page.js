@@ -417,17 +417,28 @@ const HUB_REGIONS = {
   'Australia':      { iso2:'AU', score:85, zones:{ 'East Coast':['Sydney / Port Botany','Melbourne','Brisbane'], 'West Coast':['Fremantle / Perth'], 'North':['Darwin'] } },
 }
 
+// ── Module-level constants (change in one place, works everywhere) ────────────
+const DATA_REFRESH_MS      = 5 * 60 * 1000   // how often loadLiveData re-runs
+const SCAN_TIMEOUT_MS      = 45_000           // AbortController timeout for /api/analyze
+const MAX_MISSION_HISTORY  = 20               // how many past scans we keep in localStorage
+
+// scoreClasses(score) -- returns Tailwind color tokens for a 0-100 stability/risk score.
+// Thresholds: >=60 = stable (green), >=35 = moderate (amber), <35 = high risk (red).
+function scoreClasses(score) {
+  if (score >= 60) return { text: 'text-emerald-400', bg: 'bg-emerald-500', badge: 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' }
+  if (score >= 35) return { text: 'text-amber-400',   bg: 'bg-amber-500',   badge: 'text-amber-400 border-amber-500/20 bg-amber-500/5' }
+  return             { text: 'text-rose-400',    bg: 'bg-rose-500',    badge: 'text-rose-400 border-rose-500/20 bg-rose-500/5' }
+}
+
 export default function Dashboard() {
-  const [profile, setProfile] = useState({
-    industry: 'Universal Intelligence Mode',
-    material: 'Global Resources',
-    priority: 'End-to-End Strategic Support'
-  })
+  // profile.material tracks the last searched commodity -- the only field actually used
+  const [profile, setProfile] = useState({ material: 'Global Resources' })
 
   const [risks, setRisks] = useState([])
   const [opportunities, setOpportunities] = useState([])
   const [news, setNews] = useState([])
   const [newsLoading, setNewsLoading] = useState(true)
+  const [apiErrCount, setApiErrCount] = useState(0)
   const [newsFilter, setNewsFilter] = useState('all')
   const [missionKeywords, setMissionKeywords] = useState([])
   const [selectedNode, setSelectedNode] = useState(null)
@@ -500,7 +511,7 @@ export default function Dashboard() {
       body: JSON.stringify({ opportunities: opps, query })
     }).then(r => r.json()).then(data => {
       if (!data.error) setIntelBrief(data)
-    }).catch(() => {}).finally(() => setIntelLoading(false))
+    }).catch(err => console.error('[intel]', err)).finally(() => setIntelLoading(false))
   }
 
 
@@ -518,14 +529,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     const loadLiveData = () => {
-      fetch('/api/news').then(r => r.json()).then(d => { if (Array.isArray(d) && d.length > 0) setNews(d) }).catch(() => {}).finally(() => setNewsLoading(false))
-      fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})
-      fetch('/api/commodities').then(r => r.json()).then(d => setCommodities(d)).catch(() => {})
+      fetch('/api/news').then(r => r.json()).then(d => { if (Array.isArray(d) && d.length > 0) setNews(d) }).catch(err => { console.error('[news]', err); setApiErrCount(c => c + 1) }).finally(() => setNewsLoading(false))
+      fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(err => { console.error('[fx]', err); setApiErrCount(c => c + 1) })
+      fetch('/api/commodities').then(r => r.json()).then(d => setCommodities(d)).catch(err => { console.error('[commodities]', err); setApiErrCount(c => c + 1) })
     }
     loadLiveData()
     // Refresh periodically so data actually moves while the terminal stays
     // open, instead of freezing at whatever was live on page load.
-    const interval = setInterval(loadLiveData, 5 * 60 * 1000) // every 5 min
+    const interval = setInterval(loadLiveData, DATA_REFRESH_MS)
     const metalsInterval = setInterval(() => setMetalsTs(new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })), 60 * 1000)
     try {
       const saved = localStorage.getItem('atlas_missions')
@@ -606,7 +617,7 @@ export default function Dashboard() {
       directive: dir
     }
     setMissionHistory(prev => {
-      const updated = [...prev, mission].slice(-20)
+      const updated = [...prev, mission].slice(-MAX_MISSION_HISTORY)
       try { localStorage.setItem('atlas_missions', JSON.stringify(updated)) } catch {}
       return updated
     })
@@ -667,7 +678,7 @@ export default function Dashboard() {
     }
 
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 45000)
+    const timeoutId = setTimeout(() => controller.abort(), SCAN_TIMEOUT_MS)
 
     try {
       const res = await fetch('/api/analyze', {
@@ -1269,8 +1280,9 @@ export default function Dashboard() {
             const { level, continent, country, region } = hubNav
             const countryData = country ? HUB_REGIONS[country] : null
             const s = countryData?.score
-            const barColor = s >= 60 ? 'bg-emerald-500' : s >= 35 ? 'bg-amber-500' : 'bg-rose-500'
-            const textColor = s >= 60 ? 'text-emerald-400' : s >= 35 ? 'text-amber-400' : 'text-rose-400'
+            const sc = scoreClasses(s)
+            const barColor = sc.bg
+            const textColor = sc.text
             const stabilityLabel = s >= 60 ? 'Stable' : s >= 35 ? 'Moderate' : 'High Risk'
             return (
               <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl" data-tour="stability">
@@ -1338,7 +1350,7 @@ export default function Dashboard() {
                     {(HUB_COUNTRIES[continent] || []).map(cn => {
                       const d = HUB_REGIONS[cn]
                       const cs = d?.score
-                      const tc = cs >= 60 ? 'text-emerald-400' : cs >= 35 ? 'text-amber-400' : 'text-rose-400'
+                      const tc = scoreClasses(cs).text
                       return (
                         <button key={cn}
                           onClick={() => setHubNav(n => ({ ...n, level:'region', country:cn }))}
@@ -1374,8 +1386,9 @@ export default function Dashboard() {
                     {(countryData.zones[region] || []).map((hub, i) => {
                       const pr = PORT_RISK[hub]
                       const ps = pr?.score ?? countryData.score
-                      const pc = ps >= 60 ? 'bg-emerald-500' : ps >= 35 ? 'bg-amber-500' : 'bg-rose-500'
-                      const pt = ps >= 60 ? 'text-emerald-400' : ps >= 35 ? 'text-amber-400' : 'text-rose-400'
+                      const psc = scoreClasses(ps)
+                      const pc = psc.bg
+                      const pt = psc.text
                       const pl = ps >= 60 ? 'Stable' : ps >= 35 ? 'Moderate' : 'High Risk'
                       const alerts = pr?.alerts || []
                       const topAlert = alerts[0]
@@ -1389,7 +1402,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex items-center gap-1.5 shrink-0 ml-2">
                               <span className={`text-[11px] font-bold font-mono ${pt}`}>◆ {ps}</span>
-                              <span className={`text-[10px] font-bold px-1 py-0.5 rounded border ${ps >= 60 ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5' : ps >= 35 ? 'text-amber-400 border-amber-500/20 bg-amber-500/5' : 'text-rose-400 border-rose-500/20 bg-rose-500/5'}`}>{pl}</span>
+                              <span className={`text-[10px] font-bold px-1 py-0.5 rounded border ${psc.badge}`}>{pl}</span>
                             </div>
                           </div>
                           <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden mb-2">
@@ -1532,7 +1545,7 @@ export default function Dashboard() {
                           const iso2 = getHubISO2(o.hub)
                           const score = iso2 && intelBrief?.countryScores?.[iso2]
                           if (!score) return null
-                          const c = score.stability >= 60 ? 'text-emerald-400' : score.stability >= 35 ? 'text-amber-400' : 'text-rose-400'
+                          const c = scoreClasses(score.stability).text
                           return <span className={`ml-auto font-mono text-[8px] ${c}`} title="World Bank Political Stability Score">◆ {score.stability}</span>
                         })()}
                       </div>
@@ -1717,6 +1730,7 @@ export default function Dashboard() {
                         <div className="bg-emerald-500/5 border border-emerald-500/20 p-4 rounded-xl">
                           <div className="text-[10px] text-emerald-400 font-bold uppercase mb-2 flex items-center gap-1.5">
                             <Leaf size={11} /> ESG Scorecard
+                            <span className="text-[8px] text-amber-400/70 font-normal normal-case ml-auto">Illustrative -- verify with EcoVadis/CDP</span>
                           </div>
                           <div className="flex items-center justify-between mb-2">
                             <div className="text-[28px] font-bold text-white">{selectedNode.esg.ethical_rating}</div>
@@ -2537,7 +2551,7 @@ export default function Dashboard() {
                   <TrendingUp size={14} /> Live FX Rates
                 </h2>
                 <button
-                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(() => {})}
+                  onClick={() => fetch('/api/fx').then(r => r.json()).then(d => setFxData(d)).catch(err => console.error('[fx refresh]', err))}
                   className="flex items-center gap-1 text-[8px] text-slate-400 hover:text-amber-400 font-mono transition-colors"
                   title="Rates refresh automatically every 5 minutes. Click to refresh now.">
                   <span>as of {fxData.date}</span>
@@ -2566,10 +2580,16 @@ export default function Dashboard() {
       </div>
 
       {/* System health pill — desktop only */}
-      <div className="hidden lg:flex fixed bottom-5 left-5 z-[120] items-center gap-2 bg-black/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-2xl">
-        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">System_Integrity: 100%</span>
-      </div>
+      {(() => {
+        const health = Math.max(0, 100 - apiErrCount * 34)
+        const dotColor = health === 100 ? 'bg-emerald-500' : health >= 66 ? 'bg-amber-400' : 'bg-rose-500'
+        return (
+          <div className="hidden lg:flex fixed bottom-5 left-5 z-[120] items-center gap-2 bg-black/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-2xl">
+            <div className={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`} />
+            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">System_Integrity: {health}%</span>
+          </div>
+        )
+      })()}
 
     </div>
   )

@@ -43,7 +43,7 @@ function NightOverlay({ earthRotRef }) {
   }, [])
 
   // Shader uniforms -- sunDir mutated each frame
-  const uniforms = useRef({ sunDir: { value: baseSunDir.clone() } })
+  const uniforms = useMemo(() => ({ sunDir: { value: baseSunDir.clone() } }), [baseSunDir])
 
   // Pre-allocated scratch objects (no per-frame GC)
   const _mat  = useMemo(() => new THREE.Matrix4(), [])
@@ -56,7 +56,7 @@ function NightOverlay({ earthRotRef }) {
     _mat.makeRotationY(rotY)   // ← positive: matches the Earth's own Y rotation
     _mat.multiply(_matX)       // then apply the fixed -0.25 rad X tilt
     _vec.copy(baseSunDir).applyMatrix4(_mat)
-    uniforms.current.sunDir.value.copy(_vec)
+    uniforms.sunDir.value.copy(_vec)
   })
 
   return (
@@ -65,7 +65,7 @@ function NightOverlay({ earthRotRef }) {
       <shaderMaterial
         transparent
         depthWrite={false}
-        uniforms={uniforms.current}
+        uniforms={uniforms}
         vertexShader={`
           varying vec3 vWorldNormal;
           void main() {
@@ -89,7 +89,7 @@ function NightOverlay({ earthRotRef }) {
 
 // Chokepoint marker -- amber diamond pulsing dot
 function ChokepointMarker({ cp }) {
-  const [hovered, setHovered] = React.useState(false)
+  const [hovered, setHovered] = useState(false)
 
   const position = useMemo(() => {
     const phi   = (90 - cp.lat) * (Math.PI / 180)
@@ -197,7 +197,7 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
 
 function Marker({ node, color, type, onNodeClick }) {
   const { lat, lng, title, hub } = node
-  const [hovered, setHovered] = React.useState(false)
+  const [hovered, setHovered] = useState(false)
   
   const position = useMemo(() => {
     const phi = (90 - lat) * (Math.PI / 180)

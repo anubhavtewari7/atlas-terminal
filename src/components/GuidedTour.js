@@ -144,11 +144,11 @@ function GlassHighlight() {
 
 export default function GuidedTour({ onComplete, onStartScan }) {
   const [step, setStep]   = useState(0)
-  const [rect, setRect]   = useState(null)
+  const [measurement, setMeasurement] = useState(null)
   const [win,  setWin]    = useState({ w: 1440, h: 900 })
-  const [, forceRender]   = useState(0)
 
   const current = STEPS[step]
+  const rect = measurement?.step === step && current.target ? measurement.rect : null
   const isFirst = step === 0
   const isLast  = step === STEPS.length - 1
   const isMobile = win.w < 1024
@@ -163,7 +163,9 @@ export default function GuidedTour({ onComplete, onStartScan }) {
 
   // Find and measure target element
   useEffect(() => {
-    if (!current.target) { setRect(null); return }
+    if (!current.target) return
+    let timer
+    const setRect = (rect) => setMeasurement({ step, rect })
 
     const measure = () => {
       const el = document.querySelector(`[data-tour="${current.target}"]`)
@@ -176,15 +178,18 @@ export default function GuidedTour({ onComplete, onStartScan }) {
           return
         }
         el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-        setTimeout(() => {
+        timer = setTimeout(() => {
           setRect(el.getBoundingClientRect())
-          forceRender(n => n + 1)
         }, 350)
       } else {
         setRect(null)
       }
     }
-    measure()
+    const frame = requestAnimationFrame(measure)
+    return () => {
+      cancelAnimationFrame(frame)
+      clearTimeout(timer)
+    }
   }, [step, current.target])
 
   const goNext = useCallback(() => {
