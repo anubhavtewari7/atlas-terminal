@@ -104,7 +104,7 @@ export default function Dashboard() {
   const [profile, setProfile] = useState({ material: 'Global Resources' })
 
   const { news, newsLoading, fxData, commodities, metalsTs, apiErrCount, refreshFx } = useLiveData()
-  const { missionHistory, saveMission, replayMission, clearHistory } = useMissionHistory()
+  const { missionHistory, saveMission, clearHistory } = useMissionHistory()
 
   const [risks, setRisks] = useState([])
   const [opportunities, setOpportunities] = useState([])
