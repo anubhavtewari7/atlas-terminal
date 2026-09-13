@@ -13,7 +13,8 @@ jobs:
       - name: Trigger email digest
         run: |
           STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
-            "https://atlas-terminal-tau.vercel.app/api/notify?key=${{ secrets.NOTIFY_SECRET }}")
+            -H "Authorization: Bearer ${{ secrets.NOTIFY_SECRET }}" \
+          "https://atlas-terminal-tau.vercel.app/api/notify")
           cat /tmp/response.json
           if [ "$STATUS" -ne 200 ]; then
             echo "Notify endpoint returned HTTP $STATUS"
