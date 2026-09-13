@@ -1,17 +1,27 @@
 {
-  "lastUpdated": "2026-09-13T00:35:00Z",
+  "lastUpdated": "2026-09-13T01:30:00Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
     {
       "id": "red-sea-cape-reroute-sep-2026",
       "title": "Red Sea Rerouting Adds Days to Transit Times",
-      "summary": "Vessels continue rerouting around the Cape of Good Hope due to Red Sea security risks, significantly extending east-west transit times. Drewry's container rate index has climbed to its highest level since September 2024 as a result.",
+      "summary": "Vessels continue rerouting around the Cape of Good Hope due to Red Sea security risks, significantly extending east-west transit times. Drewry's container rate index held at $4,465/40ft container as of September 3, near its highest level since September 2024.",
       "severity": "HIGH",
       "type": "DISRUPTION",
       "region": "MIDDLE-EAST",
       "source": "https://www.xeneta.com/blog/the-biggest-supply-chain-risks-of-2026-and-how-to-navigate-them",
-      "timestamp": "2026-09-12T12:00:00Z"
+      "timestamp": "2026-09-13T01:00:00Z"
+    },
+    {
+      "id": "transpacific-rate-surge-sep13-2026",
+      "title": "Transpacific Rates Hit $7,185/FEU as Capacity Tightens",
+      "summary": "Shanghai–Los Angeles spot rates climbed to $7,185 per FEU as carriers pulled approximately 20% of transpacific capacity via blank sailings through September. Shippers face omitted calls, port skipping, and last-minute schedule changes as pre-National Day cargo rush and typhoon backlogs converge.",
+      "severity": "HIGH",
+      "type": "DISRUPTION",
+      "region": "GLOBAL",
+      "source": "https://www.jmrodgers.com/news/september-2026-freight-market-update/",
+      "timestamp": "2026-09-13T01:00:00Z"
     },
     {
       "id": "global-port-congestion-four-year-high-sep-2026",
@@ -34,34 +44,14 @@
       "timestamp": "2026-09-12T10:00:00Z"
     },
     {
-      "id": "copper-production-decline-sep-2026",
-      "title": "Copper Output Falls at Codelco and Freeport",
-      "summary": "Copper futures fell nearly 5% in a single session before stabilizing near $6.45/lb, pressured by US reconsideration of refined metal import tariffs. Major miners Codelco and Freeport-McMoRan reported double-digit production declines, contributing to a 1.1% drop in global copper output in H1 2026.",
-      "severity": "MEDIUM",
-      "type": "COMMODITY",
-      "region": "AMERICAS",
-      "source": "https://tradingeconomics.com/commodity/copper",
-      "timestamp": "2026-09-11T00:00:00Z"
-    },
-    {
       "id": "typhoon-saudel-ningbo-sep-2026",
       "title": "Typhoon SAUDEL Closes Ningbo, Disrupts Asia Schedules",
-      "summary": "Typhoon SAUDEL forced the closure of Ningbo port for 78 hours this week and is driving vessel bunching across Asia, extending the US peak shipping season into September. The National Retail Federation forecasts 2.31 million TEUs will move through major US ports in September, potentially the busiest month of 2026.",
+      "summary": "Typhoon SAUDEL forced the closure of Ningbo port for 78 hours this week and is driving vessel bunching across Asia, with Ningbo now averaging 3.58-day vessel waits and Yokohama at 90-95% yard utilization. The US peak shipping season is extending into September, with the National Retail Federation forecasting 2.31 million TEUs through major US ports in September.",
       "severity": "HIGH",
       "type": "WEATHER",
       "region": "ASIA-PACIFIC",
-      "source": "https://tbgfs.com/supply-chain-disruptions-extend-u-s-peak-season-into-september/",
+      "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
       "timestamp": "2026-09-12T08:00:00Z"
-    },
-    {
-      "id": "crude-oil-100-iran-hormuz-sep-2026",
-      "title": "Crude Oil Hits $100/bbl as Iran-Gulf Hormuz Talks Open",
-      "summary": "Brent crude reached $99.99/barrel on September 11, up 20% over the past month and 59.5% year-on-year, driven by Middle East tensions and supply constraints. Iranian state media confirmed Tehran will meet Gulf states in Oman to discuss the Strait of Hormuz, introducing uncertainty into the key oil transit chokepoint.",
-      "severity": "HIGH",
-      "type": "COMMODITY",
-      "region": "MIDDLE-EAST",
-      "source": "https://tradingeconomics.com/commodity/crude-oil",
-      "timestamp": "2026-09-11T00:00:00Z"
     },
     {
       "id": "canada-retaliatory-tariffs-sep8-2026",
@@ -147,7 +137,7 @@
   "commodityNotes": [
     {
       "commodity": "Brent Crude",
-      "note": "Crude oil hit $99.99/barrel on Sep 11, up 20% over the past month and 59.5% YoY; Iran-Gulf talks on Strait of Hormuz access add fresh upside risk; energy prices forecast up 24% for full-year 2026. Thermal coal also rallying alongside crude.",
+      "note": "Energy prices surged 24% year-to-date in 2026 to highest level since Russia's Ukraine invasion; Brent crude climbed ~5.7% in August alone with Middle East supply constraints and Strait of Hormuz uncertainty continuing to drive upside risk.",
       "direction": "UP",
       "driver": "Middle East conflict, supply constraints, and Strait of Hormuz uncertainty",
       "source": "https://tradingeconomics.com/commodity/crude-oil"
@@ -193,14 +183,14 @@
       "region": "Red Sea / Horn of Africa",
       "severity": "HIGH",
       "type": "CONFLICT",
-      "desc": "Ongoing security threats forcing vessels to reroute around Cape of Good Hope, adding 10-14 days to Asia-Europe transit times and driving container rates to multi-year highs.",
+      "desc": "Ongoing security threats forcing vessels to reroute around Cape of Good Hope, adding 10-14 days to Asia-Europe transit times; Drewry index at $4,465/40ft container near multi-year highs.",
       "affectedCommodities": ["Oil", "Container Freight", "Consumer Goods", "Electronics"]
     },
     {
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
       "type": "WEATHER",
-      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours, driving vessel bunching across Asia; pre-National Day cargo rush at end of September expected to intensify congestion further.",
+      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours; Ningbo at 3.58-day waits, Yokohama at 90-95% utilization; pre-National Day cargo rush expected to intensify congestion through end of September.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
@@ -226,6 +216,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-13T01:30:00Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 1,
+      "alertsExpired": 2,
+      "summary": "Expired 2 alerts >48h old (copper-production-decline and crude-oil-100, both Sep 11T00:00). Added transpacific-rate-surge-sep13: Shanghai-LA hit $7,185/FEU with 20% blank sailing cuts. Updated Brent Crude note with full-year energy surge context (+24% YTD). Ningbo waits confirmed at 3.58 days, Yokohama at 90-95% yard utilization."
+    },
     {
       "runAt": "2026-09-13T00:35:00Z",
       "searchesPerformed": 5,
