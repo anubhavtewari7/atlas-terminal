@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-13T01:30:00Z",
+  "lastUpdated": "2026-09-13T02:30:00Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -64,6 +64,16 @@
       "timestamp": "2026-09-12T00:00:00Z"
     },
     {
+      "id": "sep29-us-regulatory-wave-2026",
+      "title": "Sep 29 US Regulatory Wave: Canada Ban + Pharma Tariffs",
+      "summary": "Two major US trade actions take effect September 29: a prohibition on importation of certain Canadian goods (escalating the US-Canada trade war), and new tariffs on patented pharmaceuticals and active ingredients affecting healthcare importers. Both measures confirmed active as of September 13, adding significant compliance burden for North American supply chains.",
+      "severity": "HIGH",
+      "type": "REGULATORY",
+      "region": "AMERICAS",
+      "source": "https://www.tradecomplianceresourcehub.com/2026/09/10/trump-2-0-tariff-tracker/",
+      "timestamp": "2026-09-13T00:35:00Z"
+    },
+    {
       "id": "iran-aviation-sanctions-sep-2026",
       "title": "US Treasury Broadens Iran Aviation Sanctions",
       "summary": "The US Treasury Department has expanded Iran aviation sanctions, increasing scrutiny of regional support networks and raising compliance risks for MRO companies, freight forwarders, aircraft brokers, and parts suppliers in the UAE, Turkey, Malaysia, and other transit markets. Companies with exposure to these networks face heightened enforcement risk.",
@@ -124,14 +134,24 @@
       "timestamp": "2026-09-12T00:00:00Z"
     },
     {
-      "id": "sep29-us-regulatory-wave-2026",
-      "title": "Sep 29 US Regulatory Wave: Canada Ban + Pharma Tariffs",
-      "summary": "Two major US trade actions take effect September 29: a prohibition on importation of certain Canadian goods (escalating the US-Canada trade war), and new tariffs on patented pharmaceuticals and active ingredients affecting healthcare importers. Both measures confirmed active as of September 13, adding significant compliance burden for North American supply chains.",
-      "severity": "HIGH",
+      "id": "port-klang-dredging-sep-2026",
+      "title": "Port Klang Westports Emergency Dredging Sep 7–27",
+      "summary": "Emergency maintenance dredging is underway at Malaysia's Port Klang Westports from September 7 to 27, restricting vessel drafts and reducing throughput at one of Southeast Asia's busiest transshipment hubs. Shippers routing cargo through Port Klang should expect schedule adjustments and possible delays during the dredging window.",
+      "severity": "MEDIUM",
+      "type": "DISRUPTION",
+      "region": "ASIA-PACIFIC",
+      "source": "https://mykn.kuehne-nagel.com/news/article/port-operational-updates-from-08-09-2026",
+      "timestamp": "2026-09-13T02:00:00Z"
+    },
+    {
+      "id": "semiconductor-cod-tariff-sep-2026",
+      "title": "Semiconductor Country-of-Diffusion Tariffs Add New Risk",
+      "summary": "US trade policy has shifted to tariffing semiconductors based on their Country of Diffusion (COD) rather than Country of Origin (COO), adding a significant new compliance layer for importers of chips manufactured or packaged in third countries. Companies with complex semiconductor supply chains sourcing from Asia face increased duty exposure and reclassification risk.",
+      "severity": "LOW",
       "type": "REGULATORY",
-      "region": "AMERICAS",
-      "source": "https://www.tradecomplianceresourcehub.com/2026/09/10/trump-2-0-tariff-tracker/",
-      "timestamp": "2026-09-13T00:35:00Z"
+      "region": "GLOBAL",
+      "source": "https://www.globaltrademag.com/how-geopolitical-tensions-in-2026-are-reshaping-global-supply-chain-strategies/",
+      "timestamp": "2026-09-13T02:00:00Z"
     }
   ],
   "commodityNotes": [
@@ -190,7 +210,7 @@
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
       "type": "WEATHER",
-      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours; Ningbo at 3.58-day waits, Yokohama at 90-95% utilization; pre-National Day cargo rush expected to intensify congestion through end of September.",
+      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours; Ningbo at 3.58-day waits, Yokohama at 90-95% utilization; Port Klang under emergency dredging Sep 7-27; pre-National Day cargo rush expected to intensify congestion through end of September.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
@@ -216,6 +236,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-13T02:30:00Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 2,
+      "alertsExpired": 0,
+      "summary": "Added port-klang-dredging-sep-2026 (emergency maintenance dredging Sep 7-27 restricting Westports capacity) and semiconductor-cod-tariff-sep-2026 (new Country-of-Diffusion tariff regime adding compliance risk for chip importers). No alerts expired; all 13 prior alerts within 48h window. Alert count now at 15 (limit)."
+    },
     {
       "runAt": "2026-09-13T01:30:00Z",
       "searchesPerformed": 5,
