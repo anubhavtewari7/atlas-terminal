@@ -3,11 +3,11 @@ import "../globals.css";
 export const metadata = {
   title: "NAUTILUS -- Supply Chain Intelligence",
   description: "Real-time sourcing intelligence, tariff data, and geopolitical risk for procurement professionals. Know your supply chain before it fails you.",
-  metadataBase: new URL('https://atlas-terminal-tau.vercel.app'),
+  metadataBase: new URL('https://nautilus-terminal.vercel.app'),
   openGraph: {
     title: "NAUTILUS -- Supply Chain Intelligence",
     description: "Real-time sourcing intelligence, tariff data, and geopolitical risk for procurement professionals. Know your supply chain before it fails you.",
-    url: "https://atlas-terminal-tau.vercel.app/terminal",
+    url: "https://nautilus-terminal.vercel.app/terminal",
     siteName: "NAUTILUS Terminal",
     images: [
       {

@@ -623,7 +623,7 @@ export default function Home() {
     if (!email || status === 'loading' || status === 'done') return
     setStatus('loading')
 
-    const TERMINAL_URL = 'https://atlas-terminal-tau.vercel.app/terminal'
+    const TERMINAL_URL = 'https://nautilus-terminal.vercel.app/terminal'
 
     const messageHtml = `
 <!DOCTYPE html>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import NautilusLogo from '@/components/NautilusLogo'
 
 export const metadata = {
-  metadataBase: new URL('https://atlas-terminal-tau.vercel.app'),
+  metadataBase: new URL('https://nautilus-terminal.vercel.app'),
 }
 
 export default function LegalLayout({ children }) {

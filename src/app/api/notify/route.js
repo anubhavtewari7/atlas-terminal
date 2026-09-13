@@ -112,7 +112,7 @@ export async function GET(request) {
     ${commHtml}
   </table>` : ''}
 
-  <a href="https://atlas-terminal-tau.vercel.app/terminal"
+  <a href="https://nautilus-terminal.vercel.app/terminal"
      style="display:inline-block;background:#38bdf8;color:#000;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px">
     Open Nautilus Terminal
   </a>

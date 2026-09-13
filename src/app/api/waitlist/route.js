@@ -3,7 +3,7 @@ import { rateLimit } from '@/lib/rate-limit'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const TERMINAL_URL = 'https://atlas-terminal-tau.vercel.app/terminal'
+const TERMINAL_URL = 'https://nautilus-terminal.vercel.app/terminal'
 
 const welcomeEmailHtml = (email) => `
 <!DOCTYPE html>

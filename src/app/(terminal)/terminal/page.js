@@ -635,7 +635,7 @@ export default function Dashboard() {
       doc.rect(18, yPos - 3, 174, 0.4, 'F')
       doc.setTextColor(60, 60, 60)
       doc.setFontSize(7)
-      doc.text('NAUTILUS SUPPLY CHAIN INTELLIGENCE  ·  atlas-terminal-tau.vercel.app  ·  For strategic reference only -- verify before contracting.', 20, yPos + 3, { maxWidth: 170 })
+      doc.text('NAUTILUS SUPPLY CHAIN INTELLIGENCE  ·  nautilus-terminal.vercel.app  ·  For strategic reference only -- verify before contracting.', 20, yPos + 3, { maxWidth: 170 })
 
       doc.save(`NAUTILUS_Brief_${(searchQuery || 'Mission').replace(/\s+/g, '_')}.pdf`)
       addLog('[SUCCESS] Executive Brief generated and downloaded.')
