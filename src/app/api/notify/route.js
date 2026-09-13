@@ -4,6 +4,7 @@
 // Protected by NOTIFY_SECRET env var -- agent passes Authorization: Bearer <SECRET> header.
 
 import { NextResponse } from 'next/server';
+import { rateLimit } from '@/lib/rate-limit';
 
 const GITHUB_RAW = 'https://raw.githubusercontent.com/anubhavtewari7/atlas-terminal/main/public/market-intelligence.json';
 // Recipient -- set NOTIFY_TO in Vercel env vars (falls back to dev address on free Resend tier)
@@ -27,6 +28,10 @@ function safeHref(url) {
 }
 
 export async function GET(request) {
+  // Rate limit before auth check so we don't burn CPU on brute-force auth attempts
+  const rl = rateLimit(request, { limit: 20, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   // Auth via Authorization header (not URL param -- URL params end up in logs)
   const authHeader = request.headers.get('Authorization') || ''
   const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''

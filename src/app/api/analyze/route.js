@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS, pickBestHub } from '@/lib/database';
 import { enrichWithRealTradeData } from '@/lib/comtrade';
+import { rateLimit } from '@/lib/rate-limit';
 
 // Module-level constant -- built once per cold start, not on every request
 const CATEGORY_SIGNALS = {
@@ -26,6 +27,9 @@ const CATEGORY_SIGNALS = {
 }
 
 export async function POST(req) {
+  const rl = rateLimit(req, { limit: 10, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   try {
     const { material } = await req.json();
 

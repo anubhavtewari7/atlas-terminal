@@ -1,4 +1,5 @@
 import { Resend } from 'resend'
+import { rateLimit } from '@/lib/rate-limit'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -80,6 +81,9 @@ const welcomeEmailHtml = (email) => `
 `
 
 export async function POST(request) {
+  const rl = rateLimit(request, { limit: 5, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   try {
     const body = await request.json()
     const email = body?.email?.trim()

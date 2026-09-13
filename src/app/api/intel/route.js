@@ -1,6 +1,7 @@
 // NAUTILUS TERMINAL -- /api/intel/route.js
 // Live trade intelligence: NewsAPI.org + static World Bank stability scores
 // Requires NEWS_API_KEY environment variable
+import { rateLimit } from '@/lib/rate-limit';
 
 // World Bank Political Stability Index 2023 — normalized 0–100
 // Source: World Bank Worldwide Governance Indicators (PV.EST, 2023)
@@ -88,10 +89,17 @@ async function fetchNewsAPI(countries, query) {
 }
 
 export async function POST(req) {
+  const rl = rateLimit(req, { limit: 10, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   try {
-    const { opportunities, query } = await req.json()
-    if (!opportunities?.length || !query) {
-      return Response.json({ error: 'Missing data' }, { status: 400 })
+    const body = await req.json()
+    const { opportunities, query } = body ?? {}
+    if (!Array.isArray(opportunities) || opportunities.length === 0) {
+      return Response.json({ error: 'opportunities must be a non-empty array' }, { status: 400 })
+    }
+    if (typeof query !== 'string' || !query.trim() || query.length > 500) {
+      return Response.json({ error: 'query must be a non-empty string (max 500 chars)' }, { status: 400 })
     }
 
     const countries = extractCountries(opportunities)
