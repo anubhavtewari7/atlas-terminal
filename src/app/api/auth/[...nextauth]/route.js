@@ -1,6 +1,20 @@
 // /api/auth/[...nextauth]/route.js
-// Auth.js v5 catch-all handler -- handles Google OAuth sign-in, callbacks,
-// session tokens, and sign-out. No logic lives here; everything is in auth.js.
-import { handlers } from '@/auth'
+//
+// Auth.js v5 catch-all handler -- disabled until next-auth is installed.
+// See auth.js at the project root for setup instructions.
 
-export const { GET, POST } = handlers
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  return NextResponse.json(
+    { error: 'Auth not configured. See auth.js for setup instructions.' },
+    { status: 503 }
+  )
+}
+
+export async function POST() {
+  return NextResponse.json(
+    { error: 'Auth not configured. See auth.js for setup instructions.' },
+    { status: 503 }
+  )
+}

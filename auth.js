@@ -1,35 +1,33 @@
-// auth.js -- Auth.js v5 (next-auth@5) configuration.
-// Requires the following Vercel environment variables:
-//   AUTH_SECRET          -- generate with:  npx auth secret
-//   AUTH_GOOGLE_ID       -- Google Cloud Console > OAuth 2.0 credentials
-//   AUTH_GOOGLE_SECRET   -- same credential
+// auth.js -- Auth.js v5 (next-auth@5) stub.
 //
-// Add https://nautilus-terminal.vercel.app/api/auth/callback/google as an
-// authorized redirect URI in the Google Cloud Console.
+// Google OAuth is not yet active. To enable it:
+//   1. Find a version of next-auth compatible with your Next.js version:
+//        npm info next-auth versions --json | tail
+//   2. Add to package.json dependencies: "next-auth": "<compatible version>"
+//   3. Run npm install locally and commit the updated package-lock.json
+//   4. Uncomment the implementation below and remove the stub exports
+//   5. Add to Vercel env: AUTH_SECRET  AUTH_GOOGLE_ID  AUTH_GOOGLE_SECRET
+//   6. Add redirect URI: https://nautilus-terminal.vercel.app/api/auth/callback/google
 //
-// Auth enforcement is opt-in: the authorized callback returns true (open access)
-// unless AUTH_SECRET and AUTH_GOOGLE_ID are both present in the environment.
-// Adding those env vars to Vercel is the only step needed to enable auth --
-// no code change required.
+// ---- Implementation (uncomment when next-auth is installed) ----
+// import NextAuth from 'next-auth'
+// import Google from 'next-auth/providers/google'
+//
+// export const { handlers, signIn, signOut, auth } = NextAuth({
+//   providers: [Google],
+//   pages: { signIn: '/auth/signin' },
+//   callbacks: {
+//     authorized({ auth: session }) {
+//       const authEnabled = !!process.env.AUTH_SECRET && !!process.env.AUTH_GOOGLE_ID
+//       if (!authEnabled) return true
+//       return !!session
+//     },
+//   },
+// })
+// ----------------------------------------------------------------
 
-import NextAuth from 'next-auth'
-import Google from 'next-auth/providers/google'
-
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [Google],
-
-  pages: {
-    signIn: '/auth/signin',
-  },
-
-  callbacks: {
-    authorized({ auth: session }) {
-      // Only enforce authentication when credentials are configured.
-      // When AUTH_SECRET or AUTH_GOOGLE_ID are absent, the terminal stays open.
-      const authEnabled =
-        !!process.env.AUTH_SECRET && !!process.env.AUTH_GOOGLE_ID
-      if (!authEnabled) return true
-      return !!session
-    },
-  },
-})
+// Stub exports -- keep the module importable without next-auth installed.
+export const handlers = { GET: null, POST: null }
+export const signIn  = async () => {}
+export const signOut = async () => {}
+export const auth    = async () => null
