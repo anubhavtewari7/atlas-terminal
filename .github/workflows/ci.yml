@@ -25,7 +25,7 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npx eslint src --ext .js,.jsx --format compact
+        run: npm run lint
 
       - name: Build
         run: npm run build
