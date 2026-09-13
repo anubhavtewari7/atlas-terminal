@@ -65,9 +65,12 @@ async function fetchNewsAPI(countries, query) {
   const baseQ = queryParts.join(' AND ')
   const tradeContext = 'AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions OR sourcing OR manufacturing)'
   const q = encodeURIComponent(`${baseQ} ${tradeContext}`)
-  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=8&apiKey=${NEWS_API_KEY}`
+  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=8`
   try {
-    const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
+    const res = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${NEWS_API_KEY}` },
+      signal: AbortSignal.timeout(10000),
+    })
     if (!res.ok) return []
     const data = await res.json()
     if (data.status !== 'ok') return []

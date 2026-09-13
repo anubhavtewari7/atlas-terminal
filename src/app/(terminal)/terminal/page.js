@@ -31,13 +31,92 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-function hubDayStatus(lng) {
-  if (lng == null) return null
+// City/region → UTC offset (standard time). Fractional hours for half-hour zones.
+// Keyed by lowercase substrings that appear in hub.hub names.
+const HUB_UTC_OFFSETS = {
+  // India (IST = UTC+5:30)
+  'mumbai':5.5,'bangalore':5.5,'chennai':5.5,'delhi':5.5,'pune':5.5,
+  'hyderabad':5.5,'ahmedabad':5.5,'kolkata':5.5,'surat':5.5,'india':5.5,
+  // Nepal, Bangladesh, Myanmar, Sri Lanka
+  'kathmandu':5.75,'nepal':5.75, 'dhaka':6,'chittagong':6,'bangladesh':6,
+  'colombo':5.5,'sri lanka':5.5, 'yangon':6.5,'myanmar':6.5,
+  // China (all on CST = UTC+8)
+  'beijing':8,'shanghai':8,'guangzhou':8,'shenzhen':8,'dongguan':8,'chengdu':8,
+  'wuhan':8,'tianjin':8,'nanjing':8,'hangzhou':8,'yiwu':8,'qingdao':8,
+  'ningbo':8,'zhengzhou':8,'baotou':8,'suzhou':8,'foshan':8,'china':8,
+  // East Asia
+  'tokyo':9,'osaka':9,'nagoya':9,'japan':9,
+  'seoul':9,'busan':9,'incheon':9,'korea':9,
+  'taipei':8,'kaohsiung':8,'taiwan':8,
+  // Southeast Asia
+  'bangkok':7,'thailand':7,'laem chabang':7,
+  'ho chi minh':7,'hanoi':7,'hai phong':7,'vietnam':7,'binh duong':7,
+  'jakarta':7,'surabaya':7,'indonesia':7,'batam':7,
+  'kuala lumpur':8,'penang':8,'malaysia':8,'johor':8,
+  'singapore':8,
+  'manila':8,'cebu':8,'philippines':8,
+  'phnom penh':7,'cambodia':7,
+  // Central/South Asia
+  'karachi':5,'lahore':5,'pakistan':5,'tehran':3.5,'iran':3.5,
+  'kabul':4.5,'afghanistan':4.5,'tashkent':5,'uzbekistan':5,
+  // Middle East
+  'dubai':4,'abu dhabi':4,'uae':4,'emirates':4,'sharjah':4,
+  'riyadh':3,'jeddah':3,'saudi':3,'dammam':3,
+  'istanbul':3,'turkey':3,'ankara':3,
+  'cairo':2,'egypt':2,'alexandria':2,
+  'tel aviv':2,'israel':2,'amman':2,'jordan':2,
+  'doha':3,'qatar':3,'kuwait':3,'bahrain':3,'oman':4,
+  // Europe
+  'berlin':1,'munich':1,'hamburg':1,'frankfurt':1,'germany':1,
+  'paris':1,'france':1,'lyon':1,'toulouse':1,
+  'amsterdam':1,'rotterdam':1,'netherlands':1,
+  'brussels':1,'antwerp':1,'belgium':1,
+  'milan':1,'rome':1,'italy':1,'genoa':1,'naples':1,
+  'madrid':1,'barcelona':1,'spain':1,'bilbao':1,
+  'warsaw':1,'lodz':1,'poland':1,'krakow':1,'poznan':1,
+  'prague':1,'czech':1,'brno':1,
+  'budapest':1,'hungary':1, 'bucharest':2,'romania':2,
+  'vienna':1,'austria':1, 'zurich':1,'switzerland':1,'bern':1,
+  'stockholm':1,'sweden':1,'gothenburg':1,
+  'helsinki':2,'finland':2, 'oslo':1,'norway':1,
+  'london':0,'manchester':0,'birmingham':0,'uk':0,'britain':0,'bristol':0,
+  // Africa
+  'nairobi':3,'kenya':3,'addis ababa':3,'ethiopia':3,
+  'lagos':1,'nigeria':1,'accra':0,'ghana':0,
+  'johannesburg':2,'cape town':2,'durban':2,'south africa':2,
+  'casablanca':1,'morocco':1,'tangier':1,
+  'dar es salaam':3,'tanzania':3,
+  // Americas
+  'toronto':-5,'montreal':-5,'vancouver':-8,'canada':-5,
+  'new york':-5,'los angeles':-8,'chicago':-6,'houston':-6,'dallas':-6,
+  'san jose':-8,'seattle':-8,'boston':-5,'atlanta':-5,'miami':-5,'usa':-5,
+  'mexico city':-6,'guadalajara':-6,'monterrey':-6,'mexico':-6,'tijuana':-8,
+  'sao paulo':-3,'rio de janeiro':-3,'brazil':-3,'manaus':-4,
+  'bogota':-5,'colombia':-5,'medellin':-5,
+  'lima':-5,'peru':-5, 'santiago':-4,'chile':-4,
+  'buenos aires':-3,'argentina':-3,'cordoba':-3,
+  // Pacific
+  'sydney':10,'melbourne':10,'brisbane':10,'australia':10,
+  'auckland':12,'new zealand':12,
+}
+
+function hubDayStatus(hubName, lng) {
+  // Try accurate lookup first
+  const lname = (hubName || '').toLowerCase()
+  let utcOffset = null
+  for (const [key, offset] of Object.entries(HUB_UTC_OFFSETS)) {
+    if (lname.includes(key)) { utcOffset = offset; break }
+  }
+  // Fall back to longitude approximation (rounds to nearest 0.5h)
+  if (utcOffset === null) {
+    if (lng == null) return null
+    utcOffset = Math.round((lng / 15) * 2) / 2
+  }
   const now = new Date()
-  const utcOffsetMs = (lng / 15) * 3600 * 1000
+  const utcOffsetMs = utcOffset * 3600 * 1000
   const local = new Date(now.getTime() + utcOffsetMs)
   const h   = local.getUTCHours()
-  const day = local.getUTCDay() // 0=Sun … 6=Sat
+  const day = local.getUTCDay()
   const isWeekday  = day >= 1 && day <= 5
   const isWorkHour = h >= 8 && h < 18
   const h12  = h % 12 || 12
@@ -78,16 +157,16 @@ const CHOKEPOINTS = [
     desc:'Stable. High vessel density. Weather delays possible in winter months.' },
 ]
 
-// Returns the chokepoints most relevant to a hub based on longitude-based region
+// Returns the chokepoints most relevant to a hub based on its geographic region
 function getRelevantChokepoints(hub) {
   if (!hub?.lng) return []
   const lng = hub.lng
   let region
-  if      (lng >  100) region = 'asia'
-  else if (lng >   50) region = 'me'
-  else if (lng >   20) region = 'india'
-  else if (lng < -30)  region = 'americas'
-  else                  region = 'europe'
+  if      (lng >  100) region = 'asia'     // East/Southeast Asia (China, Japan, Korea, SEA)
+  else if (lng >   60) region = 'india'    // Indian subcontinent (lng 60-100)
+  else if (lng >   25) region = 'me'       // Middle East & East Africa (lng 25-60)
+  else if (lng < -30)  region = 'americas' // Americas
+  else                  region = 'europe'   // Europe & West Africa
   return CHOKEPOINTS.filter(c => c.regions.includes(region))
 }
 
@@ -347,11 +426,7 @@ export default function Dashboard() {
 
   const [risks, setRisks] = useState([])
   const [opportunities, setOpportunities] = useState([])
-  const [news, setNews] = useState([
-    { title: 'Red Sea Shipping Diversions Continue to Impact Transit Times', description: 'Carriers maintaining Cape of Good Hope routing as Houthi threat persists. Add 10-14 days to Asia-Europe lead times.', link: 'https://gcaptain.com', pubDate: '' },
-    { title: 'US Tariff Updates: Section 301 Review Underway', description: 'USTR reviewing existing China tariff exclusions. Procurement teams advised to model 25-145% duty scenarios for sourcing decisions.', link: 'https://ustr.gov', pubDate: '' },
-    { title: 'Strait of Hormuz Traffic Nominal Despite Regional Tensions', description: 'Tanker transits remain at baseline levels. LNG and crude flows unaffected as of latest maritime intelligence.', link: '#', pubDate: '' },
-  ])
+  const [news, setNews] = useState([])
   const [newsLoading, setNewsLoading] = useState(true)
   const [newsFilter, setNewsFilter] = useState('all')
   const [missionKeywords, setMissionKeywords] = useState([])
@@ -466,34 +541,56 @@ export default function Dashboard() {
       if (q) {
         setSearchQuery(q)
         setTimeout(() => handleSearch(null, q), 600)
-      } else {
-        // First-time visitor with no saved missions → auto-run a demo scan
-        // so the globe is alive and populated before the tour even finishes
-        try {
-          const saved = localStorage.getItem('atlas_missions')
-          const isFirstVisit = !saved || saved === '[]' || JSON.parse(saved).length === 0
-          if (isFirstVisit) {
-            setTimeout(() => handleSearch(null, 'lithium-ion batteries for EV assembly'), 1500)
-          }
-        } catch {}
       }
+      // No auto-scan on first visit -- let the user define their own mission
     }
     return () => { clearInterval(interval); clearInterval(metalsInterval) }
   }, [])
 
   const buildMissionKeywords = (query, category) => {
     const categoryKeywords = {
-      industrial:  ['magnet','rare earth','neodymium','critical mineral','mining','sintered','ferrite','ndfeb'],
-      automotive:  ['automotive','vehicle','ev ','electric vehicle','car ','tariff','usmca','tier-1','auto'],
-      electronics: ['semiconductor','chip','tsmc','taiwan','wafer','foundry','pcb','display'],
-      metals:      ['steel','aluminum','copper','lithium','cobalt','commodity','mining','metal'],
-      agriculture: ['food','agricultural','soybean','beef','grain','crop','farming','commodity'],
-      textiles:    ['textile','apparel','cotton','fashion','garment','fiber','yarn'],
-      plastics:    ['plastic','polymer','elastomer','rubber','resin','injection','molding','moulding','tpe','abs','polypropylene','polyethylene','nylon','composite','epoxy','carbon fiber','fiberglass'],
-      chemicals:   ['chemical','adhesive','coating','lubricant','solvent','surfactant','specialty chemical','reach','epoxy','paint','primer','grease'],
-      packaging:   ['packaging','corrugated','label','carton','bottle','container','flexible pouch','shrink','paperboard','glass bottle'],
-      medical:     ['pharmaceutical','medical','drug','api','device','surgical','clinical','fda','gmp','sterile','generic','biosimilar'],
-      machinery:   ['pump','valve','compressor','cnc','machine tool','automation','robot','conveyor','gearbox','heat exchanger','capital equipment'],
+      // Core categories
+      industrial:          ['magnet','rare earth','neodymium','critical mineral','mining','sintered','ferrite','ndfeb','motor','pump','valve','bearing','seal','coupling','flange','fastener','hydraulic','pneumatic','actuator'],
+      automotive:          ['automotive','vehicle','ev ','electric vehicle','car ','tariff','usmca','tier-1','auto','brake','suspension','chassis','transmission','stamping','die-cast','oem','tier1','tier2'],
+      electronics:         ['semiconductor','chip','tsmc','taiwan','wafer','foundry','pcb','display','sensor','microcontroller','processor','memory','transistor','substrate','smt','pick-and-place'],
+      metals:              ['steel','aluminum','copper','lithium','cobalt','nickel','zinc','iron','alloy','casting','forging','ingot','coil','plate','bar','wire','tube','commodity','mining','metal'],
+      agriculture:         ['food','agricultural','soybean','beef','grain','crop','farming','commodity','wheat','corn','rice','cotton','sugar','coffee','cocoa','palm','fertilizer','pesticide','seed','livestock','poultry','seafood'],
+      textiles:            ['textile','apparel','cotton','fashion','garment','fiber','yarn','polyester','nylon','denim','knit','woven','technical fabric','spandex','fleece'],
+      plastics:            ['plastic','polymer','elastomer','rubber','resin','injection','molding','moulding','tpe','abs','polypropylene','polyethylene','pvc','nylon','composite','epoxy','carbon fiber','fiberglass'],
+      chemicals:           ['chemical','adhesive','coating','lubricant','solvent','surfactant','specialty chemical','reach','paint','primer','grease','acid','base','catalyst','additive','pigment','reagent'],
+      packaging:           ['packaging','corrugated','label','carton','bottle','container','flexible pouch','shrink','paperboard','glass bottle','blister','sachet','retort'],
+      medical:             ['pharmaceutical','medical','drug','api','device','surgical','clinical','fda','gmp','sterile','generic','biosimilar','implant','diagnostic','cro','cdmo','510k'],
+      machinery:           ['pump','valve','compressor','cnc','machine tool','automation','robot','conveyor','gearbox','heat exchanger','capital equipment','lathe','mill','press','tooling'],
+      wood_paper:          ['wood','lumber','timber','pulp','paper','cardboard','mdf','plywood','OSB','furniture board','kraft','newsprint','tissue','cellulose'],
+      construction:        ['glass','concrete','cement','rebar','structural steel','insulation','gypsum','tile','flooring','cladding','curtain wall','facade','tempered glass','laminated glass'],
+      consumer_goods:      ['consumer goods','household','cleaning','personal care','hygiene','shampoo','detergent','cosmetic','beauty','home care','FMCG','mass market'],
+      food:                ['food','beverage','drink','snack','dairy','bakery','confectionery','frozen','canned','organic','ready-to-eat','ingredient','flavoring','additive'],
+      // Expansion categories
+      aerospace:           ['aerospace','airframe','aerostructure','avionics','landing gear','nacelle','rotor','fuselage','composite aerostructure','as9100','nadcap','fastener aerospace','titanium aerospace'],
+      energy_oil_gas:      ['oil','gas','LNG','LPG','pipeline','refinery','subsea','wellhead','offshore','drilling','oilfield','petrochemical','FPSO','midstream','downstream'],
+      ev_battery:          ['battery','cathode','anode','electrolyte','lithium-ion','NMC','LFP','prismatic','cylindrical','pouch cell','gigafactory','BMS','battery pack','cell chemistry'],
+      semiconductor:       ['fab','foundry','wafer','lithography','etch','deposition','TSMC','ASML','mask','DRAM','NAND','logic','analog','OSAT','OSP','advanced packaging','CoWoS','HBM'],
+      mining:              ['ore','mine','mineral','extraction','tailings','heap leach','flotation','smelter','refinery','concentrate','cobalt mine','lithium mine','copper mine','iron ore','bauxite'],
+      luxury_goods:        ['luxury','leather','handbag','haute couture','fine watch','jewelry','gems','diamond','sapphire','fine leather','LVMH','Hermes','Gucci','bespoke'],
+      cosmetics:           ['cosmetic','beauty','fragrance','perfume','skincare','makeup','lipstick','foundation','serum','formulation','EU cosmetics regulation','ISO 22716','cruelty-free'],
+      cold_chain:          ['cold chain','refrigerated','frozen logistics','temperature-controlled','reefer','blast freeze','pharmaceutical cold chain','vaccine logistics','dry ice','GDP pharma'],
+      renewable_energy:    ['solar','wind','panel','turbine','inverter','PV','polysilicon','blade','storage','grid','offshore wind','onshore wind','solar farm','bifacial','tracker'],
+      telecom:             ['telecom','5G','antenna','base station','fiber optic','cable','router','switch','data center','network equipment','RAN','spectrum','MIMO','beamforming'],
+      furniture:           ['furniture','office furniture','chair','desk','table','wardrobe','cabinet','upholstery','foam','flat-pack','RTA','BIFMA','contract furniture'],
+      sports_outdoor:      ['sports','outdoor','athletic','fitness','gym','bicycle','cycling','camping','hiking','climbing','water sports','team sports','protective gear','sports apparel'],
+      toys_games:          ['toy','game','puzzle','doll','action figure','board game','electronic toy','ASTM F963','EN 71','CE toys','plush','ride-on','construction toy'],
+      pet_animal:          ['pet food','animal feed','veterinary','livestock supplement','pet care','aquafeed','poultry feed','pet treat','AAFCO','FEDIAF'],
+      printing_media:      ['printing','publishing','ink','toner','offset','digital print','label print','flexographic','gravure','packaging print','wide format'],
+      hvac:                ['HVAC','heat pump','chiller','air handling','VRF','ductwork','refrigerant','cooling tower','boiler','fan coil','AHU','ASHRAE','F-gas'],
+      water_treatment:     ['water treatment','membrane','RO','filtration','UV disinfection','wastewater','desalination','ion exchange','coagulation','sludge','potable water'],
+      defense_military:    ['defense','military','armament','munition','armoured','ballistic','radar','sonar','UAV','drone','optronic','night vision','ITAR','EAR','DDTC'],
+      maritime:            ['maritime','shipbuilding','vessel','hull','propeller','marine engine','deck equipment','offshore','VLCC','container ship','LNG carrier','IMO','classification society'],
+      railway:             ['railway','rolling stock','locomotive','railcar','bogie','rail','track','signaling','ETCS','ERTMS','catenary','traction','metro','high-speed rail'],
+      robotics_automation: ['robot','cobot','gripper','servo','PLC','SCADA','vision system','pick-and-place automation','AMR','AGV','end-effector','industrial robot','collaborative robot'],
+      instruments_scientific: ['instrument','analytical','spectrometer','chromatograph','microscope','oscilloscope','sensor calibration','metrology','laboratory','medical diagnostic','scientific equipment'],
+      glass_ceramics:      ['glass','ceramic','technical ceramic','advanced ceramic','alumina','zirconia','silicon carbide','borosilicate','quartz','optical glass','specialty glass'],
+      paint_coatings:      ['paint','coating','varnish','lacquer','powder coat','electrocoat','marine coating','protective coating','industrial paint','architectural coating','VOC compliance'],
+      nutraceuticals:      ['nutraceutical','supplement','vitamin','mineral supplement','protein powder','omega-3','probiotic','botanical extract','herbal','dietary supplement','DSHEA','GMP nutraceutical'],
     }
     const base = categoryKeywords[category] || []
     // also extract significant words from the raw query (4+ chars, not stopwords)
@@ -680,6 +777,7 @@ export default function Dashboard() {
       const doc = new jsPDF('p', 'mm', 'a4')
 
       const BG = [10, 10, 10]
+      let yPos = 20
       const newPage = () => {
         doc.addPage()
         doc.setFillColor(...BG)
@@ -766,7 +864,8 @@ export default function Dashboard() {
       doc.setFontSize(7)
       doc.text('CONFIDENTIAL -- For internal procurement use only. NAUTILUS Terminal data is for strategic reference; verify with primary sources before contracting.', 20, 285, { maxWidth: 170 })
 
-      let yPos = 20
+      // yPos is declared above (before closures) and reset per-page by newPage()
+      yPos = 20
 
       // ── PAGE 2+: STRATEGIC DIRECTIVE ──────────────────────────────────────
       newPage()
@@ -1424,7 +1523,7 @@ export default function Dashboard() {
                       <div className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
                         {o.hub}
                         {(() => {
-                          const ds = hubDayStatus(o.lng)
+                          const ds = hubDayStatus(o.hub, o.lng)
                           if (!ds) return null
                           return (
                             <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`} title={`Local time: ${ds.localTime}`}>
@@ -1580,7 +1679,7 @@ export default function Dashboard() {
                   <div className="space-y-4">
                     {/* Day / Night status strip */}
                     {selectedNode.lng != null && (() => {
-                      const ds = hubDayStatus(selectedNode.lng)
+                      const ds = hubDayStatus(selectedNode.hub, selectedNode.lng)
                       if (!ds) return null
                       return (
                         <div className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${ds.open ? 'bg-emerald-500/8 border-emerald-500/20' : 'bg-white/3 border-white/8'}`}>
@@ -2036,7 +2135,7 @@ export default function Dashboard() {
                           <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{o.hub}</div>
                           <div className="flex items-center gap-1.5">
                             {(() => {
-                              const ds = hubDayStatus(o.lng)
+                              const ds = hubDayStatus(o.hub, o.lng)
                               if (!ds) return null
                               return (
                                 <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`}>

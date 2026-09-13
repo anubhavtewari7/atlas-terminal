@@ -21,7 +21,27 @@ export async function POST(req) {
     if (!category) {
       return NextResponse.json({ code: 'UNCLASSIFIED_QUERY', error: 'No sourcing category matched. Add the material, product type, or application and try again.' }, { status: 422 });
     }
-    const isLowConfidence = false;
+    // Detect low-confidence matches: query has meaningful tokens but none match known category keywords
+    const queryTokens = query.toLowerCase().split(/\s+/).filter(w => w.length > 3)
+    const categorySignals = {
+      industrial:      ['motor','pump','valve','bearing','gearbox','shaft','seal','coupling','flange','fastener','bolt','nut','hydraulic','pneumatic','actuator','compressor','filter','conveyor','crane','hoist'],
+      automotive:      ['automotive','vehicle','electric','truck','tire','tyre','brake','suspension','chassis','transmission','usmca','stamping','die-cast'],
+      electronics:     ['semiconductor','chip','pcb','circuit','display','sensor','microcontroller','processor','memory','transistor','wafer','foundry','substrate'],
+      metals:          ['steel','aluminum','copper','lithium','cobalt','nickel','zinc','iron','alloy','casting','forging','ingot','coil','plate','bar','wire','tube'],
+      agriculture:     ['grain','wheat','corn','soybean','rice','cotton','sugar','coffee','cocoa','palm','fertilizer','pesticide','seed','crop','livestock','poultry','seafood'],
+      textiles:        ['textile','apparel','cotton','polyester','nylon','garment','fabric','yarn','fiber','denim','knit','woven'],
+      plastics:        ['plastic','polymer','elastomer','rubber','resin','injection','molding','abs','polypropylene','polyethylene','pvc','composite','epoxy','carbon'],
+      chemicals:       ['chemical','adhesive','coating','lubricant','solvent','surfactant','reagent','acid','base','catalyst','additive','pigment'],
+      packaging:       ['packaging','corrugated','carton','bottle','container','flexible','shrink','paperboard','label','blister'],
+      medical:         ['pharmaceutical','medical','drug','device','surgical','clinical','gmp','sterile','generic','biosimilar','implant','diagnostic'],
+      machinery:       ['machine','equipment','cnc','lathe','mill','press','robot','automation','conveyor','capital','industrial','tooling'],
+      ev_battery:      ['battery','cathode','anode','electrolyte','lithium','nmc','lfp','prismatic','cylindrical','gigafactory','bms'],
+      semiconductor:   ['fab','foundry','wafer','lithography','etch','deposition','tsmc','asml','mask','dram','nand','logic','analog'],
+      renewable_energy:['solar','wind','panel','turbine','inverter','pv','polysilicon','blade','storage','grid'],
+    }
+    const knownKeywords = (categorySignals[category] || [])
+    const matchCount = queryTokens.filter(t => knownKeywords.some(k => t.includes(k) || k.includes(t))).length
+    const isLowConfidence = queryTokens.length > 1 && matchCount === 0
 
     const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.food || ATLAS_DB.electronics;
     const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
@@ -109,12 +129,26 @@ export async function POST(req) {
 
       market_data: {
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
-        price_history: [
-          { month: 'Q1', price: 95 },
-          { month: 'Q2', price: 88 },
-          { month: 'Q3', price: 97 },
-          { month: 'Q4', price: 105 }
-        ],
+        // Category-specific illustrative price index shapes (2024 baseline = 100).
+        // These reflect general commodity cycle patterns — NOT real market data.
+        // Always source live prices from CME, Fastmarkets, or commodity exchanges.
+        price_history: ({
+          metals:          [{ month: 'Q1', price: 98  }, { month: 'Q2', price: 103 }, { month: 'Q3', price: 109 }, { month: 'Q4', price: 115 }],
+          electronics:     [{ month: 'Q1', price: 104 }, { month: 'Q2', price: 100 }, { month: 'Q3', price: 97  }, { month: 'Q4', price: 102 }],
+          agriculture:     [{ month: 'Q1', price: 92  }, { month: 'Q2', price: 88  }, { month: 'Q3', price: 96  }, { month: 'Q4', price: 101 }],
+          chemicals:       [{ month: 'Q1', price: 100 }, { month: 'Q2', price: 97  }, { month: 'Q3', price: 101 }, { month: 'Q4', price: 105 }],
+          textiles:        [{ month: 'Q1', price: 95  }, { month: 'Q2', price: 93  }, { month: 'Q3', price: 98  }, { month: 'Q4', price: 100 }],
+          automotive:      [{ month: 'Q1', price: 102 }, { month: 'Q2', price: 99  }, { month: 'Q3', price: 104 }, { month: 'Q4', price: 108 }],
+          plastics:        [{ month: 'Q1', price: 97  }, { month: 'Q2', price: 101 }, { month: 'Q3', price: 99  }, { month: 'Q4', price: 103 }],
+          medical:         [{ month: 'Q1', price: 101 }, { month: 'Q2', price: 103 }, { month: 'Q3', price: 105 }, { month: 'Q4', price: 108 }],
+          packaging:       [{ month: 'Q1', price: 96  }, { month: 'Q2', price: 99  }, { month: 'Q3', price: 98  }, { month: 'Q4', price: 102 }],
+          machinery:       [{ month: 'Q1', price: 100 }, { month: 'Q2', price: 102 }, { month: 'Q3', price: 100 }, { month: 'Q4', price: 104 }],
+          industrial:      [{ month: 'Q1', price: 99  }, { month: 'Q2', price: 102 }, { month: 'Q3', price: 105 }, { month: 'Q4', price: 107 }],
+          ev_battery:      [{ month: 'Q1', price: 110 }, { month: 'Q2', price: 98  }, { month: 'Q3', price: 92  }, { month: 'Q4', price: 88  }],
+          semiconductor:   [{ month: 'Q1', price: 96  }, { month: 'Q2', price: 101 }, { month: 'Q3', price: 108 }, { month: 'Q4', price: 115 }],
+          renewable_energy:[{ month: 'Q1', price: 103 }, { month: 'Q2', price: 99  }, { month: 'Q3', price: 96  }, { month: 'Q4', price: 94  }],
+        })[category] || [{ month: 'Q1', price: 100 }, { month: 'Q2', price: 98 }, { month: 'Q3', price: 101 }, { month: 'Q4', price: 104 }],
+        price_history_note: 'Illustrative category price index (2024 baseline = 100). Not real market data — source live prices from CME, Fastmarkets, or Reuters.',
         rfq_template:
           `Dear Procurement Team,\n\nWe are ${selectedHub.companies[0]?.name ? `requesting a quote from ${selectedHub.companies[0].name} and your team` : 'initiating a sourcing inquiry'} for the following requirement:\n\nMaterial / Component: ${query}\nApplication: [Describe your end-use application]\nEstimated Annual Volume: [Units / MT / pieces]\nRequired Delivery: [Target date]\nIncoterm Preference: [DDP / FOB / CIF]\n\nPlease provide:\n1. Unit pricing (at 3 volume tiers)\n2. Lead time (standard and expedited)\n3. Freight and insurance terms\n4. ESG / sustainability certification status\n5. Country of origin and HTS classification\n\nWe look forward to your response within 5 business days.\n\nBest regards,\n[Your Name]\n[Company] Procurement Team`
       }

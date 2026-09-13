@@ -143,6 +143,19 @@ export default function SanctionsChecker({ onClose }) {
         </div>
 
         <div className="p-6 space-y-5">
+          {/* Legal disclaimer banner -- shown prominently before any search */}
+          <div className="flex items-start gap-3 p-3.5 bg-amber-500/8 border border-amber-500/25 rounded-xl">
+            <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
+            <p className="text-[11px] text-amber-300/80 leading-relaxed">
+              <strong className="text-amber-300">For screening assistance only -- not legal advice.</strong>{' '}
+              NAUTILUS uses a curated static database updated periodically. Always verify against the{' '}
+              <a href="https://sanctionssearch.ofac.treas.gov/" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-200">OFAC SDN list</a>,{' '}
+              <a href="https://www.sanctionsmap.eu/" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-200">EU Consolidated List</a>, and{' '}
+              <a href="https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list" target="_blank" rel="noopener noreferrer" className="underline hover:text-amber-200">BIS Entity List</a>{' '}
+              before transacting. Consult qualified export control counsel for compliance decisions.
+            </p>
+          </div>
+
           {/* Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -238,23 +251,28 @@ export default function SanctionsChecker({ onClose }) {
             </div>
           )}
 
-          {/* Disclaimer + official links */}
-          <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
-            <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle size={11} /> Legal Disclaimer</div>
-            <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Nautilus provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
+          {/* Official verification links */}
+          <div className="p-4 bg-[#0a0a0a] border border-white/8 rounded-xl">
+            <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2.5">Verify Officially -- Always check primary sources before transacting</div>
             <div className="flex flex-wrap gap-2">
               {[
-                { label: 'OFAC SDN Search', url: 'https://sanctionssearch.ofac.treas.gov/' },
-                { label: 'EU Consolidated List', url: 'https://www.sanctionsmap.eu/' },
-                { label: 'UN SC Sanctions', url: 'https://www.un.org/securitycouncil/sanctions/information' },
-                { label: 'BIS Entity List', url: 'https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list' },
+                { label: 'OFAC SDN Search', url: 'https://sanctionssearch.ofac.treas.gov/', note: 'US Treasury' },
+                { label: 'EU Sanctions Map', url: 'https://www.sanctionsmap.eu/', note: 'EU Consolidated List' },
+                { label: 'UN SC Sanctions', url: 'https://www.un.org/securitycouncil/sanctions/information', note: 'UN Security Council' },
+                { label: 'BIS Entity List', url: 'https://www.bis.doc.gov/index.php/policy-guidance/lists-of-parties-of-concern/entity-list', note: 'Export Controls' },
+                { label: 'UFLPA Entity List', url: 'https://www.cbp.gov/trade/forced-labor/UFLPA', note: 'Forced Labor / Xinjiang' },
               ].map((link, i) => (
                 <a key={i} href={link.url} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[11px] text-slate-400 hover:text-sky-400 hover:border-sky-500/30 transition-all">
-                  {link.label} <ExternalLink size={9} />
+                  className="flex items-center gap-1.5 px-3 py-2 bg-[#111] border border-white/10 rounded-lg text-[11px] text-slate-400 hover:text-sky-400 hover:border-sky-500/30 transition-all group">
+                  <span>{link.label}</span>
+                  <span className="text-[10px] text-slate-600 group-hover:text-sky-500/50">({link.note})</span>
+                  <ExternalLink size={9} className="shrink-0" />
                 </a>
               ))}
             </div>
+            <p className="text-[10px] text-slate-600 mt-3 leading-relaxed">
+              NAUTILUS is not a licensed legal or compliance service. Results are indicative only and do not constitute export control advice. Engage qualified export control counsel for EAR, ITAR, or sanctions compliance decisions.
+            </p>
           </div>
         </div>
       </motion.div>
