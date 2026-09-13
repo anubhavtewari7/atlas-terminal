@@ -2,6 +2,7 @@
 
 // Sign-in page -- disabled until Google OAuth is configured.
 // See auth.js at the project root for setup instructions.
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import NautilusLogo from '@/components/NautilusLogo'
@@ -32,9 +33,9 @@ export default function SignInPage() {
           <p className="text-slate-500 text-xs">Redirecting to terminal...</p>
         </div>
         <p className="text-center text-[10px] text-slate-700 mt-6">
-          <a href="/legal/terms" className="underline hover:text-slate-500">Terms</a>
+          <Link href="/legal/terms" className="underline hover:text-slate-500">Terms</Link>
           {' '}·{' '}
-          <a href="/legal/disclaimer" className="underline hover:text-slate-500">Disclaimer</a>
+          <Link href="/legal/disclaimer" className="underline hover:text-slate-500">Disclaimer</Link>
         </p>
       </div>
     </main>

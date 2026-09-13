@@ -20,6 +20,7 @@ import TariffCalculator from '@/components/TariffCalculator'
 import CurrencyImpactCalc from '@/components/CurrencyImpactCalc'
 import DualUseChecker from '@/components/DualUseChecker'
 import SourcingRecommendation from '@/components/SourcingRecommendation'
+import Link from 'next/link'
 import NautilusLogo from '@/components/NautilusLogo'
 import GuidedTour from '@/components/GuidedTour'
 import ErrorBoundary from '@/components/ErrorBoundary'
@@ -2516,11 +2517,11 @@ export default function Dashboard() {
 
       {/* Legal footer */}
       <footer className="fixed bottom-5 right-5 z-[120] hidden lg:flex items-center gap-3">
-        <a href="/legal/terms" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Terms</a>
+        <Link href="/legal/terms" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Terms</Link>
         <span className="text-slate-800 text-[8px]">&bull;</span>
-        <a href="/legal/disclaimer" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Disclaimer</a>
+        <Link href="/legal/disclaimer" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Disclaimer</Link>
         <span className="text-slate-800 text-[8px]">&bull;</span>
-        <a href="/legal/data-sources" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Data Sources</a>
+        <Link href="/legal/data-sources" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Data Sources</Link>
       </footer>
 
     </div>
