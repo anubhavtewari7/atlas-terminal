@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-13T02:30:00Z",
+  "lastUpdated": "2026-09-13T03:30:00Z",
   "version": 1,
   "agentStatus": "active",
   "alerts": [
@@ -136,7 +136,7 @@
     {
       "id": "port-klang-dredging-sep-2026",
       "title": "Port Klang Westports Emergency Dredging Sep 7–27",
-      "summary": "Emergency maintenance dredging is underway at Malaysia's Port Klang Westports from September 7 to 27, restricting vessel drafts and reducing throughput at one of Southeast Asia's busiest transshipment hubs. Shippers routing cargo through Port Klang should expect schedule adjustments and possible delays during the dredging window.",
+      "summary": "Emergency maintenance dredging is underway at Malaysia's Port Klang Westports from September 7 to 27, restricting vessel drafts and reducing throughput at one of Southeast Asia's busiest transshipment hubs. September 13 data confirms 1.21-day average vessel waits and 90-95% yard utilization, with schedule adjustments and possible delays expected through end of dredging window.",
       "severity": "MEDIUM",
       "type": "DISRUPTION",
       "region": "ASIA-PACIFIC",
@@ -210,7 +210,7 @@
       "region": "Asia-Pacific Ports",
       "severity": "HIGH",
       "type": "WEATHER",
-      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours; Ningbo at 3.58-day waits, Yokohama at 90-95% utilization; Port Klang under emergency dredging Sep 7-27; pre-National Day cargo rush expected to intensify congestion through end of September.",
+      "desc": "Three typhoons in five weeks, including SAUDEL closing Ningbo for 78 hours; Ningbo at 3.58-day waits, Yokohama at 90-95% utilization; Port Klang under emergency dredging Sep 7-27 with 90-95% yard utilization; pre-National Day cargo rush expected to intensify congestion through end of September.",
       "affectedCommodities": ["Electronics", "Consumer Goods", "Copper", "Steel"]
     },
     {
@@ -236,6 +236,13 @@
     }
   ],
   "agentLog": [
+    {
+      "runAt": "2026-09-13T03:30:00Z",
+      "searchesPerformed": 5,
+      "alertsAdded": 0,
+      "alertsExpired": 0,
+      "summary": "All 5 searches confirm existing alerts remain accurate; no new material events found. Port Klang wait data updated to 1.21-day average with 90-95% yard utilization. All 15 alerts within 48h window; no expirations. Commodity prices stable vs prior run."
+    },
     {
       "runAt": "2026-09-13T02:30:00Z",
       "searchesPerformed": 5,
