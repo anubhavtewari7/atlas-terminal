@@ -6,6 +6,7 @@ export async function GET() {
     const res = await fetch('https://api.frankfurter.app/latest?from=USD&to=CNY,EUR,BRL,MXN,JPY,KRW,INR,SGD', {
       next: { revalidate: 3600 } // cache for 1 hour
     });
+    if (!res.ok) throw new Error(`Frankfurter API returned ${res.status}`);
     const data = await res.json();
 
     // Enrich with trade context

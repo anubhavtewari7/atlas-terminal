@@ -90,12 +90,33 @@ export default function SanctionsChecker({ onClose }) {
     const countryLower = country.toLowerCase()
 
     // Check country (only if a country was provided)
+    // Use exact match first, then a word-boundary check for multi-word country names.
+    // Avoiding substring matching (e.g. "ira" matching "iran", "uk" matching "turkey").
     let countryResult = null
     if (countryLower) {
+      // Pass 1: exact match
       for (const [key, data] of Object.entries(COUNTRY_RISK)) {
-        if (countryLower.includes(key) || key.includes(countryLower)) {
+        if (countryLower === key) {
           countryResult = { country: key, ...data }
           break
+        }
+      }
+      // Pass 2: the input is multi-word and starts with a known key (e.g. "south korea")
+      if (!countryResult) {
+        for (const [key, data] of Object.entries(COUNTRY_RISK)) {
+          if (key.includes(' ') && countryLower.startsWith(key)) {
+            countryResult = { country: key, ...data }
+            break
+          }
+        }
+      }
+      // Pass 3: known key is a prefix of the input (handles e.g. "germany, europe")
+      if (!countryResult) {
+        for (const [key, data] of Object.entries(COUNTRY_RISK)) {
+          if (countryLower.startsWith(key + ' ') || countryLower.startsWith(key + ',')) {
+            countryResult = { country: key, ...data }
+            break
+          }
         }
       }
     }

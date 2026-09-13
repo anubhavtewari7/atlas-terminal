@@ -26,7 +26,7 @@ import {
   Pause, Play, Newspaper, X, Target, Factory, Map,
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
-  History, Scale, Filter, TrendingUp, Activity, DollarSign, Download,
+  History, Scale, TrendingUp, Activity, DollarSign, Download,
   AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -439,11 +439,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [scanError, setScanError] = useState(null)
-  const [, setTerminalLogs] = useState([
-    "[SYSTEM] NAUTILUS Intelligence Core v3.0 -- Online.",
-    "[SYSTEM] Universal Resource Engine initialized.",
-    "[SYSTEM] Supply chain database loaded: 6 categories, 32 global hubs."
-  ])
+  // (terminalLogs state removed -- logs were never rendered, causing unnecessary re-renders on every scan step)
   const [directive, setDirective] = useState(null)
   const [marketData, setMarketData] = useState(null)
   const [showRFQ, setShowRFQ] = useState(false)
@@ -517,7 +513,8 @@ export default function Dashboard() {
     } catch {}
   }, [])
 
-  const addLog = (msg) => setTerminalLogs(prev => [...prev.slice(-50), msg])
+  // addLog removed -- no log panel in the UI, use console.log for debugging instead
+  const addLog = (msg) => { if (process.env.NODE_ENV === 'development') console.debug('[NAUTILUS]', msg) }
 
   useEffect(() => {
     const loadLiveData = () => {
@@ -1045,7 +1042,7 @@ export default function Dashboard() {
               ];
               const items = commodities?.prices?.length ? commodities.prices : BASE;
               return [...items, ...items].map((item, i) => (
-                <span key={i} className="inline-flex items-center gap-2 text-[11px] mr-10">
+                <span key={`${item.name}-${i}`} className="inline-flex items-center gap-2 text-[11px] mr-10">
                   <span className="text-slate-500">{item.name}</span>
                   <span className="text-white font-bold">{item.price}{item.unit}</span>
                   <span className={item.up ? 'text-emerald-400' : 'text-rose-400'}>{item.change}</span>

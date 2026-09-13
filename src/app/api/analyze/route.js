@@ -7,6 +7,24 @@ import { NextResponse } from 'next/server';
 import { ATLAS_DB, categorizeQuery, CATEGORY_RISKS, pickBestHub } from '@/lib/database';
 import { enrichWithRealTradeData } from '@/lib/comtrade';
 
+// Module-level constant -- built once per cold start, not on every request
+const CATEGORY_SIGNALS = {
+  industrial:      ['motor','pump','valve','bearing','gearbox','shaft','seal','coupling','flange','fastener','bolt','nut','hydraulic','pneumatic','actuator','compressor','filter','conveyor','crane','hoist'],
+  automotive:      ['automotive','vehicle','electric','truck','tire','tyre','brake','suspension','chassis','transmission','usmca','stamping','die-cast'],
+  electronics:     ['semiconductor','chip','pcb','circuit','display','sensor','microcontroller','processor','memory','transistor','wafer','foundry','substrate'],
+  metals:          ['steel','aluminum','copper','lithium','cobalt','nickel','zinc','iron','alloy','casting','forging','ingot','coil','plate','bar','wire','tube'],
+  agriculture:     ['grain','wheat','corn','soybean','rice','cotton','sugar','coffee','cocoa','palm','fertilizer','pesticide','seed','crop','livestock','poultry','seafood'],
+  textiles:        ['textile','apparel','cotton','polyester','nylon','garment','fabric','yarn','fiber','denim','knit','woven'],
+  plastics:        ['plastic','polymer','elastomer','rubber','resin','injection','molding','abs','polypropylene','polyethylene','pvc','composite','epoxy','carbon'],
+  chemicals:       ['chemical','adhesive','coating','lubricant','solvent','surfactant','reagent','acid','base','catalyst','additive','pigment'],
+  packaging:       ['packaging','corrugated','carton','bottle','container','flexible','shrink','paperboard','label','blister'],
+  medical:         ['pharmaceutical','medical','drug','device','surgical','clinical','gmp','sterile','generic','biosimilar','implant','diagnostic'],
+  machinery:       ['machine','equipment','cnc','lathe','mill','press','robot','automation','conveyor','capital','industrial','tooling'],
+  ev_battery:      ['battery','cathode','anode','electrolyte','lithium','nmc','lfp','prismatic','cylindrical','gigafactory','bms'],
+  semiconductor:   ['fab','foundry','wafer','lithography','etch','deposition','tsmc','asml','mask','dram','nand','logic','analog'],
+  renewable_energy:['solar','wind','panel','turbine','inverter','pv','polysilicon','blade','storage','grid'],
+}
+
 export async function POST(req) {
   try {
     const { material } = await req.json();
@@ -21,29 +39,17 @@ export async function POST(req) {
     if (!category) {
       return NextResponse.json({ code: 'UNCLASSIFIED_QUERY', error: 'No sourcing category matched. Add the material, product type, or application and try again.' }, { status: 422 });
     }
+
     // Detect low-confidence matches: query has meaningful tokens but none match known category keywords
     const queryTokens = query.toLowerCase().split(/\s+/).filter(w => w.length > 3)
-    const categorySignals = {
-      industrial:      ['motor','pump','valve','bearing','gearbox','shaft','seal','coupling','flange','fastener','bolt','nut','hydraulic','pneumatic','actuator','compressor','filter','conveyor','crane','hoist'],
-      automotive:      ['automotive','vehicle','electric','truck','tire','tyre','brake','suspension','chassis','transmission','usmca','stamping','die-cast'],
-      electronics:     ['semiconductor','chip','pcb','circuit','display','sensor','microcontroller','processor','memory','transistor','wafer','foundry','substrate'],
-      metals:          ['steel','aluminum','copper','lithium','cobalt','nickel','zinc','iron','alloy','casting','forging','ingot','coil','plate','bar','wire','tube'],
-      agriculture:     ['grain','wheat','corn','soybean','rice','cotton','sugar','coffee','cocoa','palm','fertilizer','pesticide','seed','crop','livestock','poultry','seafood'],
-      textiles:        ['textile','apparel','cotton','polyester','nylon','garment','fabric','yarn','fiber','denim','knit','woven'],
-      plastics:        ['plastic','polymer','elastomer','rubber','resin','injection','molding','abs','polypropylene','polyethylene','pvc','composite','epoxy','carbon'],
-      chemicals:       ['chemical','adhesive','coating','lubricant','solvent','surfactant','reagent','acid','base','catalyst','additive','pigment'],
-      packaging:       ['packaging','corrugated','carton','bottle','container','flexible','shrink','paperboard','label','blister'],
-      medical:         ['pharmaceutical','medical','drug','device','surgical','clinical','gmp','sterile','generic','biosimilar','implant','diagnostic'],
-      machinery:       ['machine','equipment','cnc','lathe','mill','press','robot','automation','conveyor','capital','industrial','tooling'],
-      ev_battery:      ['battery','cathode','anode','electrolyte','lithium','nmc','lfp','prismatic','cylindrical','gigafactory','bms'],
-      semiconductor:   ['fab','foundry','wafer','lithography','etch','deposition','tsmc','asml','mask','dram','nand','logic','analog'],
-      renewable_energy:['solar','wind','panel','turbine','inverter','pv','polysilicon','blade','storage','grid'],
-    }
-    const knownKeywords = (categorySignals[category] || [])
+    const knownKeywords = CATEGORY_SIGNALS[category] || []
     const matchCount = queryTokens.filter(t => knownKeywords.some(k => t.includes(k) || k.includes(t))).length
     const isLowConfidence = queryTokens.length > 1 && matchCount === 0
 
-    const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.food || ATLAS_DB.electronics;
+    const baseOpportunities = ATLAS_DB[category]
+    if (!baseOpportunities?.length) {
+      return NextResponse.json({ code: 'NO_HUBS', error: `No sourcing hubs found for category "${category}". The database may be missing entries for this category.` }, { status: 422 });
+    }
     const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
     // Surface the most relevant hub first in the browsable list too, so it
     // matches the "Primary recommendation" in the directive instead of

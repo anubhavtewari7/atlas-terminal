@@ -62,10 +62,13 @@ async function fetchNewsAPI(countries, query) {
     : ''
   // Build targeted query: commodity keywords + trade context
   const queryParts = [commodityTerms, countryTerms].filter(Boolean)
+  // If we have nothing meaningful to query, bail early rather than sending a malformed request
+  if (!queryParts.length) return []
   const baseQ = queryParts.join(' AND ')
   const tradeContext = 'AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions OR sourcing OR manufacturing)'
   const q = encodeURIComponent(`${baseQ} ${tradeContext}`)
-  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=8`
+  // pageSize matches the slice below (6) -- no point fetching extras we discard
+  const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=6`
   try {
     const res = await fetch(url, {
       headers: { 'Authorization': `Bearer ${NEWS_API_KEY}` },
@@ -104,8 +107,8 @@ export async function POST(req) {
 
     // Fetch news from NewsAPI
     const allArticles = await fetchNewsAPI(countries, query)
-    const topArticles = allArticles.slice(0, 6)
-    const sourceCount = new Set(allArticles.map(a => a.source).filter(Boolean)).size
+    const topArticles = allArticles.slice(0, 6)  // matches pageSize=6 in fetchNewsAPI
+    const sourceCount = new Set(topArticles.map(a => a.source).filter(Boolean)).size
 
     return Response.json({
       articles: topArticles,

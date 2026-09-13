@@ -34,11 +34,11 @@ function earthquakeToRisk(feature) {
   const depthKm = coords[2] != null ? Math.round(coords[2]) : null
   const depthStr = depthKm != null ? `, ${depthKm}km depth` : ''
 
-  // Severity mapping
+  // Severity mapping: M7.0+ = HIGH, M6.0-6.9 = MEDIUM, <6.0 = LOW
   let severity
   if (mag >= 7.0)      severity = 'HIGH'
-  else if (mag >= 6.0) severity = 'HIGH'
-  else                 severity = 'MEDIUM'
+  else if (mag >= 6.0) severity = 'MEDIUM'
+  else                 severity = 'LOW'
 
   const isHighImpact = mag >= 6.5 || (mag >= 5.5 && isCriticalRegion(place))
   const infra = mag >= 6.5

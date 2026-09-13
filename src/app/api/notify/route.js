@@ -1,18 +1,37 @@
 // /api/notify -- called by the Nautilus Intelligence Agent after each hourly push.
 // Fetches the latest market-intelligence.json from GitHub (always fresh after push),
 // builds a digest email, and sends it via Resend.
-// Protected by NOTIFY_SECRET env var -- agent passes ?key=SECRET in the URL.
+// Protected by NOTIFY_SECRET env var -- agent passes Authorization: Bearer <SECRET> header.
 
 import { NextResponse } from 'next/server';
 
 const GITHUB_RAW = 'https://raw.githubusercontent.com/anubhavtewari7/atlas-terminal/main/public/market-intelligence.json';
-const TO = 'anubhavtewari7@gmail.com'; // Resend free tier -- change to slate.auto after verifying a sender domain at resend.com/domains
+// Recipient -- set NOTIFY_TO in Vercel env vars (falls back to dev address on free Resend tier)
+const TO = process.env.NOTIFY_TO || 'anubhavtewari7@gmail.com';
+
+// Escape HTML special characters to prevent injection in email body
+function esc(str) {
+  return String(str ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+// Validate that a string is a safe https:// URL before using it as an href
+function safeHref(url) {
+  try {
+    const u = new URL(String(url ?? ''))
+    return u.protocol === 'https:' ? u.href : null
+  } catch { return null }
+}
 
 export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const key = searchParams.get('key');
+  // Auth via Authorization header (not URL param -- URL params end up in logs)
+  const authHeader = request.headers.get('Authorization') || ''
+  const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : ''
 
-  if (!key || key !== process.env.NOTIFY_SECRET) {
+  if (!token || token !== process.env.NOTIFY_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -31,24 +50,25 @@ export async function GET(request) {
   const medium = alerts.filter(a => a.severity === 'MEDIUM');
   const ts     = new Date(data.lastUpdated).toUTCString().replace(' GMT', ' UTC');
 
-  // Build HIGH alert list HTML
+  // Build HIGH alert list HTML (all dynamic content escaped)
   const highHtml = high.slice(0, 5).map(a => {
-    const srcLink = a.source ? ` <a href="${a.source}" style="color:#38bdf8;font-size:11px">[source]</a>` : '';
+    const href = safeHref(a.source)
+    const srcLink = href ? ` <a href="${href}" style="color:#38bdf8;font-size:11px">[source]</a>` : '';
     return `<li style="margin-bottom:10px">
-      <span style="background:#7f1d1d;color:#fca5a5;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;text-transform:uppercase">${a.type}</span>
-      <strong style="display:block;margin-top:4px;color:#f8fafc">${a.title}</strong>
-      <span style="color:#94a3b8;font-size:12px">${a.summary}</span>${srcLink}
+      <span style="background:#7f1d1d;color:#fca5a5;font-size:10px;font-weight:bold;padding:2px 6px;border-radius:4px;text-transform:uppercase">${esc(a.type)}</span>
+      <strong style="display:block;margin-top:4px;color:#f8fafc">${esc(a.title)}</strong>
+      <span style="color:#94a3b8;font-size:12px">${esc(a.summary)}</span>${srcLink}
     </li>`;
   }).join('') || '<li style="color:#64748b">No HIGH severity alerts this hour.</li>';
 
   // Build commodity notes HTML
   const commHtml = (data.commodityNotes || []).slice(0, 5).map(c => {
-    const arrow = c.direction === 'UP' ? '▲' : c.direction === 'DOWN' ? '▼' : '--';
+    const arrow = c.direction === 'UP' ? '&#9650;' : c.direction === 'DOWN' ? '&#9660;' : '--';
     const color = c.direction === 'UP' ? '#4ade80' : c.direction === 'DOWN' ? '#f87171' : '#94a3b8';
     return `<tr>
-      <td style="padding:6px 8px;color:#cbd5e1;font-size:12px">${c.commodity}</td>
-      <td style="padding:6px 8px;font-weight:bold;font-size:13px" style="color:${color}"><span style="color:${color}">${arrow}</span></td>
-      <td style="padding:6px 8px;color:#94a3b8;font-size:11px">${c.driver || ''}</td>
+      <td style="padding:6px 8px;color:#cbd5e1;font-size:12px">${esc(c.commodity)}</td>
+      <td style="padding:6px 8px;font-weight:bold;font-size:13px;color:${color}">${arrow}</td>
+      <td style="padding:6px 8px;color:#94a3b8;font-size:11px">${esc(c.driver || '')}</td>
     </tr>`;
   }).join('');
 
