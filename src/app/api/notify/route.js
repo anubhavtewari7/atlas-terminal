@@ -1,4 +1,4 @@
-// /api/notify -- called by the Atlas Intelligence Agent after each hourly push.
+// /api/notify -- called by the Nautilus Intelligence Agent after each hourly push.
 // Fetches the latest market-intelligence.json from GitHub (always fresh after push),
 // builds a digest email, and sends it via Resend.
 // Protected by NOTIFY_SECRET env var -- agent passes ?key=SECRET in the URL.
@@ -52,11 +52,11 @@ export async function GET(request) {
     </tr>`;
   }).join('');
 
-  const subject = `Atlas Terminal -- ${high.length} HIGH, ${medium.length} MEDIUM alerts | ${ts}`;
+  const subject = `Nautilus Terminal -- ${high.length} HIGH, ${medium.length} MEDIUM alerts | ${ts}`;
 
   const html = `
 <div style="font-family:monospace;max-width:620px;background:#0a0a0a;color:#e2e8f0;padding:28px;border-radius:12px">
-  <h2 style="color:#38bdf8;margin:0 0 4px;font-size:18px">Atlas Intelligence Agent</h2>
+  <h2 style="color:#38bdf8;margin:0 0 4px;font-size:18px">Nautilus Intelligence Agent</h2>
   <p style="color:#475569;font-size:11px;margin:0 0 24px">${ts}</p>
 
   <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
@@ -89,11 +89,11 @@ export async function GET(request) {
 
   <a href="https://atlas-terminal-tau.vercel.app/terminal"
      style="display:inline-block;background:#38bdf8;color:#000;padding:11px 22px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:13px">
-    Open Atlas Terminal
+    Open Nautilus Terminal
   </a>
 
   <p style="margin:20px 0 0;font-size:10px;color:#334155">
-    Sent automatically by the Atlas Intelligence Agent -- runs every hour while the Atlas app is open.
+    Sent automatically by the Nautilus Intelligence Agent -- runs every hour while the Nautilus app is open.
   </p>
 </div>`;
 
@@ -105,7 +105,7 @@ export async function GET(request) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from: 'Atlas Agent <onboarding@resend.dev>',
+      from: 'Nautilus Agent <onboarding@resend.dev>',
       to: [TO],
       subject,
       html,

@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { X, TrendingUp, TrendingDown, DollarSign, RefreshCw, Info, ChevronDown } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { resolveFxRate } from '@/lib/procurement-costs'
 
 // ── Reference FX rates vs USD (approximate mid-market) ──────────────────────
 // These are baseline defaults — app fetches live rates from frankfurter.app
@@ -26,24 +27,25 @@ const DEFAULT_FX = {
 
 const SCENARIOS = [-10, -5, -3, 3, 5, 10]
 
-export default function CurrencyImpactCalc({ onClose, liveRates }) {
+export default function CurrencyImpactCalc({ onClose, liveRates, rateDate, ratesStale = false }) {
   const [currency, setCurrency]     = useState('CNY')
   const [fobPrice, setFobPrice]     = useState('')
   const [quantity, setQuantity]     = useState('')
   const [userRate, setUserRate]     = useState('')
   const [result, setResult]         = useState(null)
 
-  // Merge live rates (from parent) with defaults
-  function getRate(ccy) {
-    if (userRate && parseFloat(userRate) > 0) return parseFloat(userRate)
-    if (liveRates?.[ccy]) return liveRates[ccy]
-    return DEFAULT_FX[ccy]?.rate || 1
+  function getRateInfo(ccy) {
+    return resolveFxRate({ currency: ccy, rates: liveRates, override: userRate,
+      referenceRate: DEFAULT_FX[ccy]?.rate, stale: ratesStale, date: rateDate })
   }
+  const currentRate = getRateInfo(currency)
 
   function calculate() {
     const priceLocal = parseFloat(fobPrice) || 0
-    const qty        = parseFloat(quantity) || 1
-    const rate       = getRate(currency)
+    const qty        = Number(quantity)
+    const rateInfo   = getRateInfo(currency)
+    const rate       = rateInfo.rate
+    if (!Number.isFinite(priceLocal) || priceLocal <= 0 || !Number.isFinite(qty) || qty <= 0 || !rate) return
     const ccy        = DEFAULT_FX[currency] || {}
 
     const priceUSD   = priceLocal / rate
@@ -59,7 +61,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
       return { pct, newRate, newPrice, newTotal, deltaUnit, deltaTotal, marginImpact }
     })
 
-    setResult({ priceLocal, qty, rate, priceUSD, totalUSD, scenarios, ccy, currency })
+    setResult({ priceLocal, qty, rateInfo, rate, priceUSD, totalUSD, scenarios, ccy, currency })
   }
 
   const selectedCcy = DEFAULT_FX[currency] || {}
@@ -87,8 +89,8 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
           </div>
           <div className="flex items-center gap-3">
             <div className="hidden sm:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-              <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Live FX • Updated 2m ago</span>
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-slate-400" />
+              <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">{currentRate.label}{currentRate.date ? ` · ${currentRate.date}` : ''}</span>
             </div>
             <button onClick={onClose} className="text-slate-500 hover:text-white transition-colors">
               <X size={16} />
@@ -104,7 +106,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               {Object.entries(DEFAULT_FX).slice(0, 8).map(([code, info]) => (
                 <button
                   key={code}
-                  onClick={() => { setCurrency(code); setUserRate('') }}
+                  onClick={() => { setCurrency(code); setUserRate(''); setResult(null) }}
                   className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border
                     ${currency === code
                       ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
@@ -119,7 +121,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
               {Object.entries(DEFAULT_FX).slice(8).map(([code, info]) => (
                 <button
                   key={code}
-                  onClick={() => { setCurrency(code); setUserRate('') }}
+                  onClick={() => { setCurrency(code); setUserRate(''); setResult(null) }}
                   className={`flex items-center gap-1.5 px-2.5 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border
                     ${currency === code
                       ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-400'
@@ -139,7 +141,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                 FOB Unit Price ({selectedCcy.symbol || currency})
               </label>
               <input
-                value={fobPrice} onChange={e => setFobPrice(e.target.value)}
+                value={fobPrice} onChange={e => { setFobPrice(e.target.value); setResult(null) }}
                 placeholder={`e.g. ${currency === 'JPY' || currency === 'KRW' || currency === 'VND' || currency === 'IDR' ? '5000' : '350'}`}
                 type="number"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50"
@@ -148,7 +150,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
             <div>
               <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5">Order Quantity</label>
               <input
-                value={quantity} onChange={e => setQuantity(e.target.value)}
+                value={quantity} onChange={e => { setQuantity(e.target.value); setResult(null) }}
                 placeholder="e.g. 1000"
                 type="number"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50"
@@ -159,8 +161,8 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                 Override FX Rate <span className="text-slate-500 normal-case">(optional)</span>
               </label>
               <input
-                value={userRate} onChange={e => setUserRate(e.target.value)}
-                placeholder={`Default: ${selectedCcy.rate || '—'}`}
+                value={userRate} onChange={e => { setUserRate(e.target.value); setResult(null) }}
+                placeholder={`Default: ${currentRate.rate ?? 'Unknown'}`}
                 type="number"
                 className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500/50"
               />
@@ -169,7 +171,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
 
           <button
             onClick={calculate}
-            disabled={!fobPrice}
+            disabled={!Number.isFinite(Number(fobPrice)) || Number(fobPrice) <= 0 || !Number.isFinite(Number(quantity)) || Number(quantity) <= 0 || !currentRate.rate}
             className="w-full h-10 bg-emerald-500 text-black font-bold uppercase text-[11px] hover:bg-emerald-400 rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all disabled:opacity-30"
           >
             <TrendingUp size={11} /> Run Sensitivity Analysis
@@ -186,7 +188,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                   <div className="text-xl font-black text-white">
                     {result.rate.toLocaleString('en-US', { maximumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[10px] text-slate-500">{result.currency}/USD</div>
+                  <div className="text-[10px] text-slate-500">{result.currency}/USD · {result.rateInfo.label}{result.rateInfo.date ? ` · ${result.rateInfo.date}` : ''}</div>
                 </div>
                 <div className="p-4 rounded-xl bg-white/3 border border-white/8">
                   <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Unit Price (USD)</div>
@@ -194,7 +196,7 @@ export default function CurrencyImpactCalc({ onClose, liveRates }) {
                     ${result.priceUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <div className="text-[10px] text-slate-500">
-                    {result.selectedCcy?.symbol || ''}{result.priceLocal.toLocaleString()} ÷ {result.rate.toFixed(2)}
+                    {result.ccy?.symbol || ''}{result.priceLocal.toLocaleString()} ÷ {result.rate.toFixed(2)}
                   </div>
                 </div>
                 <div className="p-4 rounded-xl bg-emerald-500/8 border border-emerald-500/20">

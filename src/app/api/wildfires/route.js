@@ -132,7 +132,7 @@ export async function GET() {
     }
 
     const res = await fetch(FIRMS_CSV_URL, {
-      headers: { 'User-Agent': 'ATLAS-Terminal/1.0' },
+      headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0' },
       next: { revalidate: 1800 }
     })
     if (!res.ok) throw new Error(`FIRMS ${res.status}`)

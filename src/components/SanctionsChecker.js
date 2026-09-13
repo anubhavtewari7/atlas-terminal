@@ -100,7 +100,7 @@ export default function SanctionsChecker({ onClose }) {
       }
     }
     if (!countryResult && countryLower) {
-      countryResult = { country: country, ofac: 'UNKNOWN', eu: 'UNKNOWN', un: 'UNKNOWN', level: 'UNKNOWN', program: 'No match in database', note: 'Manually verify against OFAC SDN list, EU Consolidated List, and UN Sanctions List. Country not found in Atlas database.' }
+      countryResult = { country: country, ofac: 'UNKNOWN', eu: 'UNKNOWN', un: 'UNKNOWN', level: 'UNKNOWN', program: 'No match in database', note: 'Manually verify against OFAC SDN list, EU Consolidated List, and UN Sanctions List. Country not found in Nautilus database.' }
     }
 
     // Check entity name against SDN keywords
@@ -232,7 +232,7 @@ export default function SanctionsChecker({ onClose }) {
                 </div>
               ) : (
                 <p className="text-[12px] text-slate-400 leading-relaxed">
-                  No keyword matches against Atlas&apos; curated SDN/Entity List database. <strong className="text-amber-400">Always verify</strong> against the official OFAC SDN, EU Consolidated, and UN SC lists before transacting.
+                  No keyword matches against Nautilus&apos; curated SDN/Entity List database. <strong className="text-amber-400">Always verify</strong> against the official OFAC SDN, EU Consolidated, and UN SC lists before transacting.
                 </p>
               )}
             </div>
@@ -241,7 +241,7 @@ export default function SanctionsChecker({ onClose }) {
           {/* Disclaimer + official links */}
           <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
             <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle size={11} /> Legal Disclaimer</div>
-            <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Atlas provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
+            <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Nautilus provides indicative screening only. This is not legal advice. Always verify against official government lists before transacting with any new counterparty.</p>
             <div className="flex flex-wrap gap-2">
               {[
                 { label: 'OFAC SDN Search', url: 'https://sanctionssearch.ofac.treas.gov/' },

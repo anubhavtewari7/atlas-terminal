@@ -854,7 +854,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
           {!results && (
             <div className="p-6 space-y-4">
               <p className="text-[12px] text-slate-500 leading-relaxed">
-                Paste your Bill of Materials below — one item per line, or comma / semicolon separated. Atlas will score each component for tariff exposure, sourcing concentration risk, and ESG flags.
+                Paste your Bill of Materials below -- one item per line, or comma / semicolon separated. Nautilus will score each component for tariff exposure, sourcing concentration risk, and ESG flags.
               </p>
               <p className="text-[11px] text-slate-500 -mt-2">One item per line -- material name + spec. No quantities needed.</p>
               <textarea
@@ -915,7 +915,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
                           {onScan && (
                             <button
                               onClick={(e) => { e.stopPropagation(); setLastScanned(r.item); setMinimized(true); onScan(r.item) }}
-                              title="Deep-dive this component in Atlas"
+                              title="Deep-dive this component in Nautilus"
                               className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[8px] font-bold uppercase tracking-wider border transition-all
                                 ${r.riskLevel === 'HIGH'
                                   ? 'bg-rose-500/20 border-rose-500/40 text-rose-300 hover:bg-rose-500/35'

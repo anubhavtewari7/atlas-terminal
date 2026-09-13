@@ -1,5 +1,5 @@
 // ============================================================
-// ATLAS TERMINAL — /api/risk/route.js
+// NAUTILUS TERMINAL -- /api/risk/route.js
 // Place at: src/app/api/risk/route.js
 // Used by: src/components/TradeRiskScore.js
 // ============================================================
@@ -64,7 +64,7 @@ export async function POST(req) {
     return NextResponse.json(response);
 
   } catch (error) {
-    console.error('[ATLAS] Risk API error:', error);
+    console.error('[NAUTILUS] Risk API error:', error);
     return NextResponse.json(
       { error: 'Risk assessment failed. Please retry.' },
       { status: 500 }

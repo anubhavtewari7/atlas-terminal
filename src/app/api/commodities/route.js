@@ -34,7 +34,7 @@ export async function GET() {
 
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; AtlasTerminal/1.0)',
+        'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/1.0)',
         Accept: 'application/json',
       },
       signal: AbortSignal.timeout(6000),

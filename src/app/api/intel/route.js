@@ -1,4 +1,4 @@
-// ATLAS TERMINAL — /api/intel/route.js
+// NAUTILUS TERMINAL -- /api/intel/route.js
 // Live trade intelligence: NewsAPI.org + static World Bank stability scores
 // Requires NEWS_API_KEY environment variable
 

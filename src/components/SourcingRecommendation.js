@@ -160,7 +160,7 @@ export default function SourcingRecommendation({ opportunities, risks, intelBrie
         {/* Footer */}
         <div className="px-6 py-3 border-t border-white/5 shrink-0">
           <p className="text-[9px] text-slate-600 uppercase tracking-widest">
-            Analysis based on {opportunities.length} sourcing hub{opportunities.length !== 1 ? 's' : ''} and {risks.length} active risk factor{risks.length !== 1 ? 's' : ''} identified by ATLAS Terminal
+            Analysis based on {opportunities.length} sourcing hub{opportunities.length !== 1 ? 's' : ''} and {risks.length} active risk factor{risks.length !== 1 ? 's' : ''} identified by NAUTILUS Terminal
           </p>
         </div>
       </motion.div>

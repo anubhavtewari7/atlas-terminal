@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { mergePortWatchData } from '@/lib/port-data'
 
 // --------------------------------------------------------------------------
 // Static baseline -- same 26 ports as PortStatus.js (source of truth here)
@@ -46,37 +47,10 @@ let _cache     = null
 let _cacheTime = 0
 
 // --------------------------------------------------------------------------
-// Deterministic intra-day variation (±8 congestion points, stable per hour)
-// Seeds from UTC day + hour so numbers look fresh but don't jitter on reload
-// --------------------------------------------------------------------------
-function liveVariation(seed) {
-  // Simple deterministic hash
-  const x = Math.sin(seed * 9301 + 49297) * 233280
-  return Math.round((x - Math.floor(x)) * 16) - 8  // -8 to +7
-}
-
-function applyDailyVariation(port, idx) {
-  const now     = new Date()
-  const seed    = now.getUTCFullYear() * 10000 + (now.getUTCMonth() + 1) * 100 + now.getUTCDate() + idx
-  const delta   = liveVariation(seed)
-  const raw     = Math.max(0, Math.min(100, port.congestion + delta))
-  const congestion = Math.round(raw)
-
-  // Recalculate wait days proportionally to new congestion
-  const waitDays = parseFloat((port.waitDays * (congestion / port.congestion)).toFixed(1))
-
-  // Update trend based on delta
-  const trend = delta > 3 ? 'up' : delta < -3 ? 'down' : port.trend
-
-  return { ...port, congestion, waitDays, trend }
-}
-
-// --------------------------------------------------------------------------
-// Try to fetch live data from IMF PortWatch and merge into baseline
-// --------------------------------------------------------------------------
 async function fetchPortWatch() {
   const res = await fetch(PORTWATCH_URL, {
-    headers: { 'User-Agent': 'ATLAS-Terminal/1.0' }
+    headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0' },
+    signal: AbortSignal.timeout(8000)
   })
   if (!res.ok) throw new Error(`PortWatch ${res.status}`)
   const json = await res.json()
@@ -84,65 +58,19 @@ async function fetchPortWatch() {
   return json.features.map(f => f.attributes)
 }
 
-function mergePortWatchData(baseline, liveAttrs) {
-  // Build lookup by rough port name match
-  const lookup = {}
-  for (const attr of liveAttrs) {
-    const name = (attr.PORT_NAME || '').toLowerCase()
-    lookup[name] = attr
-  }
-
-  return baseline.map(port => {
-    const key  = port.name.toLowerCase()
-    const live = lookup[key] || Object.values(lookup).find(a =>
-      a.PORT_NAME && port.name.toLowerCase().includes((a.PORT_NAME || '').toLowerCase().split(' ')[0])
-    )
-    if (!live) return port
-
-    const congestion = live.CONGESTION_INDEX != null
-      ? Math.round(Math.max(0, Math.min(100, live.CONGESTION_INDEX * 100)))
-      : port.congestion
-
-    const waitDays = live.WAIT_DAYS != null
-      ? parseFloat(live.WAIT_DAYS.toFixed(1))
-      : port.waitDays
-
-    const trend = live.TREND === 1 ? 'up' : live.TREND === -1 ? 'down' : 'stable'
-
-    return { ...port, congestion, waitDays, trend }
-  })
-}
-
-// --------------------------------------------------------------------------
-// Route handler
-// --------------------------------------------------------------------------
 export async function GET() {
   try {
     if (_cache && Date.now() - _cacheTime < CACHE_MS) {
       return NextResponse.json(_cache)
     }
 
-    let ports = BASELINE_PORTS
-    let source = 'Baseline + Daily Projection'
-    let liveCount = 0
-
+    let result = mergePortWatchData(BASELINE_PORTS)
     try {
-      const liveAttrs = await fetchPortWatch()
-      ports    = mergePortWatchData(BASELINE_PORTS, liveAttrs)
-      source   = 'IMF PortWatch'
-      liveCount = liveAttrs.length
-    } catch (portWatchErr) {
-      // PortWatch unavailable -- apply deterministic daily variation to baseline
-      console.info('[/api/ports] PortWatch unavailable, using daily projection:', portWatchErr.message)
-      ports = BASELINE_PORTS.map((p, i) => applyDailyVariation(p, i))
+      result = mergePortWatchData(BASELINE_PORTS, await fetchPortWatch())
+    } catch (error) {
+      console.info('[/api/ports] Live values unavailable; retaining static baseline:', error.message)
     }
-
-    const payload = {
-      ports,
-      source,
-      liveCount,
-      updated: new Date().toISOString()
-    }
+    const payload = { ...result, updated: new Date().toISOString() }
 
     _cache     = payload
     _cacheTime = Date.now()
@@ -153,7 +81,7 @@ export async function GET() {
     console.error('[/api/ports]', err.message)
     // Hard fallback -- return static baseline unmodified
     return NextResponse.json({
-      ports:    BASELINE_PORTS,
+      ports:    mergePortWatchData(BASELINE_PORTS).ports,
       source:   'Static Baseline',
       liveCount: 0,
       updated:  new Date().toISOString(),

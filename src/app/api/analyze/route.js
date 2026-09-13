@@ -1,5 +1,5 @@
 // ============================================================
-// ATLAS TERMINAL — /api/analyze/route.js
+// NAUTILUS TERMINAL -- /api/analyze/route.js
 // Place at: src/app/api/analyze/route.js
 // ============================================================
 
@@ -11,22 +11,17 @@ export async function POST(req) {
   try {
     const { material } = await req.json();
 
-    if (!material || typeof material !== 'string') {
+    if (typeof material !== 'string' || !material.trim() || material.length > 1000) {
       return NextResponse.json({ error: 'Material query is required' }, { status: 400 });
     }
 
     const query = material.trim();
     const category = categorizeQuery(query);
 
-    // Detect low-confidence matches (fell through to the electronics default).
-    // We flag this so the UI can show a soft "best-match" disclaimer rather
-    // than implying we found an exact category match.
-    const ELECTRONICS_KEYWORDS = ['semiconductor','wafer','pcb','lcd','oled','chip','circuit','nand','dram',
-      'monitor','screen','television','display','battery','resistor','capacitor','diode','transistor',
-      'phone','computer','laptop','tablet','sensor','cable','connector','power supply','charger',
-      'electronics','router','ssd','keyboard','mouse','headphone','speaker','printer','camera']
-    const qLow = query.toLowerCase()
-    const isLowConfidence = category === 'electronics' && !ELECTRONICS_KEYWORDS.some(kw => qLow.includes(kw))
+    if (!category) {
+      return NextResponse.json({ code: 'UNCLASSIFIED_QUERY', error: 'No sourcing category matched. Add the material, product type, or application and try again.' }, { status: 422 });
+    }
+    const isLowConfidence = false;
 
     const baseOpportunities = ATLAS_DB[category] || ATLAS_DB.food || ATLAS_DB.electronics;
     const selectedHubUnenriched = pickBestHub(baseOpportunities, query);
@@ -128,7 +123,7 @@ export async function POST(req) {
     return NextResponse.json(data);
 
   } catch (error) {
-    console.error('[ATLAS] Analyze API error:', error);
+    console.error('[NAUTILUS] Analyze API error:', error);
     return NextResponse.json(
       { error: 'Strategy scan failed. Please retry.' },
       { status: 500 }

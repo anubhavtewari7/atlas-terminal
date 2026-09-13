@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt = 'Atlas Terminal — Supply Chain Intelligence';
+export const alt = 'NAUTILUS Terminal -- Supply Chain Intelligence';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -58,7 +58,7 @@ export default async function Image() {
             }} />
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-            <span style={{ fontSize: '17px', fontWeight: 700, color: '#ffffff', letterSpacing: '0.14em' }}>ATLAS</span>
+            <span style={{ fontSize: '17px', fontWeight: 700, color: '#ffffff', letterSpacing: '0.14em' }}>NAUTILUS</span>
             <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.38)', letterSpacing: '0.2em', fontWeight: 600 }}>SUPPLY CHAIN INTELLIGENCE</span>
           </div>
           {/* Live pill */}

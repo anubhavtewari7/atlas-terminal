@@ -1,5 +1,5 @@
 // ============================================================
-// ATLAS TERMINAL — Core Intelligence Database
+// NAUTILUS TERMINAL -- Core Intelligence Database
 // Place at: src/lib/database.js
 // ============================================================
 
@@ -2404,8 +2404,16 @@ export function pickBestHub(hubs, query) {
 }
 
 export function categorizeQuery(query) {
-  const q = query.toLowerCase()
+  if (typeof query !== 'string' || !query.trim()) return null
+  const q = query.toLowerCase().replace(/[‐‑–—]/g, '-').replace(/\s+/g, ' ').trim()
   const match = (keywords) => keywords.some(kw => q.includes(kw))
+
+  // Product phrases take priority over raw-material words and end-use context.
+  // Keep whole-word boundaries here so 'ev' cannot match an unrelated word.
+  if (/\b(?:semiconductor|silicon(?: carbide)?|gallium nitride) wafers?\b/.test(q)) return 'semiconductor'
+  if (/\b(?:battery|batteries|cells?)\b/.test(q) &&
+      /\b(?:lithium[- ]ion|li[- ]ion|ev|electric vehicles?|traction)\b/.test(q)) return 'ev_battery'
+
 
   // ─────────────────────────────────────────────────────────────────────────
   // PRE-CHECKS: High-specificity compound terms that would be misrouted by
@@ -3496,8 +3504,8 @@ export function categorizeQuery(query) {
     'paper'
   ])) return 'wood_paper'
 
-  // Default: electronics (most common procurement category globally)
-  return 'electronics'
+  // No catalog match: callers must ask for clarification, not invent a category.
+  return null
 }
 
 // ============================================================
@@ -3543,29 +3551,25 @@ export const TARIFF_DATABASE = {
 }
 
 export function lookupTariff(query) {
+  const category = categorizeQuery(query)
+  if (!category) return { hts: null, duty: null, notes: 'No catalog match. Refine the product description.', matched: false, confidence: 'unknown', category: null }
   const q = query.toLowerCase()
-  for (const [key, data] of Object.entries(TARIFF_DATABASE)) {
-    if (q.includes(key)) {
-      return { hts: data.code, duty: data.base, notes: data.notes, matched: true }
+  // Do not classify a battery or wafer as its raw material (e.g. lithium carbonate).
+  const isSpecializedProduct = category === 'ev_battery' || category === 'semiconductor'
+  if (!isSpecializedProduct) {
+    for (const [key, data] of Object.entries(TARIFF_DATABASE)) {
+      const keyword = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+      if (new RegExp(`\\b${keyword}(?:s|es)?\\b`, 'i').test(q)) {
+        return { hts: data.code, duty: data.base, notes: data.notes, matched: true, confidence: 'indicative', category }
+      }
     }
   }
-  // Smart fallback based on category — this is a generic placeholder for
-  // the whole category, not a specific match for the product asked about.
-  // Callers must surface this distinction; presenting it with the same
-  // confidence as a real match risks someone filing customs paperwork
-  // against a fabricated HTS code.
-  const cat = categorizeQuery(query)
-  const fallbacks = {
-    automotive:  { hts: '8708.99.81', duty: '2.5%',        notes: 'Other auto parts. Section 301 (25%) if China-origin.' },
-    industrial:  { hts: '8505.11.00', duty: '0%–25%',      notes: 'Industrial magnets/components. Duty varies by origin and product type.' },
-    electronics: { hts: '8542.31.00', duty: '0% (ITA)',    notes: 'Electronic integrated circuits. Information Technology Agreement duty-free.' },
-    agriculture: { hts: '2106.90.99', duty: '6.4%',        notes: 'Food preparations. Actual rate varies by product and origin.' },
-    metals:      { hts: '7204.49.00', duty: '1.5%',        notes: 'Ferrous waste and scrap. Specific tariffs may apply.' },
-    textiles:    { hts: '6307.90.98', duty: '7.0%',        notes: 'Other made-up textile articles.' },
-    plastics:    { hts: '3926.90.99', duty: '5.3% + 25% (China Sec 301)', notes: 'Other plastic articles. Duty-free from Korea (KORUS), Singapore (USSFTA), Germany (MFN). Section 301 applies to China-origin.' }
+  const customs = ATLAS_DB[category]?.[0]?.customs
+  return {
+    hts: customs?.hts_code || null, duty: customs?.duty_rate || null,
+    notes: 'Category reference only; this code and rate have not been matched to the specific product or country of origin.',
+    matched: false, confidence: 'category_reference', category,
   }
-  const fb = fallbacks[cat] || fallbacks.electronics
-  return { ...fb, matched: false }
 }
 
 // ============================================================
@@ -3659,9 +3663,9 @@ export function calculateRisk(origin, destination, product = '') {
 
   let transit = 14
   if (isAsia && destUS) transit = 18
+  else if (o.includes('mexico') && destUS) transit = 3
   else if (isLatam && destUS) transit = 12
   else if (isEurope && destUS) transit = 10
-  else if (o.includes('mexico') && destUS) transit = 3
   else if (o.includes('australia') && destUS) transit = 16
   else if (o.includes('india') && destUS) transit = 20
 

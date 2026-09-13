@@ -148,7 +148,7 @@ export async function GET() {
 
     try {
       const res = await fetch(encodeURI(GDELT_URL), {
-        headers: { 'User-Agent': 'ATLAS-Terminal/1.0' },
+        headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0' },
         next: { revalidate: 3600 }
       })
       if (!res.ok) throw new Error(`GDELT ${res.status}`)

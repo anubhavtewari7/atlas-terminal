@@ -68,7 +68,7 @@ export async function GET() {
     }
 
     const res = await fetch(USGS_URL, {
-      headers: { 'User-Agent': 'ATLAS-Terminal/1.0 (supply-chain-intelligence)' },
+      headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0 (supply-chain-intelligence)' },
       next:    { revalidate: 1800 }
     })
 

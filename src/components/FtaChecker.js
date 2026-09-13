@@ -228,7 +228,7 @@ export default function FtaChecker({ onClose }) {
                 <span className="text-[11px] text-amber-400 font-bold">No FTA Found — {origin} → {destination}</span>
               </div>
               <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
-                No direct or indirect free trade agreement is recorded in the Atlas database for this pair.
+                No direct or indirect free trade agreement is recorded in the Nautilus database for this pair.
                 Standard MFN (Most Favored Nation) tariff rates apply. Consider sourcing via a third country that does have an FTA with the destination.
               </p>
               <div className="p-3 bg-black/20 rounded-lg">

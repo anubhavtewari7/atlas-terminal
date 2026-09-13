@@ -118,7 +118,8 @@ export default function TariffLookup({ onClose }) {
               <div className="flex items-start justify-between p-5 bg-sky-500/5 border border-sky-500/20 rounded-xl">
                 <div>
                   <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 tracking-widest">{result.chapter}</div>
-                  <div className="text-[28px] font-mono font-bold text-white tracking-wider">{result.hts_code}</div>
+                  <div className="text-[28px] font-mono font-bold text-white tracking-wider">{result.hts_code || 'Unclassified'}</div>
+                  <div className="text-[10px] text-amber-300 mt-1">{result.matched ? 'Indicative keyword match' : result.confidence === 'unknown' ? 'Manual classification needed' : 'Category reference only'}</div>
                   {result.source === 'usitc_live' && (
                     <div className="text-[12px] text-slate-400 mt-1">{result.description}</div>
                   )}
@@ -132,10 +133,10 @@ export default function TariffLookup({ onClose }) {
               {/* Duty Rates Grid */}
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: 'General (MFN) Rate', value: result.mfn_rate, icon: '🇺🇸', highlight: true },
+                  { label: 'Indicative Catalog Rate', value: result.catalog_rate || 'Unknown', icon: '🇺🇸', highlight: true },
                   { label: 'Preferential/FTA Rate', value: result.special_rate || 'Not specified', icon: '🤝' },
                   { label: 'Column 2 (Non-NTR) Rate', value: result.column2_rate || 'Not specified', icon: '⚠️' },
-                  { label: 'HS6 Code', value: result.hs6_code, icon: '🌐' },
+                  { label: 'HS6 Reference', value: result.hs6_code || 'Unknown', icon: '🌐' },
                 ].map((item, i) => (
                   <div key={i} className={`p-4 rounded-xl border ${item.highlight ? 'bg-amber-500/10 border-amber-500/30' : 'bg-[#111] border-white/5'}`}>
                     <div className="text-[10px] text-slate-500 uppercase font-bold mb-2 tracking-widest">{item.icon} {item.label}</div>

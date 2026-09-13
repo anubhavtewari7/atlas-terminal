@@ -2,7 +2,7 @@ const POLLINATIONS_ENDPOINT = "https://text.pollinations.ai/";
 
 export async function connectTheDots(newsItem, materialProfile) {
   const prompt = `
-    You are Project ATLAS, a Strategic Sourcing Intelligence AI.
+    You are Project NAUTILUS, a Strategic Sourcing Intelligence AI.
     USER PROFILE: ${materialProfile.industry} focusing on ${materialProfile.material}.
     
     NEWS ITEM: "${newsItem.title}" - ${newsItem.description}
@@ -34,7 +34,7 @@ export async function connectTheDots(newsItem, materialProfile) {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("ATLAS AI Error:", error);
+    console.error("NAUTILUS AI Error:", error);
     return null;
   }
 }

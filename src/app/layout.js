@@ -1,20 +1,20 @@
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata = {
-  title: 'ATLAS Terminal -- Supply Chain Intelligence',
+  title: 'NAUTILUS Terminal -- Supply Chain Intelligence',
   description: 'Real-time sourcing intelligence, tariff data, and geopolitical risk for procurement professionals. Know your supply chain before it fails you.',
   metadataBase: new URL('https://atlas-terminal-tau.vercel.app'),
   openGraph: {
-    title: 'ATLAS Terminal -- Supply Chain Intelligence',
+    title: 'NAUTILUS Terminal -- Supply Chain Intelligence',
     description: 'Real-time sourcing intelligence, tariff data, and geopolitical risk for procurement professionals. Know your supply chain before it fails you.',
     url: 'https://atlas-terminal-tau.vercel.app',
-    siteName: 'ATLAS Terminal',
+    siteName: 'NAUTILUS Terminal',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'ATLAS Terminal -- Supply Chain Intelligence',
+        alt: 'NAUTILUS Terminal -- Supply Chain Intelligence',
       },
     ],
     locale: 'en_US',
@@ -22,7 +22,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ATLAS Terminal -- Supply Chain Intelligence',
+    title: 'NAUTILUS Terminal -- Supply Chain Intelligence',
     description: 'Real-time sourcing intelligence, tariff data, and geopolitical risk -- built for procurement professionals who can\'t afford surprises.',
     images: ['/og-image.png'],
   },

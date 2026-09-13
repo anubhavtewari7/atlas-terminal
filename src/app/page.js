@@ -634,22 +634,22 @@ export default function Home() {
   <tr><td align="center">
     <table width="100%" cellpadding="0" cellspacing="0" style="max-width:540px;">
       <tr><td style="padding-bottom:28px;">
-        <span style="font-size:26px;font-weight:900;letter-spacing:-0.05em;color:#0EA5E9;">ATLAS</span>
+        <span style="font-size:26px;font-weight:900;letter-spacing:-0.05em;color:#0EA5E9;">NAUTILUS</span>
         <span style="font-size:11px;font-family:'Courier New',monospace;letter-spacing:0.16em;text-transform:uppercase;color:#94A3B8;margin-left:12px;">Terminal</span>
       </td></tr>
       <tr><td style="background:#ffffff;border-radius:16px;border:1px solid #E2E8F0;padding:40px;">
         <p style="margin:0 0 12px;font-family:'Courier New',monospace;font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#0EA5E9;">// Early Access Granted</p>
         <h1 style="margin:0 0 16px;font-size:30px;font-weight:800;letter-spacing:-0.03em;color:#0F172A;line-height:1.15;">You're in.</h1>
-        <p style="margin:0 0 28px;font-size:15px;color:#475569;line-height:1.75;">Welcome to ATLAS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
+        <p style="margin:0 0 28px;font-size:15px;color:#475569;line-height:1.75;">Welcome to NAUTILUS Terminal -- a live intelligence platform built for procurement and supply chain professionals. Your access is active now.</p>
         <table cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
           <tr><td bgcolor="#0EA5E9" style="background:#0EA5E9;border-radius:100px;">
-            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Open ATLAS Terminal &rarr;</a>
+            <a href="${TERMINAL_URL}" style="display:inline-block;padding:15px 36px;color:#ffffff;font-size:14px;font-weight:600;text-decoration:none;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">Open NAUTILUS Terminal &rarr;</a>
           </td></tr>
         </table>
         <hr style="border:none;border-top:1px solid #E2E8F0;margin:0 0 28px;"/>
         <p style="margin:0 0 16px;font-size:13px;font-weight:600;color:#0F172A;text-transform:uppercase;letter-spacing:0.06em;">What you can do from day one</p>
         <table cellpadding="0" cellspacing="0" width="100%">
-          <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Scan any product in plain language -- ATLAS maps global sourcing hubs, names real suppliers, and pulls live UN Comtrade export data.</td></tr>
+          <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Scan any product in plain language -- NAUTILUS maps global sourcing hubs, names real suppliers, and pulls live UN Comtrade export data.</td></tr>
           <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Monitor 92,000+ live fire hotspots, M4.5+ earthquakes, and 15 conflict zones -- overlaid on your sourcing geography automatically.</td></tr>
           <tr><td style="padding-bottom:12px;vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="padding-bottom:12px;font-size:13px;color:#475569;line-height:1.65;">Instant compliance: OFAC sanctions, ECCN classification, Section 301 tariffs, and FTA eligibility -- checked at the point of sourcing.</td></tr>
           <tr><td style="vertical-align:top;width:14px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0EA5E9;margin-top:5px;"></span></td><td style="font-size:13px;color:#475569;line-height:1.65;">Export a PDF mission brief, supplier RFQ, and total landed cost model in one click.</td></tr>
@@ -663,7 +663,7 @@ export default function Home() {
         <p style="margin:20px 0 0;font-size:12px;color:#94A3B8;">If you don't see this email in your inbox, check your spam or promotions folder and mark it as Not Spam.</p>
       </td></tr>
       <tr><td style="padding:24px 0;text-align:center;">
-        <p style="margin:0;font-size:11px;color:#94A3B8;">&copy; 2026 ATLAS Terminal &nbsp;&middot;&nbsp; ${email}</p>
+        <p style="margin:0;font-size:11px;color:#94A3B8;">&copy; 2026 NAUTILUS Terminal &nbsp;&middot;&nbsp; ${email}</p>
         <p style="margin:6px 0 0;font-size:10px;color:#CBD5E1;">You received this because you requested early access.</p>
       </td></tr>
     </table>
@@ -682,7 +682,7 @@ export default function Home() {
           user_id: 'NFvpRULP0SJgNBrJs',
           template_params: {
             to_email: email,
-            subject: 'Your ATLAS Terminal access is ready',
+            subject: 'Your NAUTILUS Terminal access is ready',
             message: messageHtml,
           },
         }),
@@ -712,14 +712,14 @@ export default function Home() {
 
       {/* Nav */}
       <nav ref={navRef}>
-        <div className="nav-logo">ATL<span>A</span>S</div>
+        <div className="nav-logo">NAUTILU<span>S</span></div>
         <div className="nav-tag">Live Data Active</div>
       </nav>
 
       {/* Hero */}
       <section className="hero">
         <div className="hero-eyebrow">Supply Chain Intelligence Terminal</div>
-        <h1 className="hero-title">ATLAS</h1>
+        <h1 className="hero-title">NAUTILUS</h1>
         <p className="hero-sub">
           A professional-grade intelligence platform that translates live global data into supply chain decisions your team can act on immediately.
         </p>
@@ -760,7 +760,7 @@ export default function Home() {
         <blockquote className="press-quote">
           &ldquo;Procurement teams are making multi-million-dollar sourcing decisions while juggling eight browser tabs. The intelligence exists; it just shouldn&apos;t be this hard to access.&rdquo;
         </blockquote>
-        <cite className="press-cite">-- Anubhav Tewari, Founder &amp; Developer, ATLAS Terminal &nbsp;&middot;&nbsp; <em>Supply &amp; Demand Chain Executive, Sep 1 2026</em></cite>
+        <cite className="press-cite">-- Anubhav Tewari, Founder &amp; Developer, NAUTILUS Terminal &nbsp;&middot;&nbsp; <em>Supply &amp; Demand Chain Executive, Sep 1 2026</em></cite>
       </div>
 
       {/* Marquee */}
@@ -780,7 +780,7 @@ export default function Home() {
           <div className="split-text r">
             <div className="sh-tag">Sourcing Intelligence</div>
             <h2 className="sh-h">Any product.<br /><em>Global sourcing map</em><br />in seconds.</h2>
-            <p className="sh-p">Describe what you need in plain language. ATLAS identifies the best global hubs, names real suppliers, and pulls live UN Comtrade export statistics.</p>
+            <p className="sh-p">Describe what you need in plain language. NAUTILUS identifies the best global hubs, names real suppliers, and pulls live UN Comtrade export statistics.</p>
             <div className="split-bullets">
               {[
                 'Verified supplier companies named per hub with live export data',
@@ -799,7 +799,7 @@ export default function Home() {
             <div className="mock">
               <div className="mock-bar">
                 <div className="dot" style={{ background: '#ff5f57' }} /><div className="dot" style={{ background: '#febc2e' }} /><div className="dot" style={{ background: '#28c840' }} />
-                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text3)', marginLeft: 8 }}>ATLAS -- Sourcing Scan</span>
+                <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text3)', marginLeft: 8 }}>NAUTILUS -- Sourcing Scan</span>
               </div>
               <div className="mock-body">
                 <div style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--text3)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>&#8627; neodymium magnets for EV motor assembly</div>
@@ -1001,10 +1001,10 @@ export default function Home() {
       {/* Footer */}
       <footer>
         <div>
-          <div className="f-brand">ATLAS</div>
+          <div className="f-brand">NAUTILUS</div>
           <div className="f-note">Supply Chain Intelligence Terminal &nbsp;&middot;&nbsp; Real data &nbsp;&middot;&nbsp; Built for procurement professionals</div>
         </div>
-        <div className="f-right">&copy; 2026 ATLAS Terminal</div>
+        <div className="f-right">&copy; 2026 NAUTILUS Terminal</div>
       </footer>
     </>
   )

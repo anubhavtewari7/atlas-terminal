@@ -9,8 +9,8 @@ const STEPS = [
     target: null,
     position: 'center',
     emoji: '🌍',
-    title: 'Welcome to Atlas Terminal',
-    content: 'Your AI-powered supply chain intelligence platform. Type any material or component and Atlas maps the best global sourcing hubs in 10 seconds — with duty rates, freight costs, ESG scores, risk flags, and live market data.',
+    title: 'Welcome to Nautilus Terminal',
+    content: 'Your AI-powered supply chain intelligence platform. Type any material or component and Nautilus maps the best global sourcing hubs in 10 seconds -- with duty rates, freight costs, ESG scores, risk flags, and live market data.',
   },
   {
     id: 'mission',
@@ -106,7 +106,7 @@ const STEPS = [
     position: 'center',
     emoji: '🚀',
     title: 'You\'re Ready to Source',
-    content: 'Run your first scan. Type any material and Atlas maps the global supply chain for you in 10 seconds. Start with one of the examples in the Sourcing Hubs panel, or define your own mission.',
+    content: 'Run your first scan. Type any material and Nautilus maps the global supply chain for you in 10 seconds. Start with one of the examples in the Sourcing Hubs panel, or define your own mission.',
     cta: true,
   },
 ]

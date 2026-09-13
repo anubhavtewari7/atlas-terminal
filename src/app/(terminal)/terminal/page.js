@@ -20,6 +20,7 @@ import DualUseChecker from '@/components/DualUseChecker'
 import SourcingRecommendation from '@/components/SourcingRecommendation'
 import AtlasLogo from '@/components/AtlasLogo'
 import GuidedTour from '@/components/GuidedTour'
+import { getLandedCostDefaults } from '@/lib/procurement-costs'
 import {
   Shield, ShieldAlert, Zap, ChevronRight, ChevronDown, ChevronUp,
   Pause, Play, Newspaper, X, Target, Factory, Map,
@@ -30,193 +31,6 @@ import {
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-// ── Client-side fallback categorizer (mirrors database.js — keep in sync) ──
-function clientCategorize(query) {
-  const q = query.toLowerCase()
-  const match = (kws) => kws.some(kw => q.includes(kw))
-
-  // Pre-checks — high-specificity compound terms (same order as database.js)
-  if (match(['brake caliper','exhaust manifold','wheel rim','driveshaft','crankshaft','bumper fascia','abs sensor','cv joint','tie rod','ball joint','strut assembly'])) return 'automotive'
-  if (match(['polyurethane coating','pu coating','lithium grease','lithium complex','nlgi 2','nlgi 3','petroleum jelly','petrolatum','white mineral oil','paraffin wax','mineral oil'])) return 'chemicals'
-  if (match(['flat glass','float glass','glass fiber roving','glass fiber woven','ready mix concrete','concrete pump','basalt','basalt fiber','basalt rock'])) return 'construction'
-  if (match(['coronary stent','bare metal stent','stent coronary','tyvek pouch','nitrile exam glove','exam glove','medical glove','orthopedic implant','hospital grade','gmp grade','usp grade'])) return 'medical'
-  if (match(['fabric softener','private label cosmetic','oem cosmetic','aluminum-free','ammonia-free','hair dye cream','face cream','body cream','moisturizer cream','cotton swab','cotton ball','sheet mask','clay mask'])) return 'consumer_goods'
-  if (match(['fish feed','fish meal','sunflower seed crop'])) return 'agriculture'
-  if (match(['wheat flour','burger bun','beef patty','chicken nugget','corn tortilla','soy protein','canned black bean'])) return 'food'
-  if (match(['drum','steel drum','plastic drum','ibc drum'])) return 'packaging'
-  if (match(['teak','mahogany','twine','baling twine'])) return 'wood_paper'
-
-  // P1 Plastics
-  if (match(['thermoplastic','thermoset','polymer','polypropylene','polyethylene','hdpe','ldpe','pvc','nylon','pa66','peek','polycarbonate','pu foam','injection mold','injection mould','blow mold','plastic part','plastic component','elastomer','epdm','silicone rubber','rubber compound','natural rubber','synthetic rubber','carbon fiber','fiberglass','composite part','epoxy resin','plastic film','masterbatch','engineering plastic','rubber','foam','latex','vinyl','resin','neoprene','butyl rubber','polystyrene','acrylic sheet'])) return 'plastics'
-  // P2 Industrial
-  if (match(['magnet','neodymium','ndfeb','ferrite magnet','bearing','ball bearing','fastener','paper clip','paperclip','binder clip','o-ring','gasket','actuator','solenoid','precision gear','servo motor','stepper motor','disc spring','compression spring','hydraulic fitting','pneumatic valve','sintered','screw','bolt','hinge','bracket','flange','coupling','bushing','rivet','needle','pipe','washer','chain'])) return 'industrial'
-  // P3 Metals spec
-  if (match(['lithium','cobalt','neodymium oxide','rare earth mineral','titanium sponge','tungsten','molybdenum','platinum','palladium','nickel ore','iron ore','copper ore','steel coil','steel sheet','aluminum ingot','copper cathode','zinc ingot'])) return 'metals'
-  // P3b Automotive
-  if (match(['automotive','vehicle','sun visor','visor','headliner','instrument panel','dashboard','bumper','chassis','suspension','brake pad','powertrain','motor vehicle','tier-1','ford','toyota','honda','bmw','mercedes','car seat','wire harness','trim','lumbar support','lumbar cushion'])) return 'automotive'
-  // P4 Electronics
-  if (match(['semiconductor','wafer','pcb','lcd','oled','processor','memory chip','microchip','microcontroller','fpga','asic chip','circuit board','nand','dram','monitor','screen','television','tv panel','display','projector','printer','keyboard','mouse','headphone','speaker','router','ssd','hard drive','battery','resistor','capacitor','diode','transistor','wire','switch','relay','antenna','transformer','fuse','heat sink','pcba'])) return 'electronics'
-  // P5a Food
-  if (match(['marshmallow','candy','chocolate','cookie','biscuit','bread','pasta','noodle','sausage','pepperoni','salami','salmon','tuna','shrimp','prawn','ketchup','sauce','vinegar','mayonnaise','olive oil','salt','sugar','rice','wheat','corn','beef','pork','chicken','lamb','turkey','fish','milk','egg','flour','tea','coffee','wine','beer','spirits','whiskey','vodka','rum','soup','broth','snack','tomato','potato','onion','garlic','ginger','pepper','carrot','avocado','mango','banana','apple','orange','food','packaged food'])) return 'food'
-  // P5b Agriculture
-  if (match(['raw beef','beef cattle','raw wheat','wheat grain','soybean crop','agri','raw corn','corn crop','grain crop','livestock','poultry farm','aquaculture','fishery','fertilizer','hay','silage','irrigation','aquafeed'])) return 'agriculture'
-  // P6 Chemicals
-  if (match(['adhesive','glue','sealant','coating','paint','primer','varnish','lacquer','lubricant','grease','cutting fluid','solvent','thinner','acetone','surfactant','specialty chemical','industrial chemical','acid','bleach','chlorine','ammonia','wax','pigment','pesticide','herbicide','insecticide','fungicide','ethanol','methanol','printing ink'])) return 'chemicals'
-  // P7 Metals
-  if (match(['steel','aluminum','aluminium','copper','iron','zinc','tin ore','tinplate','gold','silver','mineral','mining','metal','alloy','casting','forging','nickel','titanium','brass','bronze','chromium','rebar','wire rod','magnesium','manganese','lead','silicon metal'])) return 'metals'
-  // P8 Textiles
-  if (match(['shirt','shoe','cotton','leather','apparel','textile','clothing','garment','denim','wool','silk','polyester','fabric','yarn','linen','cashmere','viscose','rayon','spandex','fleece','velvet','canvas','thread','embroidery','zipper','button','ribbon','lace'])) return 'textiles'
-  // P11 Medical
-  if (match(['pharmaceutical','medical device','surgical instrument','syringe','catheter','stent','implant','diagnostic kit','nitrile glove','glove','surgical mask','n95','mask','hospital supply','gmp certified','drug','vitamin','antibiotic','vaccine','capsule','vial','bandage','gauze','ppe kit','personal protective equipment'])) return 'medical'
-  // P12 Consumer goods
-  if (match(['shampoo','conditioner','body wash','toothpaste','deodorant','sunscreen','lipstick','mascara','perfume','hair dye','vaseline','lip balm','moisturizer','personal care','beauty product','consumer goods','skin care','baby lotion','baby wipe','wet wipe','diaper','nappy','razor','nail polish','lotion','floss'])) return 'consumer_goods'
-  // P13 Construction
-  if (match(['tempered glass','cement','ceramic tile','drywall','gypsum board','roofing','insulation board','aggregate','gravel','construction material','building material','concrete','brick','tile','window','insulation','mortar','asphalt','bitumen','conduit'])) return 'construction'
-  // P14 Packaging
-  if (match(['corrugated box','glass bottle','glass jar','label','blister pack','flexible pouch','packaging material','packaging','bottle','box','pallet','foil','tape','lid','tin can','wrap','bag','tray','tube'])) return 'packaging'
-  // P15 Machinery
-  if (match(['pump','valve','compressor','cnc machine','machine tool','industrial robot','robotic arm','conveyor','heat exchanger','gearbox','machinery','industrial equipment','generator','tractor','turbine','motor','engine','drill','lathe','press','extruder'])) return 'machinery'
-  // P16 Broader electronics
-  if (match(['phone','computer','laptop','tablet','electronics','sensor','cable','connector','power supply','charger'])) return 'electronics'
-  // P17 Broader automotive
-  if (match(['car ','cars','brake','tire','tyre','transmission','exhaust','wheel','airbag','windshield'])) return 'automotive'
-  // P18 Wood/paper
-  if (match(['lumber','plywood','mdf','timber','wood','kraft paper','tissue paper','newsprint','copy paper','toilet paper','cardboard','notebook','pulp','paper'])) return 'wood_paper'
-
-  return 'electronics'
-}
-
-// ── Lightweight client-side hub data for offline fallback ──
-const FALLBACK_HUBS = {
-  industrial: [
-    { id:'fb_ind_1', lat:41.7, lng:110.7, hub:'BAOTOU, CHINA', title:'Global Rare Earth & NdFeB Core', companies:[{name:'Zhong Ke San Huan (HSMAG)',website:'https://www.hsmag.com/'},{name:'JLMAG Rare-Earth',website:'https://www.jlmag.com/'}], desc:'World\'s dominant hub for NdFeB permanent magnets (~90% global share). Key for automotive sensors, EV motors, and visor/IP actuators.', customs:{hts_code:'8505.11',duty_rate:'25% (Sec 301)',compliance_note:'Section 301 tariffs apply. Rare earth export quotas.'}, esg:{carbon_footprint:'Very High',ethical_rating:'C',sustainability_note:'Severe environmental impact. Closed-loop recycling not at scale.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$3.8k/FEU'}, industry_kpi:{label:'Global Share',value:'~90% NdFeB'} },
-    { id:'fb_ind_2', lat:35.6, lng:139.6, hub:'TOKYO / CHIBA, JAPAN', title:'Premium Precision Magnetics', companies:[{name:'TDK Corporation',website:'https://www.tdk.com/'},{name:'Shin-Etsu Chemical',website:'https://www.shinetsu.co.jp/'}], desc:'World-class automotive-grade precision magnets. Key for EV motors, ADAS sensors, visor actuators.', customs:{hts_code:'8505.11',duty_rate:'0% (CPTPP)',compliance_note:'CPTPP origin rules. IATF 16949 certified.'}, esg:{carbon_footprint:'Low',ethical_rating:'A+',sustainability_note:'Industry-leading magnet recycling programs.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$4.2k/Sea'}, industry_kpi:{label:'Grade',value:'N52 / N50H'} },
-    { id:'fb_ind_3', lat:50.1, lng:8.6, hub:'HANAU, GERMANY', title:'EU Advanced Magnetics Hub', companies:[{name:'Vacuumschmelze (VAC)',website:'https://www.vacuumschmelze.com/'},{name:'Arnold Europe GmbH',website:'https://www.arnoldmagnetics.com/'}], desc:'Premium rare earth magnets for automotive OEMs. VAC is the global reference for high-coercivity auto-grade magnets.', customs:{hts_code:'8505.11',duty_rate:'0% (Intra-EU) / 3.7% (MFN)',compliance_note:'REACH compliance. CE marking mandatory.'}, esg:{carbon_footprint:'Low',ethical_rating:'AA',sustainability_note:'Conflict mineral audits. RE100 green energy target.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$1.8k/Truck'}, industry_kpi:{label:'Spec',value:'IATF 16949 + AEC-Q'} },
-    { id:'fb_ind_4', lat:41.6, lng:-72.7, hub:'CONNECTICUT, USA', title:'US Domestic Magnetics', companies:[{name:'Arnold Magnetic Technologies',website:'https://www.arnoldmagnetics.com/'},{name:'Electron Energy Corp',website:'https://www.electronenergy.com/'}], desc:'100% domestic US magnet manufacturing. ITAR/DFARS compliant. No China-origin exposure.', customs:{hts_code:'8505.11',duty_rate:'0% (Domestic)',compliance_note:'ITAR/DFARS compliant. Buy America Act eligible.'}, esg:{carbon_footprint:'Low',ethical_rating:'A+',sustainability_note:'US-origin rare earth from MP Materials.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.2k/Ground'}, industry_kpi:{label:'Compliance',value:'ITAR/DFARS'} },
-  ],
-  automotive: [
-    { id:'fb_auto_1', lat:25.6, lng:-100.3, hub:'MONTERREY, MEXICO', title:'NAFTA Tier-1 Cluster', companies:[{name:'Grupo Antolin',website:'https://www.grupoantolin.com/',turnover:'>$1B'},{name:'Nemak',website:'https://www.nemak.com/',turnover:'>$1B'},{name:'Draxton Mexico',website:'https://www.draxton.com/',turnover:'$100M-$1B'},{name:'Cimco Group',website:'https://www.cimco.com.mx/',turnover:'$10M-$100M'}], desc:'Primary nearshoring hub for NA automotive OEMs. Interiors, chassis, headliners, visor assemblies.', customs:{hts_code:'8708.29',duty_rate:'0% (USMCA)',compliance_note:'USMCA Rules of Origin. RVC ≥ 75%.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'Water scarcity risk in Monterrey metro.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$2.1k/Truck'}, industry_kpi:{label:'Tooling Lead',value:'12 Weeks'} },
-    { id:'fb_auto_2', lat:42.3, lng:-83.0, hub:'DETROIT, USA', title:'Great Lakes Auto Cluster', companies:[{name:'Lear Corp',website:'https://www.lear.com/',turnover:'>$1B'},{name:'Magna International',website:'https://www.magna.com/',turnover:'>$1B'},{name:'Shape Corp',website:'https://www.shapecorp.com/',turnover:'$100M-$1B'},{name:'Gentex Corp',website:'https://www.gentex.com/',turnover:'$100M-$1B'}], desc:'Legacy US auto hub. Domestic sourcing for Ford, GM, Stellantis.', customs:{hts_code:'8708.29',duty_rate:'0% (Domestic)',compliance_note:'Buy America Act eligible.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'UAW unionized. EV transition investment active.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.5k/Ground'}, industry_kpi:{label:'Proximity',value:'Same-Day JIT'} },
-    { id:'fb_auto_3', lat:31.2, lng:121.4, hub:'SHANGHAI, CHINA', title:'East China Auto Zone', companies:[{name:'Yanfeng Automotive',website:'https://www.yfai.com/',turnover:'>$1B'},{name:'Huayu Auto',website:'https://www.hasco-group.com/',turnover:'>$1B'},{name:'Fuyao Glass',website:'https://www.fuyaogroup.com/',turnover:'>$1B'},{name:'Minth Group',website:'https://www.minthgroup.com/',turnover:'$100M-$1B'}], desc:'Scale production for auto plastics, electronics, and interiors.', customs:{hts_code:'8708.29',duty_rate:'25% (Sec 301)',compliance_note:'Section 301 tariffs active.'}, esg:{carbon_footprint:'High',ethical_rating:'B',sustainability_note:'Renewable grid transition by 2030.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$4.5k/FEU'}, industry_kpi:{label:'Scale',value:'Unlimited'} },
-  ],
-  electronics: [
-    { id:'fb_tech_1', lat:24.8, lng:120.9, hub:'HSINCHU, TAIWAN', title:'Global Semiconductor Nexus', companies:[{name:'TSMC',website:'https://www.tsmc.com/'},{name:'MediaTek',website:'https://www.mediatek.com/'}], desc:'Center of global advanced semiconductor manufacturing. 90%+ of world\'s advanced logic chips.', customs:{hts_code:'8542.31',duty_rate:'0% (ITA)',compliance_note:'Export controls on advanced nodes apply.'}, esg:{carbon_footprint:'High',ethical_rating:'A-',sustainability_note:'High water consumption risk.'}, logistics:{port_wait_days:3,freight_cost_estimate:'$8.5k/Air'}, industry_kpi:{label:'Node',value:'3nm / 2nm'} },
-    { id:'fb_tech_2', lat:22.5, lng:113.9, hub:'SHENZHEN, CHINA', title:'Hardware Innovation Bay', companies:[{name:'BYD Electronics',website:'https://www.byd.com/'},{name:'Luxshare Precision',website:'https://www.luxshare-ict.com/'}], desc:'Scale electronics assembly and PCBs. 48-hour prototype capability.', customs:{hts_code:'8517.70',duty_rate:'25% (Sec 301)',compliance_note:'Check Entity List. Section 301 applies.'}, esg:{carbon_footprint:'High',ethical_rating:'B-',sustainability_note:'Labor audit required.'}, logistics:{port_wait_days:4,freight_cost_estimate:'$3.5k/FEU'}, industry_kpi:{label:'Prototyping',value:'48 Hours'} },
-  ],
-  metals: [
-    { id:'fb_met_1', lat:-23.5, lng:-68.4, hub:'ATACAMA, CHILE', title:'Global Lithium & Copper Core', companies:[{name:'SQM',website:'https://www.sqm.com/'},{name:'Codelco',website:'https://www.codelco.com/'}], desc:'Saudi Arabia of Lithium. Primary EV battery-grade lithium and world\'s largest copper reserves.', customs:{hts_code:'2836.91',duty_rate:'0% (US-Chile FTA)',compliance_note:'Strategic mineral regulations apply.'}, esg:{carbon_footprint:'Low',ethical_rating:'B',sustainability_note:'Water rights conflicts with indigenous groups.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$3.5k/FEU'}, industry_kpi:{label:'Purity',value:'99.5% Li2CO3'} },
-    { id:'fb_met_2', lat:40.4, lng:-79.9, hub:'PITTSBURGH, USA', title:'US Domestic Steel & Aluminum', companies:[{name:'US Steel',website:'https://www.ussteel.com/'},{name:'Nucor Steel',website:'https://www.nucor.com/'}], desc:'Domestic high-grade steel and aluminum. 100% tariff-free.', customs:{hts_code:'7208',duty_rate:'0% (Domestic)',compliance_note:'Buy America Act compliant.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'Electric arc furnace adoption growing.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.0k/Rail'}, industry_kpi:{label:'Melt Origin',value:'100% US'} },
-  ],
-  agriculture: [
-    { id:'fb_ag_1', lat:41.8, lng:-88.1, hub:'ILLINOIS, USA', title:'Midwest Protein Processing Hub', companies:[{name:'OSI Group',website:'https://www.osigroup.com/'},{name:'Cargill Meat',website:'https://www.cargill.com/'}], desc:'Primary QSR chain supplier cluster. USDA-inspected, FSMA-compliant.', customs:{hts_code:'0202.30',duty_rate:'0% (Domestic)',compliance_note:'USDA FSIS inspected. FSMA compliant.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'Regenerative grazing initiatives active.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$1.5k/Reefer'}, industry_kpi:{label:'Capacity',value:'10k Tons/Day'} },
-    { id:'fb_ag_2', lat:-15.6, lng:-56.1, hub:'MATO GROSSO, BRAZIL', title:'Global Protein & Soy Nexus', companies:[{name:'JBS S.A.',website:'https://jbs.com.br/'},{name:'Marfrig',website:'https://www.marfrig.com.br/'}], desc:'World\'s largest beef and soy exporter. High volume, high ESG risk.', customs:{hts_code:'0202.30',duty_rate:'26.4% (Quota)',compliance_note:'TRQ quota limits. Sanitary certificate required.'}, esg:{carbon_footprint:'High',ethical_rating:'C',sustainability_note:'Amazon deforestation monitoring required.'}, logistics:{port_wait_days:8,freight_cost_estimate:'$5.5k/Reefer'}, industry_kpi:{label:'Traceability',value:'Tier-2 Only'} },
-  ],
-  textiles: [
-    { id:'fb_tex_1', lat:23.8, lng:90.4, hub:'DHAKA, BANGLADESH', title:'RMG Hub', companies:[{name:'Ha-Meem Group',website:'https://www.hameemgroup.net/'},{name:'Beximco',website:'https://www.beximco.com/'}], desc:'World\'s 2nd largest apparel exporter. Extreme cost competitiveness.', customs:{hts_code:'6109.10',duty_rate:'16.5% (MFN)',compliance_note:'RSC/Accord labor audits required.'}, esg:{carbon_footprint:'High',ethical_rating:'B-',sustainability_note:'Annual unannounced audits required.'}, logistics:{port_wait_days:6,freight_cost_estimate:'$3.2k/FEU'}, industry_kpi:{label:'Cost/Unit',value:'Extremely Low'} },
-    { id:'fb_tex_2', lat:41.0, lng:28.9, hub:'ISTANBUL, TURKEY', title:'Euro-Nearshore Fashion Hub', companies:[{name:'LC Waikiki',website:'https://corporate.lcwaikiki.com/'},{name:'Mavi',website:'https://www.mavi.com/'}], desc:'2-3 week lead time for EU market. High quality denim and cotton.', customs:{hts_code:'6203.42',duty_rate:'0% (EU Customs Union)',compliance_note:'Rapid EU border clearance.'}, esg:{carbon_footprint:'Low',ethical_rating:'A-',sustainability_note:'Organic cotton available.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$1.5k/Truck'}, industry_kpi:{label:'Lead Time',value:'2-3 Weeks'} },
-  ],
-  plastics: [
-    { id:'fb_pla_1', lat:22.5, lng:114.1, hub:'GUANGDONG, CHINA', title:'Global Injection Molding & Polymer Hub', companies:[{name:'Kingfa Sci & Tech',website:'https://www.kingfa.com/'},{name:'Hi-Tech Mold & Engineering',website:'https://www.hitechmold.com/'}], desc:'World\'s largest plastic parts manufacturing cluster. Unmatched capacity for TPE, ABS, and PP injection molding.', customs:{hts_code:'3926.90.99',duty_rate:'5.3% + 25% (Sec 301)',compliance_note:'Section 301 applies to most finished plastic articles. Verify REACH compliance for EU re-export.'}, esg:{carbon_footprint:'High',ethical_rating:'C+',sustainability_note:'High energy intensity from molding presses. China EPR plastics mandates increasing.'}, logistics:{port_wait_days:14,freight_cost_estimate:'$3.2k/FEU'}, industry_kpi:{label:'Capacity',value:'World\'s Largest'} },
-    { id:'fb_pla_2', lat:49.4, lng:8.7, hub:'RHINE VALLEY, GERMANY', title:'European Specialty Polymer Hub', companies:[{name:'BASF SE',website:'https://www.basf.com/'},{name:'Covestro',website:'https://www.covestro.com/'}], desc:'Global center for engineering thermoplastics and polyurethane systems. IATF-grade nylon, PBT, and polycarbonate for automotive OEMs.', customs:{hts_code:'3908.10.00',duty_rate:'0% (MFN for polyamides)',compliance_note:'REACH registration mandatory. No Section 301. Best for sustainability-focused supply chains.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'BASF carbon-neutral by 2050. ChemCycling circular economy portfolio.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$2.8k/FEU'}, industry_kpi:{label:'Grade',value:'Specialty / Engineering'} },
-    { id:'fb_pla_3', lat:29.7, lng:-95.0, hub:'HOUSTON / BAYTOWN, USA', title:'North American Polyolefin Hub', companies:[{name:'ExxonMobil Chemical',website:'https://www.exxonmobilchemical.com/'},{name:'LyondellBasell',website:'https://www.lyondellbasell.com/'}], desc:'World\'s largest polyolefin (PP, PE, LLDPE) production cluster. Domestic US supply with zero tariff, short lead times, USMCA compliant.', customs:{hts_code:'3902.10.00',duty_rate:'0% (Domestic)',compliance_note:'No import duties. USMCA-compliant. FDA food-contact grades available.'}, esg:{carbon_footprint:'Medium',ethical_rating:'B+',sustainability_note:'Domestic production reduces shipping emissions. Bio-based PP investments underway.'}, logistics:{port_wait_days:0,freight_cost_estimate:'$0.8k/Truck'}, industry_kpi:{label:'Origin',value:'100% US Domestic'} },
-    { id:'fb_pla_4', lat:35.5, lng:129.4, hub:'ULSAN, SOUTH KOREA', title:'Specialty Elastomer & Engineering Polymer Hub', companies:[{name:'LG Chem',website:'https://www.lgchem.com/'},{name:'Lotte Chemical',website:'https://www.lottechem.com/'}], desc:'Global leader in specialty elastomers, ABS, and engineering plastics. KORUS FTA eliminates US import duties on most polymer grades.', customs:{hts_code:'4002.59.00',duty_rate:'0% (KORUS FTA)',compliance_note:'KORUS FTA duty elimination on synthetic rubber and most polymer grades. Korean origin docs required.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'LG Chem 100% renewable energy target 2050. Bio-circular ABS available.'}, logistics:{port_wait_days:3,freight_cost_estimate:'$2.6k/FEU'}, industry_kpi:{label:'Tariff',value:'0% KORUS FTA'} },
-  ],
-  chemicals: [
-    { id:'fb_che_1', lat:51.5, lng:6.8, hub:'RHINE-RUHR, GERMANY', title:'European Specialty Chemicals & Coatings Hub', companies:[{name:'BASF',website:'https://www.basf.com/'},{name:'Evonik Industries',website:'https://www.evonik.com/'},{name:'Lanxess',website:'https://www.lanxess.com/'}], desc:'BASF Ludwigshafen — largest integrated chemical complex in the world. Covers adhesives, coatings, lubricants, surfactants, and industrial gases. EU REACH compliance built-in.', customs:{hts_code:'3814.00.10',duty_rate:'3.7% (MFN solvents)',compliance_note:'EU REACH registration required. Dangerous Goods shipping (IMDG/ADR). SDS mandatory for all chemical imports.'}, esg:{carbon_footprint:'High',ethical_rating:'A-',sustainability_note:'BASF Verbund system optimizes energy reuse. Carbon neutrality target 2050.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$3.2k/FEU'}, industry_kpi:{label:'Complex Scale',value:'Largest globally'} },
-    { id:'fb_che_2', lat:29.7, lng:-95.3, hub:'HOUSTON, USA', title:'US Gulf Coast Petrochemicals & Lubricants Hub', companies:[{name:'Dow Chemical',website:'https://www.dow.com/'},{name:'Huntsman Corporation',website:'https://www.huntsman.com/'},{name:'Celanese',website:'https://www.celanese.com/'}], desc:'Texas Gulf Coast hosts 40% of US chemical production. Ethylene crackers, polyurethane systems, adhesives, epoxies, specialty lubricants, and industrial solvents. Proximity to Permian Basin feedstocks drives cost advantage.', customs:{hts_code:'2710.19.11',duty_rate:'0.1¢/barrel (lubricants)',compliance_note:'EPA TSCA compliance required. Hazmat shipping regulations (49 CFR).'}, esg:{carbon_footprint:'High',ethical_rating:'B+',sustainability_note:'Industry-leading carbon capture investment. ACC Responsible Care program.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$1.8k/FEU domestic'}, industry_kpi:{label:'US Output',value:'40% of national'} },
-    { id:'fb_che_3', lat:1.3, lng:103.7, hub:'JURONG ISLAND, SINGAPORE', title:'Asia Pacific Adhesives & Coating Chemicals Hub', companies:[{name:'Henkel Asia-Pacific',website:'https://www.henkel-adhesives.com/'},{name:'H.B. Fuller',website:'https://www.hbfuller.com/'}], desc:'Jurong Island Singapore: premier APAC hub for adhesives, sealants, and specialty coatings serving electronics, automotive, and construction. Excellent bonded-warehouse infrastructure.', customs:{hts_code:'3506.10.00',duty_rate:'0% (Singapore FTA)',compliance_note:'Singapore Chemical Control Order. Hazmat IMDG compliance for export.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'Singapore EHS standards. Low-VOC formulations mandated. ISO 14001 site certification.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$2.1k/FEU'}, industry_kpi:{label:'ASEAN Access',value:'650M consumers'} },
-  ],
-  packaging: [
-    { id:'fb_pkg_1', lat:39.9, lng:116.4, hub:'BEIJING/TIANJIN, CHINA', title:'Global Corrugated & Rigid Packaging Hub', companies:[{name:'Nine Dragons Paper',website:'https://www.ndpaper.com/'},{name:'Greatview Aseptic',website:'https://www.greatviewpack.com/'}], desc:'China produces 55% of global corrugated packaging and leads in rigid plastic containers, aseptic cartons, and flexible pouches. Major sourcing hub for boxes, clamshells, and shrink film.', customs:{hts_code:'4819.10.00',duty_rate:'25% (Sec 301 + 14.6% MFN)',compliance_note:'FSC certification recommended. FDCA compliance for food-contact packaging. California AB 2287 recycled content rules.'}, esg:{carbon_footprint:'Medium-High',ethical_rating:'B',sustainability_note:'Nine Dragons runs recycled fiber operations. Audit required for tier 2 mills.'}, logistics:{port_wait_days:5,freight_cost_estimate:'$2.9k/FEU'}, industry_kpi:{label:'Global Share',value:'55% corrugated'} },
-    { id:'fb_pkg_2', lat:48.8, lng:2.3, hub:'FRANCE / BENELUX', title:'European Glass & Premium Packaging Hub', companies:[{name:'Verallia',website:'https://www.verallia.com/'},{name:'Smurfit Kappa',website:'https://www.smurfitkappa.com/'},{name:'DS Smith',website:'https://www.dssmith.com/'}], desc:'France and Benelux are the center of European glass bottle, luxury packaging, and sustainable paperboard production. Verallia and Ardagh lead glass container output.', customs:{hts_code:'7010.90.10',duty_rate:'5% (MFN glass containers)',compliance_note:'EU Packaging and Packaging Waste Directive (PPWD) compliance. Extended Producer Responsibility (EPR) registration required.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A-',sustainability_note:'Glass is infinitely recyclable. Smurfit Kappa 100% chain of custody certified.'}, logistics:{port_wait_days:3,freight_cost_estimate:'$2.8k/FEU'}, industry_kpi:{label:'Recyclability',value:'Glass: infinite'} },
-    { id:'fb_pkg_3', lat:33.7, lng:-84.4, hub:'ATLANTA, USA', title:'North American Labels & Flexible Packaging Hub', companies:[{name:'Avery Dennison',website:'https://www.averydennison.com/'},{name:'Sealed Air',website:'https://www.sealedair.com/'},{name:'Berry Global',website:'https://www.berryglobal.com/'}], desc:'US Southeast hub for pressure-sensitive labels, shrink sleeves, flexible pouches, and protective packaging. Avery Dennison and CCL dominate labels.', customs:{hts_code:'4821.10.20',duty_rate:'0% (most labels, domestic)',compliance_note:'FDA 21 CFR for food-contact. FTC Green Guides for recyclability claims. California SB 54 plastic packaging recycled content law.'}, esg:{carbon_footprint:'Medium',ethical_rating:'B+',sustainability_note:'Industry transition to mono-material recyclable films.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$1.5k/FEU domestic'}, industry_kpi:{label:'Label Market',value:'$45B+ annually'} },
-  ],
-  medical: [
-    { id:'fb_med_1', lat:22.3, lng:114.2, hub:'HONG KONG / SHENZHEN', title:'Asia Pacific Medical Device Manufacturing Hub', companies:[{name:'Mindray Medical',website:'https://www.mindray.com/'},{name:'Lepu Medical',website:'https://www.lepumedical.com/'}], desc:'Shenzhen–Hong Kong corridor is the leading APAC hub for medical device manufacturing: diagnostics equipment, imaging, surgical tools, patient monitoring, and consumables.', customs:{hts_code:'9018.90.60',duty_rate:'0% (MFN surgical instruments)',compliance_note:'FDA 510(k) or PMA required for US market entry. CE marking for EU. NMPA registration in China. QSR 21 CFR Part 820.'}, esg:{carbon_footprint:'Low-Medium',ethical_rating:'B+',sustainability_note:'ISO 13485 quality systems standard. Medical waste disposal regulations strictly enforced.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$2.8k/FEU'}, industry_kpi:{label:'Device Output',value:'Largest APAC hub'} },
-    { id:'fb_med_2', lat:47.6, lng:9.5, hub:'LAKE CONSTANCE, GERMANY/SWITZERLAND', title:'European Pharma API & MedTech Cluster', companies:[{name:'Roche',website:'https://www.roche.com/'},{name:'B. Braun',website:'https://www.bbraun.com/'},{name:'Siemens Healthineers',website:'https://www.siemens-healthineers.com/'}], desc:'Basel–Lake Constance triangle hosts the world\'s highest concentration of pharmaceutical API producers and high-end MedTech. Roche and Novartis dominate APIs. B. Braun leads infusion and surgical systems.', customs:{hts_code:'2941.10.00',duty_rate:'0% (MFN antibiotics/APIs)',compliance_note:'EMA GMP certification required. US FDA import alert risk on non-compliant API manufacturers. ICH Q7 GMP for APIs.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'Roche net-zero operations commitment. Novartis environmental health and safety excellence program.'}, logistics:{port_wait_days:1,freight_cost_estimate:'$3.5k/FEU'}, industry_kpi:{label:'API Concentration',value:'Highest globally'} },
-    { id:'fb_med_3', lat:17.4, lng:78.5, hub:'HYDERABAD, INDIA', title:'Global Generic Pharma API & Formulations Hub', companies:[{name:'Dr. Reddy\'s Laboratories',website:'https://www.drreddys.com/'},{name:'Aurobindo Pharma',website:'https://www.aurobindo.com/'},{name:'Divi\'s Laboratories',website:'https://www.divislaboratories.com/'}], desc:'Hyderabad is the pharmacy capital of India. India supplies 40% of generic drugs consumed in the US and 25% globally. API manufacturing cost advantage of 30–50% vs. Western producers.', customs:{hts_code:'2941.90.00',duty_rate:'0% (generics MFN)',compliance_note:'FDA import alerts active on select manufacturers (check FDA database). WHO GMP and US FDA 21 CFR cGMP compliance required.'}, esg:{carbon_footprint:'Medium',ethical_rating:'B+',sustainability_note:'Zero liquid discharge mandates at major facilities. EHS audits recommended.'}, logistics:{port_wait_days:4,freight_cost_estimate:'$3.1k/FEU'}, industry_kpi:{label:'US Generic Supply',value:'40% market share'} },
-  ],
-  machinery: [
-    { id:'fb_mac_1', lat:48.1, lng:11.6, hub:'BAVARIA, GERMANY', title:'Precision Machinery & Industrial Equipment Hub', companies:[{name:'Siemens AG',website:'https://www.siemens.com/'},{name:'KSB Group',website:'https://www.ksb.com/'},{name:'Trumpf',website:'https://www.trumpf.com/'}], desc:'Bavaria and Baden-Württemberg are the global center for precision machinery: CNC machining centers, industrial pumps, compressors, valves, hydraulics, and laser cutting systems.', customs:{hts_code:'8413.70.20',duty_rate:'0% (industrial pumps, EU origin)',compliance_note:'CE machinery directive 2006/42/EC. ATEX certification for explosive atmospheres. Pressure Equipment Directive (PED) for pressure vessels.'}, esg:{carbon_footprint:'Medium',ethical_rating:'A',sustainability_note:'Germany\'s Energiewende drives energy-efficient machinery design. ISO 50001 energy management certifications common.'}, logistics:{port_wait_days:3,freight_cost_estimate:'$4.5k/FEU'}, industry_kpi:{label:'Asset Life',value:'10–15 years'} },
-    { id:'fb_mac_2', lat:31.2, lng:121.5, hub:'YANGTZE DELTA, CHINA', title:'High-Volume Industrial Machinery & CNC Hub', companies:[{name:'SANY Group',website:'https://www.sanygroup.com/'},{name:'Zoomlion',website:'https://www.zoomlion.com/'}], desc:'Shanghai–Suzhou–Hangzhou triangle leads global output of CNC machine tools, injection molding machines, industrial robots, compressors, and pumps. 70% of world\'s machine tool production.', customs:{hts_code:'8457.10.00',duty_rate:'25% (Sec 301 CNC machining centers)',compliance_note:'Section 301 tariffs apply to most Chinese machinery. CE/UL certification may be absent — verify for US/EU market entry.'}, esg:{carbon_footprint:'High',ethical_rating:'B',sustainability_note:'Variable quality in ESG compliance. Factory audit and pre-shipment inspection strongly recommended.'}, logistics:{port_wait_days:6,freight_cost_estimate:'$3.8k/FEU'}, industry_kpi:{label:'Machine Tool Output',value:'70% of world production'} },
-    { id:'fb_mac_3', lat:34.7, lng:135.5, hub:'OSAKA / NAGOYA, JAPAN', title:'Japan Precision Pumps, Valves & Automation Hub', companies:[{name:'Ebara Corporation',website:'https://www.ebara.co.jp/'},{name:'Fanuc',website:'https://www.fanuc.co.jp/'},{name:'Keyence',website:'https://www.keyence.com/'}], desc:'Osaka–Nagoya corridor specializes in ultra-precision industrial automation: servo motors, CNC controllers (Fanuc dominates globally), centrifugal and vacuum pumps (Ebara), and precision measurement (Keyence).', customs:{hts_code:'8413.60.00',duty_rate:'0% (centrifugal pumps, MFN)',compliance_note:'Japan-US Trade Agreement duty relief on most machinery. Export controls on high-precision CNC (Wassenaar Arrangement).'}, esg:{carbon_footprint:'Low-Medium',ethical_rating:'A+',sustainability_note:'Fanuc zero-waste factory operations. Ebara ISO 14001 certified.'}, logistics:{port_wait_days:2,freight_cost_estimate:'$3.6k/FEU'}, industry_kpi:{label:'CNC Market',value:'Fanuc: ~65% global share'} },
-  ],
-}
-
-const FALLBACK_RISKS = {
-  industrial: [
-    { id:'fr_ind_1', title:'China Rare Earth Export Controls', type:'Risk', severity:'HIGH', desc:'China controls ~90% of global rare earth magnet (NdFeB) production. Export restrictions could halt production globally within weeks.', mitigation:'Dual-source from Japan (TDK, Shin-Etsu) and US domestic (Arnold Magnetics). Qualify magnet recycling programs.' },
-    { id:'fr_ind_2', title:'Critical Mineral Price Volatility', type:'Risk', severity:'MEDIUM', desc:'NdFeB magnet prices have swung 200-400% within a single year based on Chinese export policy and EV demand surges.', mitigation:'Lock long-term fixed-price contracts. Build 3-month buffer inventory during price dips.' },
-  ],
-  automotive: [
-    { id:'fr_auto_1', title:'Section 301 Tariff Exposure', type:'Risk', severity:'HIGH', desc:'US 25% Section 301 tariffs on Chinese-origin auto components remain active. USMCA re-negotiation creates Mexico sourcing uncertainty.', mitigation:'Prioritize USMCA-compliant sourcing. Conduct Tier-2 supplier audit for China-origin content.' },
-    { id:'fr_auto_2', title:'Semiconductor Allocation Risk', type:'Risk', severity:'HIGH', desc:'Automotive-grade chip allocations remain tight through 2026. Production shutdowns possible with < 2 weeks notice.', mitigation:'Secure long-term supply agreements. Increase buffer stock to 12+ weeks for critical chips.' },
-  ],
-  electronics: [
-    { id:'fr_tech_1', title:'Taiwan Strait Geopolitical Risk', type:'Risk', severity:'HIGH', desc:'Taiwan produces 90%+ of advanced logic chips. Military escalation would halt global chip supply for 12-24 months.', mitigation:'Qualify alternate foundries (Samsung, Intel Foundry). Increase safety stock. Begin fab diversification.' },
-    { id:'fr_tech_2', title:'Export Control Proliferation', type:'Risk', severity:'HIGH', desc:'US BIS expanding controls on advanced semiconductors. China-bound shipments face increasing license requirements.', mitigation:'Conduct quarterly export control audits. Engage trade counsel for ECCN reviews.' },
-  ],
-  metals: [
-    { id:'fr_met_1', title:'Section 232 Steel/Aluminum Tariffs', type:'Risk', severity:'HIGH', desc:'25% steel and 10% aluminum Section 232 tariffs remain on most non-FTA origins.', mitigation:'Maximize domestic US/Canada sourcing. Apply for Section 232 exclusions.' },
-    { id:'fr_met_2', title:'Commodity Price Cycle Risk', type:'Risk', severity:'MEDIUM', desc:'Base metal prices can swing 30-60% annually driven by China demand and EV adoption rates.', mitigation:'Implement commodity price hedging. Use index-linked pricing with caps and floors in supply agreements.' },
-  ],
-  agriculture: [
-    { id:'fr_ag_1', title:'Climate & Crop Yield Volatility', type:'Risk', severity:'HIGH', desc:'El Niño and climate change creating severe crop yield volatility. 2023-24 drought reduced global soy 8%.', mitigation:'Diversify sourcing across 3+ regions. Engage crop insurance and forward contracts.' },
-    { id:'fr_ag_2', title:'SPS Compliance & Food Safety', type:'Risk', severity:'HIGH', desc:'Complex SPS requirements at borders. A single rejected shipment can cost $200k+ and damage supplier relationships.', mitigation:'Pre-certify all suppliers to FSMA/EU SPS standards. Conduct pre-shipment testing.' },
-  ],
-  textiles: [
-    { id:'fr_tex_1', title:'UFLPA Forced Labor Risk', type:'Risk', severity:'HIGH', desc:'UFLPA creates rebuttable presumption of forced labor for all Xinjiang-origin goods. Cotton supply chains highly exposed.', mitigation:'Map fiber chain to raw material origin. Audit Tier-2/3 for Xinjiang exposure. Use SLCP audit standard.' },
-    { id:'fr_tex_2', title:'Lead Time vs. Fashion Cycle Mismatch', type:'Risk', severity:'MEDIUM', desc:'Asia ocean freight adds 25-40 days. Fast fashion cycles require 4-8 week total lead time.', mitigation:'Near-shore to Turkey or Mexico for responsive lines. Reserve Asia for core basics with predictable demand.' },
-  ],
-  plastics: [
-    { id:'fr_pla_1', title:'China Section 301 Tariff on Plastic Articles', type:'Risk', severity:'HIGH', desc:'Most finished plastic parts from China face 25% Section 301 tariffs. Applies to injection-molded parts, extrusions, and assembled plastic components under HTS Chapter 39.', mitigation:'Qualify tooling in Korea (0% KORUS), Germany (MFN ~0-5%), or US domestic compounders. Nearshore injection molding to Mexico under USMCA.' },
-    { id:'fr_pla_2', title:'Crude Oil Price Correlation', type:'Risk', severity:'HIGH', desc:'Polymer feedstock prices are directly tied to crude oil. A 20% crude spike typically raises polymer costs 12-18% within 60-90 days, triggering supplier price escalation clauses.', mitigation:'Include feedstock index price adjustment clauses in LTAs. Source from US Gulf Coast suppliers with domestic natural gas feedstock, which is structurally cheaper than oil-based feedstock.' },
-    { id:'fr_pla_3', title:'REACH / RoHS Restricted Substance Compliance', type:'Risk', severity:'HIGH', desc:'EU REACH regulations cover 240+ substances of very high concern (SVHCs) in polymer additives (PFAS, phthalates, BPA, halogenated flame retardants). Non-compliant products face customs seizure.', mitigation:'Require full material declaration (FMD) from all suppliers. Specify SVHC-free grade variants in purchase specs. Conduct annual chemical compliance audits.' },
-    { id:'fr_pla_4', title:'Tooling & Mold Lead Time Risk', type:'Risk', severity:'MEDIUM', desc:'Injection mold fabrication takes 8-20 weeks and costs $15k-$250k+ per tool. A single mold failure or supplier exit can halt production with no quick recovery path.', mitigation:'Own your tooling — specify tooling ownership in POs. Maintain mold drawings and CAD files. Qualify a secondary molder with duplicate tooling for critical parts.' },
-  ],
-  chemicals: [
-    { id:'fr_che_1', title:'REACH & Dangerous Goods Compliance', type:'Risk', severity:'HIGH', desc:'EU REACH requires registration of all chemical substances >1 tonne/year. Importers must comply with CLP labeling, ADR/IMDG dangerous goods rules, and maintain up-to-date Safety Data Sheets (SDS).', mitigation:'Require REACH pre-registration from EU-bound suppliers. Use a licensed dangerous goods freight forwarder. Conduct annual compliance audits against ECHA SVHC candidate list updates.' },
-    { id:'fr_che_2', title:'Feedstock & Crude Oil Price Volatility', type:'Risk', severity:'HIGH', desc:'Specialty chemical input costs (petrochemical feedstocks, natural gas) can swing 20–40% annually. Adhesive and coating raw material costs closely track crude oil and benzene/toluene benchmarks.', mitigation:'Include feedstock price-adjustment clauses (oil index linkage) in supply agreements. Dual-source critical inputs. Maintain 60-90 day safety stock on high-turnover chemicals.' },
-    { id:'fr_che_3', title:'Section 301 Tariffs on Chinese Chemicals', type:'Risk', severity:'MEDIUM', desc:'Many specialty chemicals, adhesives, and coatings from China face 7.5–25% Section 301 tariffs under List 1-4A, raising BoM costs significantly.', mitigation:'Audit import classification against active Section 301 lists. Source from European (BASF, Evonik) or US Gulf Coast alternatives. Explore duty drawback programs.' },
-  ],
-  packaging: [
-    { id:'fr_pkg_1', title:'Section 301 & Anti-Dumping on Chinese Packaging', type:'Risk', severity:'HIGH', desc:'Corrugated boxes, paperboard, and plastic packaging from China face 25% Section 301 tariffs plus additional anti-dumping duties. Total landed cost impact can be 30–40%.', mitigation:'Qualify regional packaging suppliers (US, Mexico, ASEAN). Compare total landed cost including duties before committing to China-origin packaging.' },
-    { id:'fr_pkg_2', title:'EU EPR & Recycled Content Regulations', type:'Risk', severity:'HIGH', desc:'EU Packaging and Packaging Waste Directive (PPWD) mandates minimum recycled content and Extended Producer Responsibility (EPR) registration in each EU member state. Non-compliance blocks market entry.', mitigation:'Audit all EU-bound packaging for PPWD compliance. Register with national EPR schemes. Switch to mono-material, recyclable formats.' },
-    { id:'fr_pkg_3', title:'Pulp & Paper Price Volatility', type:'Risk', severity:'MEDIUM', desc:'Containerboard and pulp prices are highly cyclical, moving 25–50% between cycle peaks and troughs. Capacity tightness can reverse price declines quickly.', mitigation:'Use index-linked pricing in paper packaging LTAs with price caps. Build 45–60 day corrugated inventory during low-price periods. Optimize box dimensions to reduce material usage.' },
-  ],
-  medical: [
-    { id:'fr_med_1', title:'FDA Import Alert & cGMP Compliance Risk', type:'Risk', severity:'HIGH', desc:'FDA maintains Import Alerts on dozens of Indian and Chinese API and device manufacturers for cGMP failures. A single import alert can halt all shipments from a facility.', mitigation:'Check FDA Import Alert database before qualifying any API or device supplier. Require recent FDA inspection outcomes. Conduct independent GMP audits. Maintain 6-month API safety stock.' },
-    { id:'fr_med_2', title:'Regulatory Approval Lead Time Risk', type:'Risk', severity:'HIGH', desc:'Switching pharmaceutical API suppliers requires FDA Drug Master File (DMF) update and can take 18–36 months. Medical device supplier changes trigger re-validation, creating single-source dependency.', mitigation:'Qualify secondary API suppliers in parallel. Include regulatory change notification clauses in supply agreements. Maintain 12+ month supply agreements with lead-time guarantees.' },
-    { id:'fr_med_3', title:'Cold Chain & Serialization Compliance', type:'Risk', severity:'MEDIUM', desc:'Biopharmaceuticals require validated cold chain logistics (2–8°C or -20°C). DSCSA (US) and FMD (EU) serialization mandates require end-to-end track-and-trace; non-compliance results in product destruction.', mitigation:'Use GDP-certified cold chain logistics providers only. Validate all cold chain lanes with temperature mapping. Implement serialization at point of manufacture.' },
-  ],
-  machinery: [
-    { id:'fr_mac_1', title:'Section 301 Tariffs on Chinese Machinery', type:'Risk', severity:'HIGH', desc:'Most industrial machinery and CNC machine tools from China face 25% Section 301 tariffs (List 3/4A). On high-value capital equipment, this creates enormous landed cost increases and disrupts capex budgets.', mitigation:'Source precision machinery from Germany, Japan, or South Korea where duty rates are 0–5% under FTAs. File for Section 301 exclusions on specialized equipment with no viable non-China source.' },
-    { id:'fr_mac_2', title:'Long Lead Times & Single-Source Risk', type:'Risk', severity:'HIGH', desc:'Precision pumps, valves, and CNC equipment from Germany and Japan carry 16–52 week lead times. Single-sourcing critical equipment means any supply disruption directly halts manufacturing.', mitigation:'Place capital equipment orders 12+ months in advance. Maintain on-site critical spare parts inventory. Negotiate spare parts stocking agreements with OEM at time of purchase.' },
-    { id:'fr_mac_3', title:'Export Control & Dual-Use Restrictions', type:'Risk', severity:'MEDIUM', desc:'High-precision CNC machine tools and certain pumps/compressors are subject to Wassenaar Arrangement dual-use export controls. Transfer to embargoed countries can trigger severe US/EU penalties.', mitigation:'Conduct end-user screening against BIS Entity List and OFAC SDN list before purchase and at any resale. Obtain ECCNs for all capital equipment. Maintain records for 5+ years.' },
-  ],
-}
-
-// ── Picks the most relevant hub within a category for the specific query,
-//    mirroring lib/database.js's pickBestHub so the offline fallback never
-//    contradicts the server path (e.g. "steel" shouldn't recommend a
-//    lithium mine just because it's first in the metals array). ──
-const FALLBACK_STOPWORDS = new Set(['and','the','for','with','core','hub','mega','global','belt','processing','world','largest','primary','source'])
-function pickBestFallbackHub(hubs, query) {
-  if (!hubs || hubs.length === 0) return null
-  const q = (query || '').toLowerCase()
-  let best = hubs[0], bestScore = 0
-  for (const h of hubs) {
-    const words = `${h.title || ''} ${h.desc || ''}`.toLowerCase().split(/[^a-z0-9]+/)
-      .filter(w => w.length > 3 && !FALLBACK_STOPWORDS.has(w))
-    const score = words.reduce((s, w) => s + (q.includes(w) ? 1 : 0), 0)
-    if (score > bestScore) { bestScore = score; best = h }
-  }
-  return best
-}
-
-// ── Day / Night business-hours indicator ──
-// Derives local time from longitude (UTC offset ≈ lng / 15h).
-// Returns { open: bool, localTime: '9:00 AM', icon: '☀️' | '🌙' }
 function hubDayStatus(lng) {
   if (lng == null) return null
   const now = new Date()
@@ -549,8 +363,9 @@ export default function Dashboard() {
   const [showSearch, setShowSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [scanError, setScanError] = useState(null)
   const [, setTerminalLogs] = useState([
-    "[SYSTEM] ATLAS Intelligence Core v3.0 — Online.",
+    "[SYSTEM] NAUTILUS Intelligence Core v3.0 -- Online.",
     "[SYSTEM] Universal Resource Engine initialized.",
     "[SYSTEM] Supply chain database loaded: 6 categories, 32 global hubs."
   ])
@@ -618,10 +433,6 @@ export default function Dashboard() {
   }
 
 
-  // Auto-switch to hubs tab when scan returns data
-  useEffect(() => {
-    if (opportunities.length > 0) setActiveMobileTab('hubs')
-  }, [opportunities.length])
 
   useEffect(() => {
     try {
@@ -743,12 +554,13 @@ export default function Dashboard() {
     })
   })()
 
-  const handleSearch = async (e, overrideQuery) => {
+  async function handleSearch(e, overrideQuery) {
     if (e) e.preventDefault()
     const activeQuery = overrideQuery ?? searchQuery
     if (!activeQuery.trim()) return
 
     setIsAnalyzing(true)
+    setScanError(null)
     setSelectedNode(null)
     setSearchQuery(activeQuery)
     addLog(`[SCAN] Initiating: "${activeQuery}"`)
@@ -772,8 +584,13 @@ export default function Dashboard() {
       })
       clearTimeout(timeoutId)
 
-      if (!res.ok) throw new Error(`API error ${res.status}`)
       const data = await res.json()
+      if (res.status === 400 || res.status === 422) {
+        setScanError(data.error || 'Please refine the product description.')
+        setShowSearch(true)
+        return
+      }
+      if (!res.ok) throw new Error(`API error ${res.status}`)
 
       if (data.opportunities?.length > 0) {
         const eqRisks   = await fetchAndMergeEarthquakeRisks(data.risks || [])
@@ -781,6 +598,7 @@ export default function Dashboard() {
         const mergedRisks = await fetchAndMergeIncidentRisks(fireRisks)
         setRisks(mergedRisks)
         setOpportunities(data.opportunities)
+        setActiveMobileTab('hubs')
         setDirective(data.directive || null)
         setMarketData(data.market_data || null)
         addLog(`[SUCCESS] Scan complete. ${data.opportunities.length} hubs identified.`)
@@ -799,11 +617,23 @@ export default function Dashboard() {
       clearTimeout(timeoutId)
       addLog('[WARN] Server scan delayed. Activating local intelligence mode...')
 
-      // Client-side fallback — same categorization logic as server
-      const cat = clientCategorize(activeQuery)
-      const baseHubs = FALLBACK_HUBS[cat] || FALLBACK_HUBS.electronics
-      const fallbackRisks = FALLBACK_RISKS[cat] || FALLBACK_RISKS.electronics
-      const selectedHub = pickBestFallbackHub(baseHubs, activeQuery)
+      let catalog
+      try {
+        catalog = await import('@/lib/database')
+      } catch {
+        setScanError('The sourcing service and local catalog are unavailable. Please reconnect and retry.')
+        setShowSearch(true)
+        return
+      }
+      const cat = catalog.categorizeQuery(activeQuery)
+      const baseHubs = catalog.ATLAS_DB[cat]
+      if (!baseHubs?.length) {
+        setScanError('No sourcing category matched. Add the material, product type, or application and try again.')
+        setShowSearch(true)
+        return
+      }
+      const fallbackRisks = catalog.CATEGORY_RISKS[cat] || []
+      const selectedHub = catalog.pickBestHub(baseHubs, activeQuery)
       const hubs = [selectedHub, ...baseHubs.filter(h => h.id !== selectedHub.id)]
 
       const fbDir = {
@@ -817,6 +647,7 @@ export default function Dashboard() {
       }
 
       setOpportunities(hubs)
+      setActiveMobileTab('hubs')
       const eqFallbackRisks   = await fetchAndMergeEarthquakeRisks(fallbackRisks)
       const fireFallbackRisks = await fetchAndMergeWildfireRisks(eqFallbackRisks)
       const mergedFallbackRisks = await fetchAndMergeIncidentRisks(fireFallbackRisks)
@@ -886,7 +717,7 @@ export default function Dashboard() {
 
       doc.setTextColor(56, 189, 248)
       doc.setFontSize(28)
-      doc.text('ATLAS', 20, 40)
+      doc.text('NAUTILUS', 20, 40)
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(13)
       doc.text('SUPPLY CHAIN INTELLIGENCE', 20, 50)
@@ -933,7 +764,7 @@ export default function Dashboard() {
 
       doc.setTextColor(60, 60, 60)
       doc.setFontSize(7)
-      doc.text('CONFIDENTIAL — For internal procurement use only. Atlas Terminal data is for strategic reference; verify with primary sources before contracting.', 20, 285, { maxWidth: 170 })
+      doc.text('CONFIDENTIAL -- For internal procurement use only. NAUTILUS Terminal data is for strategic reference; verify with primary sources before contracting.', 20, 285, { maxWidth: 170 })
 
       let yPos = 20
 
@@ -1065,9 +896,9 @@ export default function Dashboard() {
       doc.rect(18, yPos - 3, 174, 0.4, 'F')
       doc.setTextColor(60, 60, 60)
       doc.setFontSize(7)
-      doc.text('ATLAS SUPPLY CHAIN INTELLIGENCE  ·  atlas-terminal-tau.vercel.app  ·  For strategic reference only — verify before contracting.', 20, yPos + 3, { maxWidth: 170 })
+      doc.text('NAUTILUS SUPPLY CHAIN INTELLIGENCE  ·  atlas-terminal-tau.vercel.app  ·  For strategic reference only -- verify before contracting.', 20, yPos + 3, { maxWidth: 170 })
 
-      doc.save(`ATLAS_Brief_${(searchQuery || 'Mission').replace(/\s+/g, '_')}.pdf`)
+      doc.save(`NAUTILUS_Brief_${(searchQuery || 'Mission').replace(/\s+/g, '_')}.pdf`)
       addLog('[SUCCESS] Executive Brief generated and downloaded.')
     } catch (error) {
       console.error('PDF generation failed:', error)
@@ -1133,7 +964,7 @@ export default function Dashboard() {
           <div className="w-7 h-7 bg-sky-500/10 border border-sky-500/20 flex items-center justify-center rounded-md">
             <AtlasLogo size={16} />
           </div>
-          <span className="text-[11px] font-bold tracking-widest text-white">ATLAS</span>
+          <span className="text-[11px] font-bold tracking-widest text-white">NAUTILUS</span>
         </div>
         <div className="flex-1 mx-3 text-[11px] text-sky-400 truncate text-center">
           {opportunities.length > 0 ? `${opportunities.length} hubs · ${profile.material}` : 'Supply Chain Intelligence'}
@@ -1156,13 +987,13 @@ export default function Dashboard() {
           {showRisk      && <TradeRiskScore onClose={() => setShowRisk(false)} />}
           {showPorts     && <PortStatus onClose={() => setShowPorts(false)} />}
           {showCompliance && <ComplianceChecklist onClose={() => setShowCompliance(false)} />}
-          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaultDuty={parseFloat(opportunities[0]?.customs?.duty_rate) || 0} />}
+          {showTLC       && <TLCCalculator onClose={() => setShowTLC(false)} defaults={getLandedCostDefaults(isOpportunity ? selectedNode : opportunities[0])} />}
           {showBom       && <BomAnalyzer onClose={() => setShowBom(false)} onScan={(q) => handleSearch(null, q)} />}
           {showSanctions && <SanctionsChecker onClose={() => setShowSanctions(false)} />}
           {showOcean     && <OceanFreightRates onClose={() => setShowOcean(false)} />}
           {showFta       && <FtaChecker onClose={() => setShowFta(false)} />}
           {showTariffCalc  && <TariffCalculator onClose={() => setShowTariffCalc(false)} />}
-          {showCurrencyCalc && <CurrencyImpactCalc onClose={() => setShowCurrencyCalc(false)} />}
+          {showCurrencyCalc && <CurrencyImpactCalc onClose={() => setShowCurrencyCalc(false)} liveRates={fxData?.rates} rateDate={fxData?.date} ratesStale={Boolean(fxData?.stale)} />}
           {showDualUse   && <DualUseChecker onClose={() => setShowDualUse(false)} />}
           {showRecommendation && opportunities.length > 0 && (
             <SourcingRecommendation
@@ -1288,6 +1119,7 @@ export default function Dashboard() {
                       )
                     })()}
                   </div>
+                  {scanError && <p role="alert" className="text-sm text-amber-300">{scanError}</p>}
                   <button type="submit" disabled={isAnalyzing || !searchQuery.trim()}
                     className="w-full h-16 bg-emerald-500 text-black font-bold flex items-center justify-center gap-3 hover:bg-emerald-400 active:bg-emerald-400 transition-all disabled:opacity-50 text-[14px] uppercase tracking-widest rounded-xl">
                     {isAnalyzing ? 'SCANNING GLOBAL DATABASE...' : 'EXECUTE INTELLIGENCE SCAN'}
@@ -1311,7 +1143,7 @@ export default function Dashboard() {
                 <AtlasLogo size={22} />
               </div>
               <div>
-                <h1 className="font-bold text-xl tracking-widest leading-none text-white">ATLAS</h1>
+                <h1 className="font-bold text-xl tracking-widest leading-none text-white">NAUTILUS</h1>
                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">Supply Chain Intelligence</p>
               </div>
             </div>

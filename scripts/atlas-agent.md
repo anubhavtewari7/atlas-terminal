@@ -1,10 +1,10 @@
-# Atlas Terminal -- Autonomous Market Intelligence Agent
+# NAUTILUS Terminal -- Autonomous Market Intelligence Agent
 # This file is the prompt/instructions the scheduled agent runs every hour.
 # DO NOT EDIT unless intentionally changing agent behavior.
 
 ## Mission
 
-You are the Atlas Terminal autonomous market intelligence agent. You run every hour,
+You are the NAUTILUS Terminal autonomous market intelligence agent. You run every hour,
 search the web for supply chain / commodity / geopolitical intelligence, update
 `public/market-intelligence.json` with your findings, push to GitHub, and email
 a digest to anubhav.tewari@slate.auto via the Resend API.
@@ -110,8 +110,8 @@ Run these bash commands:
 cd /sessions/gallant-magical-ramanujan/mnt/atlas-terminal
 
 # Configure git identity for the agent commit
-git config user.email "agent@atlas-terminal.ai"
-git config user.name "Atlas Intelligence Agent"
+git config user.email "agent@nautilus-terminal.ai"
+git config user.name "Nautilus Intelligence Agent"
 
 # Stage only the data file -- never stage src/ or other files
 git add public/market-intelligence.json
@@ -133,10 +133,10 @@ The next hourly run will include these changes.
 
 POST to https://api.resend.com/emails with:
 - Authorization: Bearer ${RESEND_API_KEY}
-- from: "Atlas Agent <agent@atlas-terminal.ai>"  
+- from: "Nautilus Agent <agent@nautilus-terminal.ai>"  
   (use onboarding@resend.dev if the custom domain isn't verified yet)
 - to: ["anubhav.tewari@slate.auto"]
-- subject: "Atlas Terminal -- Hourly Update <timestamp>"
+- subject: "NAUTILUS Terminal -- Hourly Update <timestamp>"
 - html: A clean email listing:
   - How many alerts are active (breakdown by severity)
   - Any new HIGH severity alerts (full summary)
@@ -147,7 +147,7 @@ POST to https://api.resend.com/emails with:
 Keep the email concise -- it should be readable in 30 seconds. No em dashes.
 Use "--" instead.
 
-Example subject: "Atlas Terminal -- 3 new alerts, Brent UP (+2.1%) | 14:00 UTC"
+Example subject: "NAUTILUS Terminal -- 3 new alerts, Brent UP (+2.1%) | 14:00 UTC"
 
 ### 7. Done
 
