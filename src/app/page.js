@@ -942,7 +942,7 @@ export default function Home() {
                   { icon: '!', bg: 'rgba(251,191,36,0.15)',  ic: 'var(--amber)', label: 'ECCN Classification', val: '1C006 -- EAR', vc: 'var(--amber)', bc: 'var(--rim2)' },
                   { icon: 'â', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'FTA Eligibility', val: 'NOT ELIGIBLE', vc: 'var(--red)', bc: 'var(--rim2)' },
                   { icon: '!', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'Section 301 Tariff', val: '+25% Rate', vc: 'var(--red)', bc: 'var(--rim2)' },
-                  { icon: 'â', bg: 'rgba(56,189,248,0.12)',  ic: 'var(--accent)',label: 'MFN Base Rate', val: '0% (ITA)', vc: 'var(--accent)', bc: 'rgba(56,189,248,0.2)' },
+                  { icon: '\u2192', bg: 'rgba(56,189,248,0.12)',  ic: 'var(--accent)',label: 'MFN Base Rate', val: '0% (ITA)', vc: 'var(--accent)', bc: 'rgba(56,189,248,0.2)' },
                 ].map((r, i) => (
                   <div key={i} className="comp-row" style={{ borderColor: r.bc }}>
                     <div className="comp-check" style={{ background: r.bg, color: r.ic }}>{r.icon}</div>
