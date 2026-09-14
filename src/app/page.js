@@ -890,9 +890,9 @@ export default function Home() {
               </div>
               <div className="mock-body">
                 {[
-                  { color: 'var(--red)', glow: true, title: 'Active Wildfires -- Southeast Asia', sub: '4,218 hotspots Â· Palm oil, rubber, electronics', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
-                  { color: 'var(--red)', glow: true, title: 'Houthi Maritime Attacks -- Red Sea', sub: 'Global shipping lane Â· Cape diversion risk', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
-                  { color: 'var(--amber)', glow: false, title: 'M6.1 Earthquake -- Hokkaido, Japan', sub: '48km depth Â· Electronics, auto parts', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)' },
+                  { color: 'var(--red)', glow: true, title: 'Active Wildfires -- Southeast Asia', sub: '4,218 hotspots · Palm oil, rubber, electronics', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
+                  { color: 'var(--red)', glow: true, title: 'Houthi Maritime Attacks -- Red Sea', sub: 'Global shipping lane · Cape diversion risk', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
+                  { color: 'var(--amber)', glow: false, title: 'M6.1 Earthquake -- Hokkaido, Japan', sub: '48km depth · Electronics, auto parts', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)' },
                   { color: 'var(--amber)', glow: false, title: 'Labor Unrest -- Dhaka EPZs', sub: 'Garments, textiles, leather', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)', op: 0.6 },
                 ].map((t, i) => (
                   <div key={i} className="threat-item" style={t.op ? { opacity: t.op } : {}}>
