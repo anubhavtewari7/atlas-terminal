@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import './globals.css';
 
 export const metadata = {
   title: 'NAUTILUS Terminal -- Supply Chain Intelligence',
@@ -15,11 +16,11 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'NAUTILUS Terminal -- Supply Chain Intelligence',
-    description: 'Real-time sourcing intelligence, tariff data, and geopolitical risk -- built for procurement professionals who can\'t afford surprises.',
+    description: 'Real-time sourcing intelligence, tariff data, and geopolitical risk -- built for procurement professionals who cannot afford surprises.',
   },
 };
 
-// Root layout — minimal shell. Each route group applies its own CSS.
+// Root layout -- minimal shell. Each route group applies its own CSS.
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
