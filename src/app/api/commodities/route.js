@@ -23,73 +23,115 @@ const STATIC_REF = [
 ];
 
 function fmt(price, dp) {
-  if (price >= 10000) return \`$\${(price / 1000).toFixed(1)}k\`;
-  if (dp === 0) return \`$\${Math.round(price).toLocaleString()}\`;
-  return \`$\${price.toFixed(dp)}\`;
+  if (price >= 10000) return '$' + (price / 1000).toFixed(1) + 'k';
+  if (dp === 0) return '$' + Math.round(price).toLocaleString();
+  return '$' + price.toFixed(dp);
 }
 
 // Strategy 1: Yahoo Finance v8/finance/chart (individual ticker, separate from v7/quote which is blocked)
 async function fetchYahooChart(symbol) {
   const encoded = encodeURIComponent(symbol);
-  const url = \`https://query2.finance.yahoo.com/v8/finance/chart/\${encoded}?interval=1d&range=1d\`;
+  const url = 'https://query2.finance.yahoo.com/v8/finance/chart/' + encoded + '?interval=1d&range=1d';
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
       'Accept': 'application/json, text/plain, */*',
       'Accept-Language': 'en-US,en;q=0.9',
-      'Referer': \`https://finance.yahoo.com/quote/\${encoded}/\`,
+      'Referer': 'https://finance.yahoo.com/quote/' + encoded + '/',
       'Origin': 'https://finance.yahoo.com',
     },
     signal: AbortSignal.timeout(5000),
     next: { revalidate: 300 },
   });
-  if (!res.ok) throw new Error(\`YF chart HTTP \${res.status}\`);
+  if (!res.ok) throw new Error('YF chart HTTP ' + res.status);
   const data = await res.json();
-  const meta = data?.chart?.result?.[0]?.meta;
-  if (!meta?.regularMarketPrice) throw new Error('No price in YF chart response');
-  return { price: meta.regularMarketPrice, pct: meta.regularMarketChangePercent ?? 0 };
+  const meta = data && data.chart && data.chart.result && data.chart.result[0] && data.chart.result[0].meta;
+  if (!meta || !meta.regularMarketPrice) throw new Error('No price in YF chart response');
+  return {
+    price: meta.regularMarketPrice,
+    pct: meta.regularMarketChangePercent != null ? meta.regularMarketChangePercent : 0,
+  };
 }
 
 // Strategy 2: Stooq CSV API (free, public, server-side friendly)
 async function fetchStooq(stooqSymbol) {
-  const url = \`https://stooq.com/q/l/?s=\${stooqSymbol}&f=sd2t2ohlcv&h&e=csv\`;
+  const url = 'https://stooq.com/q/l/?s=' + stooqSymbol + '&f=sd2t2ohlcv&h&e=csv';
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)' },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
+      'Accept': 'text/csv,text/plain,*/*',
+    },
     signal: AbortSignal.timeout(5000),
     next: { revalidate: 300 },
   });
-  if (!res.ok) throw new Error(\`Stooq HTTP \${res.status}\`);
+  if (!res.ok) throw new Error('Stooq HTTP ' + res.status);
   const csv = await res.text();
-  const lines = csv.split('\n').filter(l => l.trim() && !l.startsWith('Symbol'));
+  // CSV format: Symbol,Date,Time,Open,High,Low,Close,Volume
+  const lines = csv.split('\n').filter(function(l) { return l.trim() && !l.startsWith('Symbol'); });
   if (!lines.length) throw new Error('No data in Stooq response');
   const cols = lines[0].split(',');
+  // Close is index 6, Open is index 3
   const closePrice = parseFloat(cols[6]);
   const openPrice = parseFloat(cols[3]);
   if (!closePrice || isNaN(closePrice)) throw new Error('Invalid Stooq close price');
   const pct = openPrice && !isNaN(openPrice) ? ((closePrice - openPrice) / openPrice) * 100 : 0;
-  return { price: closePrice, pct };
+  return { price: closePrice, pct: pct };
 }
 
 async function fetchTicker(cfg) {
+  // Try Yahoo Finance first
   try {
     const result = await fetchYahooChart(cfg.yf);
-    return { name: cfg.name, unit: cfg.unit, price: fmt(result.price * cfg.mult, cfg.dp), change: (result.pct >= 0 ? '+' : '') + result.pct.toFixed(1) + '%', up: result.pct >= 0, live: true, src: 'YF' };
+    return {
+      name: cfg.name,
+      unit: cfg.unit,
+      price: fmt(result.price * cfg.mult, cfg.dp),
+      change: (result.pct >= 0 ? '+' : '') + result.pct.toFixed(1) + '%',
+      up: result.pct >= 0,
+      live: true,
+      src: 'YF',
+    };
   } catch (_) {
+    // Try Stooq if we have a symbol for it
     if (cfg.stooq) {
       try {
         const result = await fetchStooq(cfg.stooq);
-        return { name: cfg.name, unit: cfg.unit, price: fmt(result.price * cfg.mult, cfg.dp), change: (result.pct >= 0 ? '+' : '') + result.pct.toFixed(1) + '%', up: result.pct >= 0, live: true, src: 'Stooq' };
-      } catch (__) {}
+        return {
+          name: cfg.name,
+          unit: cfg.unit,
+          price: fmt(result.price * cfg.mult, cfg.dp),
+          change: (result.pct >= 0 ? '+' : '') + result.pct.toFixed(1) + '%',
+          up: result.pct >= 0,
+          live: true,
+          src: 'Stooq',
+        };
+      } catch (__) {
+        // fall through to null
+      }
     }
     return null;
   }
 }
 
 export async function GET() {
-  const results = await Promise.all(SYMBOLS.map(cfg => fetchTicker(cfg)));
+  // Fetch all tickers concurrently; failures return null and we filter them out
+  const results = await Promise.all(SYMBOLS.map(function(cfg) { return fetchTicker(cfg); }));
   const live = results.filter(Boolean);
-  const ref = STATIC_REF.map(r => ({ name: r.name, unit: r.unit, price: fmt(r.price, 0), change: (r.change >= 0 ? '+' : '') + r.change.toFixed(1) + '%', up: r.change >= 0, live: false, src: 'static' }));
-  if (live.length === 0) {
+
+  const ref = STATIC_REF.map(function(r) { return {
+    name: r.name,
+    unit: r.unit,
+    price: fmt(r.price, 0),
+    change: (r.change >= 0 ? '+' : '') + r.change.toFixed(1) + '%',
+    up: r.change >= 0,
+    live: false,
+    src: 'static',
+  }; });
+
+  const anyLive = live.length > 0;
+
+  if (!anyLive) {
+    // Both fetchers failed -- return static fallback
     return NextResponse.json({
       prices: [
         { name: 'Brent Crude', unit: '/bbl',   price: '$108.40', change: '+1.8%', up: true,  live: false, src: 'static' },
@@ -107,5 +149,11 @@ export async function GET() {
       stale: true,
     });
   }
-  return NextResponse.json({ prices: [...live, ...ref], timestamp: new Date().toISOString(), source: live[0]?.src === 'Stooq' ? 'Stooq.com' : 'Yahoo Finance', anyLive: true });
+
+  return NextResponse.json({
+    prices: [...live, ...ref],
+    timestamp: new Date().toISOString(),
+    source: live[0] && live[0].src === 'Stooq' ? 'Stooq.com' : 'Yahoo Finance',
+    anyLive: true,
+  });
 }
