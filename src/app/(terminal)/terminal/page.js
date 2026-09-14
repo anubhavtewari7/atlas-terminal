@@ -38,7 +38,7 @@ import {
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, TrendingUp, Activity, DollarSign, Download,
-  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers
+  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers, RotateCcw
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -147,6 +147,7 @@ export default function Dashboard() {
   const [activeMobileTab, setActiveMobileTab] = useState('intel')
   const [threatsCollapsed, setThreatsCollapsed] = useState(false)
   const [hubsCollapsed, setHubsCollapsed] = useState(false)
+  const [showResetConfirm, setShowResetConfirm] = useState(false)
   const [intelBrief, setIntelBrief] = useState(null)
   const [intelLoading, setIntelLoading] = useState(false)
   const [hubNav, setHubNav] = useState({ level: 'continent', continent: null, country: null, region: null })
@@ -764,6 +765,12 @@ export default function Dashboard() {
                 intelBrief={intelBrief}
                 query={profile.material}
                 onClose={() => setShowRecommendation(false)}
+              />
+            )}
+                      {showResetConfirm && (
+              <ResetConfirmModal
+                onConfirm={() => { clearHistory(); window.location.href = '/terminal' }}
+                onCancel={() => setShowResetConfirm(false)}
               />
             )}
           </AnimatePresence>
@@ -1849,6 +1856,10 @@ export default function Dashboard() {
               className="w-full h-10 bg-sky-500 text-black font-bold uppercase text-[11px] hover:bg-sky-400 shadow-[0_0_20px_rgba(56,189,248,0.3)] rounded-xl tracking-widest flex items-center justify-center gap-1.5 transition-all">
               <SearchCode size={12} /> Scan
             </button>
+            <button onClick={() => setShowResetConfirm(true)}
+              className="w-full h-8 border border-rose-500/20 text-rose-500/60 hover:text-rose-400 hover:border-rose-500/40 hover:bg-rose-500/5 rounded-xl text-[9px] font-bold uppercase tracking-widest flex items-center justify-center gap-1.5 transition-all">
+              <RotateCcw size={10} /> Reset Terminal
+            </button>
           </div>
         </div>
 
@@ -2272,6 +2283,12 @@ export default function Dashboard() {
                   ))}
                 </div>
 
+                {/* Reset Terminal -- mobile */}
+                <button onClick={() => setShowResetConfirm(true)}
+                  className="w-full mt-2 py-3 flex items-center justify-center gap-2 border border-rose-500/20 text-rose-500/60 hover:text-rose-400 hover:border-rose-500/40 hover:bg-rose-500/5 rounded-xl text-[10px] font-bold uppercase tracking-widest active:bg-rose-500/10 transition-all">
+                  <RotateCcw size={12} /> Reset Terminal
+                </button>
+
               </div>
             )}
 
@@ -2566,5 +2583,54 @@ export default function Dashboard() {
       </footer>
 
     </div>
+  )
+}
+
+// -- Reset Terminal Confirmation Modal -----------------------------------------
+function ResetConfirmModal({ onConfirm, onCancel }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[300] bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+    >
+      <motion.div
+        initial={{ scale: 0.92, y: 16 }} animate={{ scale: 1, y: 0 }}
+        className="bg-[#0a0a0a] border border-rose-500/30 w-full max-w-sm rounded-2xl shadow-[0_0_60px_rgba(244,63,94,0.12)] p-6 flex flex-col gap-6"
+      >
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/25 flex items-center justify-center">
+            <RotateCcw size={22} className="text-rose-400" />
+          </div>
+          <div>
+            <h2 className="text-[15px] font-bold text-white tracking-wide">Reset Terminal?</h2>
+            <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+              This will permanently delete your entire Mission Archive and reload the terminal in a clean state. This cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div className="bg-rose-500/5 border border-rose-500/15 rounded-xl p-4 space-y-2">
+          {[
+            'All saved mission history will be erased',
+            'Current scan results will be cleared',
+            'Terminal will reload to its default state',
+          ].map((line, i) => (
+            <div key={i} className="flex items-start gap-2.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-rose-500/60 mt-1.5 shrink-0" />
+              <span className="text-[11px] text-slate-400">{line}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2">
+          <button onClick={onConfirm}
+            className="w-full py-3 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 hover:border-rose-500/50 text-rose-400 font-bold text-[11px] uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2">
+            <RotateCcw size={13} /> Yes. Reset Terminal
+          </button>
+          <button onClick={onCancel}
+            className="w-full py-2.5 text-slate-500 hover:text-slate-300 font-bold text-[11px] uppercase tracking-widest rounded-xl border border-white/5 hover:border-white/10 hover:bg-white/5 transition-all">
+            Cancel Reset
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
   )
 }
