@@ -200,6 +200,7 @@ export default function Dashboard() {
     if (typeof window !== 'undefined') {
       const q = new URLSearchParams(window.location.search).get('q')
       if (q) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSearchQuery(q)
         setTimeout(() => handleSearch(null, q), 600)
       }
