@@ -5,10 +5,10 @@ import { NextResponse } from 'next/server';
 
 const SYMBOLS = [
   { yf: 'BZ=F',  stooq: 'brent.f', name: 'Brent Crude', unit: '/bbl',   mult: 1,    dp: 2 },
-  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 0.01, dp: 2 }, // COMEX quotes in cents/lb
+  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 0.01, dp: 2 },
   { yf: 'HR=F',  stooq: null,       name: 'HRC Steel',   unit: '/st',    mult: 1,    dp: 0 },
-  { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 }, // ICE quotes in cents/lb
-  { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 }, // CBOT quotes in cents/bu
+  { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 },
+  { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 },
   { yf: 'GC=F',  stooq: 'gc.f',    name: 'Gold',        unit: '/oz',    mult: 1,    dp: 0 },
   { yf: 'NG=F',  stooq: 'ng.f',    name: 'Nat Gas',     unit: '/MMBtu', mult: 1,    dp: 3 },
 ];
@@ -31,31 +31,31 @@ function fmt(price, dp) {
 // Strategy 1: Yahoo Finance v8/finance/chart (individual ticker, separate from v7/quote which is blocked)
 async function fetchYahooChart(symbol) {
   const encoded = encodeURIComponent(symbol);
-  const url = 'https://query2.finance.yahoo.com/v8/finance/chart/' + encoded + '?interval=1d&range=1d';
+  const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`;
   const res = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
       'Accept': 'application/json, text/plain, */*',
       'Accept-Language': 'en-US,en;q=0.9',
-      'Referer': 'https://finance.yahoo.com/quote/' + encoded + '/',
+      'Referer': `https://finance.yahoo.com/quote/${encoded}/`,
       'Origin': 'https://finance.yahoo.com',
     },
     signal: AbortSignal.timeout(5000),
     next: { revalidate: 300 },
   });
-  if (!res.ok) throw new Error('YF chart HTTP ' + res.status);
+  if (!res.ok) throw new Error(`YF chart HTTP ${res.status}`);
   const data = await res.json();
-  const meta = data && data.chart && data.chart.result && data.chart.result[0] && data.chart.result[0].meta;
-  if (!meta || !meta.regularMarketPrice) throw new Error('No price in YF chart response');
+  const meta = data?.chart?.result?.[0]?.meta;
+  if (!meta?.regularMarketPrice) throw new Error('No price in YF chart response');
   return {
     price: meta.regularMarketPrice,
-    pct: meta.regularMarketChangePercent != null ? meta.regularMarketChangePercent : 0,
+    pct: meta.regularMarketChangePercent ?? 0,
   };
 }
 
 // Strategy 2: Stooq CSV API (free, public, server-side friendly)
 async function fetchStooq(stooqSymbol) {
-  const url = 'https://stooq.com/q/l/?s=' + stooqSymbol + '&f=sd2t2ohlcv&h&e=csv';
+  const url = `https://stooq.com/q/l/?s=${stooqSymbol}&f=sd2t2ohlcv&h&e=csv`;
   const res = await fetch(url, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
@@ -64,10 +64,10 @@ async function fetchStooq(stooqSymbol) {
     signal: AbortSignal.timeout(5000),
     next: { revalidate: 300 },
   });
-  if (!res.ok) throw new Error('Stooq HTTP ' + res.status);
+  if (!res.ok) throw new Error(`Stooq HTTP ${res.status}`);
   const csv = await res.text();
   // CSV format: Symbol,Date,Time,Open,High,Low,Close,Volume
-  const lines = csv.split('\n').filter(function(l) { return l.trim() && !l.startsWith('Symbol'); });
+  const lines = csv.split('\n').filter(l => l.trim() && !l.startsWith('Symbol'));
   if (!lines.length) throw new Error('No data in Stooq response');
   const cols = lines[0].split(',');
   // Close is index 6, Open is index 3
@@ -75,7 +75,7 @@ async function fetchStooq(stooqSymbol) {
   const openPrice = parseFloat(cols[3]);
   if (!closePrice || isNaN(closePrice)) throw new Error('Invalid Stooq close price');
   const pct = openPrice && !isNaN(openPrice) ? ((closePrice - openPrice) / openPrice) * 100 : 0;
-  return { price: closePrice, pct: pct };
+  return { price: closePrice, pct };
 }
 
 async function fetchTicker(cfg) {
@@ -115,10 +115,10 @@ async function fetchTicker(cfg) {
 
 export async function GET() {
   // Fetch all tickers concurrently; failures return null and we filter them out
-  const results = await Promise.all(SYMBOLS.map(function(cfg) { return fetchTicker(cfg); }));
+  const results = await Promise.all(SYMBOLS.map(cfg => fetchTicker(cfg)));
   const live = results.filter(Boolean);
 
-  const ref = STATIC_REF.map(function(r) { return {
+  const ref = STATIC_REF.map(r => ({
     name: r.name,
     unit: r.unit,
     price: fmt(r.price, 0),
@@ -126,12 +126,15 @@ export async function GET() {
     up: r.change >= 0,
     live: false,
     src: 'static',
-  }; });
+  }));
 
-  const anyLive = live.length > 0;
+  // Determine data quality: 'live' = real-time YF, 'delayed' = daily Stooq, 'reference' = static only
+  const yfItems = live.filter(r => r.src === 'YF');
+  const stooqItems = live.filter(r => r.src === 'Stooq');
+  const quality = yfItems.length > 0 ? 'live' : stooqItems.length > 0 ? 'delayed' : 'reference';
 
-  if (!anyLive) {
-    // Both fetchers failed -- return static fallback
+  if (live.length === 0) {
+    // Both fetchers failed -- return static fallback with explicit reference labeling
     return NextResponse.json({
       prices: [
         { name: 'Brent Crude', unit: '/bbl',   price: '$108.40', change: '+1.8%', up: true,  live: false, src: 'static' },
@@ -144,7 +147,8 @@ export async function GET() {
         ...ref,
       ],
       timestamp: new Date().toISOString(),
-      source: 'fallback',
+      source: 'Reference (Jan 2024)',
+      quality: 'reference',
       anyLive: false,
       stale: true,
     });
@@ -153,7 +157,8 @@ export async function GET() {
   return NextResponse.json({
     prices: [...live, ...ref],
     timestamp: new Date().toISOString(),
-    source: live[0] && live[0].src === 'Stooq' ? 'Stooq.com' : 'Yahoo Finance',
-    anyLive: true,
+    source: quality === 'live' ? 'Yahoo Finance' : 'Stooq (EOD)',
+    quality,
+    anyLive: quality === 'live',
   });
 }
