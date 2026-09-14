@@ -938,9 +938,9 @@ export default function Home() {
               </div>
               <div className="mock-body">
                 {[
-                  { icon: 'â', bg: 'rgba(16,185,129,0.15)', ic: 'var(--green)', label: 'Sanctions Screening', val: 'CLEAR', vc: 'var(--green)', bc: 'var(--rim2)' },
+                  { icon: '\u2713', bg: 'rgba(16,185,129,0.15)', ic: 'var(--green)', label: 'Sanctions Screening', val: 'CLEAR', vc: 'var(--green)', bc: 'var(--rim2)' },
                   { icon: '!', bg: 'rgba(251,191,36,0.15)',  ic: 'var(--amber)', label: 'ECCN Classification', val: '1C006 -- EAR', vc: 'var(--amber)', bc: 'var(--rim2)' },
-                  { icon: 'â', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'FTA Eligibility', val: 'NOT ELIGIBLE', vc: 'var(--red)', bc: 'var(--rim2)' },
+                  { icon: '\u2717', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'FTA Eligibility', val: 'NOT ELIGIBLE', vc: 'var(--red)', bc: 'var(--rim2)' },
                   { icon: '!', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'Section 301 Tariff', val: '+25% Rate', vc: 'var(--red)', bc: 'var(--rim2)' },
                   { icon: '\u2192', bg: 'rgba(56,189,248,0.12)',  ic: 'var(--accent)',label: 'MFN Base Rate', val: '0% (ITA)', vc: 'var(--accent)', bc: 'rgba(56,189,248,0.2)' },
                 ].map((r, i) => (
@@ -1016,7 +1016,7 @@ export default function Home() {
                 disabled={status === 'loading'}
               />
               <button type="submit" className="btn-primary" disabled={status === 'loading'}>
-                {status === 'loading' ? 'Sending...' : 'Request Access â'}
+                {status === 'loading' ? 'Sending...' : 'Request Access \u2192'}
               </button>
             </form>
           )}
