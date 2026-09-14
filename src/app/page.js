@@ -483,6 +483,10 @@ nav.scrolled {
 footer {
   position: relative;
   z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.f-top {
   border-top: 1px solid var(--rim2);
   padding: 44px 48px;
   display: flex;
@@ -490,13 +494,38 @@ footer {
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 .f-brand { font-size: 24px; font-weight: 900; letter-spacing: -0.05em; background: linear-gradient(120deg, #fff, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .f-note { font-size: 11px; color: var(--text3); margin-top: 4px; font-weight: 300; }
 .f-right { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.14em; text-transform: uppercase; }
-
+.f-legal {
+  border-top: 1px solid var(--rim2);
+  padding: 20px 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.f-legal-link {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text3);
+  text-decoration: none;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.f-legal-link:hover { color: rgba(237,244,255,0.55); border-bottom-color: rgba(237,244,255,0.18); }
+.f-legal-sep {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: rgba(237,244,255,0.10);
+  user-select: none;
+}
 .press-strip {
   display: flex;
   align-items: center;
@@ -555,7 +584,8 @@ footer {
   nav { padding: 18px 24px; }
   .wrap { padding: 0 24px; }
   .split { padding: 72px 0; }
-  footer { padding: 36px 24px; }
+  .f-top { padding: 36px 24px; }
+  .f-legal { padding: 16px 24px; gap: 8px; }
   .cta-wrap { padding: 80px 24px; }
 }
 @media (max-width: 540px) {
@@ -860,9 +890,9 @@ export default function Home() {
               </div>
               <div className="mock-body">
                 {[
-                  { color: 'var(--red)', glow: true, title: 'Active Wildfires -- Southeast Asia', sub: '4,218 hotspots · Palm oil, rubber, electronics', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
-                  { color: 'var(--red)', glow: true, title: 'Houthi Maritime Attacks -- Red Sea', sub: 'Global shipping lane · Cape diversion risk', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
-                  { color: 'var(--amber)', glow: false, title: 'M6.1 Earthquake -- Hokkaido, Japan', sub: '48km depth · Electronics, auto parts', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)' },
+                  { color: 'var(--red)', glow: true, title: 'Active Wildfires -- Southeast Asia', sub: '4,218 hotspots Â· Palm oil, rubber, electronics', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
+                  { color: 'var(--red)', glow: true, title: 'Houthi Maritime Attacks -- Red Sea', sub: 'Global shipping lane Â· Cape diversion risk', badge: 'HIGH', bc: 'rgba(248,113,113,0.15)', tc: 'var(--red)' },
+                  { color: 'var(--amber)', glow: false, title: 'M6.1 Earthquake -- Hokkaido, Japan', sub: '48km depth Â· Electronics, auto parts', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)' },
                   { color: 'var(--amber)', glow: false, title: 'Labor Unrest -- Dhaka EPZs', sub: 'Garments, textiles, leather', badge: 'MED', bc: 'rgba(251,191,36,0.15)', tc: 'var(--amber)', op: 0.6 },
                 ].map((t, i) => (
                   <div key={i} className="threat-item" style={t.op ? { opacity: t.op } : {}}>
@@ -908,11 +938,11 @@ export default function Home() {
               </div>
               <div className="mock-body">
                 {[
-                  { icon: '✓', bg: 'rgba(16,185,129,0.15)', ic: 'var(--green)', label: 'Sanctions Screening', val: 'CLEAR', vc: 'var(--green)', bc: 'var(--rim2)' },
+                  { icon: 'â', bg: 'rgba(16,185,129,0.15)', ic: 'var(--green)', label: 'Sanctions Screening', val: 'CLEAR', vc: 'var(--green)', bc: 'var(--rim2)' },
                   { icon: '!', bg: 'rgba(251,191,36,0.15)',  ic: 'var(--amber)', label: 'ECCN Classification', val: '1C006 -- EAR', vc: 'var(--amber)', bc: 'var(--rim2)' },
-                  { icon: '✗', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'FTA Eligibility', val: 'NOT ELIGIBLE', vc: 'var(--red)', bc: 'var(--rim2)' },
+                  { icon: 'â', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'FTA Eligibility', val: 'NOT ELIGIBLE', vc: 'var(--red)', bc: 'var(--rim2)' },
                   { icon: '!', bg: 'rgba(248,113,113,0.15)', ic: 'var(--red)',   label: 'Section 301 Tariff', val: '+25% Rate', vc: 'var(--red)', bc: 'var(--rim2)' },
-                  { icon: '→', bg: 'rgba(56,189,248,0.12)',  ic: 'var(--accent)',label: 'MFN Base Rate', val: '0% (ITA)', vc: 'var(--accent)', bc: 'rgba(56,189,248,0.2)' },
+                  { icon: 'â', bg: 'rgba(56,189,248,0.12)',  ic: 'var(--accent)',label: 'MFN Base Rate', val: '0% (ITA)', vc: 'var(--accent)', bc: 'rgba(56,189,248,0.2)' },
                 ].map((r, i) => (
                   <div key={i} className="comp-row" style={{ borderColor: r.bc }}>
                     <div className="comp-check" style={{ background: r.bg, color: r.ic }}>{r.icon}</div>
@@ -986,7 +1016,7 @@ export default function Home() {
                 disabled={status === 'loading'}
               />
               <button type="submit" className="btn-primary" disabled={status === 'loading'}>
-                {status === 'loading' ? 'Sending...' : 'Request Access →'}
+                {status === 'loading' ? 'Sending...' : 'Request Access â'}
               </button>
             </form>
           )}
@@ -1000,11 +1030,22 @@ export default function Home() {
 
       {/* Footer */}
       <footer>
-        <div>
-          <div className="f-brand">NAUTILUS</div>
-          <div className="f-note">Supply Chain Intelligence Terminal &nbsp;&middot;&nbsp; Real data &nbsp;&middot;&nbsp; Built for procurement professionals</div>
+        <div className="f-top">
+          <div>
+            <div className="f-brand">NAUTILUS</div>
+            <div className="f-note">Supply Chain Intelligence Terminal &nbsp;&middot;&nbsp; Real data &nbsp;&middot;&nbsp; Built for procurement professionals</div>
+          </div>
+          <div className="f-right">&copy; 2026 NAUTILUS Terminal</div>
         </div>
-        <div className="f-right">&copy; 2026 NAUTILUS Terminal</div>
+        <div className="f-legal">
+          <a href="/legal/terms" className="f-legal-link">Terms of Service</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/legal/privacy-policy" className="f-legal-link">Privacy Policy</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/legal/disclaimer" className="f-legal-link">Disclaimer</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/legal/data-sources" className="f-legal-link">Data Sources</a>
+        </div>
       </footer>
     </>
   )
