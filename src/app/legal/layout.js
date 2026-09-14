@@ -24,6 +24,7 @@ export default function LegalLayout({ children }) {
           </Link>
           <nav className="flex items-center gap-6 text-[11px] text-slate-500">
             <Link href="/legal/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
+            <Link href="/legal/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy</Link>
             <Link href="/legal/disclaimer" className="hover:text-slate-300 transition-colors">Disclaimer</Link>
             <Link href="/legal/data-sources" className="hover:text-slate-300 transition-colors">Data Sources</Link>
           </nav>
