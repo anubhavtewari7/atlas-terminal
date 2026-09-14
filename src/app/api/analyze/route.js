@@ -10,7 +10,7 @@ import { rateLimit } from '@/lib/rate-limit';
 
 // Module-level constant -- built once per cold start, not on every request
 const CATEGORY_SIGNALS = {
-  industrial:      ['motor','pump','valve','bearing','gearbox','shaft','seal','coupling','flange','fastener','bolt','nut','hydraulic','pneumatic','actuator','compressor','filter','conveyor','crane','hoist'],
+  industrial:      ['motor','pump','valve','bearing','gearbox','shaft','seal','coupling','flange','fastener','bolt','nut','hydraulic','pneumatic','actuator','compressor','filter','conveyor','crane','hoist','magnet','neodymium','ndfeb','ferrite','rare earth','solenoid','gear','precision'],
   automotive:      ['automotive','vehicle','electric','truck','tire','tyre','brake','suspension','chassis','transmission','usmca','stamping','die-cast'],
   electronics:     ['semiconductor','chip','pcb','circuit','display','sensor','microcontroller','processor','memory','transistor','wafer','foundry','substrate'],
   metals:          ['steel','aluminum','copper','lithium','cobalt','nickel','zinc','iron','alloy','casting','forging','ingot','coil','plate','bar','wire','tube'],
@@ -61,7 +61,7 @@ export async function POST(req) {
     const orderedOpportunities = [selectedHubUnenriched, ...baseOpportunities.filter(h => h.id !== selectedHubUnenriched.id)];
 
     // Attach real UN Comtrade export figures where available. This is a
-    // best-effort enrichment — network issues or missing Comtrade coverage
+    // best-effort enrichment â network issues or missing Comtrade coverage
     // for a given country/HS/year simply leave a hub without the badge,
     // never blocks or fails the mission scan itself.
     const opportunities = await enrichWithRealTradeData(orderedOpportunities);
@@ -121,18 +121,18 @@ export async function POST(req) {
         best_partner: selectedHub.companies[0]?.name || 'Strategic Partner',
         route:        selectedHub.logistics?.port_wait_days === 0
                         ? 'Domestic Ground / Rail Transport'
-                        : `Ocean / Air — ${selectedHub.logistics?.port_wait_days} day avg lead time`,
+                        : `Ocean / Air â ${selectedHub.logistics?.port_wait_days} day avg lead time`,
         summary:
           (isLowConfidence
-            ? `⚠️ No exact category match for "${query}" — showing closest global sourcing hubs. Refine your search (e.g. add material type, application, or industry) for a precise match. `
+            ? `â ï¸ No exact category match for "${query}" â showing closest global sourcing hubs. Refine your search (e.g. add material type, application, or industry) for a precise match. `
             : `Strategic scan complete for "${query}" (${categoryLabel}). `) +
           `Identified ${opportunities.length} global sourcing hub${opportunities.length > 1 ? 's' : ''}. ` +
-          `Primary recommendation: ${selectedHub.hub} — ${selectedHub.desc.split('.')[0]}.`,
+          `Primary recommendation: ${selectedHub.hub} â ${selectedHub.desc.split('.')[0]}.`,
         tariff_alert:
-          `HTS: ${selectedHub.customs.hts_code} | Duty: ${selectedHub.customs.duty_rate} — ${selectedHub.customs.compliance_note}`
+          `HTS: ${selectedHub.customs.hts_code} | Duty: ${selectedHub.customs.duty_rate} â ${selectedHub.customs.compliance_note}`
       },
 
-      // Properly structured risks — each has id, title, desc, severity, mitigation, type
+      // Properly structured risks â each has id, title, desc, severity, mitigation, type
       risks: CATEGORY_RISKS[category] || CATEGORY_RISKS.food || CATEGORY_RISKS.electronics,
 
       opportunities,
@@ -140,7 +140,7 @@ export async function POST(req) {
       market_data: {
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
         // Category-specific illustrative price index shapes (2024 baseline = 100).
-        // These reflect general commodity cycle patterns — NOT real market data.
+        // These reflect general commodity cycle patterns â NOT real market data.
         // Always source live prices from CME, Fastmarkets, or commodity exchanges.
         price_history: ({
           metals:          [{ month: 'Q1', price: 98  }, { month: 'Q2', price: 103 }, { month: 'Q3', price: 109 }, { month: 'Q4', price: 115 }],
@@ -158,7 +158,7 @@ export async function POST(req) {
           semiconductor:   [{ month: 'Q1', price: 96  }, { month: 'Q2', price: 101 }, { month: 'Q3', price: 108 }, { month: 'Q4', price: 115 }],
           renewable_energy:[{ month: 'Q1', price: 103 }, { month: 'Q2', price: 99  }, { month: 'Q3', price: 96  }, { month: 'Q4', price: 94  }],
         })[category] || [{ month: 'Q1', price: 100 }, { month: 'Q2', price: 98 }, { month: 'Q3', price: 101 }, { month: 'Q4', price: 104 }],
-        price_history_note: 'Illustrative category price index (2024 baseline = 100). Not real market data — source live prices from CME, Fastmarkets, or Reuters.',
+        price_history_note: 'Illustrative category price index (2024 baseline = 100). Not real market data â source live prices from CME, Fastmarkets, or Reuters.',
         rfq_template:
           `Dear Procurement Team,\n\nWe are ${selectedHub.companies[0]?.name ? `requesting a quote from ${selectedHub.companies[0].name} and your team` : 'initiating a sourcing inquiry'} for the following requirement:\n\nMaterial / Component: ${query}\nApplication: [Describe your end-use application]\nEstimated Annual Volume: [Units / MT / pieces]\nRequired Delivery: [Target date]\nIncoterm Preference: [DDP / FOB / CIF]\n\nPlease provide:\n1. Unit pricing (at 3 volume tiers)\n2. Lead time (standard and expedited)\n3. Freight and insurance terms\n4. ESG / sustainability certification status\n5. Country of origin and HTS classification\n\nWe look forward to your response within 5 business days.\n\nBest regards,\n[Your Name]\n[Company] Procurement Team`
       }
