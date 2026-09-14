@@ -119,7 +119,7 @@ function LegalHeader({ title, date }) {
   return (
     <header className="mb-12 pb-8 border-b border-white/10">
       <div className="text-[10px] font-mono tracking-[0.28em] uppercase text-sky-400 mb-3">
-        // Legal
+        {'// Legal'}
       </div>
       <h1 className="text-4xl font-extrabold tracking-tight leading-none mb-3">{title}</h1>
       <p className="font-mono text-[11px] text-slate-500 tracking-wider">
