@@ -102,7 +102,7 @@ async function fetchTicker(cfg) {
           price: fmt(result.price * cfg.mult, cfg.dp),
           change: (result.pct >= 0 ? '+' : '') + result.pct.toFixed(1) + '%',
           up: result.pct >= 0,
-          live: true,
+          live: false,
           src: 'Stooq',
         };
       } catch (__) {
