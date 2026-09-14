@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { useLiveData } from '@/hooks/useLiveData'
 import { useMissionHistory } from '@/hooks/useMissionHistory'
 import Globe from '@/components/Globe'
@@ -119,6 +119,7 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [scanError, setScanError] = useState(null)
+  const intelAbortRef = useRef(null)
   // (terminalLogs state removed -- logs were never rendered, causing unnecessary re-renders on every scan step)
   const [directive, setDirective] = useState(null)
   const [marketData, setMarketData] = useState(null)
@@ -166,17 +167,26 @@ export default function Dashboard() {
     return null
   }
 
-  // Fire-and-forget intel fetch after a scan completes
+  // Fire-and-forget intel fetch after a scan completes.
+  // AbortController cancels any previous in-flight request so stale results
+  // from a prior scan can never overwrite results from the current one.
   function triggerIntelFetch(opps, query) {
+    if (intelAbortRef.current) intelAbortRef.current.abort()
+    const controller = new AbortController()
+    intelAbortRef.current = controller
+
     setIntelBrief(null)
     setIntelLoading(true)
     fetch('/api/intel', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ opportunities: opps, query })
+      body: JSON.stringify({ opportunities: opps, query }),
+      signal: controller.signal,
     }).then(r => r.json()).then(data => {
       if (!data.error) setIntelBrief(data)
-    }).catch(err => console.error('[intel]', err)).finally(() => setIntelLoading(false))
+    }).catch(err => {
+      if (err.name !== 'AbortError') console.error('[intel]', err)
+    }).finally(() => setIntelLoading(false))
   }
 
 
@@ -660,9 +670,19 @@ export default function Dashboard() {
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-emerald-400 animate-pulse" />
-          <span className="text-slate-400" title={commodities?.anyLive ? 'Live CME / Yahoo Finance futures prices' : 'Reference prices — verify with exchange terminal'}>Commodity Prices</span>
-          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border hidden sm:inline-block ${commodities?.anyLive ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 'text-slate-500 bg-white/5 border-white/10'}`}>
-            {commodities?.anyLive ? `LIVE • ${metalsTs || ''}` : 'REFERENCE'}
+          <span className="text-slate-400" title={
+            commodities?.quality === 'live' ? 'Real-time CME futures via Yahoo Finance' :
+            commodities?.quality === 'delayed' ? 'End-of-day prices via Stooq -- not real-time' :
+            'Reference prices (Jan 2024) -- verify with exchange terminal'
+          }>Commodity Prices</span>
+          <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border hidden sm:inline-block ${
+            commodities?.quality === 'live' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' :
+            commodities?.quality === 'delayed' ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' :
+            'text-slate-500 bg-white/5 border-white/10'
+          }`}>
+            {commodities?.quality === 'live' ? `LIVE • ${metalsTs || ''}` :
+             commodities?.quality === 'delayed' ? `EOD • ${metalsTs || ''}` :
+             'REF'}
           </span>
         </div>
         <style dangerouslySetInnerHTML={{__html:`
@@ -1384,8 +1404,14 @@ export default function Dashboard() {
                   <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
                     <div className="text-[10px] text-sky-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
                       <BarChart3 size={11} /> Key Materials
-                      <span className={`ml-auto text-[8px] font-normal normal-case ${commodities.anyLive ? 'text-emerald-400' : 'text-slate-500'}`}>
-                        {commodities.anyLive ? 'Live' : 'Reference'}
+                      <span className={`ml-auto text-[8px] font-normal normal-case ${
+                        commodities.quality === 'live' ? 'text-emerald-400' :
+                        commodities.quality === 'delayed' ? 'text-amber-400' :
+                        'text-slate-500'
+                      }`}>
+                        {commodities.quality === 'live' ? 'Live' :
+                         commodities.quality === 'delayed' ? 'EOD' :
+                         'Ref'}
                       </span>
                     </div>
                     <div className="space-y-1.5">
@@ -2410,10 +2436,24 @@ export default function Dashboard() {
               <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2">
                 <BarChart3 size={14} /> Metals &amp; Materials
               </h2>
-              <div className="flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[9px] font-bold uppercase tracking-wider" style={{color: commodities?.anyLive ? '#34d399' : '#64748b'}}>
-                  {commodities?.anyLive ? `Live • ${metalsTs}` : `Reference • ${metalsTs}`}
+              <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border ${
+                commodities?.quality === 'live' ? 'bg-emerald-500/10 border-emerald-500/20' :
+                commodities?.quality === 'delayed' ? 'bg-amber-500/10 border-amber-500/20' :
+                'bg-white/5 border-white/10'
+              }`}>
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${
+                  commodities?.quality === 'live' ? 'bg-emerald-400 animate-pulse' :
+                  commodities?.quality === 'delayed' ? 'bg-amber-400' :
+                  'bg-slate-500'
+                }`} />
+                <span className="text-[9px] font-bold uppercase tracking-wider" style={{color:
+                  commodities?.quality === 'live' ? '#34d399' :
+                  commodities?.quality === 'delayed' ? '#fbbf24' :
+                  '#64748b'
+                }}>
+                  {commodities?.quality === 'live' ? `Live • ${metalsTs}` :
+                   commodities?.quality === 'delayed' ? `EOD • ${metalsTs}` :
+                   `Ref • Jan 2024`}
                 </span>
               </div>
             </div>
