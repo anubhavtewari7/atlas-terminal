@@ -147,9 +147,21 @@ export async function GET() {
     let incidents, source
 
     try {
-      const res = await fetch(encodeURI(GDELT_URL), {
-        headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0' },
-        next: { revalidate: 3600 }
+      // Properly encode the query param + hard timeout so Vercel never hangs
+      const gdeltBase = 'https://api.gdeltproject.org/api/v2/geo/geo'
+      const gdeltQuery = encodeURIComponent(
+        '(theme:TERROR OR theme:CONFLICT OR theme:UNREST OR theme:MILITARY_PRESENCE OR theme:PROTEST) ' +
+        '-theme:ARTS -theme:CULTURE -theme:SPORTS -theme:RELIGION'
+      )
+      const gdeltFull = `${gdeltBase}?query=${gdeltQuery}&mode=PointData&format=GeoJSON&timespan=7d&maxpoints=500&geores=1`
+
+      const res = await fetch(gdeltFull, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
+          'Accept': 'application/json',
+        },
+        signal: AbortSignal.timeout(10000),
+        next: { revalidate: 3600 },
       })
       if (!res.ok) throw new Error(`GDELT ${res.status}`)
 

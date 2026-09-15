@@ -5,10 +5,10 @@ import { NextResponse } from 'next/server';
 
 const SYMBOLS = [
   { yf: 'BZ=F',  stooq: 'brent.f', name: 'Brent Crude', unit: '/bbl',   mult: 1,    dp: 2 },
-  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 0.01, dp: 2 },
+  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 0.01, dp: 2 }, // COMEX quotes in cents/lb
   { yf: 'HR=F',  stooq: null,       name: 'HRC Steel',   unit: '/st',    mult: 1,    dp: 0 },
-  { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 },
-  { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 },
+  { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 }, // ICE quotes in cents/lb
+  { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 }, // CBOT quotes in cents/bu
   { yf: 'GC=F',  stooq: 'gc.f',    name: 'Gold',        unit: '/oz',    mult: 1,    dp: 0 },
   { yf: 'NG=F',  stooq: 'ng.f',    name: 'Nat Gas',     unit: '/MMBtu', mult: 1,    dp: 3 },
 ];
@@ -28,29 +28,83 @@ function fmt(price, dp) {
   return '$' + price.toFixed(dp);
 }
 
-// Strategy 1: Yahoo Finance v8/finance/chart (individual ticker, separate from v7/quote which is blocked)
+// Strategy 0: Fetch Yahoo Finance crumb (required since 2023)
+let _yfCrumb = null;
+let _yfCookies = '';
+let _yfCrumbTime = 0;
+const YF_CRUMB_TTL = 60 * 60 * 1000; // 1 hour
+
+async function getYahooCrumb() {
+  if (_yfCrumb && Date.now() - _yfCrumbTime < YF_CRUMB_TTL) {
+    return { crumb: _yfCrumb, cookies: _yfCookies };
+  }
+  try {
+    const cookieRes = await fetch('https://fc.yahoo.com', {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' },
+      signal: AbortSignal.timeout(4000),
+      redirect: 'follow',
+    });
+    const rawCookies = cookieRes.headers.get('set-cookie') || '';
+    // Extract just the A3 cookie for crumb auth
+    const cookieStr = rawCookies.split(',')
+      .map(c => c.split(';')[0].trim())
+      .filter(c => c.startsWith('A3=') || c.startsWith('A1=') || c.startsWith('A1S='))
+      .join('; ');
+
+    const crumbRes = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Cookie': cookieStr,
+        'Accept': 'text/plain, */*',
+      },
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!crumbRes.ok) throw new Error(`crumb HTTP ${crumbRes.status}`);
+    const crumb = await crumbRes.text();
+    if (!crumb || crumb.includes('<')) throw new Error('Invalid crumb');
+    _yfCrumb = crumb.trim();
+    _yfCookies = cookieStr;
+    _yfCrumbTime = Date.now();
+    return { crumb: _yfCrumb, cookies: _yfCookies };
+  } catch {
+    return { crumb: null, cookies: '' };
+  }
+}
+
+// Strategy 1: Yahoo Finance v8/finance/chart with crumb
 async function fetchYahooChart(symbol) {
   const encoded = encodeURIComponent(symbol);
-  const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encoded}?interval=1d&range=1d`;
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-      'Accept': 'application/json, text/plain, */*',
-      'Accept-Language': 'en-US,en;q=0.9',
-      'Referer': `https://finance.yahoo.com/quote/${encoded}/`,
-      'Origin': 'https://finance.yahoo.com',
-    },
-    signal: AbortSignal.timeout(5000),
-    next: { revalidate: 300 },
-  });
-  if (!res.ok) throw new Error(`YF chart HTTP ${res.status}`);
-  const data = await res.json();
-  const meta = data?.chart?.result?.[0]?.meta;
-  if (!meta?.regularMarketPrice) throw new Error('No price in YF chart response');
-  return {
-    price: meta.regularMarketPrice,
-    pct: meta.regularMarketChangePercent ?? 0,
-  };
+  const { crumb, cookies } = await getYahooCrumb();
+
+  // Try query1 and query2, with and without crumb
+  const bases = ['https://query1.finance.yahoo.com', 'https://query2.finance.yahoo.com'];
+  for (const base of bases) {
+    try {
+      const crumbParam = crumb ? `&crumb=${encodeURIComponent(crumb)}` : '';
+      const url = `${base}/v8/finance/chart/${encoded}?interval=1d&range=1d${crumbParam}`;
+      const res = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          'Accept': 'application/json, text/plain, */*',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': `https://finance.yahoo.com/quote/${encoded}/`,
+          'Origin': 'https://finance.yahoo.com',
+          ...(cookies ? { 'Cookie': cookies } : {}),
+        },
+        signal: AbortSignal.timeout(6000),
+        next: { revalidate: 300 },
+      });
+      if (!res.ok) continue;
+      const data = await res.json();
+      const meta = data?.chart?.result?.[0]?.meta;
+      if (!meta?.regularMarketPrice) continue;
+      return {
+        price: meta.regularMarketPrice,
+        pct: meta.regularMarketChangePercent ?? 0,
+      };
+    } catch { continue; }
+  }
+  throw new Error(`YF chart failed for ${symbol}`);
 }
 
 // Strategy 2: Stooq CSV API (free, public, server-side friendly)
@@ -58,10 +112,12 @@ async function fetchStooq(stooqSymbol) {
   const url = `https://stooq.com/q/l/?s=${stooqSymbol}&f=sd2t2ohlcv&h&e=csv`;
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
-      'Accept': 'text/csv,text/plain,*/*',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Referer': 'https://stooq.com/',
     },
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(7000),
     next: { revalidate: 300 },
   });
   if (!res.ok) throw new Error(`Stooq HTTP ${res.status}`);
@@ -73,7 +129,10 @@ async function fetchStooq(stooqSymbol) {
   // Close is index 6, Open is index 3
   const closePrice = parseFloat(cols[6]);
   const openPrice = parseFloat(cols[3]);
-  if (!closePrice || isNaN(closePrice)) throw new Error('Invalid Stooq close price');
+  // Stooq returns N/D when market is closed or symbol not found
+  if (!closePrice || isNaN(closePrice) || cols[6] === 'N/D') {
+    throw new Error(`Invalid Stooq price for ${stooqSymbol}: ${cols[6]}`);
+  }
   const pct = openPrice && !isNaN(openPrice) ? ((closePrice - openPrice) / openPrice) * 100 : 0;
   return { price: closePrice, pct };
 }
