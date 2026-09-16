@@ -1691,7 +1691,7 @@ export default function Dashboard() {
                 {/* Data sources note */}
                 <div className="bg-[#0a0a0a] border border-white/5 p-3 rounded-xl">
                   <div className="text-[9px] text-slate-600 leading-relaxed">
-                    <span className="text-slate-500 font-bold">Sources:</span> OpenSky Network (flights, free) · NASA FIRMS (fires) · USGS (seismic). Flights refresh every 60s. Fires &amp; seismic every 5 min.
+                    <span className="text-slate-500 font-bold">Sources:</span> NASA FIRMS (active fires) · USGS (seismic events). Refreshes every 5 min.
                   </div>
                 </div>
 
