@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 
 const SYMBOLS = [
   { yf: 'BZ=F',  stooq: 'brent.f', name: 'Brent Crude', unit: '/bbl',   mult: 1,    dp: 2 },
-  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 0.01, dp: 2 }, // COMEX quotes in cents/lb
+  { yf: 'HG=F',  stooq: 'hg.f',    name: 'Copper',      unit: '/lb',    mult: 1,    dp: 2 }, // YF/Stooq return USD/lb directly (not cents)
   { yf: 'HR=F',  stooq: null,       name: 'HRC Steel',   unit: '/st',    mult: 1,    dp: 0 },
   { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 }, // ICE quotes in cents/lb
   { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 }, // CBOT quotes in cents/bu
