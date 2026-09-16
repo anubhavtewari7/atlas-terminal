@@ -36,26 +36,52 @@ const BASELINE_PORTS = [
 
 // --------------------------------------------------------------------------
 // IMF PortWatch ArcGIS REST endpoint (free, no API key)
-// Returns vessel call counts as a congestion proxy
+// Returns vessel call counts as a congestion proxy.
+// We fetch outFields=* so the query never 400s on missing field names --
+// then we do flexible key matching against whatever the service returns.
 // --------------------------------------------------------------------------
+const PORTWATCH_BASE =
+  'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/PortWatch_Ports/FeatureServer/0/query'
 const PORTWATCH_URL =
-  'https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/PortWatch_Ports/FeatureServer/0/query' +
-  '?where=1%3D1&outFields=PORT_NAME%2CCONGESTION_INDEX%2CWAIT_DAYS%2CTREND&f=json&resultRecordCount=100'
+  PORTWATCH_BASE + '?where=1%3D1&outFields=*&f=json&resultRecordCount=200'
 
 const CACHE_MS  = 30 * 60 * 1000
 let _cache     = null
 let _cacheTime = 0
 
+// Flexible field extractor -- handles whatever the ArcGIS service actually exposes
+function extractPortAttr(attrs) {
+  const k = Object.keys(attrs)
+  const find = (...names) => {
+    for (const n of names) {
+      const m = k.find(key => key.toLowerCase() === n.toLowerCase())
+      if (m !== undefined && attrs[m] !== null) return attrs[m]
+    }
+    return null
+  }
+  return {
+    PORT_NAME:       find('port_name', 'portname', 'name', 'portid', 'port', 'label') || null,
+    CONGESTION_INDEX: find('congestion_index', 'congestion', 'cong_index', 'congest_idx') || null,
+    WAIT_DAYS:       find('wait_days', 'wait', 'waittime', 'delay_days', 'avg_wait') || null,
+    TREND:           find('trend', 'congestion_trend', 'trend_dir') || null,
+  }
+}
+
 // --------------------------------------------------------------------------
 async function fetchPortWatch() {
   const res = await fetch(PORTWATCH_URL, {
-    headers: { 'User-Agent': 'NAUTILUS-Terminal/1.0' },
-    signal: AbortSignal.timeout(8000)
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; NAUTILUS-Terminal/1.0)',
+      'Accept': 'application/json, */*',
+    },
+    signal: AbortSignal.timeout(10000),
+    next: { revalidate: 1800 },
   })
-  if (!res.ok) throw new Error(`PortWatch ${res.status}`)
+  if (!res.ok) throw new Error(`PortWatch HTTP ${res.status}`)
   const json = await res.json()
+  if (json.error) throw new Error(`PortWatch error: ${json.error.message || JSON.stringify(json.error)}`)
   if (!json.features?.length) throw new Error('No PortWatch features')
-  return json.features.map(f => f.attributes)
+  return json.features.map(f => extractPortAttr(f.attributes))
 }
 
 export async function GET() {
