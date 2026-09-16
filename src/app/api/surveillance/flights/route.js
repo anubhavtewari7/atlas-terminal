@@ -1,47 +1,61 @@
-// OpenSky Network — free public API, no key required
-// Returns live aircraft positions globally (rate-limited to ~10s per IP)
+// adsb.lol — free public ADS-B feed, no key, no rate limit
+// Same source used by God's Eye View for live aircraft data
+// Fallback: opendata.adsb.fi (also free, no key)
 
 export async function GET() {
-  try {
-    const ctrl = new AbortController()
-    const timer = setTimeout(() => ctrl.abort(), 8000)
+  const sources = [
+    'https://api.adsb.lol/v2/all',
+    'https://opendata.adsb.fi/api/v2/all',
+  ]
 
-    const res = await fetch('https://opensky-network.org/api/states/all', {
-      signal: ctrl.signal,
-      headers: { 'Accept': 'application/json' },
-    })
-    clearTimeout(timer)
+  for (const url of sources) {
+    try {
+      const ctrl  = new AbortController()
+      const timer = setTimeout(() => ctrl.abort(), 8000)
 
-    if (!res.ok) {
-      return Response.json({ flights: [], count: 0, error: `OpenSky ${res.status}`, ts: Date.now() }, { status: 200 })
+      const res = await fetch(url, {
+        signal: ctrl.signal,
+        headers: { 'Accept': 'application/json', 'User-Agent': 'NAUTILUS-Terminal/1.0' },
+      })
+      clearTimeout(timer)
+
+      if (!res.ok) continue
+
+      const data = await res.json()
+
+      // adsb.lol / adsb.fi share the same schema: { ac: [...] }
+      const aircraft = data.ac || data.aircraft || []
+
+      const flights = aircraft
+        .filter(a => a.lat != null && a.lon != null && a.alt_baro !== 'ground' && a.alt_baro > 0)
+        .map(a => ({
+          icao:     a.hex  || '',
+          callsign: (a.flight || a.r || a.hex || '').trim(),
+          country:  a.r    || '',           // registration prefix is closest to country w/o a DB lookup
+          type:     a.t    || '',
+          lat:      a.lat,
+          lng:      a.lon,
+          alt:      typeof a.alt_baro === 'number' ? Math.round(a.alt_baro * 0.3048) : null, // ft → m
+          velocity: a.gs   ? Math.round(a.gs) : null,   // knots
+          heading:  a.track ? Math.round(a.track) : null,
+        }))
+
+      return Response.json({
+        flights,
+        count:  flights.length,
+        source: url.includes('adsb.lol') ? 'adsb.lol' : 'adsb.fi',
+        ts:     Date.now(),
+      })
+
+    } catch {
+      // try next source
     }
-
-    const data = await res.json()
-
-    // OpenSky state vector fields:
-    // [0] icao24, [1] callsign, [2] origin_country, [3] time_position,
-    // [4] last_contact, [5] longitude, [6] latitude, [7] baro_altitude,
-    // [8] on_ground, [9] velocity, [10] true_track (heading), [11] vertical_rate
-    const flights = (data.states || [])
-      .filter(s => s[5] != null && s[6] != null && s[8] === false) // has lat/lng, airborne
-      .map(s => ({
-        icao:     s[0],
-        callsign: (s[1] || '').trim() || s[0],
-        country:  s[2] || 'Unknown',
-        lng:      s[5],
-        lat:      s[6],
-        alt:      s[7] ? Math.round(s[7]) : null,   // metres
-        velocity: s[9] ? Math.round(s[9] * 1.94384) : null, // knots
-        heading:  s[10] ? Math.round(s[10]) : null,
-      }))
-
-    return Response.json({
-      flights,
-      count: flights.length,
-      ts: Date.now(),
-    })
-  } catch (err) {
-    const msg = err.name === 'AbortError' ? 'OpenSky timeout' : err.message
-    return Response.json({ flights: [], count: 0, error: msg, ts: Date.now() }, { status: 200 })
   }
+
+  return Response.json({
+    flights: [],
+    count:   0,
+    error:   'All flight data sources unavailable',
+    ts:      Date.now(),
+  })
 }
