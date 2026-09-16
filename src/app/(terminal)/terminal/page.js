@@ -1298,43 +1298,6 @@ export default function Dashboard() {
               )}
             </div>}
 
-            {/* Global Threats — SOURCING tab (collapsible, below hubs) */}
-            {activeTab === 'sourcing' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
-              <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
-                <ShieldAlert size={14} /> Global Threats
-                {risks.length > 0
-                  ? <span className="flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-rose-500/25 bg-rose-500/8 text-rose-400">
-                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse inline-block" />
-                      LIVE · {risks.length}
-                    </span>
-                  : <span className="text-[8px] text-slate-600 font-normal normal-case border border-white/8 px-1.5 py-0.5 rounded-full">post-scan</span>
-                }
-                <span className="ml-auto text-slate-500">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
-              </h2>
-              {!threatsCollapsed && (
-                <div className="space-y-2">
-                  {risks.length === 0 ? (
-                    <p className="text-[11px] text-slate-500 italic">Run a sourcing scan to surface relevant risk factors.</p>
-                  ) : risks.map((r, i) => (
-                    <div key={r.id || i}
-                      onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
-                      className={`p-3 border transition-all cursor-pointer rounded-lg ${
-                        selectedNode?.id === (r.id || i)
-                          ? 'bg-rose-500/10 border-rose-500/40'
-                          : 'bg-[#111] border-white/5 hover:border-rose-500/20'
-                      }`}>
-                      <div className="flex items-start gap-2">
-                        <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
-                          {r.severity || 'RISK'}
-                        </span>
-                        <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>}
-
             {/* ── COMMAND TAB ── */}
             {activeTab === 'command' && (
               <div className="space-y-3">
