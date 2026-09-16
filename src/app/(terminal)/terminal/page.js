@@ -38,7 +38,8 @@ import {
   ExternalLink, FileText, Ship, Leaf, BarChart3, Mail,
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, TrendingUp, Activity, DollarSign, Download,
-  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers, RotateCcw
+  AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers, RotateCcw,
+  Eye, Radio, Flame, Waves, Globe2
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -152,6 +153,18 @@ export default function Dashboard() {
   const [intelLoading, setIntelLoading] = useState(false)
   const [hubNav, setHubNav] = useState({ level: 'continent', continent: null, country: null, region: null })
 
+  // ── Surveillance tab state ──
+  const [survFlights,      setSurvFlights]      = useState([])
+  const [survFlightCount,  setSurvFlightCount]  = useState(0)
+  const [survLoading,      setSurvLoading]      = useState(false)
+  const [survError,        setSurvError]        = useState(null)
+  const [survLastFetch,    setSurvLastFetch]    = useState(null)
+  const [showSurvFlights,  setShowSurvFlights]  = useState(true)
+  const [showSurvFires,    setShowSurvFires]    = useState(true)
+  const [showSurvSeismic,  setShowSurvSeismic]  = useState(true)
+  const [showSurvCp,       setShowSurvCp]       = useState(true)
+  const [showSurvThreats,  setShowSurvThreats]  = useState(false)
+
   // Map hub name string → ISO2 for stability badge lookup
   function getHubISO2(hubName) {
     const n = (hubName || '').toLowerCase()
@@ -218,6 +231,36 @@ export default function Dashboard() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Fetch live flights when surveillance tab is active; refresh every 60s
+  useEffect(() => {
+    if (activeTab !== 'surveillance') return
+    let cancelled = false
+
+    async function fetchFlights() {
+      setSurvLoading(true)
+      setSurvError(null)
+      try {
+        const res = await fetch('/api/surveillance/flights')
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        if (!cancelled) {
+          setSurvFlights(data.flights || [])
+          setSurvFlightCount(data.count || 0)
+          setSurvLastFetch(data.ts)
+          if (data.error) setSurvError(data.error)
+        }
+      } catch (e) {
+        if (!cancelled) setSurvError(e.message)
+      } finally {
+        if (!cancelled) setSurvLoading(false)
+      }
+    }
+
+    fetchFlights()
+    const interval = setInterval(fetchFlights, 60000)
+    return () => { cancelled = true; clearInterval(interval) }
+  }, [activeTab])
 
   const buildMissionKeywords = (query, category) => {
     const categoryKeywords = {
@@ -948,18 +991,20 @@ export default function Dashboard() {
                 </button>
               ))}
             </div>
-            {/* Row 2: Cost | Intelligence | Reports */}
-            <div className="grid grid-cols-3">
+            {/* Row 2: Cost | Intelligence | Reports | Surveillance */}
+            <div className="grid grid-cols-4">
               {[
-                { id: 'cost',         label: 'Cost',         color: 'amber' },
-                { id: 'intelligence', label: 'Intelligence',  color: 'sky' },
-                { id: 'reports',      label: 'Reports',       color: 'purple' },
+                { id: 'cost',          label: 'Cost',         color: 'amber' },
+                { id: 'intelligence',  label: 'Intel',        color: 'sky' },
+                { id: 'reports',       label: 'Reports',      color: 'purple' },
+                { id: 'surveillance',  label: 'Surv',         color: 'cyan' },
               ].map(t => (
                 <button key={t.id} onClick={() => setActiveTab(t.id)}
                   className={`py-2 text-[9px] font-bold uppercase tracking-widest transition-all border-b-2 ${
                     activeTab === t.id
                       ? t.color === 'amber'  ? 'text-amber-400 border-amber-400 bg-amber-500/5'
                       : t.color === 'purple' ? 'text-purple-400 border-purple-400 bg-purple-500/5'
+                      : t.color === 'cyan'   ? 'text-cyan-400 border-cyan-400 bg-cyan-500/5'
                       : 'text-sky-400 border-sky-400 bg-sky-500/5'
                       : 'border-transparent text-slate-500 hover:text-slate-300'
                   }`}>
@@ -1509,6 +1554,153 @@ export default function Dashboard() {
               </div>
             )}
 
+            {/* ── SURVEILLANCE TAB ── */}
+            {activeTab === 'surveillance' && (
+              <div className="space-y-3">
+
+                {/* Header status bar */}
+                <div className="bg-[#0a0a0a] border border-cyan-500/20 p-3 rounded-xl flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Eye size={11} className="text-cyan-400" />
+                    <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Surveillance Mode</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {survLoading && <span className="text-[9px] text-cyan-400 animate-pulse">SYNCING...</span>}
+                    {survLastFetch && !survLoading && (
+                      <span className="text-[9px] text-slate-500">
+                        {new Date(survLastFetch).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                      </span>
+                    )}
+                    <div className={`w-1.5 h-1.5 rounded-full ${survLoading ? 'bg-cyan-400 animate-pulse' : survError ? 'bg-rose-400' : 'bg-emerald-400'}`} />
+                  </div>
+                </div>
+
+                {/* Layer toggles */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
+                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                    <Layers size={10} /> Globe Layers
+                  </div>
+                  <div className="space-y-1.5">
+                    {[
+                      {
+                        label: 'Live Flights',
+                        icon: <Radio size={10} />,
+                        active: showSurvFlights,
+                        toggle: () => setShowSurvFlights(v => !v),
+                        color: 'cyan',
+                        count: survFlightCount > 0 ? `${survFlightCount.toLocaleString()} aircraft` : survLoading ? 'loading...' : survError ? 'unavailable' : '--',
+                      },
+                      {
+                        label: 'Active Fires',
+                        icon: <Flame size={10} />,
+                        active: showSurvFires,
+                        toggle: () => setShowSurvFires(v => !v),
+                        color: 'orange',
+                        count: null,
+                      },
+                      {
+                        label: 'Seismic Events',
+                        icon: <Waves size={10} />,
+                        active: showSurvSeismic,
+                        toggle: () => setShowSurvSeismic(v => !v),
+                        color: 'amber',
+                        count: null,
+                      },
+                      {
+                        label: 'Chokepoints',
+                        icon: <Anchor size={10} />,
+                        active: showSurvCp,
+                        toggle: () => setShowSurvCp(v => !v),
+                        color: 'amber',
+                        count: `${CHOKEPOINTS.length} routes`,
+                      },
+                      {
+                        label: 'Threat Nodes',
+                        icon: <ShieldAlert size={10} />,
+                        active: showSurvThreats,
+                        toggle: () => setShowSurvThreats(v => !v),
+                        color: 'rose',
+                        count: risks.length > 0 ? `${risks.length} active` : 'run scan first',
+                      },
+                    ].map((layer, i) => (
+                      <button key={i} onClick={layer.toggle}
+                        className={`w-full flex items-center justify-between px-2.5 py-2 rounded-lg border transition-all text-left ${
+                          layer.active
+                            ? layer.color === 'cyan'   ? 'border-cyan-500/30 bg-cyan-500/8'
+                            : layer.color === 'orange' ? 'border-orange-500/30 bg-orange-500/8'
+                            : layer.color === 'rose'   ? 'border-rose-500/30 bg-rose-500/8'
+                            : 'border-amber-500/30 bg-amber-500/8'
+                            : 'border-white/5 bg-transparent hover:border-white/10'
+                        }`}>
+                        <div className="flex items-center gap-2">
+                          <span className={layer.active
+                            ? layer.color === 'cyan'   ? 'text-cyan-400'
+                            : layer.color === 'orange' ? 'text-orange-400'
+                            : layer.color === 'rose'   ? 'text-rose-400'
+                            : 'text-amber-400'
+                            : 'text-slate-600'}>
+                            {layer.icon}
+                          </span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${layer.active ? 'text-white' : 'text-slate-500'}`}>
+                            {layer.label}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {layer.count && (
+                            <span className="text-[9px] text-slate-500">{layer.count}</span>
+                          )}
+                          <div className={`w-7 h-3.5 rounded-full transition-all relative ${layer.active ? (layer.color === 'cyan' ? 'bg-cyan-500' : layer.color === 'rose' ? 'bg-rose-500' : 'bg-amber-500') : 'bg-slate-700'}`}>
+                            <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all ${layer.active ? 'left-4' : 'left-0.5'}`} />
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Live flights feed */}
+                <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
+                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5"><Radio size={10} className="text-cyan-400" /> Live Flights</span>
+                    {survFlightCount > 0 && <span className="text-cyan-400">{survFlightCount.toLocaleString()}</span>}
+                  </div>
+                  {survLoading && survFlights.length === 0 ? (
+                    <div className="text-[10px] text-cyan-400 animate-pulse py-2">Syncing OpenSky network...</div>
+                  ) : survError && survFlights.length === 0 ? (
+                    <div className="text-[10px] text-slate-500 py-2">OpenSky rate-limited. Retrying in 60s.</div>
+                  ) : survFlights.length > 0 ? (
+                    <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
+                      {survFlights.slice(0, 12).map((f, i) => (
+                        <div key={i} className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
+                          <div className="flex items-center gap-1.5">
+                            <div className="w-1 h-1 rounded-full bg-cyan-400" />
+                            <span className="text-[10px] font-mono text-white">{f.callsign || f.icao}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-[9px] text-slate-500">
+                            <span>{f.country}</span>
+                            {f.alt && <span>{Math.round(f.alt / 100) / 10}km</span>}
+                          </div>
+                        </div>
+                      ))}
+                      {survFlights.length > 12 && (
+                        <div className="text-[9px] text-slate-600 pt-1">+{survFlights.length - 12} more aircraft not shown</div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-[10px] text-slate-600 py-2 italic">Switch on Flights layer to load data</div>
+                  )}
+                </div>
+
+                {/* Data sources note */}
+                <div className="bg-[#0a0a0a] border border-white/5 p-3 rounded-xl">
+                  <div className="text-[9px] text-slate-600 leading-relaxed">
+                    <span className="text-slate-500 font-bold">Sources:</span> OpenSky Network (flights) · USGS (seismic) · NASA FIRMS (fires) · ACLED (incidents). All data public, no auth required. Flights refresh every 60s.
+                  </div>
+                </div>
+
+              </div>
+            )}
+
           </div>
         </aside>
 
@@ -1521,7 +1713,18 @@ export default function Dashboard() {
           <div className="h-[28vh] shrink-0 lg:h-auto lg:flex-1 bg-[#0a0a0a] border border-white/10 relative flex items-center justify-center overflow-hidden rounded-xl shadow-[inset_0_0_60px_rgba(0,0,0,1)] min-h-0" data-tour="globe">
             <div className="z-0 w-full h-full">
               <ErrorBoundary label="Globe">
-                <Globe risks={risks} opportunities={opportunities} chokepoints={CHOKEPOINTS} autoRotate={autoRotate} showChokepoints={showChokepoints} showDayNight={showDayNight} showThreats={showThreats} onNodeClick={(node) => setSelectedNode(node)} />
+                <Globe
+                  risks={risks}
+                  opportunities={opportunities}
+                  chokepoints={CHOKEPOINTS}
+                  autoRotate={autoRotate}
+                  showChokepoints={activeTab === 'surveillance' ? showSurvCp : showChokepoints}
+                  showDayNight={showDayNight}
+                  showThreats={activeTab === 'surveillance' ? showSurvThreats : showThreats}
+                  onNodeClick={(node) => setSelectedNode(node)}
+                  survFlights={survFlights}
+                  showSurvFlights={activeTab === 'surveillance' && showSurvFlights}
+                />
               </ErrorBoundary>
             </div>
 

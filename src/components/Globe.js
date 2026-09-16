@@ -149,7 +149,28 @@ function ChokepointMarker({ cp }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick }) {
+// Small stationary dot used for surveillance layer (flights, vessels)
+function SurvDot({ lat, lng, color }) {
+  const position = useMemo(() => {
+    const phi   = (90 - lat) * (Math.PI / 180)
+    const theta = (lng + 180) * (Math.PI / 180)
+    const r     = 2.04
+    return [
+      -r * Math.sin(phi) * Math.cos(theta),
+       r * Math.cos(phi),
+       r * Math.sin(phi) * Math.sin(theta),
+    ]
+  }, [lat, lng])
+
+  return (
+    <mesh position={position}>
+      <sphereGeometry args={[0.018, 6, 6]} />
+      <meshBasicMaterial color={color} />
+    </mesh>
+  )
+}
+
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick, survFlights, showSurvFlights }) {
   const meshRef    = useRef()
   const earthRotY  = useRef(0)           // shared with NightOverlay via ref
   const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
@@ -189,6 +210,11 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
         {/* CHOKEPOINT NODES (AMBER/RED) -- toggleable via showChokepoints */}
         {showChokepoints && (chokepoints || []).map((cp, i) => (
           <ChokepointMarker key={`cp-${cp.id || i}`} cp={cp} />
+        ))}
+
+        {/* SURVEILLANCE — LIVE FLIGHTS (CYAN dots) */}
+        {showSurvFlights && (survFlights || []).map((f, i) => (
+          <SurvDot key={`fl-${i}`} lat={f.lat} lng={f.lng} color="#22d3ee" />
         ))}
       </mesh>
     </group>
@@ -261,7 +287,7 @@ function Marker({ node, color, type, onNodeClick }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick, survFlights = [], showSurvFlights = false }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -280,6 +306,8 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
             showDayNight={showDayNight}
             showThreats={showThreats}
             onNodeClick={onNodeClick}
+            survFlights={survFlights}
+            showSurvFlights={showSurvFlights}
           />
         </React.Suspense>
 
