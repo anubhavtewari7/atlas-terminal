@@ -9,17 +9,17 @@ const SYMBOLS = [
   { yf: 'HR=F',  stooq: null,       name: 'HRC Steel',   unit: '/st',    mult: 1,    dp: 0 },
   { yf: 'CT=F',  stooq: 'ct.f',    name: 'Cotton',      unit: '/lb',    mult: 0.01, dp: 2 }, // ICE quotes in cents/lb
   { yf: 'ZS=F',  stooq: 'zs.f',    name: 'Soybeans',    unit: '/bu',    mult: 0.01, dp: 2 }, // CBOT quotes in cents/bu
-  { yf: 'GC=F',  stooq: 'gc.f',    name: 'Gold',        unit: '/oz',    mult: 1,    dp: 0 },
+  { yf: 'GC=F',  stooq: 'gc.f',    name: 'Gold',        unit: '/oz',    mult: 1,    dp: 0, metalKey: 'gold' },
   { yf: 'NG=F',  stooq: 'ng.f',    name: 'Nat Gas',     unit: '/MMBtu', mult: 1,    dp: 3 },
 ];
 
-// No liquid free futures feed for these -- static reference baseline
+// No liquid free futures feed for these -- static reference baseline (updated Sep 2026)
 const STATIC_REF = [
-  { name: 'Aluminum',     unit: '/mt',  price: 2350,  change: +0.5 },
-  { name: 'Nickel',       unit: '/mt',  price: 18400, change: -0.9 },
-  { name: 'Lithium Carb', unit: '/mt',  price: 14200, change: -3.1 },
-  { name: 'Rare Earth',   unit: '/kg',  price: 142,   change: +6.8 },
-  { name: 'NdFeB Magnet', unit: '/kg',  price: 78,    change: +4.2 },
+  { name: 'Aluminum',     unit: '/mt',  price: 2450,  change: +0.5 },
+  { name: 'Nickel',       unit: '/mt',  price: 15800, change: -0.9 },
+  { name: 'Lithium Carb', unit: '/mt',  price: 10500, change: -3.1 },
+  { name: 'Rare Earth',   unit: '/kg',  price: 168,   change: +6.8 },
+  { name: 'NdFeB Magnet', unit: '/kg',  price: 88,    change: +4.2 },
 ];
 
 function fmt(price, dp) {
@@ -137,6 +137,26 @@ async function fetchStooq(stooqSymbol) {
   return { price: closePrice, pct };
 }
 
+// Strategy 3: metals.live (free, no key, precious metals only: gold, silver, platinum, palladium)
+async function fetchMetalsLive(metalKey) {
+  try {
+    const res = await fetch('https://metals.live/api', {
+      headers: { 'Accept': 'application/json', 'User-Agent': 'Mozilla/5.0' },
+      signal: AbortSignal.timeout(5000),
+      next: { revalidate: 300 },
+    })
+    if (!res.ok) throw new Error(`metals.live HTTP ${res.status}`)
+    const data = await res.json()
+    // Response is an array of price objects: [{ gold: 2950.4, silver: 31.2, ... }]
+    const entry = Array.isArray(data) ? data[0] : data
+    const price = entry?.[metalKey]
+    if (!price || isNaN(price)) throw new Error('No price in metals.live response')
+    return { price, pct: 0 } // metals.live doesn't provide daily change
+  } catch {
+    throw new Error(`metals.live failed for ${metalKey}`)
+  }
+}
+
 async function fetchTicker(cfg) {
   // Try Yahoo Finance first
   try {
@@ -164,6 +184,23 @@ async function fetchTicker(cfg) {
           live: false,
           src: 'Stooq',
         };
+      } catch (__) {
+        // fall through
+      }
+    }
+    // Try metals.live for Gold and Silver
+    if (cfg.metalKey) {
+      try {
+        const result = await fetchMetalsLive(cfg.metalKey)
+        return {
+          name: cfg.name,
+          unit: cfg.unit,
+          price: fmt(result.price * cfg.mult, cfg.dp),
+          change: '--',
+          up: true,
+          live: true,
+          src: 'metals.live',
+        }
       } catch (__) {
         // fall through to null
       }
@@ -196,17 +233,17 @@ export async function GET() {
     // Both fetchers failed -- return static fallback with explicit reference labeling
     return NextResponse.json({
       prices: [
-        { name: 'Brent Crude', unit: '/bbl',   price: '$108.40', change: '+1.8%', up: true,  live: false, src: 'static' },
-        { name: 'Copper',      unit: '/lb',    price: '$4.12',   change: '+2.4%', up: true,  live: false, src: 'static' },
-        { name: 'HRC Steel',   unit: '/st',    price: '$808',    change: '-0.4%', up: false, live: false, src: 'static' },
-        { name: 'Cotton',      unit: '/lb',    price: '$65.08',  change: '+0.2%', up: true,  live: false, src: 'static' },
-        { name: 'Soybeans',    unit: '/bu',    price: '$11.08',  change: '-1.5%', up: false, live: false, src: 'static' },
-        { name: 'Gold',        unit: '/oz',    price: '$2,350',  change: '+0.3%', up: true,  live: false, src: 'static' },
-        { name: 'Nat Gas',     unit: '/MMBtu', price: '$2.68',   change: '-2.1%', up: false, live: false, src: 'static' },
+        { name: 'Brent Crude', unit: '/bbl',   price: '$92.40',  change: '+1.8%', up: true,  live: false, src: 'static' },
+        { name: 'Copper',      unit: '/lb',    price: '$6.45',   change: '+2.4%', up: true,  live: false, src: 'static' },
+        { name: 'HRC Steel',   unit: '/st',    price: '$720',    change: '-0.4%', up: false, live: false, src: 'static' },
+        { name: 'Cotton',      unit: '/lb',    price: '$0.72',   change: '+0.2%', up: true,  live: false, src: 'static' },
+        { name: 'Soybeans',    unit: '/bu',    price: '$10.20',  change: '-1.5%', up: false, live: false, src: 'static' },
+        { name: 'Gold',        unit: '/oz',    price: '$2,950',  change: '+0.3%', up: true,  live: false, src: 'static' },
+        { name: 'Nat Gas',     unit: '/MMBtu', price: '$3.15',   change: '-2.1%', up: false, live: false, src: 'static' },
         ...ref,
       ],
       timestamp: new Date().toISOString(),
-      source: 'Reference (Jan 2024)',
+      source: 'Reference (estimated — verify with CME/Reuters)',
       quality: 'reference',
       anyLive: false,
       stale: true,

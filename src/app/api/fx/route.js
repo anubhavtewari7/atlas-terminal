@@ -31,14 +31,14 @@ export async function GET() {
     return NextResponse.json({
       base: 'USD', date: 'Rates may be outdated', stale: true,
       rates: {
-        CNY: { rate: 7.24, country: 'China', flag: '🇨🇳', impact: 'Favorable for US imports' },
-        EUR: { rate: 0.92, country: 'Eurozone', flag: '🇪🇺', impact: 'EUR weak — EU exports cheaper' },
+        CNY: { rate: 6.71, country: 'China', flag: '🇨🇳', impact: 'Favorable for US imports' },
+        EUR: { rate: 0.87, country: 'Eurozone', flag: '🇪🇺', impact: 'EUR weak — EU exports cheaper' },
         MXN: { rate: 17.15, country: 'Mexico', flag: '🇲🇽', impact: 'Favorable for nearshoring' },
-        BRL: { rate: 5.10, country: 'Brazil', flag: '🇧🇷', impact: 'Monitor for commodity pricing' },
-        JPY: { rate: 154.2, country: 'Japan', flag: '🇯🇵', impact: 'JPY weak — Japanese imports cheaper' },
-        KRW: { rate: 1340, country: 'South Korea', flag: '🇰🇷', impact: 'Key for semiconductor supply chain' },
-        INR: { rate: 83.5, country: 'India', flag: '🇮🇳', impact: 'India+1 strategy cost indicator' },
-        SGD: { rate: 1.34, country: 'Singapore', flag: '🇸🇬', impact: 'APAC logistics hub benchmark' },
+        BRL: { rate: 5.15, country: 'Brazil', flag: '🇧🇷', impact: 'Monitor for commodity pricing' },
+        JPY: { rate: 155.1, country: 'Japan', flag: '🇯🇵', impact: 'JPY weak — Japanese imports cheaper' },
+        KRW: { rate: 1368, country: 'South Korea', flag: '🇰🇷', impact: 'Key for semiconductor supply chain' },
+        INR: { rate: 95.96, country: 'India', flag: '🇮🇳', impact: 'India+1 strategy cost indicator' },
+        SGD: { rate: 1.27, country: 'Singapore', flag: '🇸🇬', impact: 'APAC logistics hub benchmark' },
       }
     });
   }
