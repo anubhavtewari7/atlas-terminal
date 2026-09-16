@@ -15,11 +15,11 @@ const SYMBOLS = [
 
 // No liquid free futures feed for these -- static reference baseline (updated Sep 2026)
 const STATIC_REF = [
-  { name: 'Aluminum',     unit: '/mt',  price: 2450,  change: +0.5 },
-  { name: 'Nickel',       unit: '/mt',  price: 15800, change: -0.9 },
-  { name: 'Lithium Carb', unit: '/mt',  price: 10500, change: -3.1 },
-  { name: 'Rare Earth',   unit: '/kg',  price: 168,   change: +6.8 },
-  { name: 'NdFeB Magnet', unit: '/kg',  price: 88,    change: +4.2 },
+  { name: 'Aluminum',     unit: '/mt',  price: 2450,  change: +0.5, last_updated: '2026-09' },
+  { name: 'Nickel',       unit: '/mt',  price: 15800, change: -0.9, last_updated: '2026-09' },
+  { name: 'Lithium Carb', unit: '/mt',  price: 10500, change: -3.1, last_updated: '2026-09' },
+  { name: 'Rare Earth',   unit: '/kg',  price: 168,   change: +6.8, last_updated: '2026-09' },
+  { name: 'NdFeB Magnet', unit: '/kg',  price: 88,    change: +4.2, last_updated: '2026-09' },
 ];
 
 function fmt(price, dp) {

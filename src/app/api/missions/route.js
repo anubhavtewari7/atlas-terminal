@@ -68,10 +68,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'query must be a non-empty string (max 500 chars)' }, { status: 400 })
   }
 
+  const now = Date.now()
   const mission = {
-    id:          Date.now(),
+    id:          now,
     query:       query.trim(),
-    timestamp:   Date.now(),
+    timestamp:   now,
     primaryHub:  typeof primaryHub === 'string'  ? primaryHub  : null,
     hubCount:    typeof hubCount   === 'number'   ? hubCount    : 0,
     topPartner:  typeof topPartner === 'string'   ? topPartner  : null,
@@ -92,7 +93,7 @@ export async function DELETE(request) {
 
   const { searchParams } = new URL(request.url)
   const id = Number(searchParams.get('id'))
-  if (!id || !Number.isFinite(id)) {
+  if (id == null || !Number.isFinite(id)) {
     return NextResponse.json({ error: 'id query param required (numeric timestamp)' }, { status: 400 })
   }
 

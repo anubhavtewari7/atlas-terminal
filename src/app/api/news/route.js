@@ -12,9 +12,10 @@ function parseRss(text) {
     const link = item.match(/<link>(<!\[CDATA\[)?(.*?)(]]>)?<\/link>/)?.[2] || '#';
     const pubDate = item.match(/<pubDate>(.*?)<\/pubDate>/)?.[1] || '';
     const parsedDate = pubDate ? new Date(pubDate) : null;
+    const desc = description.replace(/<[^>]*>?/gm, '');
     return {
       title: title.replace(/&amp;/g, '&'),
-      description: description.replace(/<[^>]*>?/gm, '').slice(0, 150) + '...',
+      description: desc.length > 150 ? desc.slice(0, 150) + '...' : desc,
       link,
       pubDate: parsedDate && !isNaN(parsedDate) ? parsedDate.toLocaleDateString() : '',
       // kept for correct chronological sorting once feeds are merged
@@ -35,7 +36,7 @@ const SOURCES = [
 export async function GET() {
   try {
     const results = await Promise.allSettled(
-      SOURCES.map(url => fetch(url, { next: { revalidate: 1800 } }).then(r => r.text()))
+      SOURCES.map(url => fetch(url, { next: { revalidate: 1800 }, signal: AbortSignal.timeout(6000) }).then(r => r.text()))
     );
 
     let items = [];

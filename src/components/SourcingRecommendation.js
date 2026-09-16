@@ -44,7 +44,10 @@ export default function SourcingRecommendation({ opportunities, risks, intelBrie
   if (primary) steps.push(`Request RFQ from top 3 suppliers in ${primary.hub}`)
   if (backup)  steps.push(`Qualify backup supplier in ${backup.hub} as contingency`)
   const firstHighRisk = [...criticalRisks, ...highRisks][0]
-  if (firstHighRisk) steps.push(`Initiate risk mitigation for: ${firstHighRisk.title || firstHighRisk.risk}`)
+  if (firstHighRisk) {
+    const riskLabel = firstHighRisk.title || firstHighRisk.risk
+    if (riskLabel) steps.push(`Initiate risk mitigation for: ${riskLabel}`)
+  }
   steps.push('Run Tariff Calculator for HS code before finalising landed cost')
   steps.push('Run Sanctions Check on shortlisted suppliers before contract')
 

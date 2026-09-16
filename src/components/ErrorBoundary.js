@@ -12,7 +12,7 @@ import { Component } from 'react'
 export default class ErrorBoundary extends Component {
   constructor(props) {
     super(props)
-    this.state = { error: null }
+    this.state = { error: null, retryCount: 0 }
   }
 
   static getDerivedStateFromError(error) {
@@ -27,16 +27,22 @@ export default class ErrorBoundary extends Component {
   render() {
     if (this.state.error) {
       const label = this.props.label || 'Module'
+      const maxRetries = 3
+      const exhausted = this.state.retryCount >= maxRetries
       return (
         <div className="flex flex-col items-center justify-center w-full h-full min-h-[120px] bg-black/60 border border-rose-500/20 rounded-lg text-center p-6 gap-2">
           <span className="text-rose-400 text-xs font-bold uppercase tracking-widest">{label} Unavailable</span>
           <span className="text-slate-500 text-[10px]">A render error occurred. Refresh the page to restore this module.</span>
-          <button
-            className="mt-2 text-[10px] text-slate-400 border border-white/10 px-3 py-1 rounded hover:border-white/20 transition-colors"
-            onClick={() => this.setState({ error: null })}
-          >
-            Retry
-          </button>
+          {exhausted ? (
+            <span className="mt-2 text-[10px] text-slate-500">Please refresh the page to continue.</span>
+          ) : (
+            <button
+              className="mt-2 text-[10px] text-slate-400 border border-white/10 px-3 py-1 rounded hover:border-white/20 transition-colors"
+              onClick={() => this.setState(s => ({ error: null, retryCount: s.retryCount + 1 }))}
+            >
+              Try Again ({maxRetries - this.state.retryCount} left)
+            </button>
+          )}
         </div>
       )
     }

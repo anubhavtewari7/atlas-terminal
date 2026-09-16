@@ -104,17 +104,20 @@ export async function POST(request) {
       return Response.json({ error: 'Failed to send email' }, { status: 500 })
     }
 
-    // Notify yourself -- failure here must NOT affect the user's response
-    try {
-      const safeEmail = email.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      await resend.emails.send({
-        from: 'NAUTILUS Terminal <onboarding@resend.dev>',
-        to: 'anubhavtewari7@gmail.com',
-        subject: `New NAUTILUS signup: ${safeEmail}`,
-        html: `<p style="font-family:monospace;font-size:14px;color:#333">New early access request:<br><br><strong>${safeEmail}</strong><br><br>${new Date().toUTCString()}</p>`,
-      })
-    } catch (notifyErr) {
-      console.error('Admin notification failed (user email already sent):', notifyErr)
+    // Notify admin -- failure here must NOT affect the user's response
+    const adminEmail = process.env.ADMIN_NOTIFY_EMAIL || ''
+    if (adminEmail) {
+      try {
+        const safeEmail = email.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        await resend.emails.send({
+          from: 'NAUTILUS Terminal <onboarding@resend.dev>',
+          to: adminEmail,
+          subject: `New NAUTILUS signup: ${safeEmail}`,
+          html: `<p style="font-family:monospace;font-size:14px;color:#333">New early access request:<br><br><strong>${safeEmail}</strong><br><br>${new Date().toUTCString()}</p>`,
+        })
+      } catch (notifyErr) {
+        console.error('Admin notification failed (user email already sent):', notifyErr)
+      }
     }
 
     return Response.json({ success: true })

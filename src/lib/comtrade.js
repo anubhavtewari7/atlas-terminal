@@ -53,7 +53,7 @@ async function fetchExportValue(reporterCode, hsCode, year) {
     if (!res.ok) return null;
     const json = await res.json();
     const row = (json.data || [])[0];
-    if (!row || !row.primaryValue) return null;
+    if (!row || !row.primaryValue) { return null; }
     return { value: row.primaryValue, year };
   } catch {
     clearTimeout(timeoutId);
@@ -67,7 +67,7 @@ async function fetchExportValue(reporterCode, hsCode, year) {
 // every country reports every HS6 line every year).
 export async function enrichWithRealTradeData(hubs) {
   const currentYear = new Date().getFullYear();
-  const candidateYears = [currentYear - 2, currentYear - 3]; // Comtrade typically lags 1-3 years
+  const candidateYears = [currentYear - 1, currentYear - 2, currentYear - 3]; // Comtrade typically lags 1-3 years
 
   const enriched = await Promise.allSettled(hubs.map(async (hub) => {
     const countryCode = extractCountryCode(hub.hub);

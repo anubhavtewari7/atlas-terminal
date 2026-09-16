@@ -26,14 +26,6 @@ const SC_REGIONS = [
   { id:'caucasus',     minLat: 38, maxLat: 44, minLng: 40,  maxLng: 50,  label:'Caucasus / Iran',       commodity:'oil, gas, minerals',               baseRisk:'MEDIUM' },
 ]
 
-// GDELT GEO 2.0 API -- conflict + unrest themes, last 7 days, city-level points
-// We exclude sports/arts/culture noise with negations.
-const GDELT_URL =
-  'https://api.gdeltproject.org/api/v2/geo/geo' +
-  '?query=(theme:TERROR OR theme:CONFLICT OR theme:UNREST OR theme:MILITARY_PRESENCE OR theme:PROTEST) ' +
-  '-theme:ARTS -theme:CULTURE -theme:SPORTS -theme:RELIGION' +
-  '&mode=PointData&format=GeoJSON&timespan=7d&maxpoints=500&geores=1'
-
 const CACHE_MS  = 60 * 60 * 1000   // 1-hour cache
 let _cache     = null
 let _cacheTime = 0
@@ -201,8 +193,11 @@ export async function GET() {
       source,
     }
 
-    _cache     = payload
-    _cacheTime = Date.now()
+    // Only cache when data is live from GDELT -- don't cache the fallback
+    if (source === 'GDELT Project (live)') {
+      _cache     = payload
+      _cacheTime = Date.now()
+    }
 
     return NextResponse.json(payload)
 

@@ -745,6 +745,7 @@ const RISK_COLORS = {
   HIGH: { bg: 'bg-rose-500/10', border: 'border-rose-500/30', text: 'text-rose-400', dot: 'bg-rose-500' },
   MEDIUM: { bg: 'bg-amber-500/10', border: 'border-amber-500/30', text: 'text-amber-400', dot: 'bg-amber-500' },
   LOW: { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', dot: 'bg-emerald-500' },
+  UNKNOWN: { bg: 'bg-slate-500/10', border: 'border-slate-500/20', text: 'text-slate-400', badge: 'bg-slate-500/20 text-slate-300' },
 }
 
 export default function BomAnalyzer({ onClose, onScan }) {
@@ -896,7 +897,7 @@ export default function BomAnalyzer({ onClose, onScan }) {
               {/* Item rows */}
               <div className="space-y-2">
                 {results.map((r) => {
-                  const rc = RISK_COLORS[r.riskLevel] || RISK_COLORS.LOW
+                  const rc = RISK_COLORS[r.riskLevel] || RISK_COLORS.UNKNOWN
                   const open = expanded[r.id]
                   return (
                     <div key={r.id} className={`rounded-xl border ${rc.border} overflow-hidden`}>

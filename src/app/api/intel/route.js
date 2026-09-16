@@ -59,7 +59,7 @@ function buildKeywords(query, countries) {
 
 // Strategy A: NewsAPI.org (requires NEWS_API_KEY env var)
 async function fetchNewsAPI(countries, query) {
-  if (!NEWS_API_KEY) return []
+  if (!NEWS_API_KEY) { console.warn('[/api/intel] NEWS_API_KEY not set, using GDELT fallback'); return [] }
   const { commodityWords, countryTerms } = buildKeywords(query, countries)
   const commodityTerms = commodityWords.length ? `(${commodityWords.join(' OR ')})` : ''
   const countryQ       = countryTerms.length   ? `(${countryTerms.join(' OR ')})`   : ''

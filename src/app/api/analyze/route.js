@@ -24,6 +24,32 @@ const CATEGORY_SIGNALS = {
   ev_battery:      ['battery','cathode','anode','electrolyte','lithium','nmc','lfp','prismatic','cylindrical','gigafactory','bms'],
   semiconductor:   ['fab','foundry','wafer','lithography','etch','deposition','tsmc','asml','mask','dram','nand','logic','analog'],
   renewable_energy:['solar','wind','panel','turbine','inverter','pv','polysilicon','blade','storage','grid'],
+  food:           ['food','beverage','drink','sauce','spice','grain','dairy','meat','fish','frozen','snack','confection','nutrition'],
+  wood_paper:     ['wood','timber','lumber','plywood','mdf','paper','pulp','cardboard','kraft','cellulose','veneer'],
+  construction:   ['glass','cement','concrete','brick','tile','ceramic','gypsum','insulation','roofing','aggregate'],
+  consumer_goods: ['consumer','personal','care','cosmetic','beauty','household','cleaning','hygiene','health','wellness'],
+  aerospace:      ['aerospace','aircraft','avionics','turbine','fuselage','composite','airframe','nacelle','landing'],
+  energy_oil_gas: ['oil','gas','petroleum','pipeline','refinery','drilling','wellhead','offshore','lng','lpg'],
+  mining:         ['mining','ore','mineral','extraction','quarry','bauxite','manganese','chromite','phosphate'],
+  luxury_goods:   ['luxury','leather','handbag','watch','jewel','diamond','gold','fashion','couture','bespoke'],
+  cosmetics:      ['cosmetic','skincare','lipstick','fragrance','perfume','lotion','serum','makeup','formulation'],
+  cold_chain:     ['cold','refrigerated','frozen','chilled','temperature','pharma','vaccine','perishable','reefer'],
+  telecom:        ['telecom','antenna','router','switch','fiber','optic','cable','5g','tower','basestation'],
+  furniture:      ['furniture','chair','table','desk','sofa','cabinet','shelf','upholstery','foam','mattress'],
+  sports_outdoor: ['sports','outdoor','athletic','fitness','camping','cycling','hiking','yoga','gym','equipment'],
+  toys_games:     ['toy','game','puzzle','doll','board','plush','educational','child','infant','juvenile'],
+  pet_animal:     ['pet','animal','feed','veterinary','aquaculture','livestock','poultry','kibble','collar'],
+  printing_media: ['print','media','ink','paper','publishing','packaging','label','flexo','offset','digital'],
+  hvac:           ['hvac','heating','cooling','ventilation','air','conditioning','compressor','refrigerant','duct'],
+  water_treatment:['water','treatment','filtration','membrane','purification','desalination','pump','valve'],
+  defense_military:['defense','military','armament','weapon','ballistic','radar','sonar','tactical','secure'],
+  maritime:       ['maritime','ship','vessel','hull','propeller','marine','naval','offshore','dock','port'],
+  railway:        ['railway','rail','locomotive','rolling','stock','bogie','track','signaling','metro','tram'],
+  robotics_automation:['robot','automation','cobot','gripper','servo','actuator','plc','scada','vision','lidar'],
+  instruments_scientific:['instrument','scientific','lab','analytical','sensor','calibration','measurement','spectrometer'],
+  glass_ceramics: ['glass','ceramic','technical','refractor','porcelain','borosilicate','fiberglass','fused'],
+  paint_coatings: ['paint','coating','primer','epoxy','lacquer','varnish','pigment','binder','additive','resin'],
+  nutraceuticals: ['nutraceutical','supplement','vitamin','probiotic','omega','herbal','botanical','extract','capsule'],
 }
 
 export async function POST(req) {
@@ -79,7 +105,9 @@ export async function POST(req) {
       const wait = hub.logistics?.port_wait_days ?? 3
       const waitPts = wait === 0 ? 30 : wait <= 1 ? 27 : wait <= 2 ? 22 : wait <= 3 ? 16 : wait <= 5 ? 10 : 4
       const dutyStr = (hub.customs?.duty_rate ?? '').toLowerCase()
-      const dutyPts = dutyStr.includes('0%') || dutyStr.includes('free') ? 20 : dutyStr.includes('2.5') ? 15 : dutyStr.includes('5') ? 10 : dutyStr.includes('25') ? 2 : 8
+      const dutyMatch = dutyStr.match(/(\d+(?:\.\d+)?)%/)
+      const dutyNum = dutyMatch ? parseFloat(dutyMatch[1]) : null
+      const dutyPts = (dutyStr.includes('free') || dutyNum === 0) ? 20 : dutyNum !== null && dutyNum <= 2.5 ? 17 : dutyNum !== null && dutyNum <= 5 ? 13 : dutyNum !== null && dutyNum <= 10 ? 9 : dutyNum !== null && dutyNum >= 25 ? 2 : 8
       const companyPts = Math.min(15, (hub.companies?.length ?? 0) * 2)
       return { ...hub, stability_score: Math.round(Math.min(100, esg + waitPts + dutyPts + companyPts)) }
     })
@@ -141,13 +169,13 @@ export async function POST(req) {
       confidence_score,
       directive: {
         best_region:  selectedHub.hub,
-        best_partner: selectedHub.companies[0]?.name || 'Strategic Partner',
+        best_partner: selectedHub.companies?.[0]?.name || 'Strategic Partner',
         route:        selectedHub.logistics?.port_wait_days === 0
                         ? 'Domestic Ground / Rail Transport'
                         : `Ocean / Air -- ${selectedHub.logistics?.port_wait_days} day avg lead time`,
         summary:
           (isLowConfidence
-            ? `â ï¸ No exact category match for "${query}" -- showing closest global sourcing hubs. Refine your search (e.g. add material type, application, or industry) for a precise match. `
+            ? `⚠️ No exact category match for "${query}" -- showing closest global sourcing hubs. Refine your search (e.g. add material type, application, or industry) for a precise match. `
             : `Strategic scan complete for "${query}" (${categoryLabel}). `) +
           `Identified ${opportunities.length} global sourcing hub${opportunities.length > 1 ? 's' : ''}. ` +
           `Primary recommendation: ${selectedHub.hub} -- ${selectedHub.desc.split('.')[0]}.`,
@@ -156,13 +184,13 @@ export async function POST(req) {
       },
 
       // Properly structured risks -- each has id, title, desc, severity, mitigation, type
-      risks: CATEGORY_RISKS[category] || CATEGORY_RISKS.food || CATEGORY_RISKS.electronics,
+      risks: CATEGORY_RISKS[category] || [],
 
       opportunities,
 
       market_data: {
         confidence_score,
-        currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
+        currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable', stale_as_of: '2026-09', note: 'Reference rate — verify with live DXY' },
         // Category-specific illustrative price index shapes (2024 baseline = 100).
         // These reflect general commodity cycle patterns -- NOT real market data.
         // Always source live prices from CME, Fastmarkets, or commodity exchanges.

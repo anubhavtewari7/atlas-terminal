@@ -7,8 +7,8 @@ import { calculateLandedCost } from '@/lib/procurement-costs'
 export default function TLCCalculator({ onClose, defaults }) {
   const [unitCost, setUnitCost] = useState(50.00)
   const [quantity, setQuantity] = useState(1000)
-  const [freightCost, setFreightCost] = useState(defaults?.freight.amount ?? '')
-  const [dutyPercent, setDutyPercent] = useState(defaults?.duty.percent ?? '')
+  const [freightCost, setFreightCost] = useState(defaults?.freight?.amount ?? '')
+  const [dutyPercent, setDutyPercent] = useState(defaults?.duty?.percent ?? '')
   const [insurancePercent, setInsurancePercent] = useState(0.5)
 
   const costs = calculateLandedCost({ unitCost, quantity, freightCost, dutyPercent, insurancePercent })
@@ -44,8 +44,8 @@ export default function TLCCalculator({ onClose, defaults }) {
 
           <div className="mb-4 text-[11px] text-amber-200 leading-relaxed" role="note">
             <p>{defaults?.hub ? `Prefilled from ${defaults.hub}. ` : ''}Indicative US import scenario on FOB value. Confirm duty and shipment freight before relying on this total.</p>
-            <p className="mt-1">{defaults?.duty.raw ? `Catalog duty: ${defaults.duty.raw}. ` : 'No catalog duty available. '}{defaults?.duty.reason}</p>
-            <p className="mt-1">{defaults?.freight.amount != null ? `Freight assumes one ${defaults.freight.unit || 'quoted shipment'} (${defaults.freight.raw}). Enter the total freight for your order.` : 'No unambiguous freight estimate available. Enter your shipment quote.'}</p>
+            <p className="mt-1">{defaults?.duty?.raw ? `Catalog duty: ${defaults.duty.raw}. ` : 'No catalog duty available. '}{defaults?.duty?.reason}</p>
+            <p className="mt-1">{defaults?.freight?.amount != null ? `Freight assumes one ${defaults.freight.unit || 'quoted shipment'} (${defaults.freight.raw}). Enter the total freight for your order.` : 'No unambiguous freight estimate available. Enter your shipment quote.'}</p>
           </div>
           <div className="space-y-5">
             <div className="grid grid-cols-2 gap-4">

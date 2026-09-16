@@ -91,9 +91,9 @@ export const ATLAS_DB = {
       id: 'h_auto_6', lat: 47.6, lng: 19.0,
       hub: 'BUDAPEST, HUNGARY', title: 'Eastern EU Assembly Hub',
       companies: [
-        { name: 'Audi Hungaria', website: 'https://audi.hu/' },
-        { name: 'Knorr-Bremse', website: 'https://www.knorr-bremse.com/' },
-        { name: 'Flex-N-Gate', website: 'https://www.flex-n-gate.com/' }
+        { name: 'Audi Hungaria', website: 'https://audi.hu/', turnover: '$100M-$1B' },
+        { name: 'Knorr-Bremse', website: 'https://www.knorr-bremse.com/', turnover: '$100M-$1B' },
+        { name: 'Flex-N-Gate', website: 'https://www.flex-n-gate.com/', turnover: '$100M-$1B' }
       ],
       desc: 'Cost-effective alternative to Western Europe for precision auto parts. Strong EU free trade access.',
       customs: { hts_code: '8708.29', duty_rate: '0% (Intra-EU)', compliance_note: 'EU origin certified. No additional duties within EU.' },
@@ -452,7 +452,7 @@ export const ATLAS_DB = {
       id: 'h_food_7', lat: 44.6, lng: 11.3,
       hub: 'EMILIA-ROMAGNA, ITALY', title: 'European Charcuterie & Cured Meats Hub',
       companies: [
-        { name: 'Fratelli Beretta', website: 'https://www.fratelliберетта.it/', turnover: '$100M-$1B' },
+        { name: 'Fratelli Beretta', website: 'https://www.fratellibaratta.it/', turnover: '$100M-$1B' },
         { name: 'Inalca (Cremonini Group)', website: 'https://www.inalca.it/', turnover: '>$1B' },
         { name: 'Negroni Salumi', website: 'https://www.negroni.com/', turnover: '$100M-$1B' },
         { name: 'Salumificio Riva', website: 'https://www.rivagroup.it/', turnover: '$100M-$1B' }

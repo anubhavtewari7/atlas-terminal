@@ -218,6 +218,10 @@ export default function OceanFreightRates({ onClose }) {
         </div>
 
         <div className="p-5 space-y-4">
+          {/* Staleness banner */}
+          <div className="px-3 py-2 bg-amber-500/10 border border-amber-500/20 rounded-lg text-[11px] text-amber-300">
+            Reference rates as of Aug 2026 — verify current pricing with your freight forwarder.
+          </div>
           {/* Market Indices */}
           <div className="grid grid-cols-2 gap-3">
             {[

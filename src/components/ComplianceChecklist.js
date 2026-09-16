@@ -121,7 +121,7 @@ export default function ComplianceChecklist({ onClose }) {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-24 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${(completedCount / checklist.length) * 100}%` }} />
+                  <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${checklist.length > 0 ? (completedCount / checklist.length) * 100 : 0}%` }} />
                 </div>
                 <button onClick={handleCopy} className="flex items-center gap-1.5 px-3 py-1.5 bg-[#111] border border-white/10 rounded-lg text-[11px] text-slate-400 hover:text-white active:text-white hover:border-white/20 active:border-white/20 transition-all">
                   <Copy size={10} /> Copy

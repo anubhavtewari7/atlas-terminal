@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import { join } from 'path';
 
 // Serves the agent-written market-intelligence.json as a Next.js API route.
@@ -11,7 +11,7 @@ export const revalidate = 55;
 export async function GET() {
   try {
     const filePath = join(process.cwd(), 'public', 'market-intelligence.json');
-    const raw = readFileSync(filePath, 'utf-8');
+    const raw = await readFile(filePath, 'utf-8');
     const data = JSON.parse(raw);
     return NextResponse.json(data, {
       headers: { 'Cache-Control': 'public, max-age=55, stale-while-revalidate=300' }

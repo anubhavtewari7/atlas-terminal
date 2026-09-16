@@ -6,9 +6,9 @@
 import { NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';
 
-const GITHUB_RAW = 'https://raw.githubusercontent.com/anubhavtewari7/atlas-terminal/main/public/market-intelligence.json';
-// Recipient -- set NOTIFY_TO in Vercel env vars (falls back to dev address on free Resend tier)
-const TO = process.env.NOTIFY_TO || 'anubhavtewari7@gmail.com';
+const GITHUB_RAW = process.env.GITHUB_MARKET_INTEL_URL || 'https://raw.githubusercontent.com/anubhavtewari7/atlas-terminal/main/public/market-intelligence.json';
+// Recipient -- set NOTIFY_TO or ADMIN_NOTIFY_EMAIL in Vercel env vars
+const TO = process.env.NOTIFY_TO || process.env.ADMIN_NOTIFY_EMAIL || '';
 
 // Escape HTML special characters to prevent injection in email body
 function esc(str) {
@@ -38,6 +38,18 @@ export async function GET(request) {
 
   if (!token || token !== process.env.NOTIFY_SECRET) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Guard RESEND_API_KEY before doing any work
+  if (!process.env.RESEND_API_KEY) {
+    console.error('[/api/notify] RESEND_API_KEY not configured');
+    return NextResponse.json({ error: 'Email service not configured' }, { status: 500 });
+  }
+
+  // Guard recipient address
+  if (!TO) {
+    console.warn('[/api/notify] No recipient configured (NOTIFY_TO / ADMIN_NOTIFY_EMAIL not set) -- skipping send');
+    return NextResponse.json({ ok: true, skipped: true, reason: 'No recipient configured' });
   }
 
   // Fetch the latest intelligence data straight from GitHub raw
@@ -138,8 +150,8 @@ export async function GET(request) {
   });
 
   if (!resendRes.ok) {
-    const err = await resendRes.text();
-    return NextResponse.json({ error: `Resend failed: ${err}` }, { status: 502 });
+    console.error('[/api/notify] Resend HTTP error:', resendRes.status);
+    return NextResponse.json({ error: 'Failed to send notification email' }, { status: 502 });
   }
 
   const resendData = await resendRes.json();

@@ -156,6 +156,10 @@ export function analyzeExportControls(text) {
   const verdict = hasItar ? 'ITAR LIKELY' : hasCtrl ? 'EAR CONTROLLED' : 'REVIEW NEEDED'
   const level   = hasItar ? 'itar' : hasCtrl ? 'controlled' : 'possible'
 
-  return { verdict, level, hits, ear99Signals, summary: '', recommendation: '' }
+  const topHit = hits.find(h => h.level === 'ITAR') || hits.find(h => h.level === 'CONTROLLED') || hits[0]
+  const summary = topHit?.desc || ''
+  const recommendation = topHit?.action || ''
+
+  return { verdict, level, hits, ear99Signals, summary, recommendation }
 }
 

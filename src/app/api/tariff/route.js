@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { lookupTariff } from '@/lib/database';
 import { buildTariffResponse } from '@/lib/tariff-response';
+import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(req) {
+  const rl = await rateLimit(req, { limit: 20, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   try {
     const { product } = await req.json();
 

@@ -1,9 +1,11 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { X, History, ChevronRight, Trash2, Target, MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function MissionHistory({ missions, onClose, onReplay, onClear }) {
+  const [confirmClear, setConfirmClear] = useState(false)
+
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -26,11 +28,33 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
           <div className="flex items-center gap-3">
             {missions.length > 0 && (
               <button
-                onClick={() => { if (window.confirm('Clear all mission history? This cannot be undone.')) onClear() }}
+                onClick={() => setConfirmClear(true)}
                 className="flex items-center gap-2 px-3 py-1.5 text-[10px] text-slate-500 hover:text-rose-400 active:text-rose-400 font-mono uppercase tracking-widest transition-all"
               >
                 <Trash2 size={12} /> Clear All
               </button>
+            )}
+            {confirmClear && (
+              <div className="fixed inset-0 z-[300] bg-black/80 flex items-center justify-center p-4">
+                <div className="bg-[#111] border border-rose-500/30 rounded-xl p-6 max-w-sm w-full text-center">
+                  <p className="text-[13px] text-white font-bold mb-2">Clear all mission history?</p>
+                  <p className="text-[11px] text-slate-500 mb-5">This will permanently delete all saved intelligence reports.</p>
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={() => { setConfirmClear(false); onClear(); }}
+                      className="px-4 py-2 text-[11px] font-bold text-white bg-rose-600 hover:bg-rose-500 rounded-lg transition-colors"
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      onClick={() => setConfirmClear(false)}
+                      className="px-4 py-2 text-[11px] font-bold text-slate-400 border border-white/10 hover:border-white/20 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
             <button onClick={onClose} className="p-2 text-slate-500 hover:text-white active:text-white transition-all"><X size={20} /></button>
           </div>
@@ -47,7 +71,7 @@ export default function MissionHistory({ missions, onClose, onReplay, onClear })
             <div className="space-y-3">
               {[...missions].reverse().map((m, i) => (
                 <motion.div
-                  key={i}
+                  key={m.timestamp || m.id || i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.04 }}

@@ -164,7 +164,7 @@ export async function GET() {
       activeRegions: 0,
       updated: new Date().toISOString(),
       source: 'Unavailable',
-      error: err.message,
+      error: 'Live fire data unavailable',
     })
   }
 }

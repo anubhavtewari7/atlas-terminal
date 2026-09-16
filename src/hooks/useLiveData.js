@@ -29,18 +29,18 @@ export function useLiveData() {
   useEffect(() => {
     function loadAll() {
       fetch('/api/news')
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
         .then(d => { if (Array.isArray(d) && d.length > 0) setNews(d) })
         .catch(err => { console.error('[news]', err); setApiErrCount(c => c + 1) })
         .finally(() => setNewsLoading(false))
 
       fetch('/api/fx')
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
         .then(d => setFxData(d))
         .catch(err => { console.error('[fx]', err); setApiErrCount(c => c + 1) })
 
       fetch('/api/commodities')
-        .then(r => r.json())
+        .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
         .then(d => setCommodities(d))
         .catch(err => { console.error('[commodities]', err); setApiErrCount(c => c + 1) })
     }
@@ -60,7 +60,7 @@ export function useLiveData() {
 
   const refreshFx = () => {
     fetch('/api/fx')
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json() })
       .then(d => setFxData(d))
       .catch(err => { console.error('[fx refresh]', err); setApiErrCount(c => c + 1) })
   }

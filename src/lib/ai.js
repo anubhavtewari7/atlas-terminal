@@ -28,10 +28,26 @@ export async function connectTheDots(newsItem, materialProfile) {
       body: JSON.stringify({
         messages: [{ role: 'user', content: prompt }],
         jsonMode: true
-      })
+      }),
+      signal: AbortSignal.timeout(8000),
     });
 
+    if (!response.ok) throw new Error(`Pollinations HTTP ${response.status}`);
+
     const data = await response.json();
+
+    // Validate expected response shape before returning
+    if (
+      typeof data !== 'object' ||
+      data === null ||
+      typeof data.isRelevant !== 'boolean' ||
+      !['low', 'med', 'high'].includes(data.severity) ||
+      typeof data.impactChain !== 'string' ||
+      typeof data.recommendation !== 'string'
+    ) {
+      throw new Error('Unexpected AI response shape');
+    }
+
     return data;
   } catch (error) {
     console.error("NAUTILUS AI Error:", error);

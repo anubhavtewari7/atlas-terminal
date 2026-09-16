@@ -6,8 +6,12 @@
 
 import { NextResponse } from 'next/server';
 import { calculateRisk } from '@/lib/database';
+import { rateLimit } from '@/lib/rate-limit';
 
 export async function POST(req) {
+  const rl = await rateLimit(req, { limit: 15, windowMs: 60_000 })
+  if (!rl.ok) return rl.response
+
   try {
     const { origin, destination, product = '' } = await req.json();
 

@@ -78,7 +78,7 @@ export default function SupplierComparison({ hubs, onClose }) {
                     <div className="text-[17px] text-white font-bold leading-snug">{hub.title}</div>
                     <div className="flex flex-wrap justify-center gap-2 mt-3">
                       {(hub.companies || []).slice(0, 2).map((c, ci) => (
-                        <a key={ci} href={c.website} target="_blank" rel="noopener noreferrer"
+                        <a key={ci} href={c.website || '#'} target={c.website ? '_blank' : undefined} rel="noopener noreferrer"
                           className="text-[12px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-3 py-1 rounded-lg hover:bg-sky-500/20 active:bg-sky-500/20 transition-all flex items-center gap-1.5"
                         >
                           {c.name} <ExternalLink size={10} />
