@@ -64,7 +64,25 @@ export async function POST(req) {
     // best-effort enrichment -- network issues or missing Comtrade coverage
     // for a given country/HS/year simply leave a hub without the badge,
     // never blocks or fails the mission scan itself.
-    const opportunities = await enrichWithRealTradeData(orderedOpportunities);
+    const enrichedOpportunities = await enrichWithRealTradeData(orderedOpportunities);
+
+    // Compute stability_score from existing hub fields so SourcingRecommendation
+    // always shows a meaningful score instead of "N/A". Scale 0-100:
+    //   ESG ethical_rating -> 0-35 pts
+    //   port_wait_days (lower = better) -> 0-30 pts
+    //   duty_rate (0% tariff = best) -> 0-20 pts
+    //   company count (more = more competition/supply) -> 0-15 pts
+    const ESG_SCORE = { 'AA': 35, 'A+': 32, 'A': 28, 'A-': 25, 'B+': 20, 'B': 16, 'B-': 12, 'C': 6 }
+    const opportunities = enrichedOpportunities.map(hub => {
+      if (hub.stability_score != null) return hub // already set, skip
+      const esg = ESG_SCORE[hub.esg?.ethical_rating] ?? 14
+      const wait = hub.logistics?.port_wait_days ?? 3
+      const waitPts = wait === 0 ? 30 : wait <= 1 ? 27 : wait <= 2 ? 22 : wait <= 3 ? 16 : wait <= 5 ? 10 : 4
+      const dutyStr = (hub.customs?.duty_rate ?? '').toLowerCase()
+      const dutyPts = dutyStr.includes('0%') || dutyStr.includes('free') ? 20 : dutyStr.includes('2.5') ? 15 : dutyStr.includes('5') ? 10 : dutyStr.includes('25') ? 2 : 8
+      const companyPts = Math.min(15, (hub.companies?.length ?? 0) * 2)
+      return { ...hub, stability_score: Math.round(Math.min(100, esg + waitPts + dutyPts + companyPts)) }
+    })
     const selectedHub = opportunities[0];
 
     // Build a sharp, category-aware summary
