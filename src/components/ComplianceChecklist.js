@@ -15,15 +15,6 @@ const COMPLIANCE_RULES = {
     eu: ['CE marking (if applicable)', 'REACH compliance', 'RoHS Directive (2011/65/EU)', 'WEEE compliance', 'Dual-use export authorization'],
     uk: ['UKCA marking', 'UK RoHS', 'Import declaration (CDS)', 'Strategic Export License (dual-use)'],
   },
-  semiconductor: {
-    usa: ['Export Control (EAR/ITAR) classification', 'HTS 8542.31 classification', 'OFAC sanctions screening', 'Certificate of Origin', 'CBP Bond'],
-    eu: ['CE marking (if applicable)', 'REACH compliance', 'RoHS Directive (2011/65/EU)', 'WEEE compliance', 'Dual-use export authorization'],
-    uk: [
-      { id: 'uk_sec_1', rule: 'UK Strategic Export Control', detail: 'ECJU export license required for controlled semiconductor technology. Check UK Dual-Use List.', required: true },
-      { id: 'uk_sec_2', rule: 'UK REACH Compliance', detail: 'Chemical substances in semiconductor manufacturing must comply with UK REACH.', required: true },
-      { id: 'uk_sec_3', rule: 'UKCA Marking', detail: 'Electronic components placed on UK market require UKCA marking.', required: true },
-    ],
-  },
   lithium: {
     usa: ['UN 3480/3481 hazmat labeling', 'DOT 49 CFR compliance', 'IATA dangerous goods declaration (air)', 'IMO IMDG code (sea)', 'Battery test summary (UN 38.3)', 'CBP entry documentation'],
     eu: ['Battery Regulation (EU) 2023/1542', 'REACH SVHC disclosure', 'ADR/RID/ADN transport compliance', 'CE marking', 'Recycled content declaration'],
@@ -74,8 +65,10 @@ export default function ComplianceChecklist({ onClose }) {
   const toggleCheck = (i) => setChecked(prev => ({ ...prev, [i]: !prev[i] }))
   const completedCount = Object.values(checked).filter(Boolean).length
 
+  const itemLabel = (item) => typeof item === 'string' ? item : (item?.rule ?? String(item))
+
   const handleCopy = () => {
-    const text = checklist.map((item, i) => `[${checked[i] ? 'X' : ' '}] ${item}`).join('\n')
+    const text = checklist.map((item, i) => `[${checked[i] ? 'X' : ' '}] ${itemLabel(item)}`).join('\n')
     navigator.clipboard.writeText(`Import Compliance Checklist\nProduct: ${product} → ${destination}\n\n${text}`)
   }
 
@@ -148,7 +141,7 @@ export default function ComplianceChecklist({ onClose }) {
                   <div className={`mt-0.5 shrink-0 ${checked[i] ? 'text-emerald-400' : 'text-slate-500'}`}>
                     {checked[i] ? <CheckSquare size={16} /> : <Square size={16} />}
                   </div>
-                  <span className={`text-[12px] leading-snug ${checked[i] ? 'text-slate-500 line-through' : 'text-slate-300'}`}>{item}</span>
+                  <span className={`text-[12px] leading-snug ${checked[i] ? 'text-slate-500 line-through' : 'text-slate-300'}`}>{itemLabel(item)}</span>
                 </motion.div>
               ))}
             </div>

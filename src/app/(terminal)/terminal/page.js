@@ -435,6 +435,7 @@ export default function Dashboard() {
       setRisks(mergedFallbackRisks)
       setDirective(fbDir)
       setMarketData({
+        confidence_score: 60,
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
         price_history: [{ month:'Q1',price:95 },{ month:'Q2',price:88 },{ month:'Q3',price:97 },{ month:'Q4',price:105 }],
         rfq_template: `Dear Procurement Team,\n\nWe are initiating a sourcing inquiry for: ${activeQuery}.\n\nPlease provide unit pricing, lead time, freight terms, and ESG certification status.\n\nEstimated Annual Volume: [Insert]\nIncoterm Preference: [DDP / FOB / CIF]\n\nBest regards,\n[Your Name] — Procurement`
@@ -1533,7 +1534,7 @@ export default function Dashboard() {
                         <button key={i} onClick={() => replayMission(m)}
                           className="w-full text-left p-2.5 bg-[#111] border border-white/5 rounded-lg hover:border-sky-500/20 transition-all group">
                           <div className="text-[11px] font-bold text-slate-300 group-hover:text-white transition-colors truncate uppercase">{m.query}</div>
-                          <div className="text-[9px] text-slate-500 mt-0.5">{new Date(m.timestamp).toLocaleDateString()} · {m.opportunities?.length ?? 0} hubs</div>
+                          <div className="text-[9px] text-slate-500 mt-0.5">{new Date(m.timestamp).toLocaleDateString()} · {m.hubCount ?? 0} hubs</div>
                         </button>
                       ))}
                     </div>

@@ -113,9 +113,14 @@ export async function POST(req) {
     };
     const categoryLabel = categoryLabels[category] || 'commodity';
 
+    const confidence_score = isLowConfidence
+      ? 45
+      : Math.min(95, 65 + opportunities.length * 6)
+
     const data = {
       category,
       low_confidence: isLowConfidence,
+      confidence_score,
       directive: {
         best_region:  selectedHub.hub,
         best_partner: selectedHub.companies[0]?.name || 'Strategic Partner',
@@ -138,6 +143,7 @@ export async function POST(req) {
       opportunities,
 
       market_data: {
+        confidence_score,
         currency: { pair: 'USD/INDEX', rate: 104.2, impact: 'Stable' },
         // Category-specific illustrative price index shapes (2024 baseline = 100).
         // These reflect general commodity cycle patterns -- NOT real market data.
