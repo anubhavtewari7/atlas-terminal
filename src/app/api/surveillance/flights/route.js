@@ -1,6 +1,5 @@
 // OpenSky Network — free public API, no key required
 // Returns live aircraft positions globally (rate-limited to ~10s per IP)
-export const runtime = 'edge'
 
 export async function GET() {
   try {

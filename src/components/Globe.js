@@ -170,7 +170,7 @@ function SurvDot({ lat, lng, color }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick, survFlights, showSurvFlights }) {
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick, survFlights, showSurvFlights, survFires, showSurvFires, survSeismic, showSurvSeismic }) {
   const meshRef    = useRef()
   const earthRotY  = useRef(0)           // shared with NightOverlay via ref
   const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
@@ -215,6 +215,16 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
         {/* SURVEILLANCE — LIVE FLIGHTS (CYAN dots) */}
         {showSurvFlights && (survFlights || []).map((f, i) => (
           <SurvDot key={`fl-${i}`} lat={f.lat} lng={f.lng} color="#22d3ee" />
+        ))}
+
+        {/* SURVEILLANCE — ACTIVE FIRES (ORANGE dots) */}
+        {showSurvFires && (survFires || []).map((f, i) => (
+          <SurvDot key={`fire-${i}`} lat={f.lat} lng={f.lng} color="#f97316" />
+        ))}
+
+        {/* SURVEILLANCE — SEISMIC EVENTS (AMBER dots) */}
+        {showSurvSeismic && (survSeismic || []).map((e, i) => (
+          <SurvDot key={`eq-${i}`} lat={e.lat} lng={e.lng} color="#f59e0b" />
         ))}
       </mesh>
     </group>
@@ -287,7 +297,7 @@ function Marker({ node, color, type, onNodeClick }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick, survFlights = [], showSurvFlights = false }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick, survFlights = [], showSurvFlights = false, survFires = [], showSurvFires = false, survSeismic = [], showSurvSeismic = false }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -308,6 +318,10 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
             onNodeClick={onNodeClick}
             survFlights={survFlights}
             showSurvFlights={showSurvFlights}
+            survFires={survFires}
+            showSurvFires={showSurvFires}
+            survSeismic={survSeismic}
+            showSurvSeismic={showSurvSeismic}
           />
         </React.Suspense>
 

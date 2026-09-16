@@ -156,14 +156,14 @@ export default function Dashboard() {
   // ── Surveillance tab state ──
   const [survFlights,      setSurvFlights]      = useState([])
   const [survFlightCount,  setSurvFlightCount]  = useState(0)
-  const [survLoading,      setSurvLoading]      = useState(false)
-  const [survError,        setSurvError]        = useState(null)
+  const [survFlightLoading,setSurvFlightLoading]= useState(false)
+  const [survFlightError,  setSurvFlightError]  = useState(null)
   const [survLastFetch,    setSurvLastFetch]    = useState(null)
+  const [survFires,        setSurvFires]        = useState([])
+  const [survSeismic,      setSurvSeismic]      = useState([])
   const [showSurvFlights,  setShowSurvFlights]  = useState(true)
   const [showSurvFires,    setShowSurvFires]    = useState(true)
   const [showSurvSeismic,  setShowSurvSeismic]  = useState(true)
-  const [showSurvCp,       setShowSurvCp]       = useState(true)
-  const [showSurvThreats,  setShowSurvThreats]  = useState(false)
 
   // Map hub name string → ISO2 for stability badge lookup
   function getHubISO2(hubName) {
@@ -232,14 +232,14 @@ export default function Dashboard() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Fetch live flights when surveillance tab is active; refresh every 60s
+  // Fetch surveillance data when tab is active
   useEffect(() => {
     if (activeTab !== 'surveillance') return
     let cancelled = false
 
     async function fetchFlights() {
-      setSurvLoading(true)
-      setSurvError(null)
+      setSurvFlightLoading(true)
+      setSurvFlightError(null)
       try {
         const res = await fetch('/api/surveillance/flights')
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -248,18 +248,34 @@ export default function Dashboard() {
           setSurvFlights(data.flights || [])
           setSurvFlightCount(data.count || 0)
           setSurvLastFetch(data.ts)
-          if (data.error) setSurvError(data.error)
+          if (data.error) setSurvFlightError(data.error)
         }
       } catch (e) {
-        if (!cancelled) setSurvError(e.message)
+        if (!cancelled) setSurvFlightError(e.message)
       } finally {
-        if (!cancelled) setSurvLoading(false)
+        if (!cancelled) setSurvFlightLoading(false)
       }
     }
 
+    async function fetchFiresAndSeismic() {
+      try {
+        const [fireRes, eqRes] = await Promise.all([
+          fetch('/api/wildfires'),
+          fetch('/api/earthquakes'),
+        ])
+        const [fireData, eqData] = await Promise.all([fireRes.json(), eqRes.json()])
+        if (!cancelled) {
+          setSurvFires((fireData.risks || []).filter(r => r.lat && r.lng))
+          setSurvSeismic((eqData.risks || []).filter(r => r.lat && r.lng))
+        }
+      } catch {}
+    }
+
     fetchFlights()
-    const interval = setInterval(fetchFlights, 60000)
-    return () => { cancelled = true; clearInterval(interval) }
+    fetchFiresAndSeismic()
+    const flightInterval = setInterval(fetchFlights, 60000)
+    const envInterval    = setInterval(fetchFiresAndSeismic, 300000) // fires/seismic every 5 min
+    return () => { cancelled = true; clearInterval(flightInterval); clearInterval(envInterval) }
   }, [activeTab])
 
   const buildMissionKeywords = (query, category) => {
@@ -1565,17 +1581,17 @@ export default function Dashboard() {
                     <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Surveillance Mode</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {survLoading && <span className="text-[9px] text-cyan-400 animate-pulse">SYNCING...</span>}
-                    {survLastFetch && !survLoading && (
+                    {survFlightLoading && <span className="text-[9px] text-cyan-400 animate-pulse">SYNCING...</span>}
+                    {survLastFetch && !survFlightLoading && (
                       <span className="text-[9px] text-slate-500">
                         {new Date(survLastFetch).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
                     )}
-                    <div className={`w-1.5 h-1.5 rounded-full ${survLoading ? 'bg-cyan-400 animate-pulse' : survError ? 'bg-rose-400' : 'bg-emerald-400'}`} />
+                    <div className={`w-1.5 h-1.5 rounded-full ${survFlightLoading ? 'bg-cyan-400 animate-pulse' : survFlightError ? 'bg-amber-400' : 'bg-emerald-400'}`} />
                   </div>
                 </div>
 
-                {/* Layer toggles */}
+                {/* Layer toggles — 3 surveillance-specific layers only */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
                   <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
                     <Layers size={10} /> Globe Layers
@@ -1588,7 +1604,7 @@ export default function Dashboard() {
                         active: showSurvFlights,
                         toggle: () => setShowSurvFlights(v => !v),
                         color: 'cyan',
-                        count: survFlightCount > 0 ? `${survFlightCount.toLocaleString()} aircraft` : survLoading ? 'loading...' : survError ? 'unavailable' : '--',
+                        count: survFlightCount > 0 ? `${survFlightCount.toLocaleString()} aircraft` : survFlightLoading ? 'loading...' : survFlightError ? 'rate-limited' : '--',
                       },
                       {
                         label: 'Active Fires',
@@ -1596,7 +1612,7 @@ export default function Dashboard() {
                         active: showSurvFires,
                         toggle: () => setShowSurvFires(v => !v),
                         color: 'orange',
-                        count: null,
+                        count: survFires.length > 0 ? `${survFires.length} regions` : null,
                       },
                       {
                         label: 'Seismic Events',
@@ -1604,23 +1620,7 @@ export default function Dashboard() {
                         active: showSurvSeismic,
                         toggle: () => setShowSurvSeismic(v => !v),
                         color: 'amber',
-                        count: null,
-                      },
-                      {
-                        label: 'Chokepoints',
-                        icon: <Anchor size={10} />,
-                        active: showSurvCp,
-                        toggle: () => setShowSurvCp(v => !v),
-                        color: 'amber',
-                        count: `${CHOKEPOINTS.length} routes`,
-                      },
-                      {
-                        label: 'Threat Nodes',
-                        icon: <ShieldAlert size={10} />,
-                        active: showSurvThreats,
-                        toggle: () => setShowSurvThreats(v => !v),
-                        color: 'rose',
-                        count: risks.length > 0 ? `${risks.length} active` : 'run scan first',
+                        count: survSeismic.length > 0 ? `${survSeismic.length} events` : null,
                       },
                     ].map((layer, i) => (
                       <button key={i} onClick={layer.toggle}
@@ -1628,7 +1628,6 @@ export default function Dashboard() {
                           layer.active
                             ? layer.color === 'cyan'   ? 'border-cyan-500/30 bg-cyan-500/8'
                             : layer.color === 'orange' ? 'border-orange-500/30 bg-orange-500/8'
-                            : layer.color === 'rose'   ? 'border-rose-500/30 bg-rose-500/8'
                             : 'border-amber-500/30 bg-amber-500/8'
                             : 'border-white/5 bg-transparent hover:border-white/10'
                         }`}>
@@ -1636,7 +1635,6 @@ export default function Dashboard() {
                           <span className={layer.active
                             ? layer.color === 'cyan'   ? 'text-cyan-400'
                             : layer.color === 'orange' ? 'text-orange-400'
-                            : layer.color === 'rose'   ? 'text-rose-400'
                             : 'text-amber-400'
                             : 'text-slate-600'}>
                             {layer.icon}
@@ -1649,7 +1647,7 @@ export default function Dashboard() {
                           {layer.count && (
                             <span className="text-[9px] text-slate-500">{layer.count}</span>
                           )}
-                          <div className={`w-7 h-3.5 rounded-full transition-all relative ${layer.active ? (layer.color === 'cyan' ? 'bg-cyan-500' : layer.color === 'rose' ? 'bg-rose-500' : 'bg-amber-500') : 'bg-slate-700'}`}>
+                          <div className={`w-7 h-3.5 rounded-full transition-all relative ${layer.active ? (layer.color === 'cyan' ? 'bg-cyan-500' : layer.color === 'orange' ? 'bg-orange-500' : 'bg-amber-500') : 'bg-slate-700'}`}>
                             <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all ${layer.active ? 'left-4' : 'left-0.5'}`} />
                           </div>
                         </div>
@@ -1664,13 +1662,13 @@ export default function Dashboard() {
                     <span className="flex items-center gap-1.5"><Radio size={10} className="text-cyan-400" /> Live Flights</span>
                     {survFlightCount > 0 && <span className="text-cyan-400">{survFlightCount.toLocaleString()}</span>}
                   </div>
-                  {survLoading && survFlights.length === 0 ? (
+                  {survFlightLoading && survFlights.length === 0 ? (
                     <div className="text-[10px] text-cyan-400 animate-pulse py-2">Syncing OpenSky network...</div>
-                  ) : survError && survFlights.length === 0 ? (
-                    <div className="text-[10px] text-slate-500 py-2">OpenSky rate-limited. Retrying in 60s.</div>
+                  ) : survFlightError && survFlights.length === 0 ? (
+                    <div className="text-[10px] text-slate-500 py-2">OpenSky rate-limited — retrying in 60s. Dots will appear on globe when data loads.</div>
                   ) : survFlights.length > 0 ? (
-                    <div className="space-y-1 max-h-48 overflow-y-auto pr-1">
-                      {survFlights.slice(0, 12).map((f, i) => (
+                    <div className="space-y-1 max-h-44 overflow-y-auto pr-1">
+                      {survFlights.slice(0, 15).map((f, i) => (
                         <div key={i} className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
                           <div className="flex items-center gap-1.5">
                             <div className="w-1 h-1 rounded-full bg-cyan-400" />
@@ -1678,23 +1676,59 @@ export default function Dashboard() {
                           </div>
                           <div className="flex items-center gap-2 text-[9px] text-slate-500">
                             <span>{f.country}</span>
-                            {f.alt && <span>{Math.round(f.alt / 100) / 10}km</span>}
+                            {f.alt && <span>{(f.alt / 1000).toFixed(1)}km</span>}
                           </div>
                         </div>
                       ))}
-                      {survFlights.length > 12 && (
-                        <div className="text-[9px] text-slate-600 pt-1">+{survFlights.length - 12} more aircraft not shown</div>
+                      {survFlights.length > 15 && (
+                        <div className="text-[9px] text-slate-600 pt-1 text-center">+{(survFlights.length - 15).toLocaleString()} more on globe</div>
                       )}
                     </div>
                   ) : (
-                    <div className="text-[10px] text-slate-600 py-2 italic">Switch on Flights layer to load data</div>
+                    <div className="text-[10px] text-slate-600 py-2 italic">Waiting for OpenSky data...</div>
                   )}
                 </div>
+
+                {/* Active fires feed */}
+                {survFires.length > 0 && (
+                  <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
+                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5"><Flame size={10} className="text-orange-400" /> Active Fire Regions</span>
+                      <span className="text-orange-400">{survFires.length}</span>
+                    </div>
+                    <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
+                      {survFires.slice(0, 6).map((f, i) => (
+                        <div key={i} className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
+                          <span className="text-[10px] text-slate-300 truncate">{f.title?.replace('Active Wildfires -- ', '') || f.id}</span>
+                          <span className={`text-[9px] font-bold ml-2 shrink-0 ${f.severity === 'HIGH' ? 'text-rose-400' : 'text-amber-400'}`}>{f.severity}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Seismic feed */}
+                {survSeismic.length > 0 && (
+                  <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
+                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5"><Waves size={10} className="text-amber-400" /> Seismic Events</span>
+                      <span className="text-amber-400">{survSeismic.length}</span>
+                    </div>
+                    <div className="space-y-1 max-h-32 overflow-y-auto pr-1">
+                      {survSeismic.slice(0, 6).map((e, i) => (
+                        <div key={i} className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
+                          <span className="text-[10px] text-slate-300 truncate">{e.title?.replace('Earthquake -- ', '') || e.id}</span>
+                          <span className={`text-[9px] font-bold ml-2 shrink-0 ${e.severity === 'HIGH' ? 'text-rose-400' : 'text-amber-400'}`}>{e.severity}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Data sources note */}
                 <div className="bg-[#0a0a0a] border border-white/5 p-3 rounded-xl">
                   <div className="text-[9px] text-slate-600 leading-relaxed">
-                    <span className="text-slate-500 font-bold">Sources:</span> OpenSky Network (flights) · USGS (seismic) · NASA FIRMS (fires) · ACLED (incidents). All data public, no auth required. Flights refresh every 60s.
+                    <span className="text-slate-500 font-bold">Sources:</span> OpenSky Network (flights, free) · NASA FIRMS (fires) · USGS (seismic). Flights refresh every 60s. Fires &amp; seismic every 5 min.
                   </div>
                 </div>
 
@@ -1718,12 +1752,16 @@ export default function Dashboard() {
                   opportunities={opportunities}
                   chokepoints={CHOKEPOINTS}
                   autoRotate={autoRotate}
-                  showChokepoints={activeTab === 'surveillance' ? showSurvCp : showChokepoints}
+                  showChokepoints={showChokepoints}
                   showDayNight={showDayNight}
-                  showThreats={activeTab === 'surveillance' ? showSurvThreats : showThreats}
+                  showThreats={showThreats}
                   onNodeClick={(node) => setSelectedNode(node)}
                   survFlights={survFlights}
                   showSurvFlights={activeTab === 'surveillance' && showSurvFlights}
+                  survFires={survFires}
+                  showSurvFires={activeTab === 'surveillance' && showSurvFires}
+                  survSeismic={survSeismic}
+                  showSurvSeismic={activeTab === 'surveillance' && showSurvSeismic}
                 />
               </ErrorBoundary>
             </div>
