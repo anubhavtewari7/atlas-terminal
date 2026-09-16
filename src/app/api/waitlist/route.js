@@ -81,7 +81,7 @@ const welcomeEmailHtml = (email) => `
 `
 
 export async function POST(request) {
-  const rl = rateLimit(request, { limit: 5, windowMs: 60_000 })
+  const rl = await rateLimit(request, { limit: 5, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   try {

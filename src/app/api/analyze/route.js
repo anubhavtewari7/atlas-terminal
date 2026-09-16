@@ -27,7 +27,7 @@ const CATEGORY_SIGNALS = {
 }
 
 export async function POST(req) {
-  const rl = rateLimit(req, { limit: 10, windowMs: 60_000 })
+  const rl = await rateLimit(req, { limit: 10, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   try {

@@ -87,7 +87,7 @@ function aggregateByRegion(geojson) {
 // --------------------------------------------------------------------------
 function buildIncidentRisks(aggregates, updatedAt) {
   return aggregates
-    .filter(a => a.count > 5)   // ignore negligible activity
+    .filter(a => a.count > 1)   // ignore single-article noise
     .map(a => {
       const { region } = a
       const centLat = a.centroidLat / a.n
@@ -147,25 +147,40 @@ export async function GET() {
     let incidents, source
 
     try {
-      // Properly encode the query param + hard timeout so Vercel never hangs
+      // GDELT GEO 2.0 -- try two query strategies.
+      // Strategy A: CAMEO theme codes (precise, may fail on some API versions)
+      // Strategy B: Plain keyword terms (broader, more reliable fallback)
       const gdeltBase = 'https://api.gdeltproject.org/api/v2/geo/geo'
-      const gdeltQuery = encodeURIComponent(
-        '(theme:TERROR OR theme:CONFLICT OR theme:UNREST OR theme:MILITARY_PRESENCE OR theme:PROTEST) ' +
-        '-theme:ARTS -theme:CULTURE -theme:SPORTS -theme:RELIGION'
-      )
-      const gdeltFull = `${gdeltBase}?query=${gdeltQuery}&mode=PointData&format=GeoJSON&timespan=7d&maxpoints=500&geores=1`
+      const strategies = [
+        // A: theme codes (proper GDELT 2.0 format)
+        encodeURIComponent(
+          '(theme:TERROR OR theme:MILITARY OR theme:ARMED_CONFLICT OR theme:PROTEST OR theme:UNREST_CLOSURES) ' +
+          '-theme:ARTS -theme:CULTURE -theme:SPORT'
+        ),
+        // B: plain keywords -- works even when theme: prefix is unsupported
+        encodeURIComponent('war OR conflict OR military OR attack OR protest OR sanction OR blockade'),
+      ]
 
-      const res = await fetch(gdeltFull, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
-          'Accept': 'application/json',
-        },
-        signal: AbortSignal.timeout(10000),
-        next: { revalidate: 3600 },
-      })
-      if (!res.ok) throw new Error(`GDELT ${res.status}`)
+      let geojson = null
+      for (const q of strategies) {
+        const url = `${gdeltBase}?query=${q}&mode=PointData&format=GeoJSON&timespan=7d&maxpoints=500&geores=1`
+        try {
+          const res = await fetch(url, {
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)',
+              'Accept': 'application/json, */*',
+            },
+            signal: AbortSignal.timeout(10000),
+            next: { revalidate: 3600 },
+          })
+          if (!res.ok) continue
+          const json = await res.json()
+          if (json.features?.length) { geojson = json; break }
+        } catch { continue }
+      }
 
-      const geojson    = await res.json()
+      if (!geojson) throw new Error('All GDELT query strategies returned no data')
+
       const aggregates = aggregateByRegion(geojson)
       const updatedAt  = new Date().toISOString()
       incidents = buildIncidentRisks(aggregates, updatedAt)

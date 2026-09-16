@@ -29,7 +29,7 @@ function safeHref(url) {
 
 export async function GET(request) {
   // Rate limit before auth check so we don't burn CPU on brute-force auth attempts
-  const rl = rateLimit(request, { limit: 20, windowMs: 60_000 })
+  const rl = await rateLimit(request, { limit: 20, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   // Auth via Authorization header (not URL param -- URL params end up in logs)

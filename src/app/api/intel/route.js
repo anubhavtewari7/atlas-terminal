@@ -46,29 +46,28 @@ function extractCountries(opportunities) {
   return Array.from(found).slice(0, 5)
 }
 
-async function fetchNewsAPI(countries, query) {
-  if (!NEWS_API_KEY) return []
-  // Extract meaningful commodity keywords from the scan query (skip short/generic words)
-  const STOP = new Set(['and','the','for','with','from','into','that','this','are','have','trade','supply','chain','global'])
+const STOP = new Set(['and','the','for','with','from','into','that','this','are','have','trade','supply','chain','global'])
+
+function buildKeywords(query, countries) {
   const commodityWords = query
     .replace(/[^a-zA-Z0-9\s-]/g, '')
     .split(/\s+/)
     .filter(w => w.length > 3 && !STOP.has(w.toLowerCase()))
     .slice(0, 3)
-  const commodityTerms = commodityWords.length
-    ? `(${commodityWords.join(' OR ')})`
-    : ''
-  const countryTerms = countries.slice(0, 3).length
-    ? `(${countries.slice(0, 3).join(' OR ')})`
-    : ''
-  // Build targeted query: commodity keywords + trade context
-  const queryParts = [commodityTerms, countryTerms].filter(Boolean)
-  // If we have nothing meaningful to query, bail early rather than sending a malformed request
+  return { commodityWords, countryTerms: countries.slice(0, 3) }
+}
+
+// Strategy A: NewsAPI.org (requires NEWS_API_KEY env var)
+async function fetchNewsAPI(countries, query) {
+  if (!NEWS_API_KEY) return []
+  const { commodityWords, countryTerms } = buildKeywords(query, countries)
+  const commodityTerms = commodityWords.length ? `(${commodityWords.join(' OR ')})` : ''
+  const countryQ       = countryTerms.length   ? `(${countryTerms.join(' OR ')})`   : ''
+  const queryParts = [commodityTerms, countryQ].filter(Boolean)
   if (!queryParts.length) return []
   const baseQ = queryParts.join(' AND ')
   const tradeContext = 'AND (trade OR tariff OR "supply chain" OR export OR import OR sanctions OR sourcing OR manufacturing)'
   const q = encodeURIComponent(`${baseQ} ${tradeContext}`)
-  // pageSize matches the slice below (6) -- no point fetching extras we discard
   const url = `https://newsapi.org/v2/everything?q=${q}&language=en&sortBy=publishedAt&pageSize=6`
   try {
     const res = await fetch(url, {
@@ -88,8 +87,40 @@ async function fetchNewsAPI(countries, query) {
   } catch { return [] }
 }
 
+// Strategy B: GDELT DOC API -- free, no key, updated every 15 min.
+// Returns news articles about a topic from global media.
+async function fetchGDELTNews(countries, query) {
+  try {
+    const { commodityWords, countryTerms } = buildKeywords(query, countries)
+    const keywords = [...commodityWords, ...countryTerms, 'trade', 'supply chain']
+      .filter(Boolean)
+      .slice(0, 6)
+      .join(' OR ')
+    if (!keywords) return []
+
+    const q   = encodeURIComponent(keywords)
+    const url = `https://api.gdeltproject.org/api/v2/doc/doc?query=${q}+sourcelang:english&mode=ArtList&format=json&maxrecords=10&timespan=3d&sort=DateDesc`
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; NautilusTerminal/2.0)', 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(10000),
+      next: { revalidate: 900 },
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    return (data.articles || []).slice(0, 6).map(a => ({
+      title:   a.title,
+      url:     a.url,
+      source:  a.domain || 'GDELT News',
+      pubDate: a.seendate ? new Date(
+        a.seendate.replace(/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/, '$1-$2-$3T$4:$5:$6Z')
+      ).toISOString() : new Date().toISOString(),
+      tone: /sanction|tariff|ban|restrict|conflict|crisis|war|halt|shortage/.test((a.title || '').toLowerCase()) ? -5 : 0,
+    }))
+  } catch { return [] }
+}
+
 export async function POST(req) {
-  const rl = rateLimit(req, { limit: 10, windowMs: 60_000 })
+  const rl = await rateLimit(req, { limit: 10, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   try {
@@ -113,9 +144,14 @@ export async function POST(req) {
       }
     })
 
-    // Fetch news from NewsAPI
-    const allArticles = await fetchNewsAPI(countries, query)
-    const topArticles = allArticles.slice(0, 6)  // matches pageSize=6 in fetchNewsAPI
+    // Fetch news: NewsAPI first (requires key), GDELT DOC API as free fallback
+    let allArticles = await fetchNewsAPI(countries, query)
+    let newsSource = 'NewsAPI'
+    if (allArticles.length === 0) {
+      allArticles = await fetchGDELTNews(countries, query)
+      newsSource = 'GDELT News'
+    }
+    const topArticles = allArticles.slice(0, 6)
     const sourceCount = new Set(topArticles.map(a => a.source).filter(Boolean)).size
 
     return Response.json({
@@ -124,6 +160,7 @@ export async function POST(req) {
       articleCount: allArticles.length,
       sourceCount,
       countries,
+      newsSource,
       timestamp: new Date().toISOString()
     })
 

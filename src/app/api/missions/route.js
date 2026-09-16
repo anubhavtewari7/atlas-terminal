@@ -44,7 +44,7 @@ async function getUserId(request) {
 }
 
 export async function GET(request) {
-  const rl = rateLimit(request, { limit: 30, windowMs: 60_000 })
+  const rl = await rateLimit(request, { limit: 30, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   const userId = await getUserId(request)
@@ -53,7 +53,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  const rl = rateLimit(request, { limit: 10, windowMs: 60_000 })
+  const rl = await rateLimit(request, { limit: 10, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   let body
@@ -87,7 +87,7 @@ export async function POST(request) {
 }
 
 export async function DELETE(request) {
-  const rl = rateLimit(request, { limit: 20, windowMs: 60_000 })
+  const rl = await rateLimit(request, { limit: 20, windowMs: 60_000 })
   if (!rl.ok) return rl.response
 
   const { searchParams } = new URL(request.url)
