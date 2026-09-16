@@ -39,7 +39,7 @@ import {
   Anchor, Clock, ArrowUpRight, ArrowDownRight, SearchCode,
   History, Scale, TrendingUp, Activity, DollarSign, Download,
   AlertTriangle, CheckCircle, Info, Calculator, ShieldOff, Sun, Moon, Layers, RotateCcw,
-  Eye, Radio, Flame, Waves, Globe2
+  Eye, Flame, Waves, Globe2
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -154,14 +154,8 @@ export default function Dashboard() {
   const [hubNav, setHubNav] = useState({ level: 'continent', continent: null, country: null, region: null })
 
   // ── Surveillance tab state ──
-  const [survFlights,      setSurvFlights]      = useState([])
-  const [survFlightCount,  setSurvFlightCount]  = useState(0)
-  const [survFlightLoading,setSurvFlightLoading]= useState(false)
-  const [survFlightError,  setSurvFlightError]  = useState(null)
-  const [survLastFetch,    setSurvLastFetch]    = useState(null)
   const [survFires,        setSurvFires]        = useState([])
   const [survSeismic,      setSurvSeismic]      = useState([])
-  const [showSurvFlights,  setShowSurvFlights]  = useState(true)
   const [showSurvFires,    setShowSurvFires]    = useState(true)
   const [showSurvSeismic,  setShowSurvSeismic]  = useState(true)
 
@@ -237,26 +231,6 @@ export default function Dashboard() {
     if (activeTab !== 'surveillance') return
     let cancelled = false
 
-    async function fetchFlights() {
-      setSurvFlightLoading(true)
-      setSurvFlightError(null)
-      try {
-        const res = await fetch('/api/surveillance/flights')
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        if (!cancelled) {
-          setSurvFlights(data.flights || [])
-          setSurvFlightCount(data.count || 0)
-          setSurvLastFetch(data.ts)
-          if (data.error) setSurvFlightError(data.error)
-        }
-      } catch (e) {
-        if (!cancelled) setSurvFlightError(e.message)
-      } finally {
-        if (!cancelled) setSurvFlightLoading(false)
-      }
-    }
-
     async function fetchFiresAndSeismic() {
       try {
         const [fireRes, eqRes] = await Promise.all([
@@ -271,11 +245,9 @@ export default function Dashboard() {
       } catch {}
     }
 
-    fetchFlights()
     fetchFiresAndSeismic()
-    const flightInterval = setInterval(fetchFlights, 60000)
-    const envInterval    = setInterval(fetchFiresAndSeismic, 300000) // fires/seismic every 5 min
-    return () => { cancelled = true; clearInterval(flightInterval); clearInterval(envInterval) }
+    const envInterval = setInterval(fetchFiresAndSeismic, 300000) // fires/seismic every 5 min
+    return () => { cancelled = true; clearInterval(envInterval) }
   }, [activeTab])
 
   const buildMissionKeywords = (query, category) => {
@@ -1222,8 +1194,8 @@ export default function Dashboard() {
               </div>
             )}
 
-            {/* Global Threats — SOURCING + RISK tabs */}
-            {(activeTab === 'sourcing' || activeTab === 'risk') && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
+            {/* Global Threats — RISK tab only (sourcing tab renders it below hubs) */}
+            {activeTab === 'risk' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
                 <ShieldAlert size={14} /> Global Threats
                 {risks.length > 0
@@ -1322,6 +1294,43 @@ export default function Dashboard() {
                   {opportunities.length > 0 && (
                     <p className="text-[10px] text-slate-500 mt-1">FX note: verify landed cost impact if sourcing from this region</p>
                   )}
+                </div>
+              )}
+            </div>}
+
+            {/* Global Threats — SOURCING tab (collapsible, below hubs) */}
+            {activeTab === 'sourcing' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl">
+              <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
+                <ShieldAlert size={14} /> Global Threats
+                {risks.length > 0
+                  ? <span className="flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-rose-500/25 bg-rose-500/8 text-rose-400">
+                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse inline-block" />
+                      LIVE · {risks.length}
+                    </span>
+                  : <span className="text-[8px] text-slate-600 font-normal normal-case border border-white/8 px-1.5 py-0.5 rounded-full">post-scan</span>
+                }
+                <span className="ml-auto text-slate-500">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
+              </h2>
+              {!threatsCollapsed && (
+                <div className="space-y-2">
+                  {risks.length === 0 ? (
+                    <p className="text-[11px] text-slate-500 italic">Run a sourcing scan to surface relevant risk factors.</p>
+                  ) : risks.map((r, i) => (
+                    <div key={r.id || i}
+                      onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
+                      className={`p-3 border transition-all cursor-pointer rounded-lg ${
+                        selectedNode?.id === (r.id || i)
+                          ? 'bg-rose-500/10 border-rose-500/40'
+                          : 'bg-[#111] border-white/5 hover:border-rose-500/20'
+                      }`}>
+                      <div className="flex items-start gap-2">
+                        <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border shrink-0 mt-0.5 ${severityStyle(r.severity)}`}>
+                          {r.severity || 'RISK'}
+                        </span>
+                        <div className="text-[12px] font-bold uppercase leading-snug">{r.title || r.risk}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>}
@@ -1581,13 +1590,8 @@ export default function Dashboard() {
                     <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Surveillance Mode</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {survFlightLoading && <span className="text-[9px] text-cyan-400 animate-pulse">SYNCING...</span>}
-                    {survLastFetch && !survFlightLoading && (
-                      <span className="text-[9px] text-slate-500">
-                        {new Date(survLastFetch).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                      </span>
-                    )}
-                    <div className={`w-1.5 h-1.5 rounded-full ${survFlightLoading ? 'bg-cyan-400 animate-pulse' : survFlightError ? 'bg-amber-400' : 'bg-emerald-400'}`} />
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="text-[9px] text-slate-500 uppercase tracking-widest">Live</span>
                   </div>
                 </div>
 
@@ -1598,14 +1602,6 @@ export default function Dashboard() {
                   </div>
                   <div className="space-y-1.5">
                     {[
-                      {
-                        label: 'Live Flights',
-                        icon: <Radio size={10} />,
-                        active: showSurvFlights,
-                        toggle: () => setShowSurvFlights(v => !v),
-                        color: 'cyan',
-                        count: survFlightCount > 0 ? `${survFlightCount.toLocaleString()} aircraft` : survFlightLoading ? 'loading...' : survFlightError ? 'rate-limited' : '--',
-                      },
                       {
                         label: 'Active Fires',
                         icon: <Flame size={10} />,
@@ -1654,39 +1650,6 @@ export default function Dashboard() {
                       </button>
                     ))}
                   </div>
-                </div>
-
-                {/* Live flights feed */}
-                <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
-                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5"><Radio size={10} className="text-cyan-400" /> Live Flights</span>
-                    {survFlightCount > 0 && <span className="text-cyan-400">{survFlightCount.toLocaleString()}</span>}
-                  </div>
-                  {survFlightLoading && survFlights.length === 0 ? (
-                    <div className="text-[10px] text-cyan-400 animate-pulse py-2">Syncing OpenSky network...</div>
-                  ) : survFlightError && survFlights.length === 0 ? (
-                    <div className="text-[10px] text-slate-500 py-2">OpenSky rate-limited — retrying in 60s. Dots will appear on globe when data loads.</div>
-                  ) : survFlights.length > 0 ? (
-                    <div className="space-y-1 max-h-44 overflow-y-auto pr-1">
-                      {survFlights.slice(0, 15).map((f, i) => (
-                        <div key={i} className="flex items-center justify-between py-1 border-b border-white/5 last:border-0">
-                          <div className="flex items-center gap-1.5">
-                            <div className="w-1 h-1 rounded-full bg-cyan-400" />
-                            <span className="text-[10px] font-mono text-white">{f.callsign || f.icao}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-[9px] text-slate-500">
-                            <span>{f.country}</span>
-                            {f.alt && <span>{(f.alt / 1000).toFixed(1)}km</span>}
-                          </div>
-                        </div>
-                      ))}
-                      {survFlights.length > 15 && (
-                        <div className="text-[9px] text-slate-600 pt-1 text-center">+{(survFlights.length - 15).toLocaleString()} more on globe</div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="text-[10px] text-slate-600 py-2 italic">Waiting for OpenSky data...</div>
-                  )}
                 </div>
 
                 {/* Active fires feed */}
@@ -1756,8 +1719,6 @@ export default function Dashboard() {
                   showDayNight={showDayNight}
                   showThreats={showThreats}
                   onNodeClick={(node) => setSelectedNode(node)}
-                  survFlights={survFlights}
-                  showSurvFlights={activeTab === 'surveillance' && showSurvFlights}
                   survFires={survFires}
                   showSurvFires={activeTab === 'surveillance' && showSurvFires}
                   survSeismic={survSeismic}

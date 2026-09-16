@@ -170,7 +170,7 @@ function SurvDot({ lat, lng, color }) {
   )
 }
 
-function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick, survFlights, showSurvFlights, survFires, showSurvFires, survSeismic, showSurvSeismic }) {
+function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints, showDayNight, showThreats, onNodeClick, survFires, showSurvFires, survSeismic, showSurvSeismic }) {
   const meshRef    = useRef()
   const earthRotY  = useRef(0)           // shared with NightOverlay via ref
   const texture    = useLoader(THREE.TextureLoader, '/earth.jpg')
@@ -212,11 +212,6 @@ function Earth({ risks, opportunities, chokepoints, autoRotate, showChokepoints,
           <ChokepointMarker key={`cp-${cp.id || i}`} cp={cp} />
         ))}
 
-        {/* SURVEILLANCE — LIVE FLIGHTS (CYAN dots) */}
-        {showSurvFlights && (survFlights || []).map((f, i) => (
-          <SurvDot key={`fl-${i}`} lat={f.lat} lng={f.lng} color="#22d3ee" />
-        ))}
-
         {/* SURVEILLANCE — ACTIVE FIRES (ORANGE dots) */}
         {showSurvFires && (survFires || []).map((f, i) => (
           <SurvDot key={`fire-${i}`} lat={f.lat} lng={f.lng} color="#f97316" />
@@ -253,20 +248,14 @@ function Marker({ node, color, type, onNodeClick }) {
       onPointerOut={(e) => { e.stopPropagation(); setHovered(false) }}
       onClick={(e) => { e.stopPropagation(); if (onNodeClick) onNodeClick(node) }}
     >
-      {/* CORE DOT — bigger and vivid */}
-      <sphereGeometry args={[0.07, 16, 16]} />
+      {/* CORE DOT */}
+      <sphereGeometry args={[0.055, 16, 16]} />
       <meshBasicMaterial color={color} />
-      
-      {/* OUTER GLOW RING */}
-      <mesh scale={[1, 1, 1]}>
-        <sphereGeometry args={[0.13, 16, 16]} />
-        <meshBasicMaterial color={color} transparent opacity={0.25} />
-      </mesh>
 
-      {/* WIDE PULSE DISC */}
-      <mesh scale={[8, 8, 8]}>
-        <circleGeometry args={[0.07, 32]} />
-        <meshBasicMaterial color={color} transparent opacity={0.12} side={THREE.DoubleSide} />
+      {/* TIGHT GLOW RING — small, no giant halo */}
+      <mesh>
+        <sphereGeometry args={[0.09, 16, 16]} />
+        <meshBasicMaterial color={color} transparent opacity={0.2} />
       </mesh>
       
       <Html distanceFactor={8} zIndexRange={[100, 0]}>
@@ -297,7 +286,7 @@ function Marker({ node, color, type, onNodeClick }) {
   )
 }
 
-export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick, survFlights = [], showSurvFlights = false, survFires = [], showSurvFires = false, survSeismic = [], showSurvSeismic = false }) {
+export default function Globe({ risks = [], opportunities = [], chokepoints = [], autoRotate = true, showChokepoints = true, showDayNight = true, showThreats = false, onNodeClick, survFires = [], showSurvFires = false, survSeismic = [], showSurvSeismic = false }) {
   return (
     <div className="w-full h-full">
       <Canvas shadows gl={{ antialias: true }}>
@@ -316,8 +305,6 @@ export default function Globe({ risks = [], opportunities = [], chokepoints = []
             showDayNight={showDayNight}
             showThreats={showThreats}
             onNodeClick={onNodeClick}
-            survFlights={survFlights}
-            showSurvFlights={showSurvFlights}
             survFires={survFires}
             showSurvFires={showSurvFires}
             survSeismic={survSeismic}
