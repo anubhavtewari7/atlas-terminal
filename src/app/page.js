@@ -1005,26 +1005,28 @@ export default function Home() {
               &#10003; ACCESS LINK SENT -- CHECK YOUR INBOX (and spam, just in case)
             </p>
           ) : (
-            <form className="email-form" onSubmit={handleSubmit}>
-              <label htmlFor="waitlist-email" className="sr-only">Email address</label>
-              <input
-                id="waitlist-email"
-                className="email-input"
-                type="email"
-                placeholder="your@company.com"
-                required
-                aria-label="Email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                disabled={status === 'loading'}
-              />
-              <button type="submit" className="btn-primary" disabled={status === 'loading'} aria-describedby="waitlist-disclaimer">
-                {status === 'loading' ? 'Sending...' : 'Request Access \u2192'}
-              </button>
-            </form>
-            <p id="waitlist-disclaimer" className="sr-only">
-              By submitting your email, you agree to receive a one-time access link and occasional product updates from NAUTILUS Intelligence. You can unsubscribe at any time. We do not sell your email address.
-            </p>
+            <>
+              <form className="email-form" onSubmit={handleSubmit}>
+                <label htmlFor="waitlist-email" className="sr-only">Email address</label>
+                <input
+                  id="waitlist-email"
+                  className="email-input"
+                  type="email"
+                  placeholder="your@company.com"
+                  required
+                  aria-label="Email address"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  disabled={status === 'loading'}
+                />
+                <button type="submit" className="btn-primary" disabled={status === 'loading'} aria-describedby="waitlist-disclaimer">
+                  {status === 'loading' ? 'Sending...' : 'Request Access \u2192'}
+                </button>
+              </form>
+              <p id="waitlist-disclaimer" className="sr-only">
+                By submitting your email, you agree to receive a one-time access link and occasional product updates from NAUTILUS Intelligence. You can unsubscribe at any time. We do not sell your email address.
+              </p>
+            </>
           )}
           {status === 'error' && (
             <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--red)', marginTop: 12 }}>
