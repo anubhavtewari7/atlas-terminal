@@ -3,7 +3,7 @@ export const metadata = {
   description: 'Terms governing your use of the Nautilus supply chain intelligence terminal.',
 }
 
-const EFFECTIVE_DATE = 'September 1, 2026'
+const EFFECTIVE_DATE = 'September 2026'
 
 export default function TermsPage() {
   return (
@@ -12,32 +12,48 @@ export default function TermsPage() {
 
       <Section title="1. Acceptance of Terms">
         <p>
-          By accessing or using the Nautilus Terminal (the &ldquo;Service&rdquo;), you agree to be
-          bound by these Terms of Service. If you do not agree to all of these terms, do not access
-          or use the Service.
+          By accessing or using the NAUTILUS Terminal (the &ldquo;Service&rdquo;), you agree to be
+          bound by these Terms of Service and all applicable laws. If you do not agree to all of
+          these terms, do not access or use the Service.
         </p>
-      </Section>
-
-      <Section title="2. Description of Service">
         <p>
-          Nautilus Terminal is a supply chain intelligence platform that aggregates publicly available
-          data, third-party news feeds, foreign exchange rates, and commodity prices to support
-          procurement research and decision-making. The Service is provided for informational purposes
-          only.
+          <strong className="text-slate-300">You must be at least 18 years old to use this Service.</strong>{' '}
+          By using the Service, you represent and warrant that you are 18 years of age or older.
+          If you are under 18, you are not permitted to use the Service.
         </p>
       </Section>
 
-      <Section title="3. No Professional Advice">
+      <Section title="2. Operator">
+        <p>
+          The Service is operated by <strong className="text-slate-300">NAUTILUS Intelligence</strong>,
+          a United States company (&ldquo;we&rdquo;, &ldquo;our&rdquo;, or &ldquo;the Company&rdquo;).
+          For questions or legal notices, contact us at{' '}
+          <a href="mailto:legal@nautilus-terminal.com" className="text-sky-400 hover:text-sky-300">
+            legal@nautilus-terminal.com
+          </a>.
+        </p>
+      </Section>
+
+      <Section title="3. Description of Service">
+        <p>
+          NAUTILUS Terminal is a supply chain intelligence platform that aggregates publicly available
+          data, third-party news feeds, foreign exchange rates, and commodity prices to support
+          procurement research and decision-making. The Service is provided for <strong className="text-slate-300">informational
+          purposes only</strong> and is provided &ldquo;as-is&rdquo;.
+        </p>
+      </Section>
+
+      <Section title="4. No Professional Advice">
         <p>
           Nothing on this Service constitutes financial, legal, trade, or investment advice. All
           analysis, risk scores, and recommendations are generated algorithmically from third-party
-          data and are intended as a starting point for your own research -- not as a substitute for
+          data and are intended as a starting point for your own research &mdash; not as a substitute for
           professional judgment. You are solely responsible for any decisions you make based on
           information obtained through the Service.
         </p>
       </Section>
 
-      <Section title="4. Permitted Use">
+      <Section title="5. Permitted Use">
         <p>
           You may use the Service for lawful commercial research and procurement purposes. You may not:
         </p>
@@ -46,72 +62,96 @@ export default function TermsPage() {
           <li>Use the Service to engage in market manipulation, sanctions evasion, or any unlawful activity</li>
           <li>Reverse-engineer, decompile, or otherwise attempt to extract proprietary models or algorithms</li>
           <li>Resell or sub-license access to the Service without prior written consent</li>
+          <li>Use the Service if you are under 18 years of age</li>
         </ul>
       </Section>
 
-      <Section title="5. Intellectual Property">
+      <Section title="6. Intellectual Property">
         <p>
-          The Nautilus Terminal interface, branding, and original analysis are protected by copyright
+          The NAUTILUS Terminal interface, branding, and original analysis are protected by copyright
           and other intellectual property laws. Third-party data accessed through the Service remains
           the property of the respective providers and is subject to their individual terms of use.
         </p>
       </Section>
 
-      <Section title="6. Availability and Accuracy">
+      <Section title="7. Availability and Accuracy">
         <p>
           We strive to provide accurate, up-to-date information but make no representations or
-          warranties -- express or implied -- about the completeness, accuracy, reliability, or
+          warranties &mdash; express or implied &mdash; about the completeness, accuracy, reliability, or
           fitness for a particular purpose of any content. The Service may be interrupted for
           maintenance or due to third-party API outages without notice.
         </p>
       </Section>
 
-      <Section title="7. Limitation of Liability">
+      <Section title="8. Limitation of Liability">
         <p>
-          To the maximum extent permitted by applicable law, Nautilus Terminal and its operators
+          To the maximum extent permitted by applicable law, NAUTILUS Intelligence and its operators
           shall not be liable for any indirect, incidental, special, consequential, or punitive
           damages arising from your use of or inability to use the Service, including but not limited
           to procurement decisions, contract losses, or data inaccuracies.
         </p>
       </Section>
 
-      <Section title="8. Third-Party Services">
+      <Section title="9. Third-Party Services">
         <p>
           The Service integrates with third-party APIs (including news providers, currency data
           sources, and AI inference providers). We are not responsible for the content, accuracy,
           or availability of those third-party services, and their terms of use apply independently.
+          See our <a href="/legal/data-sources" className="text-sky-400 hover:text-sky-300">Data Sources</a> page
+          for a full list.
         </p>
       </Section>
 
-      <Section title="9. Privacy">
+      <Section title="10. Pricing and Billing">
         <p>
-          Search queries entered in the terminal may be processed by third-party AI providers to
-          generate analysis. We do not sell your query data. By using the Service you consent to
-          this processing. We collect minimal usage analytics (via Vercel Analytics) to improve
-          the Service.
+          The Service is currently provided free of charge during its early-access period. If a
+          paid tier is introduced, separate billing terms will be published and presented clearly
+          before any charges are made. For information about refunds on paid plans, see our{' '}
+          <a href="/legal/refund" className="text-sky-400 hover:text-sky-300">Refund Policy</a>.
+        </p>
+        <p>
+          We will provide at least 30 days&apos; notice to existing users before introducing any paid
+          requirement for features they currently access for free.
         </p>
       </Section>
 
-      <Section title="10. Modifications">
+      <Section title="11. Privacy">
+        <p>
+          Your use of the Service is also governed by our{' '}
+          <a href="/legal/privacy-policy" className="text-sky-400 hover:text-sky-300">Privacy Policy</a>,
+          which is incorporated into these Terms by reference. Search queries entered in the terminal
+          may be processed by third-party AI providers to generate analysis. We do not sell your
+          query data. We collect minimal usage analytics (via Vercel Analytics) to improve the
+          Service.
+        </p>
+      </Section>
+
+      <Section title="12. Modifications">
         <p>
           We reserve the right to modify these Terms at any time. Continued use of the Service
           after changes are posted constitutes acceptance of the revised Terms. Material changes
-          will be communicated via the Service interface.
+          will be communicated via the Service interface or by email to registered users.
         </p>
       </Section>
 
-      <Section title="11. Governing Law">
+      <Section title="13. Governing Law">
         <p>
-          These Terms are governed by the laws of the State of Delaware, United States, without
-          regard to conflict-of-law principles. Any dispute arising from these Terms shall be
-          resolved in the state or federal courts located in Delaware.
+          These Terms are governed by the laws of the <strong className="text-slate-300">State of
+          Delaware, United States</strong>, without regard to conflict-of-law principles. Any dispute
+          arising from these Terms shall be resolved in the state or federal courts located in Delaware.
         </p>
       </Section>
 
-      <Section title="12. Contact">
+      <Section title="14. Contact">
         <p>
-          Questions about these Terms can be directed to the team via the contact information
-          available on the main Nautilus Terminal site.
+          Questions about these Terms can be directed to:
+        </p>
+        <p>
+          NAUTILUS Intelligence<br />
+          Email:{' '}
+          <a href="mailto:legal@nautilus-terminal.com" className="text-sky-400 hover:text-sky-300">
+            legal@nautilus-terminal.com
+          </a>
         </p>
       </Section>
     </article>

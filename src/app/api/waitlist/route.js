@@ -71,6 +71,12 @@ const welcomeEmailHtml = (email) => `
       <tr><td style="padding:24px 0;text-align:center;">
         <p style="margin:0;font-size:11px;color:#94A3B8;">&copy; 2026 NAUTILUS Terminal &nbsp;&middot;&nbsp; ${email}</p>
         <p style="margin:6px 0 0;font-size:10px;color:#CBD5E1;">You received this because you requested early access.</p>
+        <hr style="margin: 32px 0; border-color: #334155; border-style: solid; border-width: 1px 0 0 0;">
+        <p style="font-size: 12px; color: #64748b; text-align: center; margin: 0;">
+          You're receiving this because you signed up for the NAUTILUS Terminal waitlist.<br>
+          To unsubscribe, <a href="mailto:legal@nautilus-terminal.com?subject=Unsubscribe&body=Please remove me from the NAUTILUS waitlist." style="color: #06b6d4;">click here</a> or email legal@nautilus-terminal.com with subject "Unsubscribe".<br>
+          NAUTILUS Intelligence &middot; United States
+        </p>
       </td></tr>
 
     </table>

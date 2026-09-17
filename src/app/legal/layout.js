@@ -22,11 +22,14 @@ export default function LegalLayout({ children }) {
               </span>
             </div>
           </Link>
-          <nav className="flex items-center gap-6 text-[11px] text-slate-500">
+          <nav className="flex items-center gap-4 text-[11px] text-slate-500 flex-wrap justify-end">
             <Link href="/legal/terms" className="hover:text-slate-300 transition-colors">Terms</Link>
             <Link href="/legal/privacy-policy" className="hover:text-slate-300 transition-colors">Privacy</Link>
+            <Link href="/legal/cookies" className="hover:text-slate-300 transition-colors">Cookies</Link>
+            <Link href="/legal/refund" className="hover:text-slate-300 transition-colors">Refund</Link>
             <Link href="/legal/disclaimer" className="hover:text-slate-300 transition-colors">Disclaimer</Link>
             <Link href="/legal/data-sources" className="hover:text-slate-300 transition-colors">Data Sources</Link>
+            <Link href="/legal/data-deletion" className="hover:text-slate-300 transition-colors">Data Deletion</Link>
           </nav>
         </div>
       </header>

@@ -1006,19 +1006,25 @@ export default function Home() {
             </p>
           ) : (
             <form className="email-form" onSubmit={handleSubmit}>
+              <label htmlFor="waitlist-email" className="sr-only">Email address</label>
               <input
+                id="waitlist-email"
                 className="email-input"
                 type="email"
                 placeholder="your@company.com"
                 required
+                aria-label="Email address"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 disabled={status === 'loading'}
               />
-              <button type="submit" className="btn-primary" disabled={status === 'loading'}>
+              <button type="submit" className="btn-primary" disabled={status === 'loading'} aria-describedby="waitlist-disclaimer">
                 {status === 'loading' ? 'Sending...' : 'Request Access \u2192'}
               </button>
             </form>
+            <p id="waitlist-disclaimer" className="sr-only">
+              By submitting your email, you agree to receive a one-time access link and occasional product updates from NAUTILUS Intelligence. You can unsubscribe at any time. We do not sell your email address.
+            </p>
           )}
           {status === 'error' && (
             <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--red)', marginTop: 12 }}>
@@ -1042,9 +1048,15 @@ export default function Home() {
           <span className="f-legal-sep">/</span>
           <a href="/legal/privacy-policy" className="f-legal-link">Privacy Policy</a>
           <span className="f-legal-sep">/</span>
+          <a href="/legal/cookies" className="f-legal-link">Cookie Policy</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/legal/refund" className="f-legal-link">Refund Policy</a>
+          <span className="f-legal-sep">/</span>
           <a href="/legal/disclaimer" className="f-legal-link">Disclaimer</a>
           <span className="f-legal-sep">/</span>
           <a href="/legal/data-sources" className="f-legal-link">Data Sources</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/legal/data-deletion" className="f-legal-link">Data Deletion</a>
         </div>
       </footer>
     </>

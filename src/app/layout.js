@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import CookieBanner from '@/components/CookieBanner';
 import './globals.css';
 
 export const metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({ children }) {
       <body>
         {children}
         <Analytics />
+        <CookieBanner />
       </body>
     </html>
   );
