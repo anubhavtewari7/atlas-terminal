@@ -577,10 +577,109 @@ footer {
 }
 .press-cite em { font-style: normal; color: var(--accent); }
 
+.cases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 56px;
+}
+.case-card {
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid var(--rim2);
+  background: rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: border-color 0.3s, transform 0.3s var(--ease);
+}
+.case-card:hover { border-color: rgba(56,189,248,0.22); transform: translateY(-3px); }
+.case-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+.case-head { display: flex; flex-direction: column; gap: 6px; }
+.case-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.case-scenario {
+  font-size: 13px;
+  color: var(--text2);
+  font-weight: 300;
+  line-height: 1.7;
+  border-left: 2px solid rgba(56,189,248,0.25);
+  padding-left: 12px;
+}
+.case-findings-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 2px;
+}
+.case-findings {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+.case-finding {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: var(--text2);
+  font-weight: 300;
+  line-height: 1.65;
+}
+.case-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.case-time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 100px;
+  background: rgba(56,189,248,0.07);
+  border: 1px solid rgba(56,189,248,0.18);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.10em;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+.case-time-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2.5s infinite;
+  flex-shrink: 0;
+}
+
 @media (max-width: 860px) {
   .split, .split.flip { grid-template-columns: 1fr; direction: ltr; gap: 48px; }
   .stats-strip { grid-template-columns: repeat(3, 1fr); }
   .outputs { grid-template-columns: 1fr; }
+  .cases { grid-template-columns: 1fr; }
   nav { padding: 18px 24px; }
   .wrap { padding: 0 24px; }
   .split { padding: 72px 0; }
@@ -994,6 +1093,82 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Case Studies */}
+      <div className="rule" />
+      <div className="wrap sec">
+        <div className="r">
+          <div className="sh-tag">Case Studies</div>
+          <h2 className="sh-h">From query to <em>actionable intelligence</em>.</h2>
+          <p className="sh-p">See how procurement teams use NAUTILUS to compress days of research into seconds.</p>
+        </div>
+        <div className="cases">
+          {[
+            {
+              num: 'Case Study 01',
+              title: 'EV Motor Sourcing',
+              scenario: 'Procurement team sourcing neodymium-iron-boron magnets for EV traction motors across global hubs.',
+              findings: [
+                '6 qualified sourcing hubs identified across China, Japan, and Estonia',
+                'Section 301 tariff of 25% flagged on all China-origin shipments',
+                'Shenghe Resources flagged as restricted party — removed from shortlist',
+                'Estonian supplier via EU FTA saves 18% on total landed cost',
+              ],
+              time: '~8 seconds',
+              delay: '0.05s',
+            },
+            {
+              num: 'Case Study 02',
+              title: 'Semiconductor Supply Chain Risk',
+              scenario: 'Electronics manufacturer assessing TSMC dependency for automotive-grade chips amid geopolitical tension.',
+              findings: [
+                'Taiwan Strait congestion risk flagged HIGH — active monitoring triggered',
+                '3 alternative fabs identified in South Korea and Germany',
+                'CHIPS Act incentive routes identified for domestic sourcing scenarios',
+                'Dual-use export license flagged for EAR99 components in the stack',
+              ],
+              time: '~11 seconds',
+              delay: '0.10s',
+            },
+            {
+              num: 'Case Study 03',
+              title: 'Pharmaceutical API Sourcing',
+              scenario: 'Pharma company sourcing active pharmaceutical ingredients post-supply shock, seeking China alternatives.',
+              findings: [
+                'India (Hyderabad) and Ireland identified as qualified China alternatives',
+                'FDA import alert cross-referenced — 2 flagged suppliers removed automatically',
+                'Ocean freight Mumbai $2,340/TEU vs. Shanghai $3,100/TEU — 24% savings',
+                'EU GMP and FDA 21 CFR compliance status verified per hub',
+              ],
+              time: '~9 seconds',
+              delay: '0.15s',
+            },
+          ].map(c => (
+            <div key={c.num} className="case-card r" style={{ transitionDelay: c.delay }}>
+              <div className="case-num">{c.num}</div>
+              <div className="case-head">
+                <div className="case-title">{c.title}</div>
+              </div>
+              <p className="case-scenario">{c.scenario}</p>
+              <div>
+                <div className="case-findings-label">Key Findings</div>
+                <ul className="case-findings">
+                  {c.findings.map((f, i) => (
+                    <li key={i} className="case-finding">
+                      <span className="case-dot" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="case-time-badge">
+                <span className="case-time-dot" />
+                Time to insight: {c.time}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* CTA */}
       <div className="rule" />
       <div className="cta-wrap" id="cta">
@@ -1059,6 +1234,8 @@ export default function Home() {
           <a href="/legal/data-sources" className="f-legal-link">Data Sources</a>
           <span className="f-legal-sep">/</span>
           <a href="/legal/data-deletion" className="f-legal-link">Data Deletion</a>
+          <span className="f-legal-sep">/</span>
+          <a href="/methodology" className="f-legal-link">Methodology</a>
         </div>
       </footer>
     </>

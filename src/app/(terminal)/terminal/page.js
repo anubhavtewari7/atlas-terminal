@@ -703,7 +703,7 @@ export default function Dashboard() {
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-emerald-400 animate-pulse" />
-          <span className="text-slate-400" title={
+          <span className="text-slate-300" title={
             commodities?.quality === 'live' ? 'Real-time CME futures via Yahoo Finance' :
             commodities?.quality === 'delayed' ? 'End-of-day prices via Stooq -- not real-time' :
             'Reference prices (Jan 2024) -- verify with exchange terminal'
@@ -711,7 +711,7 @@ export default function Dashboard() {
           <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border hidden sm:inline-block ${
             commodities?.quality === 'live' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' :
             commodities?.quality === 'delayed' ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' :
-            'text-slate-500 bg-white/5 border-white/10'
+            'text-slate-300 bg-white/5 border-white/10'
           }`}>
             {commodities?.quality === 'live' ? `LIVE • ${metalsTs || ''}` :
              commodities?.quality === 'delayed' ? `EOD • ${metalsTs || ''}` :
@@ -741,7 +741,7 @@ export default function Dashboard() {
               const items = commodities?.prices?.length ? commodities.prices : BASE;
               return [...items, ...items].map((item, i) => (
                 <span key={`${item.name}-${i}`} className="inline-flex items-center gap-2 text-[11px] mr-10">
-                  <span className="text-slate-500">{item.name}</span>
+                  <span className="text-slate-300">{item.name}</span>
                   <span className="text-white font-bold">{item.price}{item.unit}</span>
                   <span className={item.up ? 'text-emerald-400' : 'text-rose-400'}>{item.change}</span>
                   {commodities && !item.live && <span className="text-slate-600 text-[9px] font-mono">ref</span>}
@@ -832,7 +832,7 @@ export default function Dashboard() {
                   <h2 className="text-[12px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-3">
                     <Mail size={18} /> Smart RFQ Generator
                   </h2>
-                  <button onClick={() => setShowRFQ(false)} className="text-slate-500 hover:text-white active:text-white transition-colors"><X size={24} /></button>
+                  <button onClick={() => setShowRFQ(false)} className="text-slate-300 hover:text-white active:text-white transition-colors"><X size={24} /></button>
                 </div>
                 <textarea readOnly rows={13} value={marketData?.rfq_template}
                   className="w-full bg-[#111] border border-white/10 p-6 text-[13px] font-mono focus:outline-none rounded-xl mb-8 leading-relaxed text-slate-300" />
@@ -861,17 +861,17 @@ export default function Dashboard() {
               className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
               <motion.div initial={{scale:0.95}} animate={{scale:1}}
                 className="bg-[#0a0a0a] border border-white/10 p-6 md:p-10 w-full max-w-2xl shadow-[0_0_80px_rgba(56,189,248,0.15)] relative rounded-2xl max-h-[90vh] overflow-y-auto">
-                <button onClick={() => setShowSearch(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white active:text-white transition-colors">
+                <button onClick={() => setShowSearch(false)} className="absolute top-6 right-6 text-slate-300 hover:text-white active:text-white transition-colors">
                   <X size={24} />
                 </button>
                 <h2 className="text-[12px] font-bold text-sky-400 tracking-[0.3em] mb-3 flex items-center gap-3">
                   <Target size={18} /> DEFINE SOURCING MISSION
                 </h2>
-                <p className="text-[11px] text-slate-400 mb-8 font-sans leading-relaxed">
+                <p className="text-[11px] text-slate-300 mb-8 font-sans leading-relaxed">
                   Describe what you need to procure — be specific. Include the material, application, and any constraints.
-                  <br/>e.g. <span className="text-slate-500 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
-                  &nbsp;<span className="text-slate-500 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
-                  &nbsp;<span className="text-slate-500 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
+                  <br/>e.g. <span className="text-slate-300 italic">&ldquo;neodymium magnets for automotive sun visor actuators&rdquo;</span>,
+                  &nbsp;<span className="text-slate-300 italic">&ldquo;food-grade soy for QSR chain supply&rdquo;</span>,
+                  &nbsp;<span className="text-slate-300 italic">&ldquo;IATF-certified steel stamping for EV chassis frames&rdquo;</span>
                 </p>
                 <form onSubmit={handleSearch} className="space-y-6">
                   <div className="relative">
@@ -944,7 +944,7 @@ export default function Dashboard() {
               <NautilusLogo size={16} />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-[9px] text-slate-500 uppercase tracking-[0.2em] font-bold">Active Mission</div>
+              <div className="text-[9px] text-slate-300 uppercase tracking-[0.2em] font-bold">Active Mission</div>
               <div onClick={() => setShowSearch(true)} data-tour="mission"
                 className="text-[12px] font-bold text-sky-400 uppercase truncate cursor-pointer hover:text-sky-300 transition-colors"
                 title="Click to start new scan">
@@ -974,7 +974,7 @@ export default function Dashboard() {
                       : t.color === 'rose'    ? 'text-rose-400 border-rose-400 bg-rose-500/5'
                       : t.color === 'amber'   ? 'text-amber-400 border-amber-400 bg-amber-500/5'
                       : 'text-sky-400 border-sky-400 bg-sky-500/5'
-                      : 'border-transparent text-slate-500 hover:text-slate-300'
+                      : 'border-transparent text-slate-300 hover:text-slate-300'
                   }`}>
                   {t.label}
                 </button>
@@ -995,7 +995,7 @@ export default function Dashboard() {
                       : t.color === 'purple' ? 'text-purple-400 border-purple-400 bg-purple-500/5'
                       : t.color === 'cyan'   ? 'text-cyan-400 border-cyan-400 bg-cyan-500/5'
                       : 'text-sky-400 border-sky-400 bg-sky-500/5'
-                      : 'border-transparent text-slate-500 hover:text-slate-300'
+                      : 'border-transparent text-slate-300 hover:text-slate-300'
                   }`}>
                   {t.label}
                 </button>
@@ -1026,7 +1026,7 @@ export default function Dashboard() {
                         else if (level === 'region') setHubNav(n => ({ ...n, level:'country', country:null, region:null }))
                         else if (level === 'hubs') setHubNav(n => ({ ...n, level:'region', region:null }))
                       }}
-                      className="text-[11px] text-slate-500 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
+                      className="text-[11px] text-slate-300 hover:text-sky-400 font-mono transition-colors flex items-center gap-1">
                       ← back
                     </button>
                   )}
@@ -1035,9 +1035,9 @@ export default function Dashboard() {
                 {/* Breadcrumb */}
                 {level !== 'continent' && (
                   <div className="flex items-center gap-1 mb-3 flex-wrap">
-                    <span className="text-[11px] text-slate-400">{continent}</span>
-                    {country && <><span className="text-[11px] text-slate-500">›</span><span className="text-[11px] text-slate-500">{country}</span></>}
-                    {region  && <><span className="text-[11px] text-slate-500">›</span><span className="text-[11px] text-sky-500/70">{region}</span></>}
+                    <span className="text-[11px] text-slate-300">{continent}</span>
+                    {country && <><span className="text-[11px] text-slate-300">›</span><span className="text-[11px] text-slate-300">{country}</span></>}
+                    {region  && <><span className="text-[11px] text-slate-300">›</span><span className="text-[11px] text-sky-500/70">{region}</span></>}
                   </div>
                 )}
 
@@ -1052,7 +1052,7 @@ export default function Dashboard() {
                       <div className={`h-full rounded-full ${barColor}`} style={{ width:`${s}%` }} />
                     </div>
                     <div className="flex items-center justify-between mt-1">
-                      <span className="text-[11px] text-slate-400">WB Political Stability</span>
+                      <span className="text-[11px] text-slate-300">WB Political Stability</span>
                       <span className={`text-[11px] font-bold ${textColor}`}>{stabilityLabel}</span>
                     </div>
                   </div>
@@ -1066,7 +1066,7 @@ export default function Dashboard() {
                         onClick={() => setHubNav({ level:'country', continent:c, country:null, region:null })}
                         className="bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group">
                         <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase leading-tight">{c}</div>
-                        <div className="text-[11px] text-slate-400 mt-0.5">{HUB_COUNTRIES[c]?.length} {HUB_COUNTRIES[c]?.length === 1 ? 'country' : 'countries'}</div>
+                        <div className="text-[11px] text-slate-300 mt-0.5">{HUB_COUNTRIES[c]?.length} {HUB_COUNTRIES[c]?.length === 1 ? 'country' : 'countries'}</div>
                       </button>
                     ))}
                   </div>
@@ -1100,9 +1100,9 @@ export default function Dashboard() {
                         className="w-full bg-[#111] border border-white/5 hover:border-sky-500/30 hover:bg-sky-500/5 rounded-lg p-2.5 text-left transition-all group flex items-center justify-between">
                         <div>
                           <div className="text-[11px] font-bold text-slate-300 group-hover:text-sky-400 uppercase">{zone}</div>
-                          <div className="text-[11px] text-slate-400 mt-0.5">{countryData.zones[zone].length} hubs</div>
+                          <div className="text-[11px] text-slate-300 mt-0.5">{countryData.zones[zone].length} hubs</div>
                         </div>
-                        <ChevronRight size={12} className="text-slate-500 group-hover:text-sky-400" />
+                        <ChevronRight size={12} className="text-slate-300 group-hover:text-sky-400" />
                       </button>
                     ))}
                   </div>
@@ -1146,11 +1146,11 @@ export default function Dashboard() {
                               ))}
                             </div>
                           )}
-                          {alerts.length === 0 && <p className="text-[8px] text-slate-500">No active alerts</p>}
+                          {alerts.length === 0 && <p className="text-[8px] text-slate-300">No active alerts</p>}
                         </div>
                       )
                     })}
-                    <p className="text-[8px] text-slate-500 mt-1 text-center">Composite: WB stability + port-specific risk factors</p>
+                    <p className="text-[8px] text-slate-300 mt-1 text-center">Composite: WB stability + port-specific risk factors</p>
                   </div>
                 )}
               </div>
@@ -1165,7 +1165,7 @@ export default function Dashboard() {
               <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                 <h2 className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-3 flex items-center gap-2">
                   <Newspaper size={13} /> Live Trade Intelligence
-                  {intelBrief && <span className="ml-auto text-[10px] text-slate-400">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
+                  {intelBrief && <span className="ml-auto text-[10px] text-slate-300">{intelBrief.articleCount} articles · {intelBrief.sourceCount} sources</span>}
                 </h2>
                 {intelLoading ? (
                   <div className="space-y-2">
@@ -1182,16 +1182,16 @@ export default function Dashboard() {
                           <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
                           <div>
                             <p className="text-[11px] text-slate-300 leading-snug group-hover:text-white transition-colors">{a.title}</p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">{a.source}</p>
+                            <p className="text-[10px] text-slate-300 mt-0.5">{a.source}</p>
                           </div>
                         </div>
                       </a>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-400 italic">No recent trade news found.</p>
+                  <p className="text-[11px] text-slate-300 italic">No recent trade news found.</p>
                 )}
-                <p className="text-[10px] text-slate-500 mt-3">GDELT · World Bank Political Stability Index</p>
+                <p className="text-[10px] text-slate-300 mt-3">GDELT · World Bank Political Stability Index</p>
               </div>
             )}
 
@@ -1206,12 +1206,12 @@ export default function Dashboard() {
                     </span>
                   : <span className="text-[8px] text-slate-600 font-normal normal-case border border-white/8 px-1.5 py-0.5 rounded-full">post-scan</span>
                 }
-                <span className="ml-auto text-slate-500">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
+                <span className="ml-auto text-slate-300">{threatsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
               {!threatsCollapsed && (
                 <div className="space-y-2">
                   {risks.length === 0 ? (
-                    <p className="text-[11px] text-slate-500 italic">Run a sourcing scan to surface relevant risk factors.</p>
+                    <p className="text-[11px] text-slate-300 italic">Run a sourcing scan to surface relevant risk factors.</p>
                   ) : risks.map((r, i) => (
                     <div key={r.id || i}
                       onClick={() => setSelectedNode(selectedNode?.id === (r.id || i) ? null : r)}
@@ -1236,14 +1236,14 @@ export default function Dashboard() {
             {activeTab === 'sourcing' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
               <h2 className="text-[11px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setHubsCollapsed(!hubsCollapsed)}>
                 <Factory size={14} /> Sourcing Hubs
-                {opportunities.length > 0 && <span className="text-[10px] text-slate-400">{opportunities.length} identified</span>}
-                <span className="ml-auto text-slate-500">{hubsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
+                {opportunities.length > 0 && <span className="text-[10px] text-slate-300">{opportunities.length} identified</span>}
+                <span className="ml-auto text-slate-300">{hubsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
               {!hubsCollapsed && (
                 <div className="space-y-2">
                   {opportunities.length === 0 ? (
                     <div className="space-y-1.5 pt-1">
-                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-2">Try an example:</p>
+                      <p className="text-[10px] text-slate-300 uppercase tracking-widest mb-2">Try an example:</p>
                       {[
                         'IATF-certified brake pads for passenger vehicles',
                         'Neodymium magnets for EV motor assembly',
@@ -1251,7 +1251,7 @@ export default function Dashboard() {
                         'Semiconductor wafers for automotive ECU',
                       ].map((q) => (
                         <button key={q} onClick={() => handleSearch(null, q)}
-                          className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-2.5 rounded-lg transition-all">
+                          className="w-full text-left text-[11px] text-slate-300 hover:text-emerald-400 border border-white/5 hover:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 p-2.5 rounded-lg transition-all">
                           → {q}
                         </button>
                       ))}
@@ -1264,13 +1264,13 @@ export default function Dashboard() {
                           ? 'bg-emerald-500/10 border-emerald-500/40'
                           : 'bg-[#111] border-white/5 hover:border-emerald-500/20'
                       }`}>
-                      <div className="text-[10px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
+                      <div className="text-[10px] text-slate-300 font-bold mb-1 uppercase tracking-widest flex items-center gap-2">
                         {o.hub}
                         {(() => {
                           const ds = hubDayStatus(o.hub, o.lng)
                           if (!ds) return null
                           return (
-                            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`} title={`Local time: ${ds.localTime}`}>
+                            <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-300 border-white/10 bg-white/5'}`} title={`Local time: ${ds.localTime}`}>
                               {ds.icon} {ds.open ? 'OPEN' : 'CLOSED'}
                             </span>
                           )
@@ -1293,7 +1293,7 @@ export default function Dashboard() {
                     </div>
                   ))}
                   {opportunities.length > 0 && (
-                    <p className="text-[10px] text-slate-500 mt-1">FX note: verify landed cost impact if sourcing from this region</p>
+                    <p className="text-[10px] text-slate-300 mt-1">FX note: verify landed cost impact if sourcing from this region</p>
                   )}
                 </div>
               )}
@@ -1304,21 +1304,21 @@ export default function Dashboard() {
               <div className="space-y-3">
                 {/* Mission state */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-                  <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-3 flex items-center gap-2"><Target size={11} /> Mission Summary</div>
+                  <div className="text-[10px] text-slate-300 uppercase font-bold tracking-widest mb-3 flex items-center gap-2"><Target size={11} /> Mission Summary</div>
                   <div className="grid grid-cols-3 gap-2 text-center mb-3">
                     <div className="bg-[#111] rounded-lg p-2.5">
                       <div className="text-[20px] font-bold text-emerald-400">{opportunities.length}</div>
-                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Hubs Found</div>
+                      <div className="text-[8px] text-slate-300 uppercase tracking-wider mt-0.5">Hubs Found</div>
                     </div>
                     <div className="bg-[#111] rounded-lg p-2.5">
                       <div className="text-[20px] font-bold text-rose-400">{risks.length}</div>
-                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Threats</div>
+                      <div className="text-[8px] text-slate-300 uppercase tracking-wider mt-0.5">Threats</div>
                     </div>
                     <div className="bg-[#111] rounded-lg p-2.5">
                       <div className={`text-[20px] font-bold ${marketData?.confidence_score >= 75 ? 'text-emerald-400' : marketData?.confidence_score >= 50 ? 'text-amber-400' : 'text-slate-500'}`}>
                         {marketData?.confidence_score ?? '--'}
                       </div>
-                      <div className="text-[8px] text-slate-400 uppercase tracking-wider mt-0.5">Confidence</div>
+                      <div className="text-[8px] text-slate-300 uppercase tracking-wider mt-0.5">Confidence</div>
                     </div>
                   </div>
                   {opportunities.length === 0 && (
@@ -1335,13 +1335,13 @@ export default function Dashboard() {
                     <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap size={11} /> Strategic Directive</div>
                     <div className="text-[12px] font-bold text-white">{directive.best_region}</div>
                     <div className="text-[11px] text-emerald-400 font-bold">{directive.best_partner}</div>
-                    <p className="text-[10px] text-slate-400 leading-snug italic">&ldquo;{directive.summary}&rdquo;</p>
+                    <p className="text-[10px] text-slate-300 leading-snug italic">&ldquo;{directive.summary}&rdquo;</p>
                   </div>
                 )}
 
                 {/* Quick-fire actions */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-                  <div className="text-[10px] text-slate-400 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={11} /> Quick Actions</div>
+                  <div className="text-[10px] text-slate-300 uppercase font-bold tracking-widest mb-2 flex items-center gap-2"><Zap size={11} /> Quick Actions</div>
                   <div className="grid grid-cols-2 gap-1.5">
                     {[
                       { label: 'Export PDF',   action: exportToPDF,                  disabled: opportunities.length === 0, color: 'white' },
@@ -1382,7 +1382,7 @@ export default function Dashboard() {
                 {/* Prompt to run a scan if no threats yet */}
                 {risks.length === 0 && (
                   <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl text-center">
-                    <p className="text-[11px] text-slate-500 italic">Run a scan to surface geopolitical threats, earthquakes, and wildfires for your supply region.</p>
+                    <p className="text-[11px] text-slate-300 italic">Run a scan to surface geopolitical threats, earthquakes, and wildfires for your supply region.</p>
                     <button onClick={() => setShowSearch(true)} className="mt-2 text-[10px] font-bold text-sky-400 uppercase tracking-widest hover:text-sky-300 transition-colors">Run Scan &rsaquo;</button>
                   </div>
                 )}
@@ -1408,7 +1408,7 @@ export default function Dashboard() {
                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-left transition-all ${t.color === 'rose' ? 'border-rose-500/20 hover:bg-rose-500/8 hover:border-rose-500/30' : t.color === 'emerald' ? 'border-emerald-500/20 hover:bg-emerald-500/8 hover:border-emerald-500/30' : t.color === 'amber' ? 'border-amber-500/20 hover:bg-amber-500/8 hover:border-amber-500/30' : t.color === 'purple' ? 'border-purple-500/20 hover:bg-purple-500/8 hover:border-purple-500/30' : 'border-sky-500/20 hover:bg-sky-500/8 hover:border-sky-500/30'}`}>
                         <div>
                           <div className={`text-[11px] font-bold uppercase tracking-wider ${t.color === 'rose' ? 'text-rose-400' : t.color === 'emerald' ? 'text-emerald-400' : t.color === 'amber' ? 'text-amber-400' : t.color === 'purple' ? 'text-purple-400' : 'text-sky-400'}`}>{t.label}</div>
-                          <div className="text-[9px] text-slate-500 mt-0.5">{t.desc}</div>
+                          <div className="text-[9px] text-slate-300 mt-0.5">{t.desc}</div>
                         </div>
                         <ChevronRight size={12} className="text-slate-600 shrink-0" />
                       </button>
@@ -1426,7 +1426,7 @@ export default function Dashboard() {
                   <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
                     <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
                       <TrendingUp size={11} /> Live FX Rates
-                      <span className="ml-auto text-[8px] text-slate-500 font-normal normal-case">as of {fxData.date}</span>
+                      <span className="ml-auto text-[8px] text-slate-300 font-normal normal-case">as of {fxData.date}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
                       {Object.entries(fxData.rates || {}).slice(0, 6).map(([code, info]) => (
@@ -1448,7 +1448,7 @@ export default function Dashboard() {
                       <span className={`ml-auto text-[8px] font-normal normal-case ${
                         commodities.quality === 'live' ? 'text-emerald-400' :
                         commodities.quality === 'delayed' ? 'text-amber-400' :
-                        'text-slate-500'
+                        'text-slate-300'
                       }`}>
                         {commodities.quality === 'live' ? 'Live' :
                          commodities.quality === 'delayed' ? 'EOD' :
@@ -1470,7 +1470,7 @@ export default function Dashboard() {
                 )}
                 {/* Cost tools */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
-                  <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><Calculator size={11} /> Cost Tools</div>
+                  <div className="text-[10px] text-slate-300 font-bold uppercase tracking-widest mb-2 flex items-center gap-1.5"><Calculator size={11} /> Cost Tools</div>
                   <div className="grid grid-cols-1 gap-1.5">
                     {[
                       { label: 'Total Landed Cost', desc: 'Duties + freight + FX',     action: () => setShowTLC(true),          color: 'emerald' },
@@ -1481,7 +1481,7 @@ export default function Dashboard() {
                         className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg border text-left transition-all ${t.color === 'emerald' ? 'border-emerald-500/20 hover:bg-emerald-500/8' : t.color === 'amber' ? 'border-amber-500/20 hover:bg-amber-500/8' : 'border-sky-500/20 hover:bg-sky-500/8'}`}>
                         <div>
                           <div className={`text-[11px] font-bold uppercase tracking-wider ${t.color === 'emerald' ? 'text-emerald-400' : t.color === 'amber' ? 'text-amber-400' : 'text-sky-400'}`}>{t.label}</div>
-                          <div className="text-[9px] text-slate-500 mt-0.5">{t.desc}</div>
+                          <div className="text-[9px] text-slate-300 mt-0.5">{t.desc}</div>
                         </div>
                         <ChevronRight size={12} className="text-slate-600 shrink-0" />
                       </button>
@@ -1501,21 +1501,21 @@ export default function Dashboard() {
                       className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-all disabled:opacity-30 text-left">
                       <div>
                         <div className="text-[11px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5"><Download size={11} /> Executive Brief (PDF)</div>
-                        <div className="text-[9px] text-slate-500 mt-0.5">Full sourcing analysis with hub scores, risk, compliance</div>
+                        <div className="text-[9px] text-slate-300 mt-0.5">Full sourcing analysis with hub scores, risk, compliance</div>
                       </div>
                     </button>
                     <button onClick={() => setShowRFQ(true)} disabled={opportunities.length === 0}
                       className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-sky-500/20 hover:bg-sky-500/8 transition-all disabled:opacity-30 text-left">
                       <div>
                         <div className="text-[11px] font-bold text-sky-400 uppercase tracking-wider flex items-center gap-1.5"><Mail size={11} /> Smart RFQ</div>
-                        <div className="text-[9px] text-slate-500 mt-0.5">Auto-generated supplier inquiry ready to send</div>
+                        <div className="text-[9px] text-slate-300 mt-0.5">Auto-generated supplier inquiry ready to send</div>
                       </div>
                     </button>
                     <button onClick={() => setShowComparison(true)} disabled={opportunities.length < 2}
                       className="w-full flex items-center justify-between px-3 py-3 rounded-lg border border-white/10 hover:bg-white/5 transition-all disabled:opacity-30 text-left">
                       <div>
                         <div className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5"><BarChart3 size={11} /> Hub Comparison</div>
-                        <div className="text-[9px] text-slate-500 mt-0.5">Side-by-side scoring for {opportunities.length} sourcing hubs</div>
+                        <div className="text-[9px] text-slate-300 mt-0.5">Side-by-side scoring for {opportunities.length} sourcing hubs</div>
                       </div>
                     </button>
                   </div>
@@ -1523,18 +1523,18 @@ export default function Dashboard() {
                 {/* Mission history */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
                   <div className="flex items-center justify-between mb-3">
-                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><History size={11} /> Mission Archive</div>
+                    <div className="text-[10px] text-slate-300 font-bold uppercase tracking-widest flex items-center gap-1.5"><History size={11} /> Mission Archive</div>
                     <button onClick={() => setShowHistory(true)} className="text-[8px] text-sky-400 hover:text-sky-300 uppercase tracking-widest transition-colors">View All &rsaquo;</button>
                   </div>
                   {missionHistory.length === 0 ? (
-                    <p className="text-[11px] text-slate-500 italic">No missions saved yet. Run a scan to create an archive entry.</p>
+                    <p className="text-[11px] text-slate-300 italic">No missions saved yet. Run a scan to create an archive entry.</p>
                   ) : (
                     <div className="space-y-1.5">
                       {missionHistory.slice(-4).reverse().map((m, i) => (
                         <button key={i} onClick={() => replayMission(m)}
                           className="w-full text-left p-2.5 bg-[#111] border border-white/5 rounded-lg hover:border-sky-500/20 transition-all group">
                           <div className="text-[11px] font-bold text-slate-300 group-hover:text-white transition-colors truncate uppercase">{m.query}</div>
-                          <div className="text-[9px] text-slate-500 mt-0.5">{new Date(m.timestamp).toLocaleDateString()} · {m.hubCount ?? 0} hubs</div>
+                          <div className="text-[9px] text-slate-300 mt-0.5">{new Date(m.timestamp).toLocaleDateString()} · {m.hubCount ?? 0} hubs</div>
                         </button>
                       ))}
                     </div>
@@ -1555,13 +1555,13 @@ export default function Dashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[9px] text-slate-500 uppercase tracking-widest">Live</span>
+                    <span className="text-[9px] text-slate-300 uppercase tracking-widest">Live</span>
                   </div>
                 </div>
 
                 {/* Layer toggles — 3 surveillance-specific layers only */}
                 <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
-                  <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
+                  <div className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mb-2.5 flex items-center gap-1.5">
                     <Layers size={10} /> Globe Layers
                   </div>
                   <div className="space-y-1.5">
@@ -1599,13 +1599,13 @@ export default function Dashboard() {
                             : 'text-slate-600'}>
                             {layer.icon}
                           </span>
-                          <span className={`text-[10px] font-bold uppercase tracking-wider ${layer.active ? 'text-white' : 'text-slate-500'}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${layer.active ? 'text-white' : 'text-slate-300'}`}>
                             {layer.label}
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
                           {layer.count && (
-                            <span className="text-[9px] text-slate-500">{layer.count}</span>
+                            <span className="text-[9px] text-slate-300">{layer.count}</span>
                           )}
                           <div className={`w-7 h-3.5 rounded-full transition-all relative ${layer.active ? (layer.color === 'cyan' ? 'bg-cyan-500' : layer.color === 'orange' ? 'bg-orange-500' : 'bg-amber-500') : 'bg-slate-700'}`}>
                             <div className={`absolute top-0.5 w-2.5 h-2.5 rounded-full bg-white transition-all ${layer.active ? 'left-4' : 'left-0.5'}`} />
@@ -1619,7 +1619,7 @@ export default function Dashboard() {
                 {/* Active fires feed */}
                 {survFires.length > 0 && (
                   <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
-                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
+                    <div className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mb-2 flex items-center justify-between">
                       <span className="flex items-center gap-1.5"><Flame size={10} className="text-orange-400" /> Active Fire Regions</span>
                       <span className="text-orange-400">{survFires.length}</span>
                     </div>
@@ -1637,7 +1637,7 @@ export default function Dashboard() {
                 {/* Seismic feed */}
                 {survSeismic.length > 0 && (
                   <div className="bg-[#0a0a0a] border border-white/10 p-3 rounded-xl">
-                    <div className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 flex items-center justify-between">
+                    <div className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mb-2 flex items-center justify-between">
                       <span className="flex items-center gap-1.5"><Waves size={10} className="text-amber-400" /> Seismic Events</span>
                       <span className="text-amber-400">{survSeismic.length}</span>
                     </div>
@@ -1654,8 +1654,8 @@ export default function Dashboard() {
 
                 {/* Data sources note */}
                 <div className="bg-[#0a0a0a] border border-white/5 p-3 rounded-xl">
-                  <div className="text-[9px] text-slate-600 leading-relaxed">
-                    <span className="text-slate-500 font-bold">Sources:</span> NASA FIRMS (active fires) · USGS (seismic events). Refreshes every 5 min.
+                  <div className="text-[9px] text-slate-400 leading-relaxed">
+                    <span className="text-slate-300 font-bold">Sources:</span> NASA FIRMS (active fires) · USGS (seismic events). Refreshes every 5 min.
                   </div>
                 </div>
 
@@ -1694,17 +1694,17 @@ export default function Dashboard() {
             {/* Globe controls — desktop only (overlaid on globe) */}
             <div className="hidden lg:flex absolute top-4 left-4 z-10 flex-col gap-1.5">
               <button onClick={() => setShowDayNight(!showDayNight)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showDayNight ? 'bg-sky-500/15 border-sky-500/30 text-sky-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showDayNight ? 'bg-sky-500/15 border-sky-500/30 text-sky-400' : 'bg-black/60 border-white/10 text-slate-300 hover:text-slate-300'}`}>
                 {showDayNight ? <Moon size={12} /> : <Sun size={12} />}
                 Day / Night
               </button>
               <button onClick={() => setShowChokepoints(!showChokepoints)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showChokepoints ? 'bg-amber-500/15 border-amber-500/30 text-amber-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showChokepoints ? 'bg-amber-500/15 border-amber-500/30 text-amber-400' : 'bg-black/60 border-white/10 text-slate-300 hover:text-slate-300'}`}>
                 <Anchor size={12} />
                 Chokepoints
               </button>
               <button onClick={() => setShowThreats(!showThreats)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showThreats ? 'bg-rose-500/15 border-rose-500/30 text-rose-400' : 'bg-black/60 border-white/10 text-slate-500 hover:text-slate-300'}`}>
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-md border transition-all text-[11px] font-bold uppercase tracking-widest ${showThreats ? 'bg-rose-500/15 border-rose-500/30 text-rose-400' : 'bg-black/60 border-white/10 text-slate-300 hover:text-slate-300'}`}>
                 <ShieldAlert size={12} />
                 {showThreats ? 'Hide Threats' : 'Threats'}
               </button>
@@ -1723,12 +1723,12 @@ export default function Dashboard() {
             {/* Globe controls — mobile compact overlay (bottom strip, doesn't cover globe) */}
             <div className="lg:hidden absolute bottom-0 left-0 right-0 z-10 flex items-center justify-between px-3 py-2 bg-black/70 backdrop-blur-sm gap-1.5 overflow-x-auto no-scrollbar">
               <button onClick={() => setShowDayNight(!showDayNight)}
-                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showDayNight ? 'border-sky-500/40 text-sky-400 bg-sky-500/10' : 'border-white/10 text-slate-500'}`}>
+                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showDayNight ? 'border-sky-500/40 text-sky-400 bg-sky-500/10' : 'border-white/10 text-slate-300'}`}>
                 {showDayNight ? <Moon size={10} /> : <Sun size={10} />}
                 Night
               </button>
               <button onClick={() => setShowChokepoints(!showChokepoints)}
-                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showChokepoints ? 'border-amber-500/40 text-amber-400 bg-amber-500/10' : 'border-white/10 text-slate-500'}`}>
+                className={`shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-bold uppercase transition-all ${showChokepoints ? 'border-amber-500/40 text-amber-400 bg-amber-500/10' : 'border-white/10 text-slate-300'}`}>
                 <Anchor size={10} />
                 Routes
               </button>
@@ -1762,7 +1762,7 @@ export default function Dashboard() {
                       </button>
                     )}
                     {selectedNode && (
-                      <button onClick={() => setSelectedNode(null)} className="p-1.5 text-slate-500 hover:text-white transition-all">
+                      <button onClick={() => setSelectedNode(null)} className="p-1.5 text-slate-300 hover:text-white transition-all">
                         <X size={16} />
                       </button>
                     )}
@@ -1778,7 +1778,7 @@ export default function Dashboard() {
                       </span>
                       <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title}</div>
                     </div>
-                    <p className="text-[12px] text-slate-400 leading-relaxed font-sans">{selectedNode.desc}</p>
+                    <p className="text-[12px] text-slate-300 leading-relaxed font-sans">{selectedNode.desc}</p>
                     <div className="grid grid-cols-1 gap-3">
                       <div className="p-4 bg-rose-500/5 border border-rose-500/20 rounded-xl">
                         <div className="text-[10px] text-rose-400 uppercase font-bold mb-2 tracking-widest flex items-center gap-1.5">
@@ -1807,10 +1807,10 @@ export default function Dashboard() {
                         <div className={`flex items-center gap-3 px-3 py-2 rounded-lg border ${ds.open ? 'bg-emerald-500/8 border-emerald-500/20' : 'bg-white/3 border-white/8'}`}>
                           <span className="text-[14px]">{ds.icon === '☀' ? '☀️' : '🌙'}</span>
                           <div>
-                            <div className={`text-[10px] font-bold uppercase tracking-widest ${ds.open ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <div className={`text-[10px] font-bold uppercase tracking-widest ${ds.open ? 'text-emerald-400' : 'text-slate-300'}`}>
                               {ds.open ? 'Business Hours -- Open for RFQ' : 'After Hours -- Closed'}
                             </div>
-                            <div className="text-[9px] text-slate-600">Local time: {ds.localTime}</div>
+                            <div className="text-[9px] text-slate-400">Local time: {ds.localTime}</div>
                           </div>
                         </div>
                       )
@@ -1818,10 +1818,10 @@ export default function Dashboard() {
                     <div className="grid grid-cols-2 gap-6">
                       <div>
                         <div className="text-[13px] font-bold uppercase mb-1 text-white tracking-wider">{selectedNode.title}</div>
-                        <p className="text-[11px] text-slate-400 leading-relaxed font-sans mb-3">{selectedNode.desc}</p>
+                        <p className="text-[11px] text-slate-300 leading-relaxed font-sans mb-3">{selectedNode.desc}</p>
                         {selectedNode.industry_kpi && (
                           <div className="bg-[#111] p-3 border-l-2 border-sky-500 rounded-r-lg">
-                            <div className="text-[8px] text-slate-400 uppercase font-bold mb-0.5">{selectedNode.industry_kpi.label}</div>
+                            <div className="text-[8px] text-slate-300 uppercase font-bold mb-0.5">{selectedNode.industry_kpi.label}</div>
                             <div className="text-[16px] font-bold text-white">{selectedNode.industry_kpi.value}</div>
                           </div>
                         )}
@@ -1833,7 +1833,7 @@ export default function Dashboard() {
                               <div className="text-[13px] font-bold text-white">
                                 ${(selectedNode.real_export_value_usd / 1e6).toLocaleString(undefined, { maximumFractionDigits: 0 })}M exported in {selectedNode.real_trade_data_year}
                               </div>
-                              <div className="text-[8px] text-slate-500">Source: UN Comtrade official statistics</div>
+                              <div className="text-[8px] text-slate-300">Source: UN Comtrade official statistics</div>
                             </div>
                           </div>
                         )}
@@ -1847,11 +1847,11 @@ export default function Dashboard() {
                           <div className="flex items-center justify-between mb-2">
                             <div className="text-[28px] font-bold text-white">{selectedNode.esg.ethical_rating}</div>
                             <div className="text-right">
-                              <div className="text-[8px] text-slate-400 uppercase">CO₂ Intensity</div>
+                              <div className="text-[8px] text-slate-300 uppercase">CO₂ Intensity</div>
                               <div className="text-[11px] text-slate-300 font-bold">{selectedNode.esg.carbon_footprint}</div>
                             </div>
                           </div>
-                          <p className="text-[11px] text-slate-500 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
+                          <p className="text-[11px] text-slate-300 italic leading-snug">&ldquo;{selectedNode.esg.sustainability_note}&rdquo;</p>
                         </div>
                       )}
                     </div>
@@ -1864,15 +1864,15 @@ export default function Dashboard() {
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">HTS Code</div>
+                              <div className="text-[8px] text-slate-300 uppercase mb-0.5">HTS Code</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.customs.hts_code}</div>
                             </div>
                             <div>
-                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Duty Rate</div>
+                              <div className="text-[8px] text-slate-300 uppercase mb-0.5">Duty Rate</div>
                               <div className="text-[13px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div>
                             </div>
                           </div>
-                          <div className="text-[11px] text-slate-500 border-t border-white/5 pt-2 leading-tight">{selectedNode.customs.compliance_note}</div>
+                          <div className="text-[11px] text-slate-300 border-t border-white/5 pt-2 leading-tight">{selectedNode.customs.compliance_note}</div>
                         </div>
                         <div className="space-y-3 border-l border-white/5 pl-6">
                           <div className="text-[10px] font-bold text-sky-400 uppercase flex items-center gap-1.5 mb-0.5">
@@ -1880,11 +1880,11 @@ export default function Dashboard() {
                           </div>
                           <div className="grid grid-cols-2 gap-3">
                             <div>
-                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Lead Time</div>
+                              <div className="text-[8px] text-slate-300 uppercase mb-0.5">Lead Time</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} Days</div>
                             </div>
                             <div>
-                              <div className="text-[8px] text-slate-400 uppercase mb-0.5">Est. Freight</div>
+                              <div className="text-[8px] text-slate-300 uppercase mb-0.5">Est. Freight</div>
                               <div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div>
                             </div>
                           </div>
@@ -1899,13 +1899,13 @@ export default function Dashboard() {
                         </div>
                         {/* Turnover filter */}
                         <div className="flex items-center gap-1.5 mb-3 flex-wrap">
-                          <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest shrink-0">Size:</span>
+                          <span className="text-[10px] text-slate-300 uppercase font-bold tracking-widest shrink-0">Size:</span>
                           {[null, '>$1B', '$100M-$1B', '$10M-$100M', '<$10M'].map(f => (
                             <button key={f ?? 'all'} onClick={() => setTurnoverFilter(f)}
                               className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-all ${
                                 turnoverFilter === f
                                   ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-400'
-                                  : 'bg-white/5 border-white/10 text-slate-500 hover:border-white/20 hover:text-slate-400'
+                                  : 'bg-white/5 border-white/10 text-slate-300 hover:border-white/20 hover:text-slate-400'
                               }`}>
                               {f ?? 'All'}
                             </button>
@@ -1917,14 +1917,14 @@ export default function Dashboard() {
                               turnoverFilter === null || c.turnover === turnoverFilter
                             )
                             if (filteredCompanies.length === 0) {
-                              return <p className="text-[11px] text-slate-400 italic col-span-3">No suppliers in this bracket for this hub.</p>
+                              return <p className="text-[11px] text-slate-300 italic col-span-3">No suppliers in this bracket for this hub.</p>
                             }
                             return filteredCompanies.map((c, i) => (
                               <a key={i} href={c.website || '#'} target="_blank" rel="noopener noreferrer"
                                 className="text-[11px] text-slate-300 font-mono bg-white/5 p-3 border border-white/5 rounded-lg hover:border-emerald-500/40 hover:bg-emerald-500/10 transition-all flex items-center justify-between group">
                                 <span className="truncate">{c.name}</span>
                                 <div className="flex flex-col items-end gap-0.5 shrink-0 ml-1">
-                                  {c.turnover && <span className="text-[8px] text-slate-400 font-mono">{c.turnover}</span>}
+                                  {c.turnover && <span className="text-[8px] text-slate-300 font-mono">{c.turnover}</span>}
                                   <ExternalLink size={10} className="opacity-30 group-hover:opacity-100 text-emerald-400" />
                                 </div>
                               </a>
@@ -1938,7 +1938,7 @@ export default function Dashboard() {
 
                 {/* ── EMPTY STATE ── */}
                 {!selectedNode && opportunities.length === 0 && (
-                  <p className="text-[12px] text-slate-400 italic">Run a scan above to identify global sourcing hubs and active risk factors.</p>
+                  <p className="text-[12px] text-slate-300 italic">Run a scan above to identify global sourcing hubs and active risk factors.</p>
                 )}
                 {!selectedNode && opportunities.length > 0 && (
                   <div className="space-y-3">
@@ -1957,7 +1957,7 @@ export default function Dashboard() {
                         <Mail size={11}/> Send RFQ
                       </button>
                     </div>
-                    <p className="text-[11px] text-slate-500">Click a green hub or red threat on the globe for details.</p>
+                    <p className="text-[11px] text-slate-300">Click a green hub or red threat on the globe for details.</p>
                   </div>
                 )}
               </div>
@@ -1974,7 +1974,7 @@ export default function Dashboard() {
           <div className="flex-1 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden flex flex-col" data-tour="new-tools">
             {/* Header */}
             <div className="px-3 py-2.5 border-b border-white/5 shrink-0">
-              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em]">Tools</span>
+              <span className="text-[8px] font-bold text-slate-300 uppercase tracking-[0.2em]">Tools</span>
             </div>
             {/* Buttons */}
             <div className="flex-1 overflow-y-auto flex flex-col py-1">
@@ -2003,7 +2003,7 @@ export default function Dashboard() {
                       t.color==='purple'  ? 'border-l-purple-500/40 text-purple-400 hover:bg-purple-500/8 hover:border-l-purple-400' :
                       t.color==='amber'   ? 'border-l-amber-500/40 text-amber-400 hover:bg-amber-500/8 hover:border-l-amber-400' :
                       t.color==='violet'  ? 'border-l-violet-500/40 text-violet-400 hover:bg-violet-500/8 hover:border-l-violet-400' :
-                      'border-l-sky-500/30 text-slate-400 hover:bg-sky-500/8 hover:text-sky-400 hover:border-l-sky-400'}`}>
+                      'border-l-sky-500/30 text-slate-300 hover:bg-sky-500/8 hover:text-sky-400 hover:border-l-sky-400'}`}>
                   <span className="shrink-0 opacity-70">{t.icon}</span>
                   <span className="truncate leading-none">{t.label}</span>
                 </button>
@@ -2047,7 +2047,7 @@ export default function Dashboard() {
                 className={`flex-1 flex flex-col items-center gap-1 py-3 text-[10px] font-bold uppercase tracking-wider transition-all border-b-2 ${
                   activeMobileTab === tab.id
                     ? 'border-sky-500 text-sky-400 bg-sky-500/5'
-                    : 'border-transparent text-slate-500 active:text-slate-300'
+                    : 'border-transparent text-slate-300 active:text-slate-300'
                 }`}>
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -2063,7 +2063,7 @@ export default function Dashboard() {
               <>
                 {opportunities.length === 0 ? (
                   <div className="space-y-2 pt-1">
-                    <p className="text-[10px] text-slate-400 uppercase tracking-widest font-bold mb-3">Try an example scan:</p>
+                    <p className="text-[10px] text-slate-300 uppercase tracking-widest font-bold mb-3">Try an example scan:</p>
                     {[
                       'IATF-certified brake pads for passenger vehicles',
                       'Neodymium magnets for EV motor assembly',
@@ -2071,7 +2071,7 @@ export default function Dashboard() {
                       'Semiconductor wafers for automotive ECU',
                     ].map((q) => (
                       <button key={q} onClick={() => handleSearch(null, q)}
-                        className="w-full text-left text-[11px] text-slate-500 hover:text-emerald-400 active:text-emerald-400 border border-white/5 hover:border-emerald-500/30 active:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 active:bg-emerald-500/5 p-3 rounded-lg transition-all leading-snug">
+                        className="w-full text-left text-[11px] text-slate-300 hover:text-emerald-400 active:text-emerald-400 border border-white/5 hover:border-emerald-500/30 active:border-emerald-500/30 bg-[#111] hover:bg-emerald-500/5 active:bg-emerald-500/5 p-3 rounded-lg transition-all leading-snug">
                         → {q}
                       </button>
                     ))}
@@ -2109,7 +2109,7 @@ export default function Dashboard() {
                         <BarChart3 size={11}/> Metals &amp; Materials
                         <div className="ml-auto flex items-center gap-1">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                          <span className="text-[11px] text-slate-500 font-mono">{metalsTs}</span>
+                          <span className="text-[11px] text-slate-300 font-mono">{metalsTs}</span>
                         </div>
                       </div>
                       <div className="grid grid-cols-3 gap-1.5">
@@ -2143,7 +2143,7 @@ export default function Dashboard() {
                           }).join(' ')
                           return (
                             <div key={i} className={`bg-[#0a0a0a] border rounded-lg p-2 text-center ${item.up ? 'border-emerald-500/10' : 'border-rose-500/10'}`}>
-                              <div className="text-[7px] text-slate-400 uppercase font-bold mb-0.5 truncate">{item.n}</div>
+                              <div className="text-[7px] text-slate-300 uppercase font-bold mb-0.5 truncate">{item.n}</div>
                               <svg width="44" height="12" viewBox="0 0 44 12" className="mx-auto mb-0.5 opacity-70">
                                 <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                               </svg>
@@ -2160,9 +2160,9 @@ export default function Dashboard() {
                         <div className="grid grid-cols-2 gap-2">
                           {Object.entries(fxData.rates).slice(0, 6).map(([code, info]) => (
                             <div key={code} className="bg-[#0a0a0a] border border-white/5 p-2.5 rounded-lg">
-                              <div className="text-[8px] text-slate-400 uppercase font-bold mb-0.5">{code}</div>
+                              <div className="text-[8px] text-slate-300 uppercase font-bold mb-0.5">{code}</div>
                               <div className="text-[14px] font-bold text-white font-mono">{typeof info === 'object' ? info.rate : info}</div>
-                              {info.label && <div className="text-[8px] text-slate-400 leading-tight">{info.label}</div>}
+                              {info.label && <div className="text-[8px] text-slate-300 leading-tight">{info.label}</div>}
                             </div>
                           ))}
                         </div>
@@ -2184,20 +2184,20 @@ export default function Dashboard() {
                 {selectedNode && isOpportunity ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[11px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      className="flex items-center gap-2 text-[11px] text-slate-300 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
                       <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Hubs
                     </button>
                     <div className="bg-[#111] border border-emerald-500/30 p-4 rounded-xl space-y-1">
                       <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest">{selectedNode.hub}</div>
                       <div className="text-[14px] font-bold uppercase text-white leading-snug">{selectedNode.title}</div>
-                      <p className="text-[11px] text-slate-400 leading-relaxed pt-1">{selectedNode.desc}</p>
+                      <p className="text-[11px] text-slate-300 leading-relaxed pt-1">{selectedNode.desc}</p>
                     </div>
                     {selectedNode.esg && (
                       <div className="bg-[#111] border border-emerald-500/20 p-4 rounded-xl flex items-center gap-3">
                         <div className="text-[32px] font-bold text-white shrink-0">{selectedNode.esg.ethical_rating}</div>
                         <div className="min-w-0">
                           <div className="text-[10px] text-emerald-400 font-bold uppercase mb-0.5">ESG · {selectedNode.esg.carbon_footprint}</div>
-                          <p className="text-[11px] text-slate-500 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
+                          <p className="text-[11px] text-slate-300 italic leading-snug">{selectedNode.esg.sustainability_note}</p>
                         </div>
                       </div>
                     )}
@@ -2205,13 +2205,13 @@ export default function Dashboard() {
                       <div className="bg-[#111] border border-sky-500/20 p-4 rounded-xl">
                         <div className="text-[10px] text-sky-400 font-bold uppercase mb-3 flex items-center gap-1.5"><FileText size={10}/> Regulatory</div>
                         <div className="grid grid-cols-2 gap-3">
-                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">HTS Code</div><div className="text-[14px] font-mono text-white">{selectedNode.customs.hts_code}</div></div>
-                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Duty Rate</div><div className="text-[14px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div></div>
-                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Lead Time</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} days</div></div>
-                          <div><div className="text-[8px] text-slate-400 uppercase mb-0.5">Est. Freight</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div></div>
+                          <div><div className="text-[8px] text-slate-300 uppercase mb-0.5">HTS Code</div><div className="text-[14px] font-mono text-white">{selectedNode.customs.hts_code}</div></div>
+                          <div><div className="text-[8px] text-slate-300 uppercase mb-0.5">Duty Rate</div><div className="text-[14px] font-mono text-emerald-400 font-bold">{selectedNode.customs.duty_rate}</div></div>
+                          <div><div className="text-[8px] text-slate-300 uppercase mb-0.5">Lead Time</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.port_wait_days ?? 'N/A'} days</div></div>
+                          <div><div className="text-[8px] text-slate-300 uppercase mb-0.5">Est. Freight</div><div className="text-[13px] font-mono text-white">{selectedNode.logistics?.freight_cost_estimate || 'TBD'}</div></div>
                         </div>
                         {selectedNode.customs.compliance_note && (
-                          <p className="text-[11px] text-slate-500 border-t border-white/5 mt-3 pt-3 leading-relaxed">{selectedNode.customs.compliance_note}</p>
+                          <p className="text-[11px] text-slate-300 border-t border-white/5 mt-3 pt-3 leading-relaxed">{selectedNode.customs.compliance_note}</p>
                         )}
                       </div>
                     )}
@@ -2232,7 +2232,7 @@ export default function Dashboard() {
                             className="flex items-center justify-between p-3 bg-[#0a0a0a] border border-white/5 rounded-lg hover:border-emerald-500/30 transition-all">
                             <span className="text-[11px] text-slate-300 font-mono truncate">{c.name}</span>
                             <div className="flex items-center gap-1 shrink-0 ml-2">
-                              {c.turnover && <span className="text-[8px] text-slate-400">{c.turnover}</span>}
+                              {c.turnover && <span className="text-[8px] text-slate-300">{c.turnover}</span>}
                               <ExternalLink size={10} className="text-emerald-400 opacity-60"/>
                             </div>
                           </a>
@@ -2249,7 +2249,7 @@ export default function Dashboard() {
                   <div className="space-y-2">
                     {opportunities.length === 0 ? (
                       <div className="space-y-3 pt-1">
-                        <p className="text-[11px] text-slate-400 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
+                        <p className="text-[11px] text-slate-300 italic">Run a mission scan to identify and rank sourcing hubs for your material.</p>
                         <button onClick={() => setShowSearch(true)}
                           className="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-bold uppercase text-[11px] rounded-xl hover:bg-emerald-500/15 active:bg-emerald-500/20 transition-all flex items-center justify-center gap-2">
                           <Factory size={12}/> Find Sourcing Hubs
@@ -2265,18 +2265,18 @@ export default function Dashboard() {
                               const ds = hubDayStatus(o.hub, o.lng)
                               if (!ds) return null
                               return (
-                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-500 border-white/10 bg-white/5'}`}>
+                                <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded border ${ds.open ? 'text-emerald-400 border-emerald-500/30 bg-emerald-500/10' : 'text-slate-300 border-white/10 bg-white/5'}`}>
                                   {ds.icon} {ds.open ? 'OPEN' : 'CLOSED'}
                                 </span>
                               )
                             })()}
-                            <ChevronRight size={14} className="text-slate-400"/>
+                            <ChevronRight size={14} className="text-slate-300"/>
                           </div>
                         </div>
                         <div className="text-[13px] font-bold uppercase leading-tight text-white">{o.title}</div>
                         <div className="flex items-center gap-3 mt-2">
-                          {o.customs?.duty_rate && <span className="text-[11px] text-slate-500 font-mono">Duty: {o.customs.duty_rate}</span>}
-                          {o.logistics?.port_wait_days !== undefined && <span className="text-[11px] text-slate-500 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
+                          {o.customs?.duty_rate && <span className="text-[11px] text-slate-300 font-mono">Duty: {o.customs.duty_rate}</span>}
+                          {o.logistics?.port_wait_days !== undefined && <span className="text-[11px] text-slate-300 font-mono">Lead: {o.logistics.port_wait_days}d</span>}
                           {o.real_export_value_usd && <span className="text-[11px] text-sky-400 font-mono flex items-center gap-0.5"><CheckCircle size={9}/> ${(o.real_export_value_usd/1e6).toFixed(0)}M</span>}
                         </div>
                       </button>
@@ -2293,7 +2293,7 @@ export default function Dashboard() {
                 {selectedNode && isRisk ? (
                   <div className="space-y-3">
                     <button onClick={() => setSelectedNode(null)}
-                      className="flex items-center gap-2 text-[11px] text-slate-400 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
+                      className="flex items-center gap-2 text-[11px] text-slate-300 active:text-sky-400 font-bold uppercase tracking-wider transition-all w-full bg-white/5 rounded-xl px-4 py-3">
                       <ChevronRight size={14} className="rotate-180 shrink-0"/> Back to Threats
                     </button>
                     <div className={`p-4 rounded-xl border space-y-3 ${
@@ -2334,7 +2334,7 @@ export default function Dashboard() {
                       <div className="bg-[#0a0a0a] border border-sky-500/20 p-4 rounded-xl">
                         <div className="text-[11px] font-bold text-sky-400 tracking-[0.2em] uppercase mb-2 flex items-center gap-2">
                           <Newspaper size={12} /> Live Trade Intelligence
-                          {intelBrief && <span className="ml-auto text-[10px] text-slate-400">{intelBrief.articleCount} articles</span>}
+                          {intelBrief && <span className="ml-auto text-[10px] text-slate-300">{intelBrief.articleCount} articles</span>}
                         </div>
                         {intelLoading ? (
                           <div className="space-y-1.5">
@@ -2350,19 +2350,19 @@ export default function Dashboard() {
                                   <span className={`text-[8px] font-bold shrink-0 mt-0.5 ${a.tone < -3 ? 'text-rose-400' : a.tone < 0 ? 'text-amber-400' : 'text-emerald-400'}`}>●</span>
                                   <div>
                                     <p className="text-[11px] text-slate-300 leading-snug group-active:text-white transition-colors">{a.title}</p>
-                                    <p className="text-[10px] text-slate-400 mt-0.5">{a.source}</p>
+                                    <p className="text-[10px] text-slate-300 mt-0.5">{a.source}</p>
                                   </div>
                                 </div>
                               </a>
                             ))}
                           </div>
                         ) : null}
-                        <p className="text-[10px] text-slate-500 mt-2">GDELT · World Bank</p>
+                        <p className="text-[10px] text-slate-300 mt-2">GDELT · World Bank</p>
                       </div>
                     )}
                     {risks.length === 0 ? (
                       <div className="space-y-3 pt-1">
-                        <p className="text-[11px] text-slate-400 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
+                        <p className="text-[11px] text-slate-300 italic">Run a mission scan to surface active threats and compliance risks for your sourcing context.</p>
                         <button onClick={() => setShowSearch(true)}
                           className="w-full py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 font-bold uppercase text-[11px] rounded-xl hover:bg-rose-500/15 active:bg-rose-500/20 transition-all flex items-center justify-center gap-2">
                           <ShieldAlert size={12}/> Run Threat Scan
@@ -2377,9 +2377,9 @@ export default function Dashboard() {
                           </span>
                           <div className="flex-1 min-w-0">
                             <div className="text-[13px] font-bold uppercase leading-snug text-white">{r.title || r.risk}</div>
-                            {r.desc && <p className="text-[11px] text-slate-500 mt-1 leading-snug line-clamp-2">{r.desc}</p>}
+                            {r.desc && <p className="text-[11px] text-slate-300 mt-1 leading-snug line-clamp-2">{r.desc}</p>}
                           </div>
-                          <ChevronRight size={14} className="text-slate-400 shrink-0 mt-1"/>
+                          <ChevronRight size={14} className="text-slate-300 shrink-0 mt-1"/>
                         </div>
                       </button>
                     ))}
@@ -2398,7 +2398,7 @@ export default function Dashboard() {
                     <SearchCode size={13}/> New Mission
                   </button>
                   <button onClick={exportToPDF} disabled={isExportingPDF || opportunities.length === 0}
-                    className="flex items-center justify-center gap-2 py-3.5 bg-[#111] border border-white/10 text-slate-400 rounded-xl text-[11px] font-bold uppercase tracking-wider disabled:opacity-30">
+                    className="flex items-center justify-center gap-2 py-3.5 bg-[#111] border border-white/10 text-slate-300 rounded-xl text-[11px] font-bold uppercase tracking-wider disabled:opacity-30">
                     <Download size={13}/> {isExportingPDF ? 'Generating...' : 'Export PDF'}
                   </button>
                 </div>
@@ -2411,7 +2411,7 @@ export default function Dashboard() {
                   </button>
                 )}
 
-                <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
+                <div className="text-[8px] text-slate-300 uppercase font-bold tracking-widest pt-1">Intelligence Tools</div>
 
                 <div className="grid grid-cols-2 gap-2">
                   {[
@@ -2431,19 +2431,19 @@ export default function Dashboard() {
                     <button key={i} onClick={t.disabled ? undefined : t.action} disabled={t.disabled}
                       className={`flex flex-col items-center justify-center gap-2 p-5 rounded-xl border transition-all relative ${
                         t.disabled
-                          ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed'
+                          ? 'bg-white/5 border-white/5 text-slate-300 cursor-not-allowed'
                           : t.color === 'emerald' ? 'bg-emerald-500/5 border-emerald-500/20 text-emerald-400 active:bg-emerald-500/20' :
                             t.color === 'rose'    ? 'bg-rose-500/5 border-rose-500/20 text-rose-400 active:bg-rose-500/20' :
                             t.color === 'sky'     ? 'bg-sky-500/5 border-sky-500/20 text-sky-400 active:bg-sky-500/20' :
                             t.color === 'amber'   ? 'bg-amber-500/5 border-amber-500/20 text-amber-400 active:bg-amber-500/20' :
                             t.color === 'purple'  ? 'bg-purple-500/5 border-purple-500/20 text-purple-400 active:bg-purple-500/20' :
                             t.color === 'violet'  ? 'bg-violet-500/5 border-violet-500/20 text-violet-400 active:bg-violet-500/20' :
-                            'bg-white/5 border-white/10 text-slate-400 active:bg-white/10'
+                            'bg-white/5 border-white/10 text-slate-300 active:bg-white/10'
                       }`}>
                       {t.icon}
                       <span className="text-[10px] font-bold uppercase tracking-wider text-center leading-tight">{t.label}</span>
                       {t.disabled && t.needsScan && (
-                        <span className="absolute top-1.5 right-1.5 text-[8px] font-bold text-slate-500 uppercase">2+ hubs</span>
+                        <span className="absolute top-1.5 right-1.5 text-[8px] font-bold text-slate-300 uppercase">2+ hubs</span>
                       )}
                     </button>
                   ))}
@@ -2478,11 +2478,11 @@ export default function Dashboard() {
             {directive ? (
               <div className="space-y-4">
                 <div>
-                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
+                  <div className="text-[8px] text-slate-300 uppercase font-bold tracking-widest mb-0.5">Target Sourcing Hub</div>
                   <div className="text-[14px] font-bold text-white uppercase tracking-wider">{directive.best_region}</div>
                 </div>
                 <div>
-                  <div className="text-[8px] text-slate-400 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
+                  <div className="text-[8px] text-slate-300 uppercase font-bold tracking-widest mb-0.5">Primary Partner</div>
                   <div className="text-[14px] font-bold text-emerald-400 uppercase">{directive.best_partner}</div>
                 </div>
                 <div className="p-3 bg-rose-500/8 border border-rose-500/25 rounded-lg space-y-1">
@@ -2491,12 +2491,12 @@ export default function Dashboard() {
                   </div>
                   <div className="text-[11px] text-rose-200 leading-snug">{directive.tariff_alert}</div>
                 </div>
-                <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-400 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
+                <div className="p-3 bg-emerald-500/5 border border-emerald-500/15 text-[11px] text-slate-300 leading-relaxed italic rounded-lg border-l-2 border-l-emerald-500/40">
                   &ldquo;{directive.summary}&rdquo;
                 </div>
               </div>
             ) : (
-              <div className="text-[11px] text-slate-500 italic flex items-center gap-2 animate-pulse">
+              <div className="text-[11px] text-slate-300 italic flex items-center gap-2 animate-pulse">
                 <Clock size={13} /> Run a mission scan to generate directive...
               </div>
             )}
@@ -2524,7 +2524,7 @@ export default function Dashboard() {
                     </span>
                   )}
                 </h2>
-                <p className="text-[10px] text-slate-500 -mt-1">
+                <p className="text-[10px] text-slate-300 -mt-1">
                   Chokepoints on primary route from {primaryHub.hub}
                 </p>
                 <div className="space-y-2">
@@ -2543,7 +2543,7 @@ export default function Dashboard() {
                           <span className="text-[10px] font-bold text-white uppercase tracking-wider">{cp.name}</span>
                           <span className={`ml-auto text-[8px] font-bold uppercase tracking-widest ${textCol}`}>{cp.status}</span>
                         </div>
-                        <p className="text-[10px] text-slate-500 leading-snug">{cp.desc}</p>
+                        <p className="text-[10px] text-slate-300 leading-snug">{cp.desc}</p>
                       </div>
                     )
                   })}
@@ -2555,7 +2555,7 @@ export default function Dashboard() {
           {/* Market Intelligence / News */}
           <div className="bg-[#0a0a0a] border border-white/10 flex-1 min-h-[320px] p-4 flex flex-col gap-3 rounded-xl shadow-xl">
             <div className="flex items-center justify-between shrink-0">
-              <h2 className="text-[11px] font-bold text-slate-500 tracking-[0.2em] uppercase flex items-center gap-2">
+              <h2 className="text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
               </h2>
               <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[8px] font-bold uppercase tracking-wider"
@@ -2575,7 +2575,7 @@ export default function Dashboard() {
                   className={`px-2 py-0.5 text-[11px] font-bold rounded transition-all flex items-center gap-1 ${
                     newsFilter === 'mission'
                       ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'text-slate-400 hover:text-emerald-400 border border-white/5'
+                      : 'text-slate-300 hover:text-emerald-400 border border-white/5'
                   }`}>
                   ⚡ Mission
                 </button>
@@ -2585,29 +2585,29 @@ export default function Dashboard() {
                   className={`px-2 py-0.5 text-[11px] font-bold rounded transition-all ${
                     newsFilter === key
                       ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                      : 'text-slate-500 hover:text-slate-400'
+                      : 'text-slate-300 hover:text-slate-400'
                   }`}>
                   {label}
                 </button>
               ))}
-              <span className="ml-auto text-[11px] text-slate-500 font-mono">{filteredNews.length}</span>
+              <span className="ml-auto text-[11px] text-slate-300 font-mono">{filteredNews.length}</span>
             </div>
             <div className="flex-1 overflow-y-auto space-y-3 pr-1 custom-scrollbar min-h-0">
               {filteredNews.length === 0 ? (
-                <p className="text-[11px] text-slate-500 italic py-2">
+                <p className="text-[11px] text-slate-300 italic py-2">
                   {newsFilter === 'mission' ? 'Run a mission scan to surface relevant intelligence.' : newsLoading ? 'Loading trade intelligence...' : 'No articles match this filter.'}
                 </p>
               ) : filteredNews.map((item, i) => (
                 <a key={i} href={item.link} target="_blank" rel="noopener noreferrer"
                   className="block border-b border-white/5 pb-3 last:border-0 group">
-                  <div className="text-[11px] text-slate-400 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
+                  <div className="text-[11px] text-slate-300 font-bold mb-1 uppercase tracking-widest flex items-center justify-between">
                     <span className="flex items-center gap-1">{item._mission && <span className="text-emerald-400">⚡</span>}{item.pubDate}</span>
                     <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 text-sky-400 transition-all" />
                   </div>
                   <h3 className="text-xs font-bold leading-snug mb-0.5 group-hover:text-sky-400 transition-all uppercase tracking-tight text-slate-200">
                     {item.title}
                   </h3>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed font-sans">{item.description}</p>
+                  <p className="text-[11px] text-slate-300 line-clamp-2 leading-relaxed font-sans">{item.description}</p>
                 </a>
               ))}
             </div>
@@ -2671,12 +2671,12 @@ export default function Dashboard() {
                 return (
                   <div key={i} className={`bg-[#111] border rounded-lg p-2.5 transition-all ${item.up ? 'border-emerald-500/10 hover:border-emerald-500/25' : 'border-rose-500/10 hover:border-rose-500/25'}`}>
                     <div className="flex items-start justify-between gap-1 mb-1">
-                      <div className="text-[11px] text-slate-500 uppercase font-bold truncate leading-tight">{item.n}</div>
+                      <div className="text-[11px] text-slate-300 uppercase font-bold truncate leading-tight">{item.n}</div>
                       <svg width="58" height="18" viewBox="0 0 58 18" className="shrink-0 opacity-60">
                         <polyline points={pts} fill="none" stroke={item.up ? '#34d399' : '#f87171'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[11px] text-slate-400">{item.u}</span></div>
+                    <div className="text-[13px] font-bold text-white font-mono leading-none">{item.p}<span className="text-[11px] text-slate-300">{item.u}</span></div>
                     <div className={`text-[11px] font-bold mt-0.5 flex items-center gap-1 ${item.up ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {item.up ? <ArrowUpRight size={10}/> : <ArrowDownRight size={10}/>}{item.c}
                     </div>
@@ -2684,9 +2684,9 @@ export default function Dashboard() {
                 )
               })}
             </div>
-            <p className="text-[10px] text-slate-500 mt-2">
+            <p className="text-[10px] text-slate-300 mt-2">
               {commodities?.anyLive
-                ? <>Live futures via CME / Yahoo Finance. <span className="text-slate-600">Ref</span> = non-exchange reference price.</>
+                ? <>Live futures via CME / Yahoo Finance. <span className="text-slate-400">Ref</span> = non-exchange reference price.</>
                 : 'Reference prices. Live CME futures load on page refresh.'}
             </p>
           </div>
@@ -2700,7 +2700,7 @@ export default function Dashboard() {
                 </h2>
                 <button
                   onClick={refreshFx}
-                  className="flex items-center gap-1 text-[8px] text-slate-400 hover:text-amber-400 font-mono transition-colors"
+                  className="flex items-center gap-1 text-[8px] text-slate-300 hover:text-amber-400 font-mono transition-colors"
                   title="Rates refresh automatically every 5 minutes. Click to refresh now.">
                   <span>as of {fxData.date}</span>
                   <span className="text-[11px]">⟳</span>
@@ -2711,7 +2711,7 @@ export default function Dashboard() {
                   <div key={code} className="flex items-center justify-between p-2.5 bg-[#111] border border-white/5 rounded-lg" title={info.impact}>
                     <div>
                       <div className="text-[11px] font-bold text-white font-mono">{info.flag} {code}</div>
-                      <div className="text-[11px] text-slate-400 mt-0.5 leading-tight">
+                      <div className="text-[11px] text-slate-300 mt-0.5 leading-tight">
                         {info.impact?.split(' ').slice(0, 3).join(' ')}
                       </div>
                     </div>
@@ -2734,18 +2734,20 @@ export default function Dashboard() {
         return (
           <div className="hidden lg:flex fixed bottom-5 left-5 z-[120] items-center gap-2 bg-black/80 border border-white/10 px-3 py-1.5 rounded-full backdrop-blur-md shadow-2xl">
             <div className={`w-1.5 h-1.5 rounded-full ${dotColor} animate-pulse`} />
-            <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">System_Integrity: {health}%</span>
+            <span className="text-[8px] font-bold text-slate-300 uppercase tracking-widest">System_Integrity: {health}%</span>
           </div>
         )
       })()}
 
       {/* Legal footer */}
       <footer className="fixed bottom-5 right-5 z-[120] hidden lg:flex items-center gap-3">
-        <Link href="/legal/terms" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Terms</Link>
-        <span className="text-slate-800 text-[8px]">&bull;</span>
-        <Link href="/legal/disclaimer" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Disclaimer</Link>
-        <span className="text-slate-800 text-[8px]">&bull;</span>
-        <Link href="/legal/data-sources" className="text-[8px] text-slate-700 hover:text-slate-500 transition-colors uppercase tracking-widest">Data Sources</Link>
+        <Link href="/legal/terms" className="text-[8px] text-slate-500 hover:text-slate-200 transition-colors uppercase tracking-widest">Terms</Link>
+        <span className="text-slate-600 text-[8px]">&bull;</span>
+        <Link href="/legal/disclaimer" className="text-[8px] text-slate-500 hover:text-slate-200 transition-colors uppercase tracking-widest">Disclaimer</Link>
+        <span className="text-slate-600 text-[8px]">&bull;</span>
+        <Link href="/legal/data-sources" className="text-[8px] text-slate-500 hover:text-slate-200 transition-colors uppercase tracking-widest">Data Sources</Link>
+        <span className="text-slate-600 text-[8px]">&bull;</span>
+        <Link href="/methodology" className="text-[8px] text-slate-500 hover:text-slate-200 transition-colors uppercase tracking-widest">Methodology</Link>
       </footer>
 
     </div>
@@ -2769,7 +2771,7 @@ function ResetConfirmModal({ onConfirm, onCancel }) {
           </div>
           <div>
             <h2 className="text-[15px] font-bold text-white tracking-wide">Reset Terminal?</h2>
-            <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+            <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
               This will permanently delete your entire Mission Archive and reload the terminal in a clean state. This cannot be undone.
             </p>
           </div>
@@ -2782,7 +2784,7 @@ function ResetConfirmModal({ onConfirm, onCancel }) {
           ].map((line, i) => (
             <div key={i} className="flex items-start gap-2.5">
               <div className="w-1.5 h-1.5 rounded-full bg-rose-500/60 mt-1.5 shrink-0" />
-              <span className="text-[11px] text-slate-400">{line}</span>
+              <span className="text-[11px] text-slate-300">{line}</span>
             </div>
           ))}
         </div>
@@ -2792,7 +2794,7 @@ function ResetConfirmModal({ onConfirm, onCancel }) {
             <RotateCcw size={13} /> Yes. Reset Terminal
           </button>
           <button onClick={onCancel}
-            className="w-full py-2.5 text-slate-500 hover:text-slate-300 font-bold text-[11px] uppercase tracking-widest rounded-xl border border-white/5 hover:border-white/10 hover:bg-white/5 transition-all">
+            className="w-full py-2.5 text-slate-300 hover:text-slate-300 font-bold text-[11px] uppercase tracking-widest rounded-xl border border-white/5 hover:border-white/10 hover:bg-white/5 transition-all">
             Cancel Reset
           </button>
         </div>
