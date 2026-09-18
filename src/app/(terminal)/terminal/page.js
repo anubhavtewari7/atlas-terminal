@@ -722,7 +722,7 @@ export default function Dashboard() {
     <div className="flex flex-col h-screen w-full overflow-hidden bg-[#000000] text-[#f8fafc] antialiased font-mono">
 
       {/* ── COMMODITY TICKER ── */}
-      <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
+      <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0" data-tour="ticker">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-emerald-400 animate-pulse" />
           <span className="text-slate-300">Commodity Prices</span>
