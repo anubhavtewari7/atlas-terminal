@@ -854,6 +854,11 @@ export default function Dashboard() {
                 try { localStorage.setItem('atlas_tour_done', '1') } catch {}
               }}
               onStartScan={() => setShowSearch(true)}
+              onStepEnter={(id) => {
+                if (id === 'risks')        setActiveTab('risk')
+                if (id === 'hubs')         setActiveTab('sourcing')
+                if (id === 'tabs' || id === 'surveillance') setActiveTab('sourcing')
+              }}
             />
           )}
         </AnimatePresence>

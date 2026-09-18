@@ -166,7 +166,7 @@ function GlassHighlight() {
   )
 }
 
-export default function GuidedTour({ onComplete, onStartScan }) {
+export default function GuidedTour({ onComplete, onStartScan, onStepEnter }) {
   const [step, setStep]   = useState(0)
   const [measurement, setMeasurement] = useState(null)
   const [win,  setWin]    = useState({ w: 1440, h: 900 })
@@ -176,6 +176,11 @@ export default function GuidedTour({ onComplete, onStartScan }) {
   const isFirst = step === 0
   const isLast  = step === STEPS.length - 1
   const isMobile = win.w < 1024
+
+  // Notify parent when step changes so it can switch tabs, etc.
+  useEffect(() => {
+    onStepEnter?.(STEPS[step].id)
+  }, [step]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Track window size
   useEffect(() => {
