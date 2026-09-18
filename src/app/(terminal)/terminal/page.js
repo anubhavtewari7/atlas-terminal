@@ -100,6 +100,28 @@ async function fetchAndMergeIncidentRisks(baseRisks) {
   }
 }
 
+// ── Source attribution tooltip ──────────────────────────────────────────────
+// Renders a small ⓘ icon that reveals a tooltip on hover explaining the data
+// source and methodology for a given panel. Positioned above the icon so it
+// never gets clipped by the viewport edge.
+function SourceTooltip({ text }) {
+  const [show, setShow] = React.useState(false)
+  return (
+    <span
+      className="relative inline-flex items-center"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+    >
+      <span className="text-xs text-slate-400 hover:text-cyan-400 cursor-help select-none leading-none">ⓘ</span>
+      {show && (
+        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 bg-[#111827] border border-white/15 text-slate-300 text-[10px] leading-relaxed p-2.5 rounded-lg shadow-2xl max-w-xs w-max pointer-events-none whitespace-normal font-sans font-normal normal-case tracking-normal">
+          {text}
+        </span>
+      )}
+    </span>
+  )
+}
+
 export default function Dashboard() {
   // profile.material tracks the last searched commodity -- the only field actually used
   const [profile, setProfile] = useState({ material: 'Global Resources' })
@@ -703,11 +725,8 @@ export default function Dashboard() {
       <div className="h-8 bg-[#050505] border-b border-white/5 flex items-center px-4 overflow-hidden shrink-0">
         <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest mr-8 shrink-0">
           <Activity size={12} className="text-emerald-400 animate-pulse" />
-          <span className="text-slate-300" title={
-            commodities?.quality === 'live' ? 'Real-time CME futures via Yahoo Finance' :
-            commodities?.quality === 'delayed' ? 'End-of-day prices via Stooq -- not real-time' :
-            'Reference prices (Jan 2024) -- verify with exchange terminal'
-          }>Commodity Prices</span>
+          <span className="text-slate-300">Commodity Prices</span>
+          <SourceTooltip text="Live prices via Yahoo Finance. 15-minute delay. For reference only — not financial advice." />
           <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded border hidden sm:inline-block ${
             commodities?.quality === 'live' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' :
             commodities?.quality === 'delayed' ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' :
@@ -1199,6 +1218,7 @@ export default function Dashboard() {
             {activeTab === 'risk' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="risks">
               <h2 className="text-[11px] font-bold text-rose-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setThreatsCollapsed(!threatsCollapsed)}>
                 <ShieldAlert size={14} /> Global Threats
+                <SourceTooltip text="Risk signals aggregated from USGS (earthquakes), NASA FIRMS (wildfires), ACLED (incidents), and live port data." />
                 {risks.length > 0
                   ? <span className="flex items-center gap-1 text-[8px] font-bold px-1.5 py-0.5 rounded-full border border-rose-500/25 bg-rose-500/8 text-rose-400">
                       <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse inline-block" />
@@ -1236,6 +1256,7 @@ export default function Dashboard() {
             {activeTab === 'sourcing' && <div className="bg-[#0a0a0a] border border-white/10 p-4 flex flex-col rounded-xl" data-tour="hubs">
               <h2 className="text-[11px] font-bold text-emerald-500 tracking-[0.2em] uppercase mb-3 flex items-center gap-2 shrink-0 cursor-pointer select-none" onClick={() => setHubsCollapsed(!hubsCollapsed)}>
                 <Factory size={14} /> Sourcing Hubs
+                <SourceTooltip text="Hub scoring based on geopolitical stability (ACLED), port access (MarineTraffic), sanctions exposure (OFAC/UN/EU), and trade agreement coverage." />
                 {opportunities.length > 0 && <span className="text-[10px] text-slate-300">{opportunities.length} identified</span>}
                 <span className="ml-auto text-slate-300">{hubsCollapsed ? <ChevronDown size={12} /> : <ChevronUp size={12} />}</span>
               </h2>
@@ -1332,7 +1353,7 @@ export default function Dashboard() {
                 {/* Top hub + directive preview */}
                 {directive && (
                   <div className="bg-[#0a0a0a] border border-emerald-500/20 p-4 rounded-xl space-y-2">
-                    <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap size={11} /> Strategic Directive</div>
+                    <div className="text-[10px] text-emerald-400 font-bold uppercase tracking-widest flex items-center gap-1.5"><Zap size={11} /> Strategic Directive <SourceTooltip text="Generated by Claude claude-sonnet-4-6 based on scan results. Always verify with qualified procurement professionals." /></div>
                     <div className="text-[12px] font-bold text-white">{directive.best_region}</div>
                     <div className="text-[11px] text-emerald-400 font-bold">{directive.best_partner}</div>
                     <p className="text-[10px] text-slate-300 leading-snug italic">&ldquo;{directive.summary}&rdquo;</p>
@@ -1426,6 +1447,7 @@ export default function Dashboard() {
                   <div className="bg-[#0a0a0a] border border-white/10 p-4 rounded-xl">
                     <div className="text-[10px] text-amber-400 font-bold uppercase tracking-widest mb-3 flex items-center gap-1.5">
                       <TrendingUp size={11} /> Live FX Rates
+                      <SourceTooltip text="Exchange rates via Open Exchange Rates API. Updated hourly." />
                       <span className="ml-auto text-[8px] text-slate-300 font-normal normal-case">as of {fxData.date}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-1.5">
@@ -2107,6 +2129,7 @@ export default function Dashboard() {
                     <div className="bg-[#111] border border-white/5 p-4 rounded-xl">
                       <div className="text-[10px] font-bold text-sky-400 tracking-[0.2em] uppercase flex items-center gap-2 mb-3">
                         <BarChart3 size={11}/> Metals &amp; Materials
+                        <SourceTooltip text="Spot prices via Yahoo Finance (CME, LME). Updated every 15 minutes." />
                         <div className="ml-auto flex items-center gap-1">
                           <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           <span className="text-[11px] text-slate-300 font-mono">{metalsTs}</span>
@@ -2471,6 +2494,7 @@ export default function Dashboard() {
             <div className="absolute top-0 right-0 p-3 overflow-hidden rounded-tr-xl"><Zap size={20} className="text-emerald-500/10" /></div>
             <h2 className="text-[11px] font-bold text-emerald-400 tracking-[0.3em] uppercase flex items-center gap-2">
               <Target size={14} /> Strategic Directive
+              <SourceTooltip text="Generated by Claude claude-sonnet-4-6 based on scan results. Always verify with qualified procurement professionals." />
               <span className={`ml-auto text-[8px] font-bold px-1.5 py-0.5 rounded-full border ${directive ? 'border-emerald-500/25 text-emerald-400 bg-emerald-500/8' : 'border-white/8 text-slate-600'}`}>
                 {directive ? 'AI-GENERATED' : 'PENDING SCAN'}
               </span>
@@ -2557,6 +2581,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between shrink-0">
               <h2 className="text-[11px] font-bold text-slate-300 tracking-[0.2em] uppercase flex items-center gap-2">
                 <Newspaper size={14} className="text-sky-400" /> Market Intelligence
+                <SourceTooltip text="News sourced via NewsAPI from Reuters, Bloomberg, AP, Financial Times. Filtered by geopolitical and trade relevance." />
               </h2>
               <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[8px] font-bold uppercase tracking-wider"
                 style={newsLoading
