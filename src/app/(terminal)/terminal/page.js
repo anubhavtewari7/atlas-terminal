@@ -114,7 +114,7 @@ function SourceTooltip({ text }) {
     >
       <span className="text-xs text-slate-400 hover:text-cyan-400 cursor-help select-none leading-none">ⓘ</span>
       {show && (
-        <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 bg-[#111827] border border-white/15 text-slate-300 text-[10px] leading-relaxed p-2.5 rounded-lg shadow-2xl max-w-xs w-max pointer-events-none whitespace-normal font-sans font-normal normal-case tracking-normal">
+        <span className="absolute top-full left-0 mt-1 z-50 bg-[#111827] border border-white/15 text-slate-300 text-[10px] leading-relaxed p-2.5 rounded-lg shadow-2xl max-w-xs w-max pointer-events-none whitespace-normal font-sans font-normal normal-case tracking-normal">
           {text}
         </span>
       )}
