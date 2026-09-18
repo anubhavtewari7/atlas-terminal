@@ -94,11 +94,11 @@ const STEPS = [
   },
   {
     id: 'transparency',
-    target: 'ticker',
-    position: 'bottom',
+    target: null,
+    position: 'center',
     emoji: 'ⓘ',
     title: 'Source Transparency',
-    content: 'Every live data panel shows a small ⓘ icon — hover it to see exactly which data source powers that number. Commodity prices from Yahoo Finance (CME/LME), FX rates from Open Exchange Rates, risk intel from NewsAPI and World Bank, port data from MarineTraffic. Visit the Methodology page (footer link) for a full breakdown of data sources, update frequencies, and accuracy benchmarks.',
+    content: 'Every live data panel carries a small ⓘ — hover it to see exactly which source powers that number. Commodity prices from Yahoo Finance (CME/LME), FX rates from Open Exchange Rates, risk intel from NewsAPI and World Bank, port data from MarineTraffic. The Methodology page (footer link) lists every source with update frequency and accuracy benchmarks.',
   },
   {
     id: 'tools',

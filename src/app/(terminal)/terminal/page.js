@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { useLiveData } from '@/hooks/useLiveData'
 import { useMissionHistory } from '@/hooks/useMissionHistory'
 import Globe from '@/components/Globe'
@@ -105,18 +106,35 @@ async function fetchAndMergeIncidentRisks(baseRisks) {
 // source and methodology for a given panel. Positioned above the icon so it
 // never gets clipped by the viewport edge.
 function SourceTooltip({ text }) {
-  const [show, setShow] = React.useState(false)
+  const [pos, setPos] = React.useState(null)
+  const ref = React.useRef(null)
+
+  const handleEnter = () => {
+    if (ref.current) {
+      const r = ref.current.getBoundingClientRect()
+      // position below the icon; clamp so it doesn't overflow the right edge
+      const tooltipW = 240
+      const left = Math.min(r.left, window.innerWidth - tooltipW - 8)
+      setPos({ top: r.bottom + 4, left })
+    }
+  }
+
   return (
     <span
-      className="relative inline-flex items-center"
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
+      ref={ref}
+      className="inline-flex items-center"
+      onMouseEnter={handleEnter}
+      onMouseLeave={() => setPos(null)}
     >
       <span className="text-xs text-slate-400 hover:text-cyan-400 cursor-help select-none leading-none">ⓘ</span>
-      {show && (
-        <span className="absolute top-full left-0 mt-1 z-50 bg-[#111827] border border-white/15 text-slate-300 text-[10px] leading-relaxed p-2.5 rounded-lg shadow-2xl max-w-xs w-max pointer-events-none whitespace-normal font-sans font-normal normal-case tracking-normal">
+      {pos && typeof document !== 'undefined' && createPortal(
+        <span
+          style={{ position: 'fixed', top: pos.top, left: pos.left, zIndex: 9999, width: 240 }}
+          className="bg-[#111827] border border-white/15 text-slate-300 text-[10px] leading-relaxed p-2.5 rounded-lg shadow-2xl pointer-events-none whitespace-normal font-sans font-normal normal-case tracking-normal"
+        >
           {text}
-        </span>
+        </span>,
+        document.body
       )}
     </span>
   )
