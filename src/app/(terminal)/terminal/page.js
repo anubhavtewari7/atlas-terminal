@@ -977,7 +977,7 @@ export default function Dashboard() {
           </div>
 
           {/* ── Primary Tab Navigation ── */}
-          <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shrink-0">
+          <div className="bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden shrink-0" data-tour="tabs">
             {/* Row 1: Command | Sourcing | Risk | Compliance */}
             <div className="grid grid-cols-4 border-b border-white/5">
               {[
@@ -1000,7 +1000,7 @@ export default function Dashboard() {
               ))}
             </div>
             {/* Row 2: Cost | Intelligence | Reports | Surveillance */}
-            <div className="grid grid-cols-4">
+            <div className="grid grid-cols-4" data-tour="surv-tab">
               {[
                 { id: 'cost',          label: 'Cost',         color: 'amber' },
                 { id: 'intelligence',  label: 'Intel',        color: 'sky' },
